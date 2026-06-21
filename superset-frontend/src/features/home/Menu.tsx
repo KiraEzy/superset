@@ -35,7 +35,7 @@ import {
   MenuData,
 } from 'src/types/bootstrapTypes';
 import RightMenu from './RightMenu';
-import { NAVBAR_MENU_POPUP_OFFSET } from './commonMenuData';
+import { NAVBAR_MENU_POPUP_OFFSET, aiMenuItem } from './commonMenuData';
 
 interface MenuProps {
   data: MenuData;
@@ -207,6 +207,7 @@ export function Menu({
     Datasets = '/tablemodelview',
     SqlLab = '/sqllab',
     SavedQueries = '/savedqueryview',
+    Ai = '/ai',
   }
 
   const defaultTabSelection: string[] = [];
@@ -226,6 +227,9 @@ export function Menu({
         break;
       case path.startsWith(Paths.SqlLab) || path.startsWith(Paths.SavedQueries):
         setActiveTabs(['SQL']);
+        break;
+      case path.startsWith(Paths.Ai):
+        setActiveTabs([aiMenuItem.label]);
         break;
       default:
         setActiveTabs(defaultTabSelection);
@@ -435,7 +439,7 @@ export default function MenuWrapper({ data, ...rest }: MenuProps) {
     }
   });
 
-  newMenuData.menu = cleanedMenu;
+  newMenuData.menu = [aiMenuItem, ...cleanedMenu];
   newMenuData.settings = settings;
 
   return <Menu data={newMenuData} {...rest} />;

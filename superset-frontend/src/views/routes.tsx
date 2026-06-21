@@ -29,6 +29,7 @@ import getBootstrapData from 'src/utils/getBootstrapData';
 
 // not lazy loaded since this is the home page.
 import Home from 'src/pages/Home';
+import AI from 'src/pages/AI';
 
 const ChartCreation = lazy(
   () =>
@@ -218,6 +219,14 @@ export const routes: Routes = [
   {
     path: '/superset/welcome/',
     Component: Home,
+  },
+  {
+    path: '/ai/',
+    Component: AI,
+  },
+  {
+    path: '/ai/:sessionId',
+    Component: AI,
   },
   {
     path: '/superset/file-handler',

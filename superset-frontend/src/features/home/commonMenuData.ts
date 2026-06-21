@@ -23,6 +23,12 @@ import { t } from '@apache-superset/core/translation';
  */
 export const NAVBAR_MENU_POPUP_OFFSET: [number, number] = [0, -8];
 
+export const aiMenuItem = {
+  name: 'AI',
+  label: t('AI'),
+  url: '/ai/',
+};
+
 export const commonMenuData = {
   name: t('SQL'),
   tabs: [
