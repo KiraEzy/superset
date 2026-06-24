@@ -85,6 +85,9 @@ nvm use 20.19.0
 # Install dependencies (first time only)
 npm ci
 
+# Install peer dependencies not pulled in by npm ci
+npm install "@react-spring/web@^9.4.5" "@fontsource/inter@^5.2.6" "remark-gfm@^3.0.1" "@deck.gl/widgets@~9.2.5" "react-ace@^10.1.0" "ace-builds@^1.41.0"
+
 # Start webpack dev server
 npm run dev-server
 ```
@@ -144,7 +147,19 @@ Edit files under `superset-frontend/src/` → browser refreshes automatically.
 cd superset\superset-frontend
 Remove-Item -Recurse -Force node_modules
 npm ci
+npm install "@react-spring/web@^9.4.5" "@fontsource/inter@^5.2.6" "remark-gfm@^3.0.1" "@deck.gl/widgets@~9.2.5" "react-ace@^10.1.0" "ace-builds@^1.41.0"
 ```
+
+### Webpack `Module not found` errors (`@react-spring/web`, `@fontsource/inter`, etc.)
+
+`npm ci` does not install peer dependencies. Run the install step from section 4 after `npm ci`:
+
+```powershell
+cd superset\superset-frontend
+npm install "@react-spring/web@^9.4.5" "@fontsource/inter@^5.2.6" "remark-gfm@^3.0.1" "@deck.gl/widgets@~9.2.5" "react-ace@^10.1.0" "ace-builds@^1.41.0"
+```
+
+Then restart the dev server.
 
 ### Blank page / `FlashProvider` crash on :9000
 

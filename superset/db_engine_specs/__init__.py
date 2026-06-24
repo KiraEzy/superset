@@ -142,6 +142,22 @@ def get_available_engine_specs() -> dict[type[BaseEngineSpec], set[str]]:  # noq
                 try:
                     dialect.dbapi()
                 except ModuleNotFoundError:
+                    if attr == "mysql":
+                        for alt_driver in ("mysqlconnector", "pymysql", "mysqldb"):
+                            try:
+                                alt_dialect = sqlalchemy.dialects.registry.load(
+                                    f"mysql.{alt_driver}"
+                                )
+                                alt_dialect.dbapi()
+                                drivers[attr].add(alt_driver)
+                            except ModuleNotFoundError:
+                                continue
+                            except Exception as ex:  # pylint: disable=broad-except
+                                logger.warning(
+                                    "Unable to load dialect mysql.%s: %s",
+                                    alt_driver,
+                                    ex,
+                                )
                     continue
                 except Exception as ex:  # pylint: disable=broad-except
                     logger.warning("Unable to load dialect %s: %s", dialect, ex)
@@ -193,3 +209,18 @@ def get_available_engine_specs() -> dict[type[BaseEngineSpec], set[str]]:  # noq
         available_engines[engine_spec] = driver
 
     return available_engines
+
+
+def get_effective_default_driver(engine_spec: type) -> str | None:
+    """Return the best available driver for an engine spec."""
+    drivers = get_available_engine_specs().get(engine_spec, set())
+    default = getattr(engine_spec, "default_driver", None)
+    if default and default in drivers:
+        return default
+    if not drivers:
+        return default
+    if engine_spec.engine == "mysql":
+        for preferred in ("mysqlconnector", "pymysql", "mysqldb"):
+            if preferred in drivers:
+                return preferred
+    return sorted(drivers)[0]

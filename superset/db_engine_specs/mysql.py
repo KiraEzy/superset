@@ -398,16 +398,43 @@ class MySQLEngineSpec(BasicParametersMixin, BaseEngineSpec):
         return parse.unquote(sqlalchemy_uri.database)
 
     @classmethod
+    def _load_type_code_map(cls) -> dict[int, str]:
+        for loader in (
+            cls._load_mysqldb_type_map,
+            cls._load_mysqlconnector_type_map,
+        ):
+            try:
+                return loader()
+            except ImportError:
+                continue
+        return {}
+
+    @staticmethod
+    def _load_mysqldb_type_map() -> dict[int, str]:
+        import MySQLdb
+
+        ft = MySQLdb.constants.FIELD_TYPE
+        return {
+            getattr(ft, name): name
+            for name in dir(ft)
+            if not name.startswith("_")
+        }
+
+    @staticmethod
+    def _load_mysqlconnector_type_map() -> dict[int, str]:
+        from mysql.connector.constants import FieldType
+
+        return {
+            getattr(FieldType, name): name
+            for name in dir(FieldType)
+            if not name.startswith("_")
+            and isinstance(getattr(FieldType, name), int)
+        }
+
+    @classmethod
     def get_datatype(cls, type_code: Any) -> Optional[str]:
         if not cls.type_code_map:
-            # only import and store if needed at least once
-            # pylint: disable=import-outside-toplevel
-            import MySQLdb
-
-            ft = MySQLdb.constants.FIELD_TYPE
-            cls.type_code_map = {
-                getattr(ft, k): k for k in dir(ft) if not k.startswith("_")
-            }
+            cls.type_code_map = cls._load_type_code_map()
         datatype = type_code
         if isinstance(type_code, int):
             datatype = cls.type_code_map.get(type_code)

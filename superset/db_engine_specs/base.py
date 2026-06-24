@@ -2631,6 +2631,12 @@ class BasicParametersMixin:
     encryption_parameters: dict[str, str] = {}
 
     @classmethod
+    def get_effective_default_driver(cls) -> str:
+        from superset.db_engine_specs import get_effective_default_driver
+
+        return get_effective_default_driver(cls) or cls.default_driver
+
+    @classmethod
     def build_sqlalchemy_uri(  # pylint: disable=unused-argument
         cls,
         parameters: BasicParametersType,
@@ -2646,9 +2652,10 @@ class BasicParametersMixin:
                 )
             query.update(cls.encryption_parameters)
 
+        driver = cls.get_effective_default_driver()
         return str(
             URL.create(
-                f"{cls.engine}+{cls.default_driver}".rstrip("+"),  # type: ignore
+                f"{cls.engine}+{driver}".rstrip("+"),  # type: ignore
                 username=parameters.get("username"),
                 password=parameters.get("password"),
                 host=parameters["host"],

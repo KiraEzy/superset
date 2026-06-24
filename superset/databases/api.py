@@ -110,7 +110,10 @@ from superset.databases.schemas import (
     ValidateSQLResponse,
 )
 from superset.databases.utils import get_table_metadata
-from superset.db_engine_specs import get_available_engine_specs
+from superset.db_engine_specs import (
+    get_available_engine_specs,
+    get_effective_default_driver,
+)
 from superset.errors import ErrorLevel, SupersetError, SupersetErrorType
 from superset.exceptions import (
     DatabaseNotFoundException,
@@ -1914,13 +1917,17 @@ class DatabaseRestApi(BaseSupersetModelRestApi):
             }
 
             if engine_spec.default_driver:
-                payload["default_driver"] = engine_spec.default_driver
+                effective_driver = get_effective_default_driver(engine_spec)
+                if effective_driver:
+                    payload["default_driver"] = effective_driver
 
             # show configuration parameters for DBs that support it
+            effective_driver = get_effective_default_driver(engine_spec)
             if (
                 hasattr(engine_spec, "parameters_json_schema")
                 and hasattr(engine_spec, "sqlalchemy_uri_placeholder")
-                and engine_spec.default_driver in drivers
+                and effective_driver
+                and effective_driver in drivers
             ):
                 payload["parameters"] = engine_spec.parameters_json_schema()
                 payload["sqlalchemy_uri_placeholder"] = (

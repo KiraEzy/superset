@@ -66,6 +66,7 @@ import {
   RightMenuProps,
 } from './types';
 import { NAVBAR_MENU_POPUP_OFFSET } from './commonMenuData';
+import { AI_CONNECTION_SETTINGS_PATH } from 'src/features/ai/aiConnectionConfig';
 
 const extensionsRegistry = getExtensionsRegistry();
 
@@ -487,6 +488,22 @@ const RightMenu = ({
       });
 
       if (!navbarRight.user_is_anonymous) {
+        items.push({ type: 'divider', key: 'ai-divider' });
+
+        items.push({
+          type: 'group',
+          label: t('AI'),
+          key: 'ai-section',
+          children: [
+            {
+              key: 'ai-connection',
+              label: (
+                <Link to={AI_CONNECTION_SETTINGS_PATH}>{t('AI Connection')}</Link>
+              ),
+            },
+          ],
+        });
+
         items.push({ type: 'divider', key: 'user-divider' });
 
         const userItems: MenuItem[] = [];

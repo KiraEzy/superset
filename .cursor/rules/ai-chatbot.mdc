@@ -1,0 +1,53 @@
+---
+description: AI Chatbot feature guidelines for the FocalBI Superset fork — chat UI, sessions, MCP integration, and chart visualization
+globs: "**/features/ai/**,**/pages/AI/**,**/pages/AIConnection/**,**/views/ai/**,**/mcp_service/**"
+alwaysApply: false
+---
+
+# AI Chatbot Feature
+
+This project is an Apache Superset 6.1 fork (FocalBI) with an added AI chatbot. The chatbot lives across these layers:
+
+## Architecture
+
+```
+pages/AI/          → Chat UI (sidebar, sessions, messages, streaming)
+pages/AIConnection/→ LLM + MCP settings form
+features/ai/       → API client (aiChatApi.ts) + config (aiConnectionConfig.ts)
+views/ai/          → Flask REST API + agent proxy (SSE streaming, MCP tool loop)
+mcp_service/       → Superset MCP server (tools: execute_sql, generate_chart, etc.)
+```
+
+## Core Requirements
+
+The AI Chat page (`/ai/`) must support:
+
+1. **New Chat** — create a fresh session from the sidebar; clear message history
+2. **Chat History** — sidebar list of past sessions; sessions must be persistable (localStorage or backend API), not purely in-memory
+3. **AI Connection per user** — each chat session uses the LLM provider configured in AI Connection settings (localStorage key `focalbi__ai_connection_config`); config is sent with every `/api/v1/ai/chat/stream/` request
+4. **Superset MCP integration** — the backend agent proxy calls MCP tools (list_databases, execute_sql, generate_chart, etc.) via JSON-RPC; the frontend displays `tool_start`/`tool_end` SSE events as status indicators
+5. **Chart visualization** — when MCP returns a chart payload (via `generate_chart`), the chat UI must render the chart inline using Superset's chart rendering components, not just show raw JSON
+
+## Frontend Patterns
+
+- **React hooks only** for chat state — no Redux for chat (Redux is used elsewhere in Superset)
+- **Streaming**: use `streamChatMessage()` from `aiChatApi.ts` with SSE event callbacks (`onStatus`, `onToken`, `onDone`, `onError`)
+- **Styling**: Emotion `styled` components + `@apache-superset/core/theme` tokens
+- **Components**: use `@superset-ui/core/components` and `@apache-superset/core/components`
+- **i18n**: wrap all user-facing strings with `t()` from `@apache-superset/core/translation`
+- **Routing**: react-router-dom v5; routes registered in `src/views/routes.tsx`; use `useParams` for `/ai/:sessionId` deep linking
+
+## Backend Patterns
+
+- **API endpoints** at `/api/v1/ai/` — registered via `AIRestApi` in `views/ai/api.py`
+- **Agent loop** in `views/ai/proxy.py` — iterates LLM ↔ MCP tool calls (max `AI_AGENT_MAX_ITERATIONS`)
+- **SSE event types**: `status`, `tool_start`, `tool_end`, `token`, `done`, `error`
+- **Docker-aware URLs**: use `AI_DOCKER_HOST`, `AI_MCP_INTERNAL_URL`, `AI_LLM_INTERNAL_BASE_URL` config vars
+
+## When Adding New Features
+
+- Place reusable chat components under `features/ai/components/`
+- Keep page-level orchestration in `pages/AI/index.tsx`
+- Add new MCP tools in `mcp_service/` following the domain-folder pattern (e.g. `chart/`, `dashboard/`)
+- Add new API endpoints in `views/ai/api.py` with corresponding client functions in `aiChatApi.ts`
+- Persist chat sessions — the `/ai/:sessionId` route exists but is currently unused; wire it up

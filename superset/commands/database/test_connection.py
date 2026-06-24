@@ -33,7 +33,7 @@ from superset.commands.database.ssh_tunnel.exceptions import (
 )
 from superset.commands.database.utils import ping
 from superset.daos.database import DatabaseDAO
-from superset.databases.utils import make_url_safe
+from superset.databases.utils import make_url_safe, resolve_sqlalchemy_uri
 from superset.errors import ErrorLevel, SupersetErrorType
 from superset.exceptions import (
     OAuth2RedirectError,
@@ -74,6 +74,8 @@ class TestConnectionDatabaseCommand(BaseCommand):
         uri = self._properties.get("sqlalchemy_uri", "")
         if self._model and uri == self._model.safe_sqlalchemy_uri():
             uri = self._model.sqlalchemy_uri_decrypted
+
+        uri = resolve_sqlalchemy_uri(uri)
 
         url = make_url_safe(uri)
 

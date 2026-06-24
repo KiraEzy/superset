@@ -129,3 +129,32 @@ def make_url_safe(raw_url: str | URL) -> URL:
 
     else:
         return raw_url
+
+
+def resolve_sqlalchemy_uri(uri: str) -> str:
+    """
+    Rewrite SQLAlchemy URIs to use an installed driver when the default is missing.
+
+    For example, ``mysql://`` defaults to mysqldb; if only mysql-connector-python is
+    installed we rewrite to ``mysql+mysqlconnector://``.
+    """
+    url = make_url_safe(uri)
+    if url.drivername != "mysql":
+        return uri
+
+    from superset.db_engine_specs import get_available_engine_specs
+
+    drivers: set[str] = set()
+    for engine_spec, available in get_available_engine_specs().items():
+        if engine_spec.engine == "mysql":
+            drivers = available
+            break
+
+    if not drivers:
+        return uri
+
+    for preferred in ("mysqlconnector", "pymysql", "mysqldb"):
+        if preferred in drivers:
+            return str(url.set(drivername=f"mysql+{preferred}"))
+
+    return uri

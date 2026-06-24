@@ -19,22 +19,10 @@
 import { useState, useRef, useEffect, useCallback, KeyboardEvent } from 'react';
 import { t } from '@apache-superset/core/translation';
 import { styled, css } from '@apache-superset/core/theme';
+import { Loading } from '@superset-ui/core/components';
 import { Icons } from '@superset-ui/core/components/Icons';
-
-interface ChatMessage {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: number;
-}
-
-interface ChatSession {
-  id: string;
-  title: string;
-  messages: ChatMessage[];
-  createdAt: number;
-  updatedAt: number;
-}
+import ChatMarkdown from 'src/features/ai/components/ChatMarkdown';
+import { useAiChatSessions } from 'src/features/ai/hooks/useAiChatSessions';
 
 const PageWrapper = styled.div`
   display: flex;
@@ -206,28 +194,44 @@ const MessageRow = styled.div<{ role: 'user' | 'assistant' }>`
   `}
 `;
 
-const MessageBubble = styled.div<{ role: 'user' | 'assistant' }>`
-  ${({ theme, role }) => css`
-    max-width: 80%;
+const StatusText = styled.div`
+  ${({ theme }) => css`
+    font-size: ${theme.fontSizeSM}px;
+    color: ${theme.colorTextSecondary};
+    font-style: italic;
+    margin-bottom: ${theme.sizeUnit}px;
+  `}
+`;
+
+const MessageBubble = styled.div<{ role: 'user' | 'assistant'; error?: boolean }>`
+  ${({ theme, role, error }) => css`
+    max-width: ${role === 'assistant' ? '90%' : '80%'};
     padding: ${theme.sizeUnit * 2.5}px ${theme.sizeUnit * 3.5}px;
     border-radius: ${theme.borderRadiusLG}px;
     font-size: ${theme.fontSize}px;
     line-height: 1.6;
-    white-space: pre-wrap;
     word-break: break-word;
 
     ${
-      role === 'user'
+      error
         ? css`
-            background: ${theme.colorPrimary};
-            color: #fff;
-            border-bottom-right-radius: ${theme.borderRadiusSM}px;
-          `
-        : css`
-            background: ${theme.colorBgLayout};
-            color: ${theme.colorText};
+            background: ${theme.colorErrorBg};
+            color: ${theme.colorErrorText};
+            border: 1px solid ${theme.colorErrorBorder};
             border-bottom-left-radius: ${theme.borderRadiusSM}px;
           `
+        : role === 'user'
+          ? css`
+              background: ${theme.colorPrimary};
+              color: #fff;
+              border-bottom-right-radius: ${theme.borderRadiusSM}px;
+              white-space: pre-wrap;
+            `
+          : css`
+              background: ${theme.colorBgLayout};
+              color: ${theme.colorText};
+              border-bottom-left-radius: ${theme.borderRadiusSM}px;
+            `
     }
   `}
 `;
@@ -300,34 +304,29 @@ const SendButton = styled.button<{ disabled?: boolean }>`
   `}
 `;
 
-function createId(): string {
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function generateSessionTitle(firstMessage: string): string {
-  const maxLen = 30;
-  const trimmed = firstMessage.trim().replace(/\n/g, ' ');
-  return trimmed.length > maxLen ? `${trimmed.slice(0, maxLen)}...` : trimmed;
-}
-
-const MOCK_RESPONSES = [
-  "I can help you explore your data. What dataset would you like to analyze?",
-  "Let me look into that for you. Could you provide more details about what you're looking for?",
-  "That's a great question! Based on your dashboards, I can help you create a visualization for that.",
-  "I'd recommend starting with a time-series chart for that kind of analysis. Want me to set one up?",
-  "I can run that SQL query for you. Let me check the available databases first.",
-];
+const LoadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;
 
 export default function AI() {
-  const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const {
+    sessions,
+    activeSession,
+    isLoadingSessions,
+    isLoadingSession,
+    isSending,
+    createNewSession,
+    selectSession,
+    sendMessage,
+  } = useAiChatSessions();
+
   const [sidebarTab, setSidebarTab] = useState<'history'>('history');
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const activeSession = sessions.find(s => s.id === activeSessionId) ?? null;
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -337,88 +336,22 @@ export default function AI() {
     scrollToBottom();
   }, [activeSession?.messages.length, scrollToBottom]);
 
-  const createNewSession = useCallback(() => {
-    const session: ChatSession = {
-      id: createId(),
-      title: t('New chat'),
-      messages: [],
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    setSessions(prev => [session, ...prev]);
-    setActiveSessionId(session.id);
-    setInputValue('');
-    textareaRef.current?.focus();
-  }, []);
-
-  const sendMessage = useCallback(async () => {
+  const handleSend = useCallback(async () => {
     const text = inputValue.trim();
-    if (!text || isLoading) return;
-
-    let sessionId = activeSessionId;
-
-    if (!sessionId) {
-      const session: ChatSession = {
-        id: createId(),
-        title: t('New chat'),
-        messages: [],
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      };
-      setSessions(prev => [session, ...prev]);
-      sessionId = session.id;
-      setActiveSessionId(session.id);
+    if (!text || isSending) {
+      return;
     }
-
-    const userMsg: ChatMessage = {
-      id: createId(),
-      role: 'user',
-      content: text,
-      timestamp: Date.now(),
-    };
-
-    setSessions(prev =>
-      prev.map(s => {
-        if (s.id !== sessionId) return s;
-        const isFirst = s.messages.length === 0;
-        return {
-          ...s,
-          title: isFirst ? generateSessionTitle(text) : s.title,
-          messages: [...s.messages, userMsg],
-          updatedAt: Date.now(),
-        };
-      }),
-    );
     setInputValue('');
-    setIsLoading(true);
-
-    // Simulate assistant response
-    await new Promise(resolve => {
-      setTimeout(resolve, 800 + Math.random() * 1200);
-    });
-
-    const assistantMsg: ChatMessage = {
-      id: createId(),
-      role: 'assistant',
-      content:
-        MOCK_RESPONSES[Math.floor(Math.random() * MOCK_RESPONSES.length)],
-      timestamp: Date.now(),
-    };
-
-    setSessions(prev =>
-      prev.map(s =>
-        s.id === sessionId
-          ? { ...s, messages: [...s.messages, assistantMsg], updatedAt: Date.now() }
-          : s,
-      ),
-    );
-    setIsLoading(false);
-  }, [inputValue, isLoading, activeSessionId]);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+    }
+    await sendMessage(text);
+  }, [inputValue, isSending, sendMessage]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      handleSend();
     }
   };
 
@@ -428,6 +361,11 @@ export default function AI() {
     el.style.height = 'auto';
     el.style.height = `${Math.min(el.scrollHeight, 150)}px`;
   };
+
+  const activeSessionId = activeSession?.id ?? null;
+  const showEmptyState =
+    !isLoadingSession &&
+    (!activeSession || activeSession.messages.length === 0);
 
   return (
     <PageWrapper>
@@ -440,13 +378,21 @@ export default function AI() {
         </SidebarHeader>
 
         <SidebarTabs>
-          <SidebarTab active={sidebarTab === 'history'} onClick={() => setSidebarTab('history')}>
+          <SidebarTab
+            active={sidebarTab === 'history'}
+            onClick={() => setSidebarTab('history')}
+          >
             {t('History')}
           </SidebarTab>
         </SidebarTabs>
 
         <SessionList>
-          {sessions.length === 0 && (
+          {isLoadingSessions && (
+            <EmptySubtitle style={{ textAlign: 'center', padding: '24px 0' }}>
+              {t('Loading...')}
+            </EmptySubtitle>
+          )}
+          {!isLoadingSessions && sessions.length === 0 && (
             <EmptySubtitle style={{ textAlign: 'center', padding: '24px 0' }}>
               {t('No conversations yet')}
             </EmptySubtitle>
@@ -455,7 +401,7 @@ export default function AI() {
             <SessionItem
               key={session.id}
               active={session.id === activeSessionId}
-              onClick={() => setActiveSessionId(session.id)}
+              onClick={() => selectSession(session.id)}
             >
               <Icons.CommentOutlined iconSize="s" />
               <SessionTitle>{session.title}</SessionTitle>
@@ -465,25 +411,34 @@ export default function AI() {
       </Sidebar>
 
       <MainArea>
-        {!activeSession || activeSession.messages.length === 0 ? (
+        {isLoadingSession ? (
+          <LoadingWrapper>
+            <Loading />
+          </LoadingWrapper>
+        ) : showEmptyState ? (
           <EmptyState>
             <EmptyTitle>{t('What can I help you with?')}</EmptyTitle>
             <EmptySubtitle>
-              {t('Ask questions about your data, create charts, or explore dashboards.')}
+              {t(
+                'Ask questions about your data, create charts, or explore dashboards.',
+              )}
             </EmptySubtitle>
           </EmptyState>
         ) : (
           <MessagesContainer>
-            {activeSession.messages.map(msg => (
+            {activeSession?.messages.map(msg => (
               <MessageRow key={msg.id} role={msg.role}>
-                <MessageBubble role={msg.role}>{msg.content}</MessageBubble>
+                <MessageBubble role={msg.role} error={msg.error}>
+                  {msg.status && <StatusText>{msg.status}</StatusText>}
+                  {msg.role === 'assistant' && msg.content ? (
+                    <ChatMarkdown content={msg.content} />
+                  ) : (
+                    msg.content
+                  )}
+                  {msg.streaming && !msg.content && !msg.status && '...'}
+                </MessageBubble>
               </MessageRow>
             ))}
-            {isLoading && (
-              <MessageRow role="assistant">
-                <MessageBubble role="assistant">...</MessageBubble>
-              </MessageRow>
-            )}
             <div ref={messagesEndRef} />
           </MessagesContainer>
         )}
@@ -499,8 +454,8 @@ export default function AI() {
               placeholder={t('Message AI...')}
             />
             <SendButton
-              disabled={!inputValue.trim() || isLoading}
-              onClick={sendMessage}
+              disabled={!inputValue.trim() || isSending}
+              onClick={handleSend}
             >
               <Icons.CaretRightOutlined iconSize="s" />
             </SendButton>

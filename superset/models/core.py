@@ -65,7 +65,7 @@ from superset_core.common.models import Database as CoreDatabase
 from superset import db, db_engine_specs, is_feature_enabled
 from superset.commands.database.exceptions import DatabaseInvalidError
 from superset.constants import LRU_CACHE_MAX_SIZE, PASSWORD_MASK
-from superset.databases.utils import make_url_safe
+from superset.databases.utils import make_url_safe, resolve_sqlalchemy_uri
 from superset.db_engine_specs.base import MetricType, TimeGrain
 from superset.extensions import (
     cache_manager,
@@ -399,7 +399,7 @@ class Database(CoreDatabase, AuditMixinNullable, ImportExportMixin):  # pylint: 
         return url_copy
 
     def set_sqlalchemy_uri(self, uri: str) -> None:
-        conn = make_url_safe(uri.strip())
+        conn = make_url_safe(resolve_sqlalchemy_uri(uri.strip()))
         custom_password_store = app.config["SQLALCHEMY_CUSTOM_PASSWORD_STORE"]
         if conn.password != PASSWORD_MASK and not custom_password_store:
             # do not over-write the password with the password mask
@@ -1162,7 +1162,7 @@ class Database(CoreDatabase, AuditMixinNullable, ImportExportMixin):  # pylint: 
                 conn = conn.set(password=self.password)
         else:
             conn = conn.set(password=self.password)
-        return str(conn)
+        return resolve_sqlalchemy_uri(str(conn))
 
     @property
     def sql_url(self) -> str:
