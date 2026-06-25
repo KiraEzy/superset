@@ -18,10 +18,12 @@
  */
 import { SupersetClient, getClientErrorObject } from '@superset-ui/core';
 import { formatAiChatError } from './aiChatApi';
+import { rewriteChartExploreUrl } from './supersetUrlUtils';
 import {
   ApiChatMessage,
   ApiChatSession,
   ApiChatSessionSummary,
+  AiChatChartPayload,
   ChatMessage,
   ChatSession,
   ChatSessionSummary,
@@ -35,6 +37,44 @@ function toTimestamp(value: string | undefined): number {
   return Number.isNaN(parsed) ? Date.now() : parsed;
 }
 
+function mapChartsFromExtra(extra: Record<string, unknown>): AiChatChartPayload[] {
+  const raw = extra.charts;
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  return raw
+    .filter((item): item is Record<string, unknown> => Boolean(item && typeof item === 'object'))
+    .map((item, index) => {
+      const formData = item.form_data;
+      const vizType = item.viz_type;
+      if (typeof vizType !== 'string' || !vizType.trim()) {
+        return null;
+      }
+      if ((!formData || typeof formData !== 'object') && typeof item.slice_id !== 'number') {
+        return null;
+      }
+      const chart: AiChatChartPayload = {
+        id: typeof item.id === 'string' ? item.id : `chart-${index}`,
+        viz_type: vizType.trim(),
+        form_data: (formData as Record<string, unknown>) ?? {},
+      };
+      if (typeof item.title === 'string' && item.title.trim()) {
+        chart.title = item.title.trim();
+      }
+      if (typeof item.slice_id === 'number') {
+        chart.slice_id = item.slice_id;
+      }
+      if (typeof item.explore_url === 'string' && item.explore_url.trim()) {
+        chart.explore_url = item.explore_url.trim();
+      }
+      if (typeof item.form_data_key === 'string' && item.form_data_key.trim()) {
+        chart.form_data_key = item.form_data_key.trim();
+      }
+      return rewriteChartExploreUrl(chart);
+    })
+    .filter((chart): chart is AiChatChartPayload => chart !== null);
+}
+
 export function mapApiMessage(message: ApiChatMessage): ChatMessage {
   const extra = message.extra ?? {};
   return {
@@ -43,6 +83,11 @@ export function mapApiMessage(message: ApiChatMessage): ChatMessage {
     content: message.content,
     timestamp: toTimestamp(message.created_on),
     error: Boolean(extra.error),
+    charts: mapChartsFromExtra(extra),
+    durationSeconds:
+      typeof extra.duration_seconds === 'number' && extra.duration_seconds >= 0
+        ? extra.duration_seconds
+        : undefined,
   };
 }
 

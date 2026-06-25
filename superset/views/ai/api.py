@@ -52,6 +52,21 @@ class AIRestApi(BaseApi):
     def _config_from_request(self) -> dict[str, Any]:
         return request.get_json(silent=True) or {}
 
+    def _agent_max_iterations_from_request(self, data: dict[str, Any]) -> int | None:
+        raw = data.get("agentMaxIterations")
+        if isinstance(raw, int) and raw > 0:
+            return raw
+        if isinstance(raw, str) and raw.strip().isdigit():
+            parsed = int(raw.strip())
+            return parsed if parsed > 0 else None
+        return None
+
+    def _system_prompt_from_request(self, data: dict[str, Any]) -> str | None:
+        raw = data.get("systemPrompt")
+        if isinstance(raw, str):
+            return raw
+        return None
+
     @expose("/test_llm/", methods=("POST",))
     @protect()
     @safe
@@ -103,6 +118,8 @@ class AIRestApi(BaseApi):
                 mcp_enabled=bool(data.get("mcpEnabled")),
                 mcp_server_url=data.get("mcpServerUrl", ""),
                 mcp_bearer_token=data.get("mcpBearerToken"),
+                agent_max_iterations=self._agent_max_iterations_from_request(data),
+                system_prompt=self._system_prompt_from_request(data),
             )
             return self._json_response(200, result)
         except Exception as ex:  # noqa: BLE001
@@ -128,6 +145,10 @@ class AIRestApi(BaseApi):
                     mcp_enabled=bool(data.get("mcpEnabled")),
                     mcp_server_url=data.get("mcpServerUrl", ""),
                     mcp_bearer_token=data.get("mcpBearerToken"),
+                    agent_max_iterations=self._agent_max_iterations_from_request(
+                        data
+                    ),
+                    system_prompt=self._system_prompt_from_request(data),
                 ):
                     yield f"data: {json.dumps(event)}\n\n"
             except AiStreamError as ex:

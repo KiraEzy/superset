@@ -20,8 +20,8 @@ from tests.integration_tests.base_tests import SupersetTestCase
 from tests.integration_tests.conftest import with_feature_flags
 
 REDIRECT_CONFIG = {
-    "WEBDRIVER_BASEURL": "http://localhost:8088",
-    "WEBDRIVER_BASEURL_USER_FRIENDLY": "http://localhost:8088",
+    "WEBDRIVER_BASEURL": "http://localhost:9000",
+    "WEBDRIVER_BASEURL_USER_FRIENDLY": "http://localhost:9000",
 }
 
 

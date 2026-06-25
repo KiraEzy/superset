@@ -19,10 +19,12 @@
 import { useState, useRef, useEffect, useCallback, KeyboardEvent } from 'react';
 import { t } from '@apache-superset/core/translation';
 import { styled, css } from '@apache-superset/core/theme';
-import { Loading } from '@superset-ui/core/components';
+import { DeleteModal, Loading } from '@superset-ui/core/components';
 import { Icons } from '@superset-ui/core/components/Icons';
 import ChatMarkdown from 'src/features/ai/components/ChatMarkdown';
+import ChatChartEmbed from 'src/features/ai/components/ChatChartEmbed';
 import { useAiChatSessions } from 'src/features/ai/hooks/useAiChatSessions';
+import { ChatSessionSummary } from 'src/features/ai/types';
 
 const PageWrapper = styled.div`
   display: flex;
@@ -108,12 +110,30 @@ const SessionList = styled.div`
   padding: ${({ theme }) => theme.sizeUnit * 2}px;
 `;
 
+const SessionItemRow = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: ${theme.sizeUnit}px;
+    border-radius: ${theme.borderRadiusLG}px;
+
+    &:hover {
+      background: ${theme.colorBgTextHover};
+
+      button[data-delete-session] {
+        opacity: 1;
+      }
+    }
+  `}
+`;
+
 const SessionItem = styled.button<{ active?: boolean }>`
   ${({ theme, active }) => css`
     display: flex;
     align-items: center;
     gap: ${theme.sizeUnit * 2}px;
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     padding: ${theme.sizeUnit * 2}px ${theme.sizeUnit * 2.5}px;
     border: none;
     border-radius: ${theme.borderRadiusLG}px;
@@ -125,7 +145,7 @@ const SessionItem = styled.button<{ active?: boolean }>`
     transition: background 0.15s;
 
     &:hover {
-      background: ${theme.colorBgTextHover};
+      background: transparent;
     }
   `}
 `;
@@ -134,6 +154,30 @@ const SessionTitle = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`;
+
+const SessionDeleteButton = styled.button`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    margin-right: ${theme.sizeUnit}px;
+    border: none;
+    border-radius: ${theme.borderRadius}px;
+    background: transparent;
+    color: ${theme.colorTextSecondary};
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s;
+
+    &:hover {
+      color: ${theme.colorError};
+      background: ${theme.colorErrorBg};
+    }
+  `}
 `;
 
 const MainArea = styled.div`
@@ -200,6 +244,15 @@ const StatusText = styled.div`
     color: ${theme.colorTextSecondary};
     font-style: italic;
     margin-bottom: ${theme.sizeUnit}px;
+  `}
+`;
+
+const ResponseDuration = styled.div`
+  ${({ theme }) => css`
+    margin-top: ${theme.sizeUnit * 2}px;
+    font-size: ${theme.fontSizeSM - 1}px;
+    color: ${theme.colorTextTertiary};
+    text-align: right;
   `}
 `;
 
@@ -304,6 +357,28 @@ const SendButton = styled.button<{ disabled?: boolean }>`
   `}
 `;
 
+const StopButton = styled.button`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: ${theme.borderRadius}px;
+    background: ${theme.colorBgTextHover};
+    color: ${theme.colorText};
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s;
+
+    &:hover {
+      background: ${theme.colorErrorBg};
+      color: ${theme.colorError};
+    }
+  `}
+`;
+
 const LoadingWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -321,9 +396,13 @@ export default function AI() {
     createNewSession,
     selectSession,
     sendMessage,
+    stopGeneration,
+    deleteSession,
   } = useAiChatSessions();
 
   const [sidebarTab, setSidebarTab] = useState<'history'>('history');
+  const [sessionToDelete, setSessionToDelete] =
+    useState<ChatSessionSummary | null>(null);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -367,6 +446,15 @@ export default function AI() {
     !isLoadingSession &&
     (!activeSession || activeSession.messages.length === 0);
 
+  const handleConfirmDelete = useCallback(async () => {
+    if (!sessionToDelete) {
+      return;
+    }
+    const { id } = sessionToDelete;
+    setSessionToDelete(null);
+    await deleteSession(id);
+  }, [deleteSession, sessionToDelete]);
+
   return (
     <PageWrapper>
       <Sidebar>
@@ -398,17 +486,42 @@ export default function AI() {
             </EmptySubtitle>
           )}
           {sessions.map(session => (
-            <SessionItem
-              key={session.id}
-              active={session.id === activeSessionId}
-              onClick={() => selectSession(session.id)}
-            >
-              <Icons.CommentOutlined iconSize="s" />
-              <SessionTitle>{session.title}</SessionTitle>
-            </SessionItem>
+            <SessionItemRow key={session.id}>
+              <SessionItem
+                active={session.id === activeSessionId}
+                onClick={() => selectSession(session.id)}
+              >
+                <Icons.CommentOutlined iconSize="s" />
+                <SessionTitle>{session.title}</SessionTitle>
+              </SessionItem>
+              <SessionDeleteButton
+                type="button"
+                data-delete-session
+                aria-label={t('Delete conversation')}
+                onClick={e => {
+                  e.stopPropagation();
+                  setSessionToDelete(session);
+                }}
+              >
+                <Icons.DeleteOutlined iconSize="s" />
+              </SessionDeleteButton>
+            </SessionItemRow>
           ))}
         </SessionList>
       </Sidebar>
+
+      {sessionToDelete && (
+        <DeleteModal
+          open
+          title={t('Delete conversation?')}
+          description={t(
+            'This will permanently delete "%s".',
+            sessionToDelete.title,
+          )}
+          onConfirm={handleConfirmDelete}
+          onHide={() => setSessionToDelete(null)}
+        />
+      )}
 
       <MainArea>
         {isLoadingSession ? (
@@ -430,12 +543,23 @@ export default function AI() {
               <MessageRow key={msg.id} role={msg.role}>
                 <MessageBubble role={msg.role} error={msg.error}>
                   {msg.status && <StatusText>{msg.status}</StatusText>}
+                  {msg.role === 'assistant' &&
+                    msg.charts?.map(chart => (
+                      <ChatChartEmbed key={chart.id} chart={chart} />
+                    ))}
                   {msg.role === 'assistant' && msg.content ? (
                     <ChatMarkdown content={msg.content} />
                   ) : (
                     msg.content
                   )}
                   {msg.streaming && !msg.content && !msg.status && '...'}
+                  {msg.role === 'assistant' &&
+                    msg.durationSeconds !== undefined &&
+                    !msg.streaming && (
+                      <ResponseDuration>
+                        {t('%s sec', msg.durationSeconds)}
+                      </ResponseDuration>
+                    )}
                 </MessageBubble>
               </MessageRow>
             ))}
@@ -453,12 +577,22 @@ export default function AI() {
               onKeyDown={handleKeyDown}
               placeholder={t('Message AI...')}
             />
-            <SendButton
-              disabled={!inputValue.trim() || isSending}
-              onClick={handleSend}
-            >
-              <Icons.CaretRightOutlined iconSize="s" />
-            </SendButton>
+            {isSending ? (
+              <StopButton
+                type="button"
+                aria-label={t('Stop generating')}
+                onClick={stopGeneration}
+              >
+                <Icons.StopOutlined iconSize="s" />
+              </StopButton>
+            ) : (
+              <SendButton
+                disabled={!inputValue.trim()}
+                onClick={handleSend}
+              >
+                <Icons.CaretRightOutlined iconSize="s" />
+              </SendButton>
+            )}
           </InputWrapper>
         </InputArea>
       </MainArea>

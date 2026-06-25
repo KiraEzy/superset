@@ -20,6 +20,7 @@ import { SupersetClient } from '@superset-ui/core';
 import {
   generateSessionTitle,
   listChatSessions,
+  mapApiMessage,
   mapApiSession,
   mapApiSessionSummary,
 } from './aiChatSessionApi';
@@ -108,5 +109,39 @@ describe('aiChatSessionApi', () => {
     });
     expect(sessions).toHaveLength(1);
     expect(sessions[0].title).toBe('One');
+  });
+
+  test('mapApiMessage maps charts from extra', () => {
+    const message = mapApiMessage({
+      id: 5,
+      role: 'assistant',
+      content: 'Here is your chart',
+      created_on: '2026-01-01T00:00:00',
+      extra: {
+        charts: [
+          {
+            id: 'chart-0',
+            viz_type: 'pie',
+            slice_id: 42,
+            form_data: { viz_type: 'pie' },
+          },
+        ],
+      },
+    });
+
+    expect(message.charts).toHaveLength(1);
+    expect(message.charts?.[0].slice_id).toBe(42);
+  });
+
+  test('mapApiMessage maps duration_seconds from extra', () => {
+    const message = mapApiMessage({
+      id: 6,
+      role: 'assistant',
+      content: 'Done',
+      created_on: '2026-01-01T00:00:00',
+      extra: { duration_seconds: 12 },
+    });
+
+    expect(message.durationSeconds).toBe(12);
   });
 });

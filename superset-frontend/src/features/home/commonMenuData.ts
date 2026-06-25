@@ -25,7 +25,7 @@ export const NAVBAR_MENU_POPUP_OFFSET: [number, number] = [0, -8];
 
 export const aiMenuItem = {
   name: 'AI',
-  label: t('AI'),
+  label: t('Ask Focal AI'),
   url: '/ai/',
 };
 

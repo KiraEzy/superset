@@ -53,6 +53,8 @@ const testConfig: AiConnectionConfig = {
   mcpEnabled: false,
   mcpServerUrl: '',
   mcpBearerToken: '',
+  agentMaxIterations: 120,
+  systemPrompt: '',
 };
 
 // eslint-disable-next-line no-restricted-globals -- TODO: Migrate from describe blocks
@@ -137,12 +139,55 @@ describe('streamChatMessage', () => {
     await expect(
       streamChatMessage([{ role: 'user', content: 'hello' }], testConfig),
     ).rejects.toThrow('Insufficient Balance');
+  });
 
-    try {
-      await streamChatMessage([{ role: 'user', content: 'hello' }], testConfig);
-      fail('expected streamChatMessage to reject');
-    } catch (error) {
-      expect((error as Error).message).not.toBe('Chat ended without a response');
-    }
+  test('aborts in-flight stream when signal is aborted', async () => {
+    const controller = new AbortController();
+    controller.abort();
+
+    global.fetch = jest.fn().mockRejectedValue(
+      new DOMException('Aborted', 'AbortError'),
+    );
+
+    await expect(
+      streamChatMessage(
+        [{ role: 'user', content: 'hello' }],
+        testConfig,
+        {},
+        controller.signal,
+      ),
+    ).rejects.toMatchObject({ name: 'AbortError' });
+  });
+
+  test('parses chart SSE events and includes charts in response', async () => {
+    const chartPayload = {
+      id: 'chart-0',
+      viz_type: 'pie',
+      form_data: { viz_type: 'pie', datasource: '1__table' },
+      slice_id: 42,
+      title: 'Revenue',
+    };
+    global.fetch = jest.fn().mockResolvedValue(
+      createSseResponse([
+        `data: ${JSON.stringify({ type: 'chart', chart: chartPayload })}\n\n`,
+        `data: ${JSON.stringify({
+          type: 'done',
+          content: 'Here is your chart.',
+          tools_used: ['generate_chart'],
+          charts: [chartPayload],
+        })}\n\n`,
+      ]),
+    );
+
+    const onChart = jest.fn();
+    const result = await streamChatMessage(
+      [{ role: 'user', content: 'chart please' }],
+      testConfig,
+      { onChart },
+    );
+
+    expect(onChart).toHaveBeenCalledWith(chartPayload);
+    expect(result.charts).toEqual([chartPayload]);
+    expect(result.content).toBe('Here is your chart.');
   });
 });

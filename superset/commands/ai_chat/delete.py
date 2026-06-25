@@ -16,6 +16,7 @@
 # under the License.
 import logging
 from functools import partial
+from typing import Optional
 from uuid import UUID
 
 from superset.commands.ai_chat.exceptions import (
@@ -24,6 +25,7 @@ from superset.commands.ai_chat.exceptions import (
 )
 from superset.commands.base import BaseCommand
 from superset.daos.ai_chat import AiChatSessionDAO
+from superset.models.ai_chat import AiChatSession
 from superset.utils.decorators import on_error, transaction
 
 logger = logging.getLogger(__name__)
@@ -32,16 +34,15 @@ logger = logging.getLogger(__name__)
 class DeleteAiChatSessionCommand(BaseCommand):
     def __init__(self, session_uuid: UUID):
         self._session_uuid = session_uuid
-        self._model_id: int | None = None
+        self._model: Optional[AiChatSession] = None
 
     @transaction(on_error=partial(on_error, reraise=AiChatSessionDeleteFailedError))
     def run(self) -> None:
         self.validate()
-        assert self._model_id is not None
-        AiChatSessionDAO.delete([self._model_id])
+        assert self._model is not None
+        AiChatSessionDAO.delete([self._model])
 
     def validate(self) -> None:
-        model = AiChatSessionDAO.find_by_uuid(self._session_uuid)
-        if not model:
+        self._model = AiChatSessionDAO.find_by_uuid(self._session_uuid)
+        if not self._model:
             raise AiChatSessionNotFoundError()
-        self._model_id = model.id

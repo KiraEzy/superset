@@ -62,8 +62,9 @@ const {
 
 // Precedence: CLI args > env vars > defaults
 const devserverPort = cliPort || process.env.WEBPACK_DEVSERVER_PORT || 9000;
+// 0.0.0.0 allows LAN devices (e.g. http://192.168.x.x:9000). Set to 127.0.0.1 for loopback only.
 const devserverHost =
-  cliHost || process.env.WEBPACK_DEVSERVER_HOST || '127.0.0.1';
+  cliHost || process.env.WEBPACK_DEVSERVER_HOST || '0.0.0.0';
 
 const isDevMode = mode !== 'production';
 const isDevServer = process.argv[1]?.includes('webpack-dev-server') ?? false;
@@ -664,16 +665,8 @@ if (isDevMode) {
     liveReload: false,
     host: devserverHost,
     port: devserverPort,
-    allowedHosts: [
-      ...new Set([
-        devserverHost,
-        'localhost',
-        '.localhost',
-        '127.0.0.1',
-        '::1',
-        '.local',
-      ]),
-    ],
+  // Allow any Host header so intranet IPs (192.168.x.x) are not rejected.
+    allowedHosts: 'all',
     proxy: [() => proxyConfig],
     client: {
       overlay: {
@@ -682,11 +675,8 @@ if (isDevMode) {
         runtimeErrors: error => !/ResizeObserver/.test(error.message),
       },
       logging: 'info', // Show HMR messages
-      webSocketURL: {
-        hostname: '0.0.0.0',
-        pathname: '/ws',
-        port: 0,
-      },
+      // Derive WS host from the page URL so HMR works via localhost and LAN IP.
+      webSocketURL: 'auto://0.0.0.0:0/ws',
     },
     static: {
       directory: path.join(process.cwd(), '../static/assets'),

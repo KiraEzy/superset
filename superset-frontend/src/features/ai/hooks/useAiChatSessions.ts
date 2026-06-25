@@ -26,12 +26,13 @@ import { formatAiChatError, streamChatMessage } from 'src/features/ai/aiChatApi'
 import {
   appendChatMessage,
   createChatSession,
+  deleteChatSession,
   generateSessionTitle,
   getChatSessionByUuid,
   listChatSessions,
   updateChatSessionTitle,
 } from 'src/features/ai/aiChatSessionApi';
-import { ChatMessage, ChatSession, ChatSessionSummary } from 'src/features/ai/types';
+import { ChatMessage, ChatSession, ChatSessionSummary, AiChatChartPayload } from 'src/features/ai/types';
 
 function createLocalId(): string {
   return `local-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -45,6 +46,27 @@ function upsertSummary(
   return [summary, ...without].sort((a, b) => b.updatedAt - a.updatedAt);
 }
 
+function isAbortError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') {
+    return false;
+  }
+  const err = error as {
+    name?: string;
+    statusText?: string;
+    originalError?: { name?: string; statusText?: string };
+  };
+  return (
+    err.name === 'AbortError' ||
+    err.statusText === 'abort' ||
+    err.originalError?.name === 'AbortError' ||
+    err.originalError?.statusText === 'abort'
+  );
+}
+
+function computeResponseDurationSeconds(startedAtMs: number): number {
+  return Math.max(0, Math.round((Date.now() - startedAtMs) / 1000));
+}
+
 export function useAiChatSessions() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -56,6 +78,13 @@ export function useAiChatSessions() {
   const [isLoadingSession, setIsLoadingSession] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const activeSessionRef = useRef<ChatSession | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const streamedContentRef = useRef('');
+  const chartsThisTurnRef = useRef<AiChatChartPayload[]>([]);
+  const activeStreamMetaRef = useRef<{
+    sessionId: string;
+    assistantLocalId: string;
+  } | null>(null);
 
   useEffect(() => {
     activeSessionRef.current = activeSession;
@@ -88,6 +117,17 @@ export function useAiChatSessions() {
       cancelled = true;
     };
   }, [refreshSessionList, showError]);
+
+  useEffect(
+    () => () => {
+      abortControllerRef.current?.abort();
+    },
+    [],
+  );
+
+  useEffect(() => {
+    abortControllerRef.current?.abort();
+  }, [urlSessionId]);
 
   useEffect(() => {
     if (!urlSessionId) {
@@ -142,6 +182,32 @@ export function useAiChatSessions() {
     [history],
   );
 
+  const stopGeneration = useCallback(() => {
+    abortControllerRef.current?.abort();
+  }, []);
+
+  const deleteSession = useCallback(
+    async (sessionId: string) => {
+      try {
+        if (
+          activeSessionRef.current?.id === sessionId &&
+          abortControllerRef.current
+        ) {
+          abortControllerRef.current.abort();
+        }
+        await deleteChatSession(sessionId);
+        setSessions(prev => prev.filter(s => s.id !== sessionId));
+        if (activeSessionRef.current?.id === sessionId) {
+          setActiveSession(null);
+          history.replace('/ai/');
+        }
+      } catch (error) {
+        showError(error);
+      }
+    },
+    [history, showError],
+  );
+
   const sendMessage = useCallback(
     async (text: string) => {
       const trimmed = text.trim();
@@ -151,6 +217,7 @@ export function useAiChatSessions() {
 
       setIsSending(true);
       let session = activeSessionRef.current;
+      let streamStartedAt = 0;
 
       try {
         if (!session) {
@@ -232,58 +299,118 @@ export function useAiChatSessions() {
           };
         });
 
+        streamedContentRef.current = '';
+        chartsThisTurnRef.current = [];
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+        activeStreamMetaRef.current = {
+          sessionId: session.id,
+          assistantLocalId,
+        };
+
+        streamStartedAt = Date.now();
         let streamedContent = '';
-        const response = await streamChatMessage(historyForLlm, getAiConnectionConfig(), {
-          onStatus: message => {
-            setActiveSession(prev => {
-              if (!prev || prev.id !== session!.id) {
-                return prev;
-              }
-              return {
-                ...prev,
-                messages: prev.messages.map(msg =>
-                  msg.id === assistantLocalId
-                    ? { ...msg, status: message }
-                    : msg,
-                ),
-              };
-            });
+        const response = await streamChatMessage(
+          historyForLlm,
+          getAiConnectionConfig(),
+          {
+            onStatus: message => {
+              setActiveSession(prev => {
+                if (!prev || prev.id !== session!.id) {
+                  return prev;
+                }
+                return {
+                  ...prev,
+                  messages: prev.messages.map(msg =>
+                    msg.id === assistantLocalId
+                      ? { ...msg, status: message }
+                      : msg,
+                  ),
+                };
+              });
+            },
+            onToken: token => {
+              streamedContent += token;
+              streamedContentRef.current = streamedContent;
+              setActiveSession(prev => {
+                if (!prev || prev.id !== session!.id) {
+                  return prev;
+                }
+                return {
+                  ...prev,
+                  messages: prev.messages.map(msg =>
+                    msg.id === assistantLocalId
+                      ? {
+                          ...msg,
+                          content: msg.content + token,
+                          status: undefined,
+                        }
+                      : msg,
+                  ),
+                };
+              });
+            },
+            onChart: chart => {
+              chartsThisTurnRef.current = [
+                ...chartsThisTurnRef.current,
+                chart,
+              ];
+              setActiveSession(prev => {
+                if (!prev || prev.id !== session!.id) {
+                  return prev;
+                }
+                return {
+                  ...prev,
+                  messages: prev.messages.map(msg =>
+                    msg.id === assistantLocalId
+                      ? {
+                          ...msg,
+                          charts: [...(msg.charts ?? []), chart],
+                          status: undefined,
+                        }
+                      : msg,
+                  ),
+                };
+              });
+            },
+            onError: () => {
+              setActiveSession(prev => {
+                if (!prev || prev.id !== session!.id) {
+                  return prev;
+                }
+                return {
+                  ...prev,
+                  messages: prev.messages.map(msg =>
+                    msg.id === assistantLocalId
+                      ? { ...msg, status: undefined }
+                      : msg,
+                  ),
+                };
+              });
+            },
           },
-          onToken: token => {
-            streamedContent += token;
-            setActiveSession(prev => {
-              if (!prev || prev.id !== session!.id) {
-                return prev;
-              }
-              return {
-                ...prev,
-                messages: prev.messages.map(msg =>
-                  msg.id === assistantLocalId
-                    ? {
-                        ...msg,
-                        content: msg.content + token,
-                        status: undefined,
-                      }
-                    : msg,
-                ),
-              };
-            });
-          },
-          onError: () => {
-            setActiveSession(prev => {
-              if (!prev || prev.id !== session!.id) {
-                return prev;
-              }
-              return {
-                ...prev,
-                messages: prev.messages.map(msg =>
-                  msg.id === assistantLocalId
-                    ? { ...msg, status: undefined }
-                    : msg,
-                ),
-              };
-            });
-          },
+          controller.signal,
+        );
+
+        const durationSeconds = computeResponseDurationSeconds(streamStartedAt);
+
+        setActiveSession(prev => {
+          if (!prev || prev.id !== session!.id) {
+            return prev;
+          }
+          return {
+            ...prev,
+            messages: prev.messages.map(msg =>
+              msg.id === assistantLocalId
+                ? {
+                    ...msg,
+                    streaming: false,
+                    status: undefined,
+                    durationSeconds,
+                  }
+                : msg,
+            ),
+          };
         });
 
         let assistantContent = response.content;
@@ -291,13 +418,21 @@ export function useAiChatSessions() {
           assistantContent += `\n\n—\n_${t('Tools used')}: ${response.tools_used.join(', ')}_`;
         }
 
+        const assistantExtra: Record<string, unknown> = {
+          duration_seconds: durationSeconds,
+        };
+        if (response.tools_used?.length) {
+          assistantExtra.tools_used = response.tools_used;
+        }
+        if (response.charts?.length) {
+          assistantExtra.charts = response.charts;
+        }
+
         const { message: persistedAssistant, session: updatedSummary } =
           await appendChatMessage(session.id, {
             role: 'assistant',
             content: assistantContent,
-            extra: response.tools_used?.length
-              ? { tools_used: response.tools_used }
-              : undefined,
+            extra: assistantExtra,
           });
 
         setActiveSession(prev => {
@@ -320,29 +455,97 @@ export function useAiChatSessions() {
           await refreshSessionList();
         }
       } catch (error) {
-        showError(error);
-        if (session) {
-          setActiveSession(prev => {
-            if (!prev || prev.id !== session!.id) {
-              return prev;
+        if (isAbortError(error) && session) {
+          const partialContent = streamedContentRef.current.trim();
+          const streamMeta = activeStreamMetaRef.current;
+          const durationSeconds = computeResponseDurationSeconds(streamStartedAt);
+
+          if (partialContent && streamMeta?.sessionId === session.id) {
+            try {
+              const abortExtra: Record<string, unknown> = {
+                stopped: true,
+                duration_seconds: durationSeconds,
+              };
+              if (chartsThisTurnRef.current.length) {
+                abortExtra.charts = chartsThisTurnRef.current;
+              }
+              const { message: persistedAssistant, session: updatedSummary } =
+                await appendChatMessage(session.id, {
+                  role: 'assistant',
+                  content: partialContent,
+                  extra: abortExtra,
+                });
+
+              setActiveSession(prev => {
+                if (!prev || prev.id !== session!.id) {
+                  return prev;
+                }
+                return {
+                  ...prev,
+                  updatedAt: Date.now(),
+                  messages: prev.messages.map(msg =>
+                    msg.id === streamMeta.assistantLocalId
+                      ? persistedAssistant
+                      : msg,
+                  ),
+                };
+              });
+
+              if (updatedSummary) {
+                setSessions(prev => upsertSummary(prev, updatedSummary));
+              }
+            } catch (persistError) {
+              showError(persistError);
             }
-            return {
-              ...prev,
-              messages: prev.messages.map(msg =>
-                msg.streaming
-                  ? {
-                      ...msg,
-                      content: `${t('Error')}: ${formatAiChatError(error)}`,
-                      streaming: false,
-                      status: undefined,
-                      error: true,
-                    }
-                  : msg,
-              ),
-            };
-          });
+          } else if (streamMeta?.sessionId === session.id) {
+            setActiveSession(prev => {
+              if (!prev || prev.id !== session!.id) {
+                return prev;
+              }
+              return {
+                ...prev,
+                messages: prev.messages.filter(
+                  msg => msg.id !== streamMeta.assistantLocalId,
+                ),
+              };
+            });
+          }
+        } else {
+          showError(error);
+          if (session) {
+            const durationSeconds =
+              streamStartedAt > 0
+                ? computeResponseDurationSeconds(streamStartedAt)
+                : undefined;
+            setActiveSession(prev => {
+              if (!prev || prev.id !== session!.id) {
+                return prev;
+              }
+              return {
+                ...prev,
+                messages: prev.messages.map(msg =>
+                  msg.streaming
+                    ? {
+                        ...msg,
+                        content: `${t('Error')}: ${formatAiChatError(error)}`,
+                        streaming: false,
+                        status: undefined,
+                        error: true,
+                        ...(durationSeconds !== undefined
+                          ? { durationSeconds }
+                          : {}),
+                      }
+                    : msg,
+                ),
+              };
+            });
+          }
         }
       } finally {
+        abortControllerRef.current = null;
+        activeStreamMetaRef.current = null;
+        streamedContentRef.current = '';
+        chartsThisTurnRef.current = [];
         setIsSending(false);
       }
     },
@@ -358,5 +561,7 @@ export function useAiChatSessions() {
     createNewSession,
     selectSession,
     sendMessage,
+    stopGeneration,
+    deleteSession,
   };
 }

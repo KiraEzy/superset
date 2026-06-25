@@ -17,6 +17,16 @@
  * under the License.
  */
 
+export interface AiChatChartPayload {
+  id: string;
+  title?: string;
+  viz_type: string;
+  slice_id?: number;
+  explore_url?: string;
+  form_data: Record<string, unknown>;
+  form_data_key?: string;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
@@ -25,6 +35,9 @@ export interface ChatMessage {
   error?: boolean;
   streaming?: boolean;
   status?: string;
+  charts?: AiChatChartPayload[];
+  /** Wall-clock seconds to complete the assistant response (stream end). */
+  durationSeconds?: number;
 }
 
 export interface ChatSessionSummary {

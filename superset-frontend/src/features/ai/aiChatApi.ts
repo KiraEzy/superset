@@ -19,6 +19,8 @@
 import { SupersetClient, getClientErrorObject } from '@superset-ui/core';
 import { makeUrl } from 'src/utils/pathUtils';
 import { AiConnectionConfig, getAiConnectionConfig } from './aiConnectionConfig';
+import { rewriteChartExploreUrl } from './supersetUrlUtils';
+import { AiChatChartPayload } from './types';
 
 type ProxyResponse = { ok: boolean; message: string; models?: string[] };
 
@@ -118,6 +120,7 @@ export async function testLlmConnection(
 export interface ChatResponse {
   content: string;
   tools_used?: string[];
+  charts?: AiChatChartPayload[];
 }
 
 export type ChatStreamEvent =
@@ -125,7 +128,8 @@ export type ChatStreamEvent =
   | { type: 'tool_start'; tool: string }
   | { type: 'tool_end'; tool: string }
   | { type: 'token'; content: string }
-  | { type: 'done'; content: string; tools_used?: string[] }
+  | { type: 'chart'; chart: AiChatChartPayload }
+  | { type: 'done'; content: string; tools_used?: string[]; charts?: AiChatChartPayload[] }
   | {
       type: 'error';
       message: string;
@@ -138,6 +142,7 @@ export interface ChatStreamHandlers {
   onToolStart?: (tool: string) => void;
   onToolEnd?: (tool: string) => void;
   onToken?: (content: string) => void;
+  onChart?: (chart: AiChatChartPayload) => void;
   onDone?: (response: ChatResponse) => void;
   onError?: (message: string) => void;
 }
@@ -259,6 +264,7 @@ export async function streamChatMessage(
 
   let content = '';
   const toolsUsed: string[] = [];
+  const charts: AiChatChartPayload[] = [];
   let finished = false;
   let streamError: string | null = null;
 
@@ -274,6 +280,12 @@ export async function streamChatMessage(
       case 'tool_end':
         handlers.onToolEnd?.(event.tool);
         break;
+      case 'chart': {
+        const chart = rewriteChartExploreUrl(event.chart);
+        charts.push(chart);
+        handlers.onChart?.(chart);
+        break;
+      }
       case 'token':
         content += event.content;
         handlers.onToken?.(event.content);
@@ -283,8 +295,16 @@ export async function streamChatMessage(
         if (event.tools_used?.length) {
           toolsUsed.push(...event.tools_used);
         }
+        if (event.charts?.length) {
+          for (const chart of event.charts) {
+            const rewritten = rewriteChartExploreUrl(chart);
+            if (!charts.some(existing => existing.id === rewritten.id)) {
+              charts.push(rewritten);
+            }
+          }
+        }
         finished = true;
-        handlers.onDone?.({ content, tools_used: toolsUsed });
+        handlers.onDone?.({ content, tools_used: toolsUsed, charts });
         break;
       case 'error': {
         const message = streamErrorMessage(event);
@@ -305,7 +325,7 @@ export async function streamChatMessage(
     throw new Error('Chat ended without a response');
   }
 
-  return { content: content.trim(), tools_used: toolsUsed };
+  return { content: content.trim(), tools_used: toolsUsed, charts };
 }
 
 export async function sendChatMessage(

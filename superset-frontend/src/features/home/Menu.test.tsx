@@ -23,6 +23,7 @@ import setupCodeOverrides from 'src/setup/setupCodeOverrides';
 import { getExtensionsRegistry } from '@superset-ui/core';
 import * as CoreTheme from '@apache-superset/core/theme';
 import { Menu } from './Menu';
+import MenuWrapper from './Menu';
 import * as getBootstrapData from 'src/utils/getBootstrapData';
 
 jest.mock('@apache-superset/core/theme', () => ({
@@ -596,6 +597,28 @@ test('should render the Login link when user is anonymous', async () => {
   });
   const login = await screen.findByText('Login');
   expect(login).toHaveAttribute('href', user_login_url);
+});
+
+test('should NOT render Ask Focal AI when user is anonymous', async () => {
+  useSelectorMock.mockReturnValue({ roles: user.roles });
+  render(<MenuWrapper {...mockedProps} />, {
+    useRedux: true,
+    useQueryParams: true,
+    useRouter: true,
+    useTheme: true,
+  });
+  expect(screen.queryByText('Ask Focal AI')).not.toBeInTheDocument();
+});
+
+test('should render Ask Focal AI when user is logged in', async () => {
+  useSelectorMock.mockReturnValue({ roles: user.roles });
+  render(<MenuWrapper {...notanonProps} />, {
+    useRedux: true,
+    useQueryParams: true,
+    useRouter: true,
+    useTheme: true,
+  });
+  expect(await screen.findByText('Ask Focal AI')).toBeInTheDocument();
 });
 
 test('should render the Language Picker', async () => {

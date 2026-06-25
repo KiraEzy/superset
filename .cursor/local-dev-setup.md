@@ -137,6 +137,18 @@ npm run dev-server
 
 Edit files under `superset-frontend/src/` → browser refreshes automatically.
 
+### Access from other devices on your Wi‑Fi (LAN)
+
+The dev server binds to **all interfaces** (`0.0.0.0:9000`) by default. On the dev machine, find your LAN IP (e.g. `192.168.11.122`) and open:
+
+`http://<your-lan-ip>:9000/`
+
+Other devices on the same network can use the same URL. API calls are proxied to the backend on this machine (`localhost:8088`), so Docker does not need to be exposed to the LAN.
+
+- Log in again when using the LAN IP — cookies from `localhost` do not apply to `192.168.x.x`.
+- If another device cannot connect, allow inbound TCP **9000** in Windows Firewall on the dev machine.
+- For loopback-only access, set `WEBPACK_DEVSERVER_HOST=127.0.0.1` before `npm run dev-server`.
+
 ---
 
 ## Troubleshooting

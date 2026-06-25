@@ -22,6 +22,10 @@ import remarkGfm from 'remark-gfm';
 import { styled, css, useTheme } from '@apache-superset/core/theme';
 import { t } from '@apache-superset/core/translation';
 import { Icons } from '@superset-ui/core/components/Icons';
+import {
+  rewriteSupersetExploreUrl,
+  shouldRewriteSupersetUrl,
+} from 'src/features/ai/supersetUrlUtils';
 
 const MarkdownWrapper = styled.div`
   ${({ theme }) => css`
@@ -319,7 +323,8 @@ export default function ChatMarkdown({ content }: ChatMarkdownProps) {
     () =>
       body.replace(CHART_LINK_RE, (_match, label, url, sliceId) => {
         const safeLabel = label || `Chart ${sliceId}`;
-        return `[📊 ${safeLabel}](${url})`;
+        const rewrittenUrl = rewriteSupersetExploreUrl(url);
+        return `[📊 ${safeLabel}](${rewrittenUrl})`;
       }),
     [body],
   );
@@ -353,16 +358,31 @@ export default function ChatMarkdown({ content }: ChatMarkdownProps) {
         href?: string;
         children?: React.ReactNode;
       }) {
-        const isChartLink = href && /\/explore\/\?slice_id=\d+/.test(href);
+        const resolvedHref =
+          href && shouldRewriteSupersetUrl(href)
+            ? rewriteSupersetExploreUrl(href)
+            : href;
+        const isChartLink =
+          resolvedHref && /\/explore\/\?slice_id=\d+/.test(resolvedHref);
         if (isChartLink) {
           return (
-            <ChartLink href={href} target="_blank" rel="noopener noreferrer" {...props}>
+            <ChartLink
+              href={resolvedHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              {...props}
+            >
               {linkChildren}
             </ChartLink>
           );
         }
         return (
-          <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+          <a
+            href={resolvedHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...props}
+          >
             {linkChildren}
           </a>
         );

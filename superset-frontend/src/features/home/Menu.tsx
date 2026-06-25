@@ -439,7 +439,9 @@ export default function MenuWrapper({ data, ...rest }: MenuProps) {
     }
   });
 
-  newMenuData.menu = [aiMenuItem, ...cleanedMenu];
+  newMenuData.menu = newMenuData.navbar_right?.user_is_anonymous
+    ? cleanedMenu
+    : [aiMenuItem, ...cleanedMenu];
   newMenuData.settings = settings;
 
   return <Menu data={newMenuData} {...rest} />;

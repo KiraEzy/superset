@@ -84,9 +84,11 @@ class AiStreamError(ValueError):
 
 MCP_ACCEPT = "application/json, text/event-stream"
 
-REQUEST_TIMEOUT = 120
+REQUEST_TIMEOUT = 1200
 
-MAX_TOOL_ITERATIONS = 12
+MAX_TOOL_ITERATIONS = 120
+
+LOCAL_HOSTNAMES = frozenset({"localhost", "127.0.0.1", "0.0.0.0"})  # noqa: S104
 
 MAX_TOOL_RESULT_CHARS = 48_000
 
@@ -120,10 +122,68 @@ Rules:
 
 - Share explore/preview URLs returned by chart tools.
 
+- When creating charts for the user, use save_chart: true so charts persist and appear inline in chat.
+
 - Be concise in your final reply to the user."""
 
 
+def _resolve_agent_max_iterations(agent_max_iterations: int | None) -> int:
+    if isinstance(agent_max_iterations, int) and agent_max_iterations > 0:
+        return agent_max_iterations
+    config_val = current_app.config.get("AI_AGENT_MAX_ITERATIONS")
+    if isinstance(config_val, int) and config_val > 0:
+        return config_val
+    return MAX_TOOL_ITERATIONS
 
+
+def _resolve_agent_system_prompt(system_prompt: str | None) -> str:
+    if isinstance(system_prompt, str) and system_prompt.strip():
+        return system_prompt.strip()
+    config_prompt = current_app.config.get("AI_AGENT_SYSTEM_PROMPT")
+    if isinstance(config_prompt, str) and config_prompt.strip():
+        return config_prompt.strip()
+    return AGENT_SYSTEM_PROMPT
+
+
+def _get_request_base_url() -> str | None:
+    try:
+        from flask import has_request_context, request
+
+        if not has_request_context():
+            return None
+        scheme = request.headers.get("X-Forwarded-Proto", request.scheme)
+        host = request.headers.get("X-Forwarded-Host") or request.host
+        if host:
+            return f"{scheme}://{host}".rstrip("/")
+    except Exception:  # noqa: BLE001
+        return None
+    return None
+
+
+def rewrite_superset_url_for_client(url: str) -> str:
+    """Rewrite localhost or relative Superset URLs to the client's request origin."""
+    if not url or not url.strip():
+        return url
+    trimmed = url.strip()
+    base = _get_request_base_url()
+    if not base:
+        return trimmed
+    base_parsed = urlparse(base)
+    if trimmed.startswith("/"):
+        return f"{base.rstrip('/')}{trimmed}"
+    parsed = urlparse(trimmed)
+    if parsed.scheme in ("http", "https") and parsed.hostname in LOCAL_HOSTNAMES:
+        return urlunparse(
+            (
+                base_parsed.scheme,
+                base_parsed.netloc,
+                parsed.path,
+                parsed.params,
+                parsed.query,
+                parsed.fragment,
+            )
+        )
+    return trimmed
 
 
 def _running_in_docker() -> bool:
@@ -472,6 +532,64 @@ def _uses_tool_search_proxy(mcp_tools: list[dict[str, Any]]) -> bool:
 
 
 
+def _parse_mcp_structured_content(result: Any) -> dict[str, Any] | None:
+    if not isinstance(result, dict):
+        return None
+    structured = result.get("structuredContent")
+    if isinstance(structured, dict):
+        return structured
+    content = result.get("content")
+    if isinstance(content, list):
+        for block in content:
+            if isinstance(block, dict) and block.get("type") == "text":
+                text = block.get("text", "")
+                if isinstance(text, str) and text.strip().startswith("{"):
+                    try:
+                        parsed = json.loads(text)
+                        if isinstance(parsed, dict):
+                            return parsed
+                    except json.JSONDecodeError:
+                        continue
+    if isinstance(result.get("success"), bool) or result.get("form_data"):
+        return result
+    return None
+
+
+def _extract_chart_payload(tool_name: str, raw_result: Any) -> dict[str, Any] | None:
+    if tool_name != "generate_chart":
+        return None
+    structured = _parse_mcp_structured_content(raw_result)
+    if not structured or not structured.get("success"):
+        return None
+    form_data = structured.get("form_data")
+    if not isinstance(form_data, dict) or not form_data:
+        return None
+    chart_info = structured.get("chart") if isinstance(structured.get("chart"), dict) else {}
+    slice_id = chart_info.get("id")
+    title = chart_info.get("slice_name") or chart_info.get("title")
+    viz_type = (
+        chart_info.get("viz_type")
+        or form_data.get("viz_type")
+        or structured.get("viz_type")
+    )
+    if not isinstance(viz_type, str) or not viz_type.strip():
+        return None
+    payload: dict[str, Any] = {
+        "title": title if isinstance(title, str) else None,
+        "viz_type": viz_type.strip(),
+        "form_data": form_data,
+    }
+    if isinstance(slice_id, int):
+        payload["slice_id"] = slice_id
+    explore_url = structured.get("explore_url")
+    if isinstance(explore_url, str) and explore_url.strip():
+        payload["explore_url"] = rewrite_superset_url_for_client(explore_url.strip())
+    form_data_key = structured.get("form_data_key")
+    if isinstance(form_data_key, str) and form_data_key.strip():
+        payload["form_data_key"] = form_data_key.strip()
+    return payload
+
+
 def _serialize_tool_result(result: Any) -> str:
 
     if result is None:
@@ -719,6 +837,8 @@ def iter_chat_completion_events(
     mcp_enabled: bool,
     mcp_server_url: str,
     mcp_bearer_token: str | None,
+    agent_max_iterations: int | None = None,
+    system_prompt: str | None = None,
 ) -> Iterator[dict[str, Any]]:
     if not llm_model or not llm_model.strip():
         raise ValueError("Model is required. Configure it in AI Connection settings.")
@@ -746,8 +866,9 @@ def iter_chat_completion_events(
                 [tool for tool in mcp_tools if tool.get("name") not in SYNTHETIC_MCP_TOOLS]
             )
 
+    resolved_system_prompt = _resolve_agent_system_prompt(system_prompt)
     payload_messages: list[dict[str, Any]] = [
-        {"role": "system", "content": AGENT_SYSTEM_PROMPT},
+        {"role": "system", "content": resolved_system_prompt},
         *[
             {"role": m["role"], "content": m["content"]}
             for m in user_messages
@@ -756,7 +877,9 @@ def iter_chat_completion_events(
     ]
 
     tools_used: list[str] = []
-    max_iterations = current_app.config.get("AI_AGENT_MAX_ITERATIONS", MAX_TOOL_ITERATIONS)
+    charts_this_turn: list[dict[str, Any]] = []
+    chart_counter = 0
+    max_iterations = _resolve_agent_max_iterations(agent_max_iterations)
     model = llm_model.strip()
 
     yield {"type": "status", "message": "Thinking..."}
@@ -807,6 +930,15 @@ def iter_chat_completion_events(
                         )
                         tool_result = _serialize_tool_result(raw_result)
                         tools_used.append(display_tool)
+                        chart_payload = _extract_chart_payload(display_tool, raw_result)
+                        if chart_payload:
+                            chart_payload = {
+                                **chart_payload,
+                                "id": f"chart-{chart_counter}",
+                            }
+                            chart_counter += 1
+                            charts_this_turn.append(chart_payload)
+                            yield {"type": "chart", "chart": chart_payload}
                     except Exception as ex:  # noqa: BLE001
                         logger.warning("MCP tool %s failed: %s", tool_name, ex)
                         tool_result = f"Tool error: {ex}"
@@ -841,6 +973,7 @@ def iter_chat_completion_events(
             "type": "done",
             "content": content,
             "tools_used": tools_used,
+            "charts": charts_this_turn,
         }
         return
 
@@ -989,6 +1122,8 @@ def chat_completion(
     mcp_enabled: bool,
     mcp_server_url: str,
     mcp_bearer_token: str | None,
+    agent_max_iterations: int | None = None,
+    system_prompt: str | None = None,
 ) -> dict[str, Any]:
     content_parts: list[str] = []
     tools_used: list[str] = []
@@ -1000,6 +1135,8 @@ def chat_completion(
         mcp_enabled=mcp_enabled,
         mcp_server_url=mcp_server_url,
         mcp_bearer_token=mcp_bearer_token,
+        agent_max_iterations=agent_max_iterations,
+        system_prompt=system_prompt,
     ):
         event_type = event.get("type")
         if event_type == "token":

@@ -24,6 +24,7 @@ import {
   Button,
   Form,
   Input,
+  InputNumber,
   Select,
   Switch,
   Typography,
@@ -31,6 +32,8 @@ import {
 import SubMenu, { SubMenuProps } from 'src/features/home/SubMenu';
 import { useToasts } from 'src/components/MessageToasts/withToasts';
 import {
+  AGENT_MAX_ITERATIONS_MAX,
+  AGENT_MAX_ITERATIONS_MIN,
   AiConnectionConfig,
   DEFAULT_AI_CONNECTION_CONFIG,
   getAiConnectionConfig,
@@ -290,6 +293,49 @@ export default function AIConnection() {
               {t('Test MCP connection')}
             </Button>
           </ButtonRow>
+
+          <SectionTitle level={5}>{t('Agent')}</SectionTitle>
+
+          <Form.Item
+            name="agentMaxIterations"
+            label={t('Max tool iterations')}
+            rules={[
+              { required: true, message: t('Max tool iterations is required') },
+              {
+                type: 'number',
+                min: AGENT_MAX_ITERATIONS_MIN,
+                max: AGENT_MAX_ITERATIONS_MAX,
+                message: t(
+                  'Enter a value between %s and %s',
+                  AGENT_MAX_ITERATIONS_MIN,
+                  AGENT_MAX_ITERATIONS_MAX,
+                ),
+              },
+            ]}
+            extra={t(
+              'Maximum LLM ↔ MCP tool rounds per chat message. Default is 120.',
+            )}
+          >
+            <InputNumber
+              min={AGENT_MAX_ITERATIONS_MIN}
+              max={AGENT_MAX_ITERATIONS_MAX}
+              precision={0}
+              style={{ width: '100%' }}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="systemPrompt"
+            label={t('System prompt')}
+            extra={t(
+              'Optional instructions prepended to every chat. Leave empty to use the server default.',
+            )}
+          >
+            <Input.TextArea
+              rows={6}
+              placeholder={t('Use server default system prompt')}
+            />
+          </Form.Item>
 
           <Alert
             type="info"
