@@ -14,27 +14,23 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-from flask_appbuilder import expose, has_access, permission_name
-
-from superset import event_logger
-from superset.superset_typing import FlaskResponse
-from superset.views.base import BaseSupersetView
+from superset.views.ai.proxy import _sanitize_http_error_body
 
 
-class AIView(BaseSupersetView):
-    route_base = "/ai"
-    class_permission_name = "AI"
+def test_sanitize_http_error_body_plain_text() -> None:
+    assert _sanitize_http_error_body("Invalid API key", 401) == "Invalid API key"
 
-    @expose("/")
-    @has_access
-    @permission_name("chat")
-    @event_logger.log_this
-    def index(self) -> FlaskResponse:
-        return super().render_app_template()
 
-    @expose("/connection/")
-    @has_access
-    @permission_name("chat")
-    @event_logger.log_this
-    def connection(self) -> FlaskResponse:
-        return super().render_app_template()
+def test_sanitize_http_error_body_html_document() -> None:
+    html = (
+        "<!DOCTYPE html><html><head><title>404 Not Found</title></head>"
+        "<body><h1>Not Found</h1></body></html>"
+    )
+    message = _sanitize_http_error_body(html, 404)
+    assert "404 Not Found" in message
+    assert "Not Found" in message
+    assert "<html" not in message
+
+
+def test_sanitize_http_error_body_empty() -> None:
+    assert _sanitize_http_error_body("", 502) == "HTTP 502"

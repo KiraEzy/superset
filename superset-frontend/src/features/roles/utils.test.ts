@@ -22,6 +22,7 @@ import {
   clearPermissionSearchCache,
   fetchGroupOptions,
   fetchPermissionOptions,
+  fetchPermissionsByIds,
 } from './utils';
 
 const getMock = jest.spyOn(SupersetClient, 'get');
@@ -29,6 +30,29 @@ const getMock = jest.spyOn(SupersetClient, 'get');
 afterEach(() => {
   getMock.mockReset();
   clearPermissionSearchCache();
+});
+
+test('fetchPermissionsByIds loads permission catalog without id filter', async () => {
+  const catalog = Array.from({ length: 5 }, (_, i) => ({
+    id: i + 1,
+    permission: { name: `perm_${i + 1}` },
+    view_menu: { name: `view_${i + 1}` },
+  }));
+
+  getMock.mockResolvedValue({
+    json: { count: catalog.length, result: catalog },
+  } as any);
+
+  const result = await fetchPermissionsByIds([1, 3, 99]);
+
+  expect(getMock).toHaveBeenCalledTimes(1);
+  const { endpoint } = getMock.mock.calls[0][0] as { endpoint: string };
+  const query = rison.decode(endpoint.split('?q=')[1]) as Record<string, unknown>;
+  expect(query.filters).toBeUndefined();
+  expect(result).toEqual([
+    { value: 1, label: 'perm 1 view 1' },
+    { value: 3, label: 'perm 3 view 3' },
+  ]);
 });
 
 test('fetchPermissionOptions fetches all results on page 0 with large page_size', async () => {

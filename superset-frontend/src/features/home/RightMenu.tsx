@@ -147,6 +147,7 @@ const RightMenu = ({
   const canChart = findPermission('can_write', 'Chart', roles);
   const canDatabase = findPermission('can_write', 'Database', roles);
   const canDataset = findPermission('can_write', 'Dataset', roles);
+  const canAiConnection = findPermission('can_read', 'Explore', roles);
 
   const { canUploadData, canUploadCSV, canUploadColumnar, canUploadExcel } =
     uploadUserPerms(
@@ -488,21 +489,25 @@ const RightMenu = ({
       });
 
       if (!navbarRight.user_is_anonymous) {
-        items.push({ type: 'divider', key: 'ai-divider' });
+        if (canAiConnection) {
+          items.push({ type: 'divider', key: 'ai-divider' });
 
-        items.push({
-          type: 'group',
-          label: t('AI'),
-          key: 'ai-section',
-          children: [
-            {
-              key: 'ai-connection',
-              label: (
-                <Link to={AI_CONNECTION_SETTINGS_PATH}>{t('AI Connection')}</Link>
-              ),
-            },
-          ],
-        });
+          items.push({
+            type: 'group',
+            label: t('AI'),
+            key: 'ai-section',
+            children: [
+              {
+                key: 'ai-connection',
+                label: (
+                  <Link to={AI_CONNECTION_SETTINGS_PATH}>
+                    {t('AI Connection')}
+                  </Link>
+                ),
+              },
+            ],
+          });
+        }
 
         items.push({ type: 'divider', key: 'user-divider' });
 
@@ -632,6 +637,7 @@ const RightMenu = ({
     languageMenuItem,
     dropdownItems,
     roles,
+    canAiConnection,
     settings,
     RightMenuItemIconExtension,
     buildMenuItem,

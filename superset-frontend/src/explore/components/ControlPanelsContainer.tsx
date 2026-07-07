@@ -112,6 +112,7 @@ export type ControlPanelsContainerProps = {
   onQuery: () => void;
   onStop: () => void;
   canStopQuery: boolean;
+  canRunQuery: boolean;
   chartIsStale: boolean;
 };
 
@@ -1035,6 +1036,7 @@ export const ControlPanelsContainer = (props: ControlPanelsContainerProps) => {
             loading={props.chart.chartStatus === 'loading'}
             isNewChart={!props.chart.queriesResponse}
             canStopQuery={props.canStopQuery}
+            canRunQuery={props.canRunQuery}
             chartIsStale={props.chartIsStale}
           />
         </div>

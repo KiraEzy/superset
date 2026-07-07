@@ -79,3 +79,16 @@ if [ "$SUPERSET_LOAD_EXAMPLES" = "yes" ]; then
     fi
     echo_step "4" "Complete" "Loading examples"
 fi
+
+# Grant examples DB access and configure Tableau-like license roles
+if [ "$SUPERSET_LOAD_EXAMPLES" = "yes" ] && [ "$CYPRESS_CONFIG" != "true" ]; then
+    echo_step "${STEP_CNT}" "Starting" "Configuring Tableau-like license roles"
+    superset shell <<'PYEOF'
+from grant_examples_db_access import grant_examples_database_access
+from setup_tableau_license_roles import setup_tableau_license_roles
+
+setup_tableau_license_roles()
+grant_examples_database_access()
+PYEOF
+    echo_step "${STEP_CNT}" "Complete" "Configuring Tableau-like license roles"
+fi

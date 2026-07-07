@@ -76,9 +76,13 @@ const PAGE_SIZE = 1000;
 const CONCURRENCY_LIMIT = 3;
 const MAX_CACHE_ENTRIES = 20;
 const permissionSearchCache = new Map<string, SelectOption[]>();
+let permissionCatalogCache: SelectOption[] | null = null;
+let permissionCatalogPromise: Promise<SelectOption[]> | null = null;
 
 export const clearPermissionSearchCache = () => {
   permissionSearchCache.clear();
+  permissionCatalogCache = null;
+  permissionCatalogPromise = null;
 };
 
 const fetchPermissionPageRaw = async (queryParams: Record<string, unknown>) => {
@@ -89,6 +93,73 @@ const fetchPermissionPageRaw = async (queryParams: Record<string, unknown>) => {
     data: mapPermissionResults(response.json?.result || []),
     totalCount: response.json?.count ?? 0,
   };
+};
+
+const fetchAllPermissionsCatalog = async (): Promise<SelectOption[]> => {
+  if (permissionCatalogCache) {
+    return permissionCatalogCache;
+  }
+  if (permissionCatalogPromise) {
+    return permissionCatalogPromise;
+  }
+
+  permissionCatalogPromise = (async () => {
+    const page0 = await fetchPermissionPageRaw({
+      page: 0,
+      page_size: PAGE_SIZE,
+    });
+    if (page0.data.length === 0 || page0.data.length >= page0.totalCount) {
+      permissionCatalogCache = page0.data;
+      return page0.data;
+    }
+
+    const actualPageSize = page0.data.length;
+    const totalPages = Math.ceil(page0.totalCount / actualPageSize);
+    const allResults = [...page0.data];
+
+    for (let batch = 1; batch < totalPages; batch += CONCURRENCY_LIMIT) {
+      const batchEnd = Math.min(batch + CONCURRENCY_LIMIT, totalPages);
+      const batchResults = await Promise.all(
+        Array.from({ length: batchEnd - batch }, (_, i) =>
+          fetchPermissionPageRaw({
+            page: batch + i,
+            page_size: PAGE_SIZE,
+          }),
+        ),
+      );
+      for (const result of batchResults) {
+        allResults.push(...result.data);
+        if (result.data.length === 0) {
+          break;
+        }
+      }
+      if (allResults.length >= page0.totalCount) {
+        break;
+      }
+    }
+
+    permissionCatalogCache = allResults;
+    return allResults;
+  })();
+
+  try {
+    return await permissionCatalogPromise;
+  } finally {
+    permissionCatalogPromise = null;
+  }
+};
+
+export const fetchPermissionsByIds = async (
+  permissionIds: number[],
+): Promise<SelectOption[]> => {
+  if (!permissionIds.length) {
+    return [];
+  }
+
+  // permissions-resources does not allow filtering by id; load catalog and match locally.
+  const idSet = new Set(permissionIds);
+  const catalog = await fetchAllPermissionsCatalog();
+  return catalog.filter(option => idSet.has(Number(option.value)));
 };
 
 const fetchAllPermissionPages = async (

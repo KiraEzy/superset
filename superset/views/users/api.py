@@ -127,7 +127,7 @@ class CurrentUserRestApi(BaseSupersetApi):
         put:
           summary: Update the current user
           description: >-
-            Updates the current user's first name, last name, or password.
+            Updates the current user's first name, last name, email, or password.
           requestBody:
             required: true
             content:

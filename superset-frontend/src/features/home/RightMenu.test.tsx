@@ -476,3 +476,72 @@ test('hides logout button when embedded and flag is enabled', async () => {
   userEvent.hover(await screen.findByText(/Settings/i));
   expect(screen.queryByText('Logout')).not.toBeInTheDocument();
 });
+
+test('shows AI Connection in settings for users with Explore read permission', async () => {
+  useSelectorMock.mockReturnValueOnce({
+    createdOn: '2021-04-27T18:12:38.952304',
+    email: 'creator@example.com',
+    firstName: 'Creator',
+    isActive: true,
+    lastName: 'User',
+    permissions: {},
+    roles: {
+      Alpha: [['can_read', 'Explore']],
+    },
+    userId: 2,
+    username: 'creator',
+  });
+  useSelectorMock.mockReturnValueOnce(undefined);
+  useSelectorMock.mockReturnValueOnce({
+    CSV_EXTENSIONS: ['csv'],
+    EXCEL_EXTENSIONS: ['xls', 'xlsx'],
+    COLUMNAR_EXTENSIONS: ['parquet', 'zip'],
+    ALLOWED_EXTENSIONS: ['parquet', 'zip', 'xls', 'xlsx', 'csv'],
+  });
+
+  render(<RightMenu {...createProps()} />, {
+    useRedux: true,
+    useQueryParams: true,
+    useRouter: true,
+    useTheme: true,
+  });
+
+  userEvent.hover(await screen.findByText(/Settings/i));
+  expect(await screen.findByText('AI Connection')).toBeInTheDocument();
+});
+
+test('hides AI Connection in settings for Viewer role', async () => {
+  useSelectorMock.mockReturnValueOnce({
+    createdOn: '2021-04-27T18:12:38.952304',
+    email: 'viewer@example.com',
+    firstName: 'Viewer',
+    isActive: true,
+    lastName: 'User',
+    permissions: {},
+    roles: {
+      Viewer: [
+        ['can_read', 'Dashboard'],
+        ['menu_access', 'Dashboards'],
+      ],
+    },
+    userId: 3,
+    username: 'viewer',
+  });
+  useSelectorMock.mockReturnValueOnce(undefined);
+  useSelectorMock.mockReturnValueOnce({
+    CSV_EXTENSIONS: ['csv'],
+    EXCEL_EXTENSIONS: ['xls', 'xlsx'],
+    COLUMNAR_EXTENSIONS: ['parquet', 'zip'],
+    ALLOWED_EXTENSIONS: ['parquet', 'zip', 'xls', 'xlsx', 'csv'],
+  });
+
+  render(<RightMenu {...createProps()} />, {
+    useRedux: true,
+    useQueryParams: true,
+    useRouter: true,
+    useTheme: true,
+  });
+
+  userEvent.hover(await screen.findByText(/Settings/i));
+  expect(screen.queryByText('AI Connection')).not.toBeInTheDocument();
+});

@@ -131,5 +131,6 @@ describe('UserInfo', () => {
 
     const modals = await screen.findAllByText(/Edit user/i);
     expect(modals.length).toBeGreaterThan(0);
+    expect(await screen.findByLabelText('Email')).toBeInTheDocument();
   });
 });

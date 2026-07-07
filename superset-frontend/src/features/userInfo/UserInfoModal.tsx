@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { omit } from 'lodash';
 import { t } from '@apache-superset/core/translation';
 import { SupersetClient } from '@superset-ui/core';
 import { FormModal, FormItem, Input } from '@superset-ui/core/components';
@@ -38,20 +39,21 @@ function UserInfoModal({
   const { addDangerToast, addSuccessToast } = useToasts();
 
   const requiredFields = isEditMode
-    ? ['first_name', 'last_name']
+    ? ['first_name', 'last_name', 'email']
     : ['password', 'confirm_password'];
   const initialValues = isEditMode
     ? {
         first_name: user?.firstName,
         last_name: user?.lastName,
+        email: user?.email,
       }
     : {};
   const handleFormSubmit = async (values: FormValues) => {
     try {
-      const { confirm_password, ...payload } = values;
+      const payload = omit(values, ['confirm_password']);
       await SupersetClient.put({
         endpoint: `/api/v1/me/`,
-        jsonPayload: { ...payload },
+        jsonPayload: payload,
       });
       addSuccessToast(
         isEditMode
@@ -82,6 +84,19 @@ function UserInfoModal({
         rules={[{ required: true, message: t('Last name is required') }]}
       >
         <Input name="last_name" placeholder={t("Enter the user's last name")} />
+      </FormItem>
+      <FormItem
+        name="email"
+        label={t('Email')}
+        rules={[
+          { required: true, message: t('Email is required') },
+          {
+            type: 'email',
+            message: t('Please enter a valid email address'),
+          },
+        ]}
+      >
+        <Input name="email" placeholder={t("Enter the user's email")} />
       </FormItem>
     </>
   );

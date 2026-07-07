@@ -70,6 +70,18 @@ Steps:
 
 The database will initialize itself upon startup via the init container ([`superset-init`](./docker-init.sh)). This may take a minute.
 
+## After reverting git / switching branches
+
+If you `git checkout`, reset, or revert to an older revision, remove stale containers and reset Docker volumes before starting again. From the `superset` directory (where `docker-compose-image-tag.yml` lives):
+
+```bash
+docker compose down -v
+docker compose -f docker-compose-image-tag.yml down -v
+docker compose -f docker-compose-image-tag.yml up -d
+```
+
+Run `docker compose down -v` first if you previously used the source [`docker-compose.yml`](../docker-compose.yml) build — otherwise volumes such as `superset_superset_home` may remain attached to stopped containers (e.g. `superset-node`).
+
 ## Normal Operation
 
 To run the container, simply run: `docker compose up`

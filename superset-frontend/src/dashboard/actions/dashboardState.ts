@@ -85,6 +85,7 @@ import {
   getFreshSharedLabels,
   getDynamicLabelsColors,
 } from '../../utils/colorScheme';
+import { userHasPermission } from 'src/dashboard/util/permissionUtils';
 import type { DashboardState, GetState, RootState, Slice } from '../types';
 
 // Dashboard dispatch type. The base ThunkDispatch handles dashboard-specific
@@ -1241,12 +1242,21 @@ export const persistDashboardLabelsColor =
     const {
       dashboardInfo: { id, metadata },
       dashboardState: { labelsColorMapMustSync, sharedLabelsColorsMustSync },
+      user,
     } = getState();
 
     if (labelsColorMapMustSync || sharedLabelsColorsMustSync) {
       dispatch(setDashboardLabelsColorMapSynced());
       dispatch(setDashboardSharedLabelsColorsSynced());
-      storeDashboardColorConfig(id, metadata);
+      // Color metadata migration requires can_write on Dashboard; read-only
+      // roles (e.g. Tableau Viewer) apply colors client-side only.
+      if (userHasPermission(user, 'Dashboard', 'can_write')) {
+        try {
+          await storeDashboardColorConfig(id, metadata);
+        } catch (error) {
+          logging.warn('Failed to persist dashboard color config:', error);
+        }
+      }
     }
   };
 

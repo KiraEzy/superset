@@ -27,6 +27,12 @@ export interface AiChatChartPayload {
   form_data_key?: string;
 }
 
+export interface GenerationActivityEntry {
+  type?: string;
+  message: string;
+  at: string;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';

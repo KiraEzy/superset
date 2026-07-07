@@ -144,6 +144,7 @@ const createProps = (additionalProps = {}) =>
       dashboards: [{ id: 1, dashboard_title: 'Test' }],
     },
     canOverwrite: false,
+    canSave: true,
     canDownload: false,
     isStarred: false,
     ...additionalProps,
@@ -450,6 +451,16 @@ describe('ExploreChartHeader', () => {
     userEvent.click(saveButton);
 
     expect(triggerManualSave).not.toHaveBeenCalled();
+  });
+
+  test('hides save button when user cannot save charts', () => {
+    render(<ExploreHeader {...createProps({ canSave: false })} />, {
+      useRedux: true,
+    });
+
+    expect(
+      screen.queryByRole('button', { name: /save/i }),
+    ).not.toBeInTheDocument();
   });
 
   test('should render UnsavedChangesModal when showModal is true', async () => {

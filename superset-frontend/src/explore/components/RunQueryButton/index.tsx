@@ -30,6 +30,7 @@ export type RunQueryButtonProps = {
   errorMessage: ReactNode;
   isNewChart: boolean;
   canStopQuery: boolean;
+  canRunQuery?: boolean;
   chartIsStale: boolean;
 };
 
@@ -40,9 +41,13 @@ export const RunQueryButton = ({
   errorMessage,
   isNewChart,
   canStopQuery,
+  canRunQuery = true,
   chartIsStale,
 }: RunQueryButtonProps) => {
   const theme = useTheme();
+  if (!canRunQuery && !loading) {
+    return null;
+  }
   return loading ? (
     <Button onClick={onStop} buttonStyle="danger" disabled={!canStopQuery}>
       <Icons.Square iconSize="xs" iconColor={theme.colorIcon} />

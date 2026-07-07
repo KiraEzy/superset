@@ -38,12 +38,33 @@ function createLocalId(): string {
   return `local-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function upsertSummary(
+function sortSummariesByRecency(
+  summaries: ChatSessionSummary[],
+): ChatSessionSummary[] {
+  return [...summaries].sort((a, b) => b.updatedAt - a.updatedAt);
+}
+
+/** Insert or re-sort when recency increases (e.g. user sent a message). */
+function bumpSessionSummary(
   summaries: ChatSessionSummary[],
   summary: ChatSessionSummary,
 ): ChatSessionSummary[] {
   const without = summaries.filter(item => item.id !== summary.id);
-  return [summary, ...without].sort((a, b) => b.updatedAt - a.updatedAt);
+  return sortSummariesByRecency([summary, ...without]);
+}
+
+/** Update metadata without changing sidebar order (e.g. session selected). */
+function mergeSessionSummaryInPlace(
+  summaries: ChatSessionSummary[],
+  summary: ChatSessionSummary,
+): ChatSessionSummary[] {
+  const index = summaries.findIndex(item => item.id === summary.id);
+  if (index === -1) {
+    return sortSummariesByRecency([...summaries, summary]);
+  }
+  return summaries.map(item =>
+    item.id === summary.id ? { ...item, ...summary } : item,
+  );
 }
 
 function isAbortError(error: unknown): boolean {
@@ -132,6 +153,13 @@ export function useAiChatSessions() {
   useEffect(() => {
     if (!urlSessionId) {
       setActiveSession(null);
+      activeSessionRef.current = null;
+      return;
+    }
+
+    // Session already loaded locally (e.g. created mid-send from /ai/); refetch would
+    // overwrite optimistic messages with an empty server snapshot.
+    if (activeSessionRef.current?.id === urlSessionId) {
       return;
     }
 
@@ -143,7 +171,7 @@ export function useAiChatSessions() {
           return;
         }
         setActiveSession(session);
-        setSessions(prev => upsertSummary(prev, session));
+        setSessions(prev => mergeSessionSummaryInPlace(prev, session));
       })
       .catch(error => {
         if (cancelled) {
@@ -167,7 +195,7 @@ export function useAiChatSessions() {
   const createNewSession = useCallback(async () => {
     try {
       const session = await createChatSession(t('New chat'));
-      setSessions(prev => upsertSummary(prev, session));
+      setSessions(prev => bumpSessionSummary(prev, session));
       setActiveSession(session);
       history.push(`/ai/${session.id}`);
     } catch (error) {
@@ -222,7 +250,8 @@ export function useAiChatSessions() {
       try {
         if (!session) {
           session = await createChatSession(t('New chat'));
-          setSessions(prev => upsertSummary(prev, session!));
+          setSessions(prev => bumpSessionSummary(prev, session!));
+          activeSessionRef.current = session;
           setActiveSession(session);
           history.replace(`/ai/${session.id}`);
         }
@@ -258,42 +287,47 @@ export function useAiChatSessions() {
         ];
 
         setActiveSession(prev => {
-          if (!prev || prev.id !== session!.id) {
-            return prev;
-          }
+          const base =
+            prev?.id === session!.id ? prev : { ...session!, messages: [] };
           return {
-            ...prev,
+            ...base,
             title: nextTitle,
             updatedAt: Date.now(),
             messages: [
-              ...prev.messages,
+              ...base.messages,
               optimisticUserMessage,
               optimisticAssistant,
             ],
           };
         });
 
-        const { message: persistedUser } = await appendChatMessage(session.id, {
-          role: 'user',
-          content: trimmed,
-        });
+        const { message: persistedUser, session: userSessionSummary } =
+          await appendChatMessage(session.id, {
+            role: 'user',
+            content: trimmed,
+          });
+
+        if (userSessionSummary) {
+          setSessions(prev => bumpSessionSummary(prev, userSessionSummary));
+        }
 
         if (isFirstMessage && nextTitle !== session.title) {
           const updatedSummary = await updateChatSessionTitle(
             session.id,
             nextTitle,
           );
-          setSessions(prev => upsertSummary(prev, updatedSummary));
+          setSessions(prev =>
+            mergeSessionSummaryInPlace(prev, updatedSummary),
+          );
         }
 
         setActiveSession(prev => {
-          if (!prev || prev.id !== session!.id) {
-            return prev;
-          }
+          const base =
+            prev?.id === session!.id ? prev : { ...session!, messages: [] };
           return {
-            ...prev,
+            ...base,
             title: nextTitle,
-            messages: prev.messages.map(msg =>
+            messages: base.messages.map(msg =>
               msg.id === optimisticUserMessage.id ? persistedUser : msg,
             ),
           };
@@ -450,7 +484,9 @@ export function useAiChatSessions() {
         });
 
         if (updatedSummary) {
-          setSessions(prev => upsertSummary(prev, updatedSummary));
+          setSessions(prev =>
+            mergeSessionSummaryInPlace(prev, updatedSummary),
+          );
         } else {
           await refreshSessionList();
         }
@@ -492,7 +528,9 @@ export function useAiChatSessions() {
               });
 
               if (updatedSummary) {
-                setSessions(prev => upsertSummary(prev, updatedSummary));
+                setSessions(prev =>
+                  mergeSessionSummaryInPlace(prev, updatedSummary),
+                );
               }
             } catch (persistError) {
               showError(persistError);

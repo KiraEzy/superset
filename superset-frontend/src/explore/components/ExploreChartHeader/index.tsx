@@ -67,6 +67,7 @@ interface ExploreActions {
 export interface ExploreChartHeaderProps {
   actions: ExploreActions;
   canOverwrite: boolean;
+  canSave: boolean;
   canDownload: boolean;
   dashboardId?: number;
   colorScheme?: string;
@@ -110,6 +111,7 @@ export const ExploreChartHeader: FC<ExploreChartHeaderProps> = ({
   chart,
   user,
   canOverwrite,
+  canSave,
   canDownload,
   isStarred,
   sliceName,
@@ -314,27 +316,29 @@ export const ExploreChartHeader: FC<ExploreChartHeaderProps> = ({
           </div>
         }
         rightPanelAdditionalItems={
-          <Tooltip
-            title={
-              saveDisabled
-                ? t('Add required control values to save chart')
-                : null
-            }
-          >
-            {/* needed to wrap button in a div - antd tooltip doesn't work with disabled button */}
-            <div>
-              <Button
-                buttonStyle="secondary"
-                onClick={showModal}
-                disabled={saveDisabled}
-                data-test="query-save-button"
-                css={saveButtonStyles}
-                icon={<Icons.SaveOutlined />}
-              >
-                {t('Save')}
-              </Button>
-            </div>
-          </Tooltip>
+          canSave ? (
+            <Tooltip
+              title={
+                saveDisabled
+                  ? t('Add required control values to save chart')
+                  : null
+              }
+            >
+              {/* needed to wrap button in a div - antd tooltip doesn't work with disabled button */}
+              <div>
+                <Button
+                  buttonStyle="secondary"
+                  onClick={showModal}
+                  disabled={saveDisabled}
+                  data-test="query-save-button"
+                  css={saveButtonStyles}
+                  icon={<Icons.SaveOutlined />}
+                >
+                  {t('Save')}
+                </Button>
+              </div>
+            </Tooltip>
+          ) : null
         }
         additionalActionsMenu={menu}
         menuDropdownProps={{

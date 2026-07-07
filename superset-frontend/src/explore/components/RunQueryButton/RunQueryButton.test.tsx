@@ -72,3 +72,9 @@ test('renders query running button disabled', () => {
   userEvent.click(screen.getByRole('button'));
   expect(props.onStop).not.toHaveBeenCalled();
 });
+
+test('hides run query button when user cannot run queries', () => {
+  const props = createProps({ canRunQuery: false });
+  render(<RunQueryButton {...props} />);
+  expect(screen.queryByTestId('run-query-button')).not.toBeInTheDocument();
+});

@@ -20,7 +20,7 @@ import json
 import logging
 from typing import Any
 
-from flask import request, stream_with_context
+from flask import current_app, request, stream_with_context
 from flask_appbuilder.api import BaseApi, expose, protect, safe
 from flask.wrappers import Response
 
@@ -38,9 +38,13 @@ logger = logging.getLogger(__name__)
 class AIRestApi(BaseApi):
     allow_browser_login = True
     resource_name = "ai"
+    class_permission_name = "AI"
     openapi_spec_tag = "AI"
     # Reuse existing chat permission so streaming works without a new DB role grant.
     method_permission_name = {
+        "test_llm": "chat",
+        "test_mcp": "chat",
+        "chat": "chat",
         "chat_stream": "chat",
     }
 
@@ -67,6 +71,41 @@ class AIRestApi(BaseApi):
             return raw
         return None
 
+    def _request_bearer_token(self) -> str | None:
+        auth = request.headers.get("Authorization")
+        if not auth:
+            return None
+        parts = auth.strip().split(" ", 1)
+        if len(parts) != 2 or parts[0].lower() != "bearer":
+            return None
+        token = parts[1].strip()
+        return token or None
+
+    def _mcp_bearer_token_from_request(self, data: dict[str, Any]) -> str | None:
+        # Prefer the currently authenticated user's bearer token so MCP calls
+        # execute with per-user identity instead of a shared dev fallback.
+        request_token = self._request_bearer_token()
+        if request_token:
+            return request_token
+        token = data.get("mcpBearerToken")
+        if isinstance(token, str) and token.strip():
+            return token.strip()
+        return None
+
+    def _validate_mcp_auth_identity(
+        self, *, mcp_enabled: bool, mcp_server_url: str, mcp_bearer_token: str | None
+    ) -> None:
+        if not (mcp_enabled and mcp_server_url):
+            return
+        if not current_app.config.get("MCP_AUTH_ENABLED", False):
+            return
+        if mcp_bearer_token:
+            return
+        raise ValueError(
+            "MCP auth is enabled but no per-user bearer token was provided. "
+            "Include an Authorization Bearer token in this request."
+        )
+
     @expose("/test_llm/", methods=("POST",))
     @protect()
     @safe
@@ -91,10 +130,11 @@ class AIRestApi(BaseApi):
     @safe
     def test_mcp(self) -> Response:
         data = self._config_from_request()
+        mcp_bearer_token = self._mcp_bearer_token_from_request(data)
         try:
             result = test_mcp_connection(
                 mcp_server_url=data.get("mcpServerUrl", ""),
-                mcp_bearer_token=data.get("mcpBearerToken"),
+                mcp_bearer_token=mcp_bearer_token,
             )
             return self._json_response(200, result)
         except Exception as ex:  # noqa: BLE001
@@ -109,15 +149,23 @@ class AIRestApi(BaseApi):
     @safe
     def chat(self) -> Response:
         data = self._config_from_request()
+        mcp_enabled = bool(data.get("mcpEnabled"))
+        mcp_server_url = data.get("mcpServerUrl", "")
+        mcp_bearer_token = self._mcp_bearer_token_from_request(data)
         try:
+            self._validate_mcp_auth_identity(
+                mcp_enabled=mcp_enabled,
+                mcp_server_url=mcp_server_url,
+                mcp_bearer_token=mcp_bearer_token,
+            )
             result = chat_completion(
                 llm_api_base_url=data.get("llmApiBaseUrl", ""),
                 llm_api_key=data.get("llmApiKey"),
                 llm_model=data.get("llmModel", ""),
                 messages=data.get("messages", []),
-                mcp_enabled=bool(data.get("mcpEnabled")),
-                mcp_server_url=data.get("mcpServerUrl", ""),
-                mcp_bearer_token=data.get("mcpBearerToken"),
+                mcp_enabled=mcp_enabled,
+                mcp_server_url=mcp_server_url,
+                mcp_bearer_token=mcp_bearer_token,
                 agent_max_iterations=self._agent_max_iterations_from_request(data),
                 system_prompt=self._system_prompt_from_request(data),
             )
@@ -134,6 +182,14 @@ class AIRestApi(BaseApi):
     @safe
     def chat_stream(self) -> Response:
         data = self._config_from_request()
+        mcp_enabled = bool(data.get("mcpEnabled"))
+        mcp_server_url = data.get("mcpServerUrl", "")
+        mcp_bearer_token = self._mcp_bearer_token_from_request(data)
+        self._validate_mcp_auth_identity(
+            mcp_enabled=mcp_enabled,
+            mcp_server_url=mcp_server_url,
+            mcp_bearer_token=mcp_bearer_token,
+        )
 
         def generate():
             try:
@@ -142,9 +198,9 @@ class AIRestApi(BaseApi):
                     llm_api_key=data.get("llmApiKey"),
                     llm_model=data.get("llmModel", ""),
                     messages=data.get("messages", []),
-                    mcp_enabled=bool(data.get("mcpEnabled")),
-                    mcp_server_url=data.get("mcpServerUrl", ""),
-                    mcp_bearer_token=data.get("mcpBearerToken"),
+                    mcp_enabled=mcp_enabled,
+                    mcp_server_url=mcp_server_url,
+                    mcp_bearer_token=mcp_bearer_token,
                     agent_max_iterations=self._agent_max_iterations_from_request(
                         data
                     ),

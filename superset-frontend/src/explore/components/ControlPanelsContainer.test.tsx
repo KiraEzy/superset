@@ -121,12 +121,19 @@ describe('ControlPanelsContainer', () => {
       controls,
       form_data: getFormDataFromControls(controls),
       isDatasourceMetaLoading: false,
-      exploreState: {},
+      exploreState:
+        defaultState as unknown as ControlPanelsContainerProps['exploreState'],
       chart: {
         queriesResponse: null,
         chartStatus: 'success',
       },
-    } as ControlPanelsContainerProps;
+      onQuery: jest.fn(),
+      onStop: jest.fn(),
+      canStopQuery: true,
+      canRunQuery: true,
+      chartIsStale: false,
+      errorMessage: null,
+    } as unknown as ControlPanelsContainerProps;
   }
 
   test('renders ControlPanelSections', async () => {

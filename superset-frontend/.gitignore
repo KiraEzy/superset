@@ -1,3 +1,4 @@
+config/ai-connection.test.local.json
 coverage/*
 cypress/screenshots
 cypress/videos

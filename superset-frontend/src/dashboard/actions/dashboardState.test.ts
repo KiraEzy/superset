@@ -28,6 +28,9 @@ import {
   ON_FILTERS_REFRESH,
   ON_REFRESH,
   ON_REFRESH_SUCCESS,
+  persistDashboardLabelsColor,
+  SET_DASHBOARD_LABELS_COLORMAP_SYNCED,
+  SET_DASHBOARD_SHARED_LABELS_COLORS_SYNCED,
 } from 'src/dashboard/actions/dashboardState';
 import { refreshChart } from 'src/components/Chart/chartAction';
 import { UPDATE_COMPONENTS_PARENTS_LIST } from 'src/dashboard/actions/dashboardLayout';
@@ -399,5 +402,71 @@ describe('dashboardState actions', () => {
     expect(dispatchedTypes).toContain(ON_REFRESH_SUCCESS);
     expect(dispatchedTypes).not.toContain(ON_REFRESH);
     expect(dispatchedTypes).not.toContain(ON_FILTERS_REFRESH);
+  });
+
+  test('persistDashboardLabelsColor skips PUT for read-only users', async () => {
+    const { getState, dispatch } = setup({
+      dashboardInfo: {
+        id: 7,
+        metadata: {
+          color_namespace: 'ns',
+          label_colors: {},
+          map_label_colors: {},
+          shared_label_colors: [],
+        },
+      },
+      dashboardState: {
+        labelsColorMapMustSync: true,
+        sharedLabelsColorsMustSync: false,
+      },
+      user: {
+        userId: 1,
+        username: 'viewer',
+        permissions: {},
+        roles: { Viewer: [['can_read', 'Dashboard']] },
+      },
+    });
+
+    await persistDashboardLabelsColor()(dispatch, getState);
+
+    expect(putStub).not.toHaveBeenCalled();
+    expect(dispatch).toHaveBeenCalledWith({
+      type: SET_DASHBOARD_LABELS_COLORMAP_SYNCED,
+    });
+    expect(dispatch).toHaveBeenCalledWith({
+      type: SET_DASHBOARD_SHARED_LABELS_COLORS_SYNCED,
+    });
+  });
+
+  test('persistDashboardLabelsColor PUTs color config for dashboard editors', async () => {
+    const { getState, dispatch } = setup({
+      dashboardInfo: {
+        id: 7,
+        metadata: {
+          color_namespace: 'ns',
+          label_colors: { Sales: '#ff0000' },
+          map_label_colors: {},
+          shared_label_colors: [],
+        },
+      },
+      dashboardState: {
+        labelsColorMapMustSync: true,
+        sharedLabelsColorsMustSync: false,
+      },
+      user: {
+        userId: 1,
+        username: 'creator',
+        permissions: {},
+        roles: { Alpha: [['can_write', 'Dashboard']] },
+      },
+    });
+
+    await persistDashboardLabelsColor()(dispatch, getState);
+
+    expect(putStub).toHaveBeenCalledWith(
+      expect.objectContaining({
+        endpoint: '/api/v1/dashboard/7/colors?mark_updated=false',
+      }),
+    );
   });
 });

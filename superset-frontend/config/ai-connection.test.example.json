@@ -1,0 +1,11 @@
+{
+  "llmProvider": "gemini",
+  "llmApiBaseUrl": "https://generativelanguage.googleapis.com/v1beta/openai",
+  "llmModel": "gemini-2.5-flash",
+  "llmApiKey": "YOUR_API_KEY_HERE",
+  "mcpEnabled": true,
+  "mcpServerUrl": "http://localhost:5008/mcp",
+  "mcpBearerToken": "",
+  "agentMaxIterations": 120,
+  "systemPrompt": ""
+}

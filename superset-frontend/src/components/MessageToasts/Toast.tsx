@@ -29,6 +29,20 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Icons } from '@superset-ui/core/components/Icons';
 import { ToastType, ToastMeta } from './types';
 
+/** Interweave rejects full HTML documents; strip them to plain text for toasts. */
+const HTML_DOCUMENT_RE = /^<(!doctype|(html|head|body)(\s|>))/i;
+
+function sanitizeToastContent(content: string): string {
+  const trimmed = content.trim();
+  if (!HTML_DOCUMENT_RE.test(trimmed)) {
+    return content;
+  }
+  return trimmed
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 const ToastContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -150,7 +164,10 @@ export default function Toast({ toast, onCloseToast }: ToastPresenterProps) {
     >
       <div className="toast__content">
         {icon}
-        <Interweave content={toast.text} noHtml={!toast.allowHtml} />
+        <Interweave
+          content={sanitizeToastContent(toast.text)}
+          noHtml={!toast.allowHtml}
+        />
       </div>
       <Icons.CloseOutlined
         iconSize="m"

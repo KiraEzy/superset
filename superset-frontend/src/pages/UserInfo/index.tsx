@@ -201,7 +201,7 @@ export function UserInfo({ user }: { user: UserWithPermissionsAndRoles }) {
                 {userDetails.lastName}
               </Descriptions.Item>
               <Descriptions.Item label={t('Email')}>
-                {user.email}
+                {userDetails.email}
               </Descriptions.Item>
             </Descriptions>
           </Collapse.Panel>

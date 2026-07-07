@@ -60,6 +60,8 @@ class AiChatSessionDAO(BaseDAO[AiChatSession]):
         if extra:
             message.extra = extra
         db.session.add(message)
-        session.changed_on = message.created_on
-        db.session.add(session)
+        # Order history by last user activity, not assistant replies or session reads.
+        if role == "user":
+            session.changed_on = message.created_on
+            db.session.add(session)
         return message

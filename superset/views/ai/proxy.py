@@ -40,7 +40,11 @@ import logging
 
 import os
 
+import re
+
 import uuid
+
+from html import unescape
 
 from typing import Any, Iterator
 
@@ -50,7 +54,7 @@ from urllib.parse import urlparse, urlunparse
 
 import requests
 
-from flask import current_app
+from flask import current_app, g
 
 
 
@@ -92,8 +96,46 @@ LOCAL_HOSTNAMES = frozenset({"localhost", "127.0.0.1", "0.0.0.0"})  # noqa: S104
 
 MAX_TOOL_RESULT_CHARS = 48_000
 
+MAX_IDENTICAL_TOOL_FAILURES = 3 # TODO Review if it is really needed
+
+
+def _is_tool_failure_result(tool_result: str) -> bool:
+    return tool_result.startswith(("Error:", "Tool error:", "Validation error"))
+
+
+def _tool_args_key(display_tool: str, mcp_arguments: dict[str, Any]) -> str:
+    return f"{display_tool}:{json.dumps(mcp_arguments, sort_keys=True)}"
+
+
+def _clear_tool_failure_counts(
+    repeated_tool_failures: dict[str, int],
+    *,
+    display_tool: str,
+    mcp_arguments: dict[str, Any],
+) -> None:
+    args_prefix = f"{_tool_args_key(display_tool, mcp_arguments)}:"
+    for key in list(repeated_tool_failures):
+        if key.startswith(args_prefix):
+            repeated_tool_failures.pop(key, None)
+
 SYNTHETIC_MCP_TOOLS = frozenset({"search_tools", "call_tool"})
 
+READ_ONLY_ROLE_NAMES = frozenset({"viewer", "gamma", "public"})
+
+# Mutating tools should not be exposed to read-only users (Viewer/Gamma/Public).
+READ_ONLY_BLOCKED_MCP_TOOLS = frozenset(
+    {
+        "create_virtual_dataset",
+        "execute_sql",
+        "generate_chart",
+        "update_chart",
+        "update_chart_preview",
+        "generate_dashboard",
+        "add_chart_to_existing_dashboard",
+        "save_sql_query",
+    }
+)
+# TODO update READ_ONLY_BLOCKED_MCP_TOOLS to be dynamically set on the admin setting panel
 
 
 AGENT_SYSTEM_PROMPT = """You are an AI assistant embedded in Apache Superset with MCP tools \
@@ -111,6 +153,8 @@ Rules:
 - Many Superset MCP tools expect a top-level "request" wrapper, for example:
 
   list_databases(request={"page": 1})
+
+  list_datasets(request={"page": 1, "page_size": 100})
 
   execute_sql(request={"database_id": 2, "sql": "SELECT ...", "limit": 100})
 
@@ -136,13 +180,61 @@ def _resolve_agent_max_iterations(agent_max_iterations: int | None) -> int:
     return MAX_TOOL_ITERATIONS
 
 
-def _resolve_agent_system_prompt(system_prompt: str | None) -> str:
+def _get_current_role_names() -> set[str]:
+    roles: set[str] = set()
+    user = getattr(g, "user", None)
+    if not user:
+        return roles
+    for role in getattr(user, "roles", []) or []:
+        name = getattr(role, "name", None)
+        if isinstance(name, str) and name:
+            roles.add(name.lower())
+    return roles
+
+
+def _is_read_only_role(role_names: set[str]) -> bool:
+    return any(role in READ_ONLY_ROLE_NAMES for role in role_names)
+
+
+def _is_allowed_mcp_tool(tool_name: str, role_names: set[str]) -> bool:
+    if not _is_read_only_role(role_names):
+        return True
+    return tool_name not in READ_ONLY_BLOCKED_MCP_TOOLS
+
+
+def _filter_tools_for_roles(
+    tools: list[dict[str, Any]], role_names: set[str]
+) -> list[dict[str, Any]]:
+    filtered: list[dict[str, Any]] = []
+    for tool in tools:
+        name = tool.get("name")
+        if isinstance(name, str) and not _is_allowed_mcp_tool(name, role_names):
+            continue
+        filtered.append(tool)
+    return filtered
+
+
+def _resolve_agent_system_prompt(
+    system_prompt: str | None, *, role_names: set[str] | None = None
+) -> str:
     if isinstance(system_prompt, str) and system_prompt.strip():
-        return system_prompt.strip()
-    config_prompt = current_app.config.get("AI_AGENT_SYSTEM_PROMPT")
-    if isinstance(config_prompt, str) and config_prompt.strip():
-        return config_prompt.strip()
-    return AGENT_SYSTEM_PROMPT
+        resolved = system_prompt.strip()
+    else:
+        config_prompt = current_app.config.get("AI_AGENT_SYSTEM_PROMPT")
+        if isinstance(config_prompt, str) and config_prompt.strip():
+            resolved = config_prompt.strip()
+        else:
+            resolved = AGENT_SYSTEM_PROMPT
+
+    if _is_read_only_role(role_names or set()):
+        return (
+            f"{resolved}\n\n"
+            "Read-only role guardrails:\n"
+            "- Do not attempt create/update/delete operations.\n"
+            "- Do not call mutating tools (chart/dashboard/dataset/sql writes).\n"
+            "- If asked to perform a write action, explain that the role is read-only."
+        )
+    return resolved
 
 
 def _get_request_base_url() -> str | None:
@@ -285,6 +377,25 @@ def _auth_headers(api_key: str | None) -> dict[str, str]:
     return headers
 
 
+def _forward_request_auth_headers() -> dict[str, str]:
+    """Forward user auth context to MCP when available."""
+    try:
+        from flask import has_request_context, request
+
+        if not has_request_context():
+            return {}
+        forwarded: dict[str, str] = {}
+        authorization = request.headers.get("Authorization")
+        if authorization and authorization.strip():
+            forwarded["Authorization"] = authorization.strip()
+        cookie = request.headers.get("Cookie")
+        if cookie and cookie.strip():
+            forwarded["Cookie"] = cookie.strip()
+        return forwarded
+    except Exception:  # noqa: BLE001
+        return {}
+
+
 
 
 
@@ -333,6 +444,7 @@ def mcp_jsonrpc(
         "Accept": MCP_ACCEPT,
 
         **_auth_headers(bearer_token),
+        **_forward_request_auth_headers(),
 
     }
 
@@ -650,6 +762,33 @@ def _parse_tool_arguments(raw_arguments: Any) -> dict[str, Any]:
 
 
 
+def _normalize_mcp_tool_arguments(
+    mcp_tools: list[dict[str, Any]] | None,
+    tool_name: str,
+    arguments: dict[str, Any],
+) -> dict[str, Any]:
+    """Wrap flat tool args in request={...} when the MCP schema requires it."""
+    if "request" in arguments or not mcp_tools:
+        return arguments
+
+    for tool in mcp_tools:
+        if tool.get("name") != tool_name:
+            continue
+        schema = tool.get("inputSchema") or {}
+        required = schema.get("required") or []
+        properties = schema.get("properties") or {}
+        if "request" in required or (
+            isinstance(properties.get("request"), dict) and "request" in properties
+        ):
+            return {"request": arguments}
+        break
+
+    return arguments
+
+
+
+
+
 def _resolve_mcp_tool_invocation(
 
     tool_name: str,
@@ -752,6 +891,28 @@ def _llm_chat_completion(
     return response.json()
 
 
+_HTML_DOCUMENT_RE = re.compile(r"^<(!doctype|(html|head|body)(\s|>))", re.I)
+_HTML_TAG_RE = re.compile(r"<[^>]+>")
+_MAX_ERROR_MESSAGE_LEN = 500
+
+
+def _sanitize_http_error_body(text: str, status_code: int | None = None) -> str:
+    """Convert HTML error pages and oversized bodies into toast-safe plain text."""
+    stripped = (text or "").strip()
+    if not stripped:
+        return f"HTTP {status_code}" if status_code else "Request failed"
+
+    if _HTML_DOCUMENT_RE.match(stripped):
+        plain = unescape(_HTML_TAG_RE.sub(" ", stripped))
+        plain = re.sub(r"\s+", " ", plain).strip()
+        if plain:
+            return plain[:_MAX_ERROR_MESSAGE_LEN]
+        suffix = f" (HTTP {status_code})" if status_code else ""
+        return f"Received an HTML page instead of an API response{suffix}"
+
+    return stripped[:_MAX_ERROR_MESSAGE_LEN]
+
+
 def _llm_http_error_details(response: requests.Response) -> dict[str, Any]:
     message = response.text or f"HTTP {response.status_code}"
     code: str | None = None
@@ -770,6 +931,7 @@ def _llm_http_error_details(response: requests.Response) -> dict[str, Any]:
                 code = str(payload["code"])
     except Exception:  # noqa: BLE001
         pass
+    message = _sanitize_http_error_body(message, response.status_code)
     return {"message": message, "code": code, "source": "llm"}
 
 
@@ -852,12 +1014,15 @@ def iter_chat_completion_events(
     user_messages = [m for m in messages if m.get("role") in {"user", "assistant"}]
     if not user_messages:
         raise ValueError("No messages provided")
+    role_names = _get_current_role_names()
 
     openai_tools: list[dict[str, Any]] | None = None
+    mcp_tools: list[dict[str, Any]] = []
     uses_tool_proxy = False
     if mcp_enabled and mcp_server_url:
         yield {"type": "status", "message": "Loading Superset MCP tools..."}
         mcp_tools = mcp_list_tools(mcp_server_url, bearer_token=mcp_bearer_token)
+        mcp_tools = _filter_tools_for_roles(mcp_tools, role_names)
         uses_tool_proxy = _uses_tool_search_proxy(mcp_tools)
         if uses_tool_proxy:
             openai_tools = mcp_tools_to_openai(mcp_tools)
@@ -866,7 +1031,9 @@ def iter_chat_completion_events(
                 [tool for tool in mcp_tools if tool.get("name") not in SYNTHETIC_MCP_TOOLS]
             )
 
-    resolved_system_prompt = _resolve_agent_system_prompt(system_prompt)
+    resolved_system_prompt = _resolve_agent_system_prompt(
+        system_prompt, role_names=role_names
+    )
     payload_messages: list[dict[str, Any]] = [
         {"role": "system", "content": resolved_system_prompt},
         *[
@@ -881,6 +1048,7 @@ def iter_chat_completion_events(
     chart_counter = 0
     max_iterations = _resolve_agent_max_iterations(agent_max_iterations)
     model = llm_model.strip()
+    repeated_tool_failures: dict[str, int] = {}
 
     yield {"type": "status", "message": "Thinking..."}
 
@@ -913,6 +1081,11 @@ def iter_chat_completion_events(
                     arguments = {}
                     tool_result = f"Invalid tool arguments JSON: {ex}"
                 else:
+                    arguments = _normalize_mcp_tool_arguments(
+                        mcp_tools,
+                        tool_name,
+                        arguments,
+                    )
                     mcp_tool_name, mcp_arguments = _resolve_mcp_tool_invocation(
                         tool_name,
                         arguments,
@@ -920,7 +1093,15 @@ def iter_chat_completion_events(
                     )
                     if tool_name == "call_tool":
                         display_tool = str(mcp_arguments.get("name", "call_tool"))
+                    target_tool_name = (
+                        display_tool if tool_name == "call_tool" else mcp_tool_name
+                    )
+                    if not _is_allowed_mcp_tool(str(target_tool_name), role_names):
+                        raise ValueError(
+                            f"Tool {target_tool_name} is not available for read-only roles."
+                        )
                     yield {"type": "tool_start", "tool": display_tool}
+                    args_key = _tool_args_key(display_tool, mcp_arguments)
                     try:
                         raw_result = mcp_call_tool(
                             mcp_server_url,
@@ -929,6 +1110,12 @@ def iter_chat_completion_events(
                             bearer_token=mcp_bearer_token,
                         )
                         tool_result = _serialize_tool_result(raw_result)
+                        if not _is_tool_failure_result(tool_result):
+                            _clear_tool_failure_counts(
+                                repeated_tool_failures,
+                                display_tool=display_tool,
+                                mcp_arguments=mcp_arguments,
+                            )
                         tools_used.append(display_tool)
                         chart_payload = _extract_chart_payload(display_tool, raw_result)
                         if chart_payload:
@@ -942,6 +1129,19 @@ def iter_chat_completion_events(
                     except Exception as ex:  # noqa: BLE001
                         logger.warning("MCP tool %s failed: %s", tool_name, ex)
                         tool_result = f"Tool error: {ex}"
+                    if _is_tool_failure_result(tool_result):
+                        # Only stop when the same tool+args produces the same error
+                        # repeatedly (stuck retry loop). Successful calls and failures
+                        # with different errors are unaffected.
+                        failure_key = f"{args_key}:{tool_result[:300]}"
+                        failure_count = repeated_tool_failures.get(failure_key, 0) + 1
+                        repeated_tool_failures[failure_key] = failure_count
+                        if failure_count >= MAX_IDENTICAL_TOOL_FAILURES:
+                            raise ValueError(
+                                f"Tool {display_tool} failed {failure_count} times "
+                                f"with the same arguments and error. "
+                                f"Last error: {tool_result[:300]}"
+                            )
                     yield {"type": "tool_end", "tool": display_tool}
 
                 payload_messages.append(
@@ -1017,7 +1217,7 @@ def _probe_chat_model(
         )
         if response.ok:
             return True, ""
-        return False, response.text or f"HTTP {response.status_code}"
+        return False, _llm_http_error_message(response)
     except Exception as ex:  # noqa: BLE001
         return False, str(ex)
 
@@ -1037,7 +1237,7 @@ def test_llm_connection(
     if not response.ok:
         return {
             "ok": False,
-            "message": response.text or f"HTTP {response.status_code}",
+            "message": _llm_http_error_message(response),
         }
 
     data = response.json()

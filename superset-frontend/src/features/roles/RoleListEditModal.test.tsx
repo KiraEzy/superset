@@ -27,6 +27,7 @@ import { SupersetClient } from '@superset-ui/core';
 import rison from 'rison';
 import RoleListEditModal from './RoleListEditModal';
 import {
+  clearPermissionSearchCache,
   updateRoleName,
   updateRoleGroups,
   updateRolePermissions,
@@ -38,7 +39,13 @@ const mockToasts = {
   addSuccessToast: jest.fn(),
 };
 
-jest.mock('./utils');
+jest.mock('./utils', () => ({
+  ...jest.requireActual('./utils'),
+  updateRoleName: jest.fn(),
+  updateRoleGroups: jest.fn(),
+  updateRolePermissions: jest.fn(),
+  updateRoleUsers: jest.fn(),
+}));
 const mockUpdateRoleName = jest.mocked(updateRoleName);
 const mockUpdateRoleGroups = jest.mocked(updateRoleGroups);
 const mockUpdateRolePermissions = jest.mocked(updateRolePermissions);
@@ -63,6 +70,10 @@ jest.mock('@superset-ui/core', () => {
 
 // eslint-disable-next-line no-restricted-globals -- TODO: Migrate from describe blocks
 describe('RoleListEditModal', () => {
+  beforeEach(() => {
+    clearPermissionSearchCache();
+  });
+
   const mockRole = {
     id: 1,
     name: 'Admin',
@@ -234,7 +245,7 @@ describe('RoleListEditModal', () => {
     const mockGet = SupersetClient.get as jest.Mock;
     mockGet.mockImplementation(({ endpoint }) => {
       if (endpoint?.includes('/api/v1/security/permissions-resources/')) {
-        // Only return permission id=10, not id=20
+        // Catalog is missing permission id=20
         return Promise.resolve({
           json: {
             count: 1,
@@ -347,23 +358,20 @@ describe('RoleListEditModal', () => {
 
     mockGet.mockImplementation(({ endpoint }) => {
       if (endpoint?.includes('/api/v1/security/permissions-resources/')) {
-        const query = rison.decode(endpoint.split('?q=')[1]) as Record<
-          string,
-          unknown
-        >;
-        const filters = query.filters as Array<{
-          col: string;
-          opr: string;
-          value: number[];
-        }>;
-        const ids = filters?.[0]?.value || [];
-        const result = ids.map((id: number) => ({
-          id,
-          permission: { name: `perm_${id}` },
-          view_menu: { name: `view_${id}` },
-        }));
+        const catalog = [
+          {
+            id: 10,
+            permission: { name: 'perm_10' },
+            view_menu: { name: 'view_10' },
+          },
+          {
+            id: 30,
+            permission: { name: 'perm_30' },
+            view_menu: { name: 'view_30' },
+          },
+        ];
         return Promise.resolve({
-          json: { count: result.length, result },
+          json: { count: catalog.length, result: catalog },
         });
       }
       return Promise.resolve({ json: { count: 0, result: [] } });
@@ -402,18 +410,13 @@ describe('RoleListEditModal', () => {
       const permCalls = mockGet.mock.calls.filter(([c]) =>
         c.endpoint.includes('/api/v1/security/permissions-resources/'),
       );
-      expect(permCalls.length).toBeGreaterThan(0);
-      // Should request role B's IDs, not role A's
-      const query = rison.decode(
-        permCalls[0][0].endpoint.split('?q=')[1],
-      ) as Record<string, unknown>;
-      const filters = query.filters as Array<{
-        col: string;
-        opr: string;
-        value: number[];
-      }>;
-      expect(filters[0].value).toEqual(roleB.permission_ids);
+      // Permission catalog is cached after the first role load.
+      expect(permCalls.length).toBe(0);
     });
+
+    expect(mockToasts.addDangerToast).not.toHaveBeenCalledWith(
+      'Some permissions could not be resolved and are shown as IDs.',
+    );
 
     unmount();
     mockGet.mockReset();
@@ -421,11 +424,38 @@ describe('RoleListEditModal', () => {
 
   test('fetches permissions and groups by id for hydration', async () => {
     const mockGet = SupersetClient.get as jest.Mock;
-    mockGet.mockResolvedValue({
-      json: {
-        count: 0,
-        result: [],
-      },
+    mockGet.mockImplementation(({ endpoint }) => {
+      if (endpoint?.includes('/api/v1/security/permissions-resources/')) {
+        return Promise.resolve({
+          json: {
+            count: 2,
+            result: [
+              {
+                id: 10,
+                permission: { name: 'can_read' },
+                view_menu: { name: 'Dashboard' },
+              },
+              {
+                id: 20,
+                permission: { name: 'can_write' },
+                view_menu: { name: 'Chart' },
+              },
+            ],
+          },
+        });
+      }
+      if (endpoint?.includes('/api/v1/security/groups/')) {
+        return Promise.resolve({
+          json: {
+            count: 2,
+            result: [
+              { id: 1, name: 'Engineering' },
+              { id: 2, name: 'Analytics' },
+            ],
+          },
+        });
+      }
+      return Promise.resolve({ json: { count: 0, result: [] } });
     });
 
     render(<RoleListEditModal {...mockProps} />);
@@ -456,15 +486,8 @@ describe('RoleListEditModal', () => {
     }
 
     expect(rison.decode(permissionQuery[1])).toEqual({
-      page_size: 100,
+      page_size: 1000,
       page: 0,
-      filters: [
-        {
-          col: 'id',
-          opr: 'in',
-          value: mockRole.permission_ids,
-        },
-      ],
     });
 
     expect(rison.decode(groupsQuery[1])).toEqual({

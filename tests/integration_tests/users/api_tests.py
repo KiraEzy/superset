@@ -82,6 +82,19 @@ class TestCurrentUserApi(SupersetTestCase):
         assert data["result"]["first_name"] == "UpdatedFirst"
         assert data["result"]["last_name"] == "UpdatedLast"
 
+    def test_update_me_email(self):
+        self.login(ADMIN_USERNAME)
+
+        payload = {
+            "email": "admin-updated@fab.org",
+        }
+
+        rv = self.client.put("/api/v1/me/", json=payload)
+        assert rv.status_code == 200
+
+        data = json.loads(rv.data.decode("utf-8"))
+        assert data["result"]["email"] == "admin-updated@fab.org"
+
     def test_update_me_unauthenticated(self):
         rv = self.client.put("/api/v1/me/", json={"first_name": "Hacker"})
         assert rv.status_code == 401

@@ -885,6 +885,7 @@ function ExploreViewContainer(props: ExploreViewContainerProps) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Combined actions type is compatible at runtime
         actions={props.actions as any}
         canOverwrite={props.can_overwrite}
+        canSave={props.can_add || props.can_overwrite}
         canDownload={props.can_download}
         dashboardId={props.dashboardId}
         colorScheme={props.dashboardColorScheme}
@@ -1016,6 +1017,7 @@ function ExploreViewContainer(props: ExploreViewContainerProps) {
             onQuery={onQuery}
             onStop={onStop}
             canStopQuery={props.can_add || props.can_overwrite}
+            canRunQuery={props.can_add || props.can_overwrite}
             errorMessage={dataTabErrorMessage}
             buttonErrorMessage={errorMessage}
             chartIsStale={chartIsStale}

@@ -43,11 +43,11 @@ import {
   UsersField,
 } from './RoleFormItems';
 import {
+  fetchPermissionsByIds,
   updateRoleGroups,
   updateRoleName,
   updateRolePermissions,
   updateRoleUsers,
-  formatPermissionLabel,
 } from './utils';
 
 export interface RoleListEditModalProps extends BaseModalProps {
@@ -154,32 +154,18 @@ function RoleListEditModal({
 
     setLoadingRolePermissions(true);
     permissionFetchSucceeded.current = false;
-    const filters = [{ col: 'id', opr: 'in', value: stablePermissionIds }];
 
-    fetchPaginatedData({
-      endpoint: `/api/v1/security/permissions-resources/`,
-      pageSize: 100,
-      setData: (data: SelectOption[]) => {
+    fetchPermissionsByIds(stablePermissionIds)
+      .then(data => {
         permissionFetchSucceeded.current = true;
         setRolePermissions(data);
-      },
-      filters,
-      setLoadingState: (loading: boolean) => setLoadingRolePermissions(loading),
-      loadingKey: 'rolePermissions',
-      addDangerToast,
-      errorMessage: t('There was an error loading permissions.'),
-      mapResult: (permission: {
-        id: number;
-        permission: { name: string };
-        view_menu: { name: string };
-      }) => ({
-        value: permission.id,
-        label: formatPermissionLabel(
-          permission.permission.name,
-          permission.view_menu.name,
-        ),
-      }),
-    });
+      })
+      .catch(() => {
+        addDangerToast(t('There was an error loading permissions.'));
+      })
+      .finally(() => {
+        setLoadingRolePermissions(false);
+      });
   }, [addDangerToast, id, stablePermissionIds]);
 
   useEffect(() => {

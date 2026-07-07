@@ -24,6 +24,7 @@ from marshmallow.validate import Length
 
 first_name_description = "The current user's first name"
 last_name_description = "The current user's last name"
+email_description = "The current user's email"
 password_description = "The current user's password for authentication"  # noqa: S105
 
 
@@ -50,6 +51,11 @@ class CurrentUserPutSchema(Schema):
         required=False,
         metadata={"description": last_name_description},
         validate=[Length(1, 64)],
+    )
+    email = fields.String(
+        required=False,
+        metadata={"description": email_description},
+        validate=[Length(1, 320)],
     )
     password = fields.String(
         required=False,
