@@ -18,7 +18,7 @@
  */
 import { SupersetClient, getClientErrorObject } from '@superset-ui/core';
 import { makeUrl } from 'src/utils/pathUtils';
-import { AiConnectionConfig, getAiConnectionConfig } from './aiConnectionConfig';
+import { AiConnectionConfig } from './aiConnectionConfig';
 import { rewriteChartExploreUrl } from './supersetUrlUtils';
 import { AiChatChartPayload } from './types';
 
@@ -78,7 +78,10 @@ export function formatAiChatError(error: unknown): string {
   return trimmed;
 }
 
-async function postAi<T>(endpoint: string, body: Record<string, unknown>): Promise<T> {
+async function postAi<T>(
+  endpoint: string,
+  body: Record<string, unknown>,
+): Promise<T> {
   try {
     const { json } = await SupersetClient.post({
       endpoint: `/api/v1/ai/${endpoint}`,
@@ -105,10 +108,7 @@ export async function testMcpConnection(
 }
 
 export async function testLlmConnection(
-  config: Pick<
-    AiConnectionConfig,
-    'llmApiBaseUrl' | 'llmApiKey' | 'llmModel'
-  >,
+  config: Pick<AiConnectionConfig, 'llmApiBaseUrl' | 'llmApiKey' | 'llmModel'>,
 ): Promise<{ ok: boolean; message: string }> {
   return postAi<ProxyResponse>('test_llm/', {
     llmApiBaseUrl: config.llmApiBaseUrl,
@@ -129,7 +129,12 @@ export type ChatStreamEvent =
   | { type: 'tool_end'; tool: string }
   | { type: 'token'; content: string }
   | { type: 'chart'; chart: AiChatChartPayload }
-  | { type: 'done'; content: string; tools_used?: string[]; charts?: AiChatChartPayload[] }
+  | {
+      type: 'done';
+      content: string;
+      tools_used?: string[];
+      charts?: AiChatChartPayload[];
+    }
   | {
       type: 'error';
       message: string;
@@ -186,7 +191,9 @@ export function flushSseBuffer(buffer: string): ChatStreamEvent[] {
   return event ? [event] : [];
 }
 
-export function streamErrorMessage(event: Extract<ChatStreamEvent, { type: 'error' }>): string {
+export function streamErrorMessage(
+  event: Extract<ChatStreamEvent, { type: 'error' }>,
+): string {
   if (event.message?.trim()) {
     return event.message.trim();
   }
@@ -233,7 +240,6 @@ async function parseSseStream(
 
 export async function streamChatMessage(
   messages: Array<{ role: 'user' | 'assistant'; content: string }>,
-  config: AiConnectionConfig = getAiConnectionConfig(),
   handlers: ChatStreamHandlers = {},
   signal?: AbortSignal,
 ): Promise<ChatResponse> {
@@ -246,14 +252,13 @@ export async function streamChatMessage(
     headers['X-CSRFToken'] = csrfToken;
   }
 
+  // The backend loads the global AI connection config server-side; the client
+  // only needs to send the conversation.
   const response = await fetch(makeUrl('/api/v1/ai/chat/stream/'), {
     method: 'POST',
     headers,
     credentials: 'same-origin',
-    body: JSON.stringify({
-      ...config,
-      messages,
-    }),
+    body: JSON.stringify({ messages }),
     signal,
   });
 
@@ -330,10 +335,6 @@ export async function streamChatMessage(
 
 export async function sendChatMessage(
   messages: Array<{ role: 'user' | 'assistant'; content: string }>,
-  config: AiConnectionConfig = getAiConnectionConfig(),
 ): Promise<ChatResponse> {
-  return postAi<ChatResponse>('chat/', {
-    ...config,
-    messages,
-  });
+  return postAi<ChatResponse>('chat/', { messages });
 }

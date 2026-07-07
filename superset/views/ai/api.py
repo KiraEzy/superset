@@ -24,6 +24,7 @@ from flask import current_app, request, stream_with_context
 from flask_appbuilder.api import BaseApi, expose, protect, safe
 from flask.wrappers import Response
 
+from superset.views.ai import config_store
 from superset.views.ai.proxy import (
     AiStreamError,
     chat_completion,
@@ -56,21 +57,6 @@ class AIRestApi(BaseApi):
     def _config_from_request(self) -> dict[str, Any]:
         return request.get_json(silent=True) or {}
 
-    def _agent_max_iterations_from_request(self, data: dict[str, Any]) -> int | None:
-        raw = data.get("agentMaxIterations")
-        if isinstance(raw, int) and raw > 0:
-            return raw
-        if isinstance(raw, str) and raw.strip().isdigit():
-            parsed = int(raw.strip())
-            return parsed if parsed > 0 else None
-        return None
-
-    def _system_prompt_from_request(self, data: dict[str, Any]) -> str | None:
-        raw = data.get("systemPrompt")
-        if isinstance(raw, str):
-            return raw
-        return None
-
     def _request_bearer_token(self) -> str | None:
         auth = request.headers.get("Authorization")
         if not auth:
@@ -90,6 +76,16 @@ class AIRestApi(BaseApi):
         token = data.get("mcpBearerToken")
         if isinstance(token, str) and token.strip():
             return token.strip()
+        return None
+
+    def _resolve_mcp_bearer_token(self, stored_token: str | None) -> str | None:
+        # Per-user Authorization header wins; otherwise fall back to the stored
+        # global MCP bearer token.
+        request_token = self._request_bearer_token()
+        if request_token:
+            return request_token
+        if isinstance(stored_token, str) and stored_token.strip():
+            return stored_token.strip()
         return None
 
     def _validate_mcp_auth_identity(
@@ -149,9 +145,10 @@ class AIRestApi(BaseApi):
     @safe
     def chat(self) -> Response:
         data = self._config_from_request()
-        mcp_enabled = bool(data.get("mcpEnabled"))
-        mcp_server_url = data.get("mcpServerUrl", "")
-        mcp_bearer_token = self._mcp_bearer_token_from_request(data)
+        config = config_store.resolve_active_config()
+        mcp_enabled = bool(config["mcpEnabled"])
+        mcp_server_url = config["mcpServerUrl"]
+        mcp_bearer_token = self._resolve_mcp_bearer_token(config["mcpBearerToken"])
         try:
             self._validate_mcp_auth_identity(
                 mcp_enabled=mcp_enabled,
@@ -159,15 +156,15 @@ class AIRestApi(BaseApi):
                 mcp_bearer_token=mcp_bearer_token,
             )
             result = chat_completion(
-                llm_api_base_url=data.get("llmApiBaseUrl", ""),
-                llm_api_key=data.get("llmApiKey"),
-                llm_model=data.get("llmModel", ""),
+                llm_api_base_url=config["llmApiBaseUrl"],
+                llm_api_key=config["llmApiKey"],
+                llm_model=config["llmModel"],
                 messages=data.get("messages", []),
                 mcp_enabled=mcp_enabled,
                 mcp_server_url=mcp_server_url,
                 mcp_bearer_token=mcp_bearer_token,
-                agent_max_iterations=self._agent_max_iterations_from_request(data),
-                system_prompt=self._system_prompt_from_request(data),
+                agent_max_iterations=config["agentMaxIterations"],
+                system_prompt=config["systemPrompt"],
             )
             return self._json_response(200, result)
         except Exception as ex:  # noqa: BLE001
@@ -182,9 +179,10 @@ class AIRestApi(BaseApi):
     @safe
     def chat_stream(self) -> Response:
         data = self._config_from_request()
-        mcp_enabled = bool(data.get("mcpEnabled"))
-        mcp_server_url = data.get("mcpServerUrl", "")
-        mcp_bearer_token = self._mcp_bearer_token_from_request(data)
+        config = config_store.resolve_active_config()
+        mcp_enabled = bool(config["mcpEnabled"])
+        mcp_server_url = config["mcpServerUrl"]
+        mcp_bearer_token = self._resolve_mcp_bearer_token(config["mcpBearerToken"])
         self._validate_mcp_auth_identity(
             mcp_enabled=mcp_enabled,
             mcp_server_url=mcp_server_url,
@@ -194,17 +192,15 @@ class AIRestApi(BaseApi):
         def generate():
             try:
                 for event in iter_chat_completion_events(
-                    llm_api_base_url=data.get("llmApiBaseUrl", ""),
-                    llm_api_key=data.get("llmApiKey"),
-                    llm_model=data.get("llmModel", ""),
+                    llm_api_base_url=config["llmApiBaseUrl"],
+                    llm_api_key=config["llmApiKey"],
+                    llm_model=config["llmModel"],
                     messages=data.get("messages", []),
                     mcp_enabled=mcp_enabled,
                     mcp_server_url=mcp_server_url,
                     mcp_bearer_token=mcp_bearer_token,
-                    agent_max_iterations=self._agent_max_iterations_from_request(
-                        data
-                    ),
-                    system_prompt=self._system_prompt_from_request(data),
+                    agent_max_iterations=config["agentMaxIterations"],
+                    system_prompt=config["systemPrompt"],
                 ):
                     yield f"data: {json.dumps(event)}\n\n"
             except AiStreamError as ex:

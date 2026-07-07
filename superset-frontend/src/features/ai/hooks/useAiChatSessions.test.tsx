@@ -33,20 +33,6 @@ jest.mock('react-redux', () => ({
   useDispatch: () => mockDispatch,
 }));
 
-jest.mock('src/features/ai/aiConnectionConfig', () => ({
-  getAiConnectionConfig: () => ({
-    llmProvider: 'custom',
-    llmApiBaseUrl: 'https://api.example.com/v1',
-    llmApiKey: 'key',
-    llmModel: 'model',
-    mcpEnabled: false,
-    mcpServerUrl: '',
-    mcpBearerToken: '',
-    agentMaxIterations: 120,
-    systemPrompt: '',
-  }),
-}));
-
 const sessionSummary: ChatSessionSummary = {
   id: 'session-uuid-1',
   dbId: 1,
@@ -163,7 +149,7 @@ describe('useAiChatSessions stopGeneration', () => {
 
     jest
       .spyOn(aiChatApi, 'streamChatMessage')
-      .mockImplementation(async (_history, _config, handlers = {}) => {
+      .mockImplementation(async (_history, handlers = {}) => {
         handlers.onToken?.('partial ');
         handlers.onToken?.('text');
         throw new DOMException('Aborted', 'AbortError');
@@ -261,7 +247,7 @@ describe('useAiChatSessions stopGeneration', () => {
 
     jest
       .spyOn(aiChatApi, 'streamChatMessage')
-      .mockImplementation(async (_history, _config, handlers = {}) => {
+      .mockImplementation(async (_history, handlers = {}) => {
         handlers.onChart?.(chartPayload);
         return {
           content: 'Chart ready',
@@ -344,7 +330,7 @@ describe('useAiChatSessions send from /ai/', () => {
     );
 
     jest.spyOn(aiChatApi, 'streamChatMessage').mockImplementation(
-      async (_history, _config, handlers = {}) => {
+      async (_history, handlers = {}) => {
         handlers.onToken?.('Hi');
         return streamPromise;
       },

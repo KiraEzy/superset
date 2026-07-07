@@ -18,6 +18,7 @@
  */
 
 import { FeatureFlag, isFeatureEnabled } from '@superset-ui/core';
+import { findPermission } from 'src/utils/findPermission';
 import {
   lazy,
   ComponentType,
@@ -222,14 +223,6 @@ export const routes: Routes = [
     Component: Home,
   },
   {
-    path: '/ai/connection/',
-    Component: AIConnection,
-  },
-  {
-    path: '/ai/:sessionId?',
-    Component: AI,
-  },
-  {
     path: '/superset/file-handler',
     Component: FileHandler,
   },
@@ -357,6 +350,19 @@ const user = getBootstrapData()?.user;
 const authRegistrationEnabled =
   getBootstrapData()?.common.conf.AUTH_USER_REGISTRATION;
 const isAdmin = isUserAdmin(user);
+
+if (findPermission('can_write', 'AIConnectionConfig', user?.roles)) {
+  routes.push({
+    path: '/ai/connection/',
+    Component: AIConnection,
+  });
+}
+
+// Must be registered after /ai/connection/ so "connection" is not captured as sessionId.
+routes.push({
+  path: '/ai/:sessionId?',
+  Component: AI,
+});
 
 if (isAdmin) {
   routes.push(

@@ -32,9 +32,20 @@ class AIView(BaseSupersetView):
     def index(self) -> FlaskResponse:
         return super().render_app_template()
 
-    @expose("/connection/")
+
+class AIConnectionView(BaseSupersetView):
+    """Admin-configurable global AI connection settings page.
+
+    Gated by the dedicated ``AIConnectionConfig`` permission (shared with the
+    config REST API) so it is only reachable by permitted users.
+    """
+
+    route_base = "/ai/connection"
+    class_permission_name = "AIConnectionConfig"
+
+    @expose("/")
     @has_access
-    @permission_name("chat")
+    @permission_name("read")
     @event_logger.log_this
-    def connection(self) -> FlaskResponse:
+    def index(self) -> FlaskResponse:
         return super().render_app_template()

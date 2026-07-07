@@ -23,7 +23,6 @@ import {
   streamChatMessage,
   streamErrorMessage,
 } from './aiChatApi';
-import { AiConnectionConfig } from './aiConnectionConfig';
 
 function createSseResponse(chunks: string[]): Response {
   const encoder = new TextEncoder();
@@ -44,18 +43,6 @@ function createSseResponse(chunks: string[]): Response {
     headers: { 'Content-Type': 'text/event-stream' },
   });
 }
-
-const testConfig: AiConnectionConfig = {
-  llmProvider: 'custom',
-  llmApiBaseUrl: 'https://api.example.com/v1',
-  llmApiKey: 'test-key',
-  llmModel: 'test-model',
-  mcpEnabled: false,
-  mcpServerUrl: '',
-  mcpBearerToken: '',
-  agentMaxIterations: 120,
-  systemPrompt: '',
-};
 
 // eslint-disable-next-line no-restricted-globals -- TODO: Migrate from describe blocks
 describe('aiChatApi SSE parsing', () => {
@@ -125,7 +112,7 @@ describe('streamChatMessage', () => {
     );
 
     await expect(
-      streamChatMessage([{ role: 'user', content: 'hello' }], testConfig),
+      streamChatMessage([{ role: 'user', content: 'hello' }]),
     ).rejects.toThrow('Insufficient Balance');
   });
 
@@ -137,7 +124,7 @@ describe('streamChatMessage', () => {
     );
 
     await expect(
-      streamChatMessage([{ role: 'user', content: 'hello' }], testConfig),
+      streamChatMessage([{ role: 'user', content: 'hello' }]),
     ).rejects.toThrow('Insufficient Balance');
   });
 
@@ -152,7 +139,6 @@ describe('streamChatMessage', () => {
     await expect(
       streamChatMessage(
         [{ role: 'user', content: 'hello' }],
-        testConfig,
         {},
         controller.signal,
       ),
@@ -182,7 +168,6 @@ describe('streamChatMessage', () => {
     const onChart = jest.fn();
     const result = await streamChatMessage(
       [{ role: 'user', content: 'chart please' }],
-      testConfig,
       { onChart },
     );
 

@@ -477,7 +477,7 @@ test('hides logout button when embedded and flag is enabled', async () => {
   expect(screen.queryByText('Logout')).not.toBeInTheDocument();
 });
 
-test('shows AI Connection in settings for users with Explore read permission', async () => {
+test('shows AI Connection in settings for users with the AIConnectionConfig write permission', async () => {
   useSelectorMock.mockReturnValueOnce({
     createdOn: '2021-04-27T18:12:38.952304',
     email: 'creator@example.com',
@@ -486,7 +486,7 @@ test('shows AI Connection in settings for users with Explore read permission', a
     lastName: 'User',
     permissions: {},
     roles: {
-      Alpha: [['can_read', 'Explore']],
+      Alpha: [['can_write', 'AIConnectionConfig']],
     },
     userId: 2,
     username: 'creator',

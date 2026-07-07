@@ -21,8 +21,10 @@ import { useHistory, useParams } from 'react-router-dom';
 import { t } from '@apache-superset/core/translation';
 import { addDangerToast } from 'src/components/MessageToasts/actions';
 import { useDispatch } from 'react-redux';
-import { getAiConnectionConfig } from 'src/features/ai/aiConnectionConfig';
-import { formatAiChatError, streamChatMessage } from 'src/features/ai/aiChatApi';
+import {
+  formatAiChatError,
+  streamChatMessage,
+} from 'src/features/ai/aiChatApi';
 import {
   appendChatMessage,
   createChatSession,
@@ -32,7 +34,12 @@ import {
   listChatSessions,
   updateChatSessionTitle,
 } from 'src/features/ai/aiChatSessionApi';
-import { ChatMessage, ChatSession, ChatSessionSummary, AiChatChartPayload } from 'src/features/ai/types';
+import {
+  ChatMessage,
+  ChatSession,
+  ChatSessionSummary,
+  AiChatChartPayload,
+} from 'src/features/ai/types';
 
 function createLocalId(): string {
   return `local-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -316,9 +323,7 @@ export function useAiChatSessions() {
             session.id,
             nextTitle,
           );
-          setSessions(prev =>
-            mergeSessionSummaryInPlace(prev, updatedSummary),
-          );
+          setSessions(prev => mergeSessionSummaryInPlace(prev, updatedSummary));
         }
 
         setActiveSession(prev => {
@@ -346,7 +351,6 @@ export function useAiChatSessions() {
         let streamedContent = '';
         const response = await streamChatMessage(
           historyForLlm,
-          getAiConnectionConfig(),
           {
             onStatus: message => {
               setActiveSession(prev => {
@@ -385,10 +389,7 @@ export function useAiChatSessions() {
               });
             },
             onChart: chart => {
-              chartsThisTurnRef.current = [
-                ...chartsThisTurnRef.current,
-                chart,
-              ];
+              chartsThisTurnRef.current = [...chartsThisTurnRef.current, chart];
               setActiveSession(prev => {
                 if (!prev || prev.id !== session!.id) {
                   return prev;
@@ -484,9 +485,7 @@ export function useAiChatSessions() {
         });
 
         if (updatedSummary) {
-          setSessions(prev =>
-            mergeSessionSummaryInPlace(prev, updatedSummary),
-          );
+          setSessions(prev => mergeSessionSummaryInPlace(prev, updatedSummary));
         } else {
           await refreshSessionList();
         }
@@ -494,7 +493,8 @@ export function useAiChatSessions() {
         if (isAbortError(error) && session) {
           const partialContent = streamedContentRef.current.trim();
           const streamMeta = activeStreamMetaRef.current;
-          const durationSeconds = computeResponseDurationSeconds(streamStartedAt);
+          const durationSeconds =
+            computeResponseDurationSeconds(streamStartedAt);
 
           if (partialContent && streamMeta?.sessionId === session.id) {
             try {

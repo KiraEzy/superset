@@ -35,12 +35,15 @@ import {
   AGENT_MAX_ITERATIONS_MAX,
   AGENT_MAX_ITERATIONS_MIN,
   AiConnectionConfig,
+  buildConfigFromState,
   DEFAULT_AI_CONNECTION_CONFIG,
-  getAiConnectionConfig,
+  fetchAiConnectionState,
+  getDefaultProviderLlmSettings,
   LlmProvider,
-  saveAiConnectionConfig,
-  stashProviderLlmSettings,
-  switchAiConnectionProvider,
+  mergeConfigIntoState,
+  ProviderLlmSettings,
+  saveAiConnectionState,
+  StoredAiConnectionState,
 } from 'src/features/ai/aiConnectionConfig';
 import {
   testLlmConnection,
@@ -77,22 +80,30 @@ export default function AIConnection() {
   const activeProviderRef = useRef<LlmProvider>(
     DEFAULT_AI_CONNECTION_CONFIG.llmProvider,
   );
+  // In-memory source of truth for per-provider drafts and shared settings.
+  const stateRef = useRef<StoredAiConnectionState>({
+    llmProvider: DEFAULT_AI_CONNECTION_CONFIG.llmProvider,
+    providerSettings: {},
+    mcpEnabled: DEFAULT_AI_CONNECTION_CONFIG.mcpEnabled,
+    mcpServerUrl: DEFAULT_AI_CONNECTION_CONFIG.mcpServerUrl,
+    mcpBearerToken: DEFAULT_AI_CONNECTION_CONFIG.mcpBearerToken,
+    agentMaxIterations: DEFAULT_AI_CONNECTION_CONFIG.agentMaxIterations,
+    systemPrompt: DEFAULT_AI_CONNECTION_CONFIG.systemPrompt,
+  });
   const [providerKey, setProviderKey] = useState(0);
 
-  const readLlmFields = (): {
-    llmApiBaseUrl: string;
-    llmModel: string;
-    llmApiKey: string;
-  } => ({
+  const readLlmFields = (): ProviderLlmSettings => ({
     llmApiBaseUrl: String(form.getFieldValue('llmApiBaseUrl') ?? ''),
     llmModel: String(form.getFieldValue('llmModel') ?? ''),
     llmApiKey: String(form.getFieldValue('llmApiKey') ?? ''),
   });
 
-  const applyLlmFields = (config: Pick<
-    AiConnectionConfig,
-    'llmProvider' | 'llmApiBaseUrl' | 'llmModel' | 'llmApiKey'
-  >) => {
+  const applyLlmFields = (
+    config: Pick<
+      AiConnectionConfig,
+      'llmProvider' | 'llmApiBaseUrl' | 'llmModel' | 'llmApiKey'
+    >,
+  ) => {
     form.setFieldsValue({
       llmProvider: config.llmProvider,
       llmApiBaseUrl: config.llmApiBaseUrl,
@@ -104,14 +115,28 @@ export default function AIConnection() {
   };
 
   const persistActiveProviderDraft = () => {
-    stashProviderLlmSettings(activeProviderRef.current, readLlmFields());
+    stateRef.current.providerSettings[activeProviderRef.current] =
+      readLlmFields();
   };
 
   useEffect(() => {
-    const config = getAiConnectionConfig();
-    form.setFieldsValue(config);
-    activeProviderRef.current = config.llmProvider;
-  }, [form]);
+    let cancelled = false;
+    fetchAiConnectionState()
+      .then(state => {
+        if (cancelled) {
+          return;
+        }
+        stateRef.current = state;
+        form.setFieldsValue(buildConfigFromState(state));
+        activeProviderRef.current = state.llmProvider;
+      })
+      .catch(() => {
+        addDangerToast(t('Failed to load AI connection settings.'));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [form, addDangerToast]);
 
   const menuData: SubMenuProps = {
     name: t('AI Connection'),
@@ -121,10 +146,16 @@ export default function AIConnection() {
     try {
       setSaving(true);
       const values = await form.validateFields();
-      saveAiConnectionConfig(values);
+      stateRef.current = mergeConfigIntoState(stateRef.current, values);
+      const saved = await saveAiConnectionState(stateRef.current);
+      stateRef.current = saved;
       addSuccessToast(t('AI connection settings saved.'));
-    } catch {
-      addDangerToast(t('Please fix the form errors before saving.'));
+    } catch (error) {
+      addDangerToast(
+        error instanceof Error && error.message
+          ? error.message
+          : t('Please fix the form errors before saving.'),
+      );
     } finally {
       setSaving(false);
     }
@@ -185,7 +216,11 @@ export default function AIConnection() {
           )}
         </Typography.Paragraph>
 
-        <Form form={form} layout="vertical" initialValues={DEFAULT_AI_CONNECTION_CONFIG}>
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={DEFAULT_AI_CONNECTION_CONFIG}
+        >
           <SectionTitle level={5}>{t('LLM Provider')}</SectionTitle>
 
           <Form.Item
@@ -205,13 +240,14 @@ export default function AIConnection() {
                 if (value === activeProviderRef.current) {
                   return;
                 }
-                const fromProvider = activeProviderRef.current;
-                const nextConfig = switchAiConnectionProvider(
-                  fromProvider,
-                  readLlmFields(),
-                  value,
-                );
-                applyLlmFields(nextConfig);
+                // Remember the current provider's draft in memory.
+                stateRef.current.providerSettings[activeProviderRef.current] =
+                  readLlmFields();
+                stateRef.current.llmProvider = value;
+                const llm =
+                  stateRef.current.providerSettings[value] ??
+                  getDefaultProviderLlmSettings(value);
+                applyLlmFields({ llmProvider: value, ...llm });
               }}
             />
           </Form.Item>
@@ -234,7 +270,9 @@ export default function AIConnection() {
             name="llmModel"
             label={t('Model')}
             rules={[{ required: true, message: t('Model is required') }]}
-            extra={t('Example: gemini-2.0-flash, deepseek-chat, or your LM Studio model id')}
+            extra={t(
+              'Example: gemini-2.0-flash, deepseek-chat, or your LM Studio model id',
+            )}
           >
             <Input
               placeholder="e.g. qwen2.5-7b-instruct"
@@ -246,7 +284,9 @@ export default function AIConnection() {
             key={`llm-api-key-${providerKey}`}
             name="llmApiKey"
             label={t('API key')}
-            extra={t('Required for Gemini, DeepSeek, and OpenAI. Optional for LM Studio.')}
+            extra={t(
+              'Required for Gemini, DeepSeek, and OpenAI. Optional for LM Studio.',
+            )}
           >
             <Input.Password
               placeholder={t('Optional')}
@@ -274,7 +314,9 @@ export default function AIConnection() {
           <Form.Item
             name="mcpServerUrl"
             label={t('MCP server URL')}
-            rules={[{ required: true, message: t('MCP server URL is required') }]}
+            rules={[
+              { required: true, message: t('MCP server URL is required') },
+            ]}
             extra={t('Example: http://localhost:5008/mcp')}
           >
             <Input placeholder="http://localhost:5008/mcp" />
@@ -340,9 +382,9 @@ export default function AIConnection() {
           <Alert
             type="info"
             showIcon
-            message={t('Settings are stored in this browser')}
+            message={t('Settings are shared across all users')}
             description={t(
-              'LLM settings are remembered per provider in this browser. MCP settings are shared. You do not need to click Save when switching providers.',
+              'This is a single global configuration used by every user. Only administrators with the AI Connection permission can view or change it. Click Save to apply your changes.',
             )}
             style={{ marginTop: 24 }}
           />

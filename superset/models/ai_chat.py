@@ -25,6 +25,7 @@ from flask_appbuilder import Model
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
+from superset.extensions import encrypted_field_factory
 from superset.models.helpers import AuditMixinNullable, ExtraJSONMixin, UUIDMixin
 from superset.utils.core import MediumText
 
@@ -75,3 +76,19 @@ class AiChatMessage(ExtraJSONMixin, Model):
 
     def __repr__(self) -> str:
         return f"AiChatMessage<{self.id}: {self.role}>"
+
+
+class AiConnectionConfig(AuditMixinNullable, Model):
+    """Global, shared AI connection configuration (single row, ``id=1``).
+
+    The full config is stored as an encrypted JSON blob mirroring the frontend
+    ``StoredAiConnectionState`` shape so LLM/MCP secrets are encrypted at rest.
+    """
+
+    __tablename__ = "ai_connection_config"
+
+    id = Column(Integer, primary_key=True)
+    config = Column(encrypted_field_factory.create(Text), nullable=True)
+
+    def __repr__(self) -> str:
+        return f"AiConnectionConfig<{self.id}>"

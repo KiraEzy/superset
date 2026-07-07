@@ -21,8 +21,8 @@ import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { Page } from '@playwright/test';
 
-/** Matches `STORAGE_KEY` in src/features/ai/aiConnectionConfig.ts */
-export const AI_CONNECTION_STORAGE_KEY = 'focalbi__ai_connection_config';
+/** Global AI connection config REST endpoint. */
+export const AI_CONNECTION_ENDPOINT = '/api/v1/ai_connection/';
 
 const DEFAULT_CONFIG_PATH = join(
   process.cwd(),
@@ -149,7 +149,13 @@ export function toStoredAiConnectionState(
   };
 }
 
-/** Seed browser localStorage with the test AI connection config. */
+/**
+ * Seed the global AI connection config via the backend API.
+ *
+ * Runs inside the authenticated browser context so it reuses the logged-in
+ * session cookie (the user must hold the AIConnectionConfig write permission,
+ * e.g. admin).
+ */
 export async function applyAiConnectionTestConfig(page: Page): Promise<boolean> {
   const config = loadAiConnectionTestConfig();
   if (!config) {
@@ -157,11 +163,25 @@ export async function applyAiConnectionTestConfig(page: Page): Promise<boolean> 
   }
 
   const stored = toStoredAiConnectionState(config);
-  await page.evaluate(
-    ({ storageKey, value }) => {
-      localStorage.setItem(storageKey, JSON.stringify(value));
+  const ok = await page.evaluate(
+    async ({ endpoint, value }) => {
+      const csrfResponse = await fetch('/api/v1/security/csrf_token/', {
+        headers: { Accept: 'application/json' },
+        credentials: 'same-origin',
+      });
+      const csrfJson = (await csrfResponse.json()) as { result?: string };
+      const response = await fetch(endpoint, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfJson.result ?? '',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(value),
+      });
+      return response.ok;
     },
-    { storageKey: AI_CONNECTION_STORAGE_KEY, value: stored },
+    { endpoint: AI_CONNECTION_ENDPOINT, value: stored },
   );
-  return true;
+  return ok;
 }

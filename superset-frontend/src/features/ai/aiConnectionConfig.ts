@@ -16,10 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { SupersetClient, getClientErrorObject } from '@superset-ui/core';
 
 export const AI_CONNECTION_SETTINGS_PATH = '/ai/connection/';
 
-const STORAGE_KEY = 'focalbi__ai_connection_config';
+const AI_CONNECTION_ENDPOINT = '/api/v1/ai_connection/';
 
 export type LlmProvider =
   | 'lmstudio'
@@ -43,7 +44,7 @@ export interface AiConnectionConfig extends ProviderLlmSettings {
   systemPrompt: string;
 }
 
-interface StoredAiConnectionState {
+export interface StoredAiConnectionState {
   llmProvider: LlmProvider;
   providerSettings: Partial<Record<LlmProvider, ProviderLlmSettings>>;
   mcpEnabled: boolean;
@@ -112,7 +113,7 @@ export function getDefaultProviderLlmSettings(
   };
 }
 
-function isLlmProvider(value: unknown): value is LlmProvider {
+export function isLlmProvider(value: unknown): value is LlmProvider {
   return (
     value === 'lmstudio' ||
     value === 'openai' ||
@@ -122,7 +123,7 @@ function isLlmProvider(value: unknown): value is LlmProvider {
   );
 }
 
-function extractLlmSettings(
+export function extractLlmSettings(
   source: Partial<AiConnectionConfig>,
 ): ProviderLlmSettings {
   return {
@@ -149,33 +150,28 @@ function parseSystemPrompt(value: unknown): string {
   return typeof value === 'string' ? value : DEFAULT_AGENT.systemPrompt;
 }
 
-function buildConfigFromState(state: StoredAiConnectionState): AiConnectionConfig {
-  const provider = state.llmProvider;
-  const llm =
-    state.providerSettings[provider] ?? getDefaultProviderLlmSettings(provider);
+function defaultStoredState(): StoredAiConnectionState {
   return {
-    llmProvider: provider,
-    ...llm,
-    mcpEnabled: state.mcpEnabled,
-    mcpServerUrl: state.mcpServerUrl,
-    mcpBearerToken: state.mcpBearerToken,
-    agentMaxIterations: state.agentMaxIterations,
-    systemPrompt: state.systemPrompt,
+    llmProvider: DEFAULT_AI_CONNECTION_CONFIG.llmProvider,
+    providerSettings: {},
+    ...DEFAULT_MCP,
+    ...DEFAULT_AGENT,
   };
 }
 
-function migrateLegacyConfig(
+function normalizeStoredState(
   parsed: Record<string, unknown>,
 ): StoredAiConnectionState {
   const provider = isLlmProvider(parsed.llmProvider)
     ? parsed.llmProvider
     : DEFAULT_AI_CONNECTION_CONFIG.llmProvider;
-
+  const providerSettings =
+    parsed.providerSettings && typeof parsed.providerSettings === 'object'
+      ? (parsed.providerSettings as StoredAiConnectionState['providerSettings'])
+      : {};
   return {
     llmProvider: provider,
-    providerSettings: {
-      [provider]: extractLlmSettings(parsed as Partial<AiConnectionConfig>),
-    },
+    providerSettings,
     mcpEnabled:
       typeof parsed.mcpEnabled === 'boolean'
         ? parsed.mcpEnabled
@@ -193,100 +189,80 @@ function migrateLegacyConfig(
   };
 }
 
-function loadStoredState(): StoredAiConnectionState {
+export function buildConfigFromState(
+  state: StoredAiConnectionState,
+): AiConnectionConfig {
+  const provider = state.llmProvider;
+  const llm =
+    state.providerSettings[provider] ?? getDefaultProviderLlmSettings(provider);
+  return {
+    llmProvider: provider,
+    ...llm,
+    mcpEnabled: state.mcpEnabled,
+    mcpServerUrl: state.mcpServerUrl,
+    mcpBearerToken: state.mcpBearerToken,
+    agentMaxIterations: state.agentMaxIterations,
+    systemPrompt: state.systemPrompt,
+  };
+}
+
+/** Fold the active provider's flat form config back into the stored state. */
+export function mergeConfigIntoState(
+  state: StoredAiConnectionState,
+  config: AiConnectionConfig,
+): StoredAiConnectionState {
+  return {
+    ...state,
+    llmProvider: config.llmProvider,
+    providerSettings: {
+      ...state.providerSettings,
+      [config.llmProvider]: extractLlmSettings(config),
+    },
+    mcpEnabled: config.mcpEnabled,
+    mcpServerUrl: config.mcpServerUrl,
+    mcpBearerToken: config.mcpBearerToken,
+    agentMaxIterations: parseAgentMaxIterations(config.agentMaxIterations),
+    systemPrompt: parseSystemPrompt(config.systemPrompt),
+  };
+}
+
+/** Load the global AI connection config from the backend. */
+export async function fetchAiConnectionState(): Promise<StoredAiConnectionState> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return {
-        llmProvider: DEFAULT_AI_CONNECTION_CONFIG.llmProvider,
-        providerSettings: {},
-        ...DEFAULT_MCP,
-        ...DEFAULT_AGENT,
-      };
+    const { json } = await SupersetClient.get({
+      endpoint: AI_CONNECTION_ENDPOINT,
+    });
+    const result = (json as { result?: Record<string, unknown> })?.result;
+    if (result && typeof result === 'object') {
+      return normalizeStoredState(result);
     }
-
-    const parsed = JSON.parse(raw) as Record<string, unknown>;
-    if (parsed.providerSettings && typeof parsed.providerSettings === 'object') {
-      const provider = isLlmProvider(parsed.llmProvider)
-        ? parsed.llmProvider
-        : DEFAULT_AI_CONNECTION_CONFIG.llmProvider;
-      return {
-        llmProvider: provider,
-        providerSettings:
-          parsed.providerSettings as StoredAiConnectionState['providerSettings'],
-        mcpEnabled:
-          typeof parsed.mcpEnabled === 'boolean'
-            ? parsed.mcpEnabled
-            : DEFAULT_MCP.mcpEnabled,
-        mcpServerUrl:
-          typeof parsed.mcpServerUrl === 'string'
-            ? parsed.mcpServerUrl
-            : DEFAULT_MCP.mcpServerUrl,
-        mcpBearerToken:
-          typeof parsed.mcpBearerToken === 'string'
-            ? parsed.mcpBearerToken
-            : DEFAULT_MCP.mcpBearerToken,
-        agentMaxIterations: parseAgentMaxIterations(parsed.agentMaxIterations),
-        systemPrompt: parseSystemPrompt(parsed.systemPrompt),
-      };
-    }
-
-    return migrateLegacyConfig(parsed);
-  } catch {
-    return {
-      llmProvider: DEFAULT_AI_CONNECTION_CONFIG.llmProvider,
-      providerSettings: {},
-      ...DEFAULT_MCP,
-      ...DEFAULT_AGENT,
-    };
+    return defaultStoredState();
+  } catch (error) {
+    const clientError = await getClientErrorObject(error);
+    throw new Error(
+      clientError.message || clientError.error || 'Failed to load AI config',
+    );
   }
 }
 
-function writeStoredState(state: StoredAiConnectionState): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-export function getProviderLlmSettings(
-  provider: LlmProvider,
-): ProviderLlmSettings {
-  const state = loadStoredState();
-  return state.providerSettings[provider] ?? getDefaultProviderLlmSettings(provider);
-}
-
-export function getAiConnectionConfig(): AiConnectionConfig {
-  return buildConfigFromState(loadStoredState());
-}
-
-export function saveAiConnectionConfig(config: AiConnectionConfig): void {
-  const state = loadStoredState();
-  state.llmProvider = config.llmProvider;
-  state.providerSettings[config.llmProvider] = extractLlmSettings(config);
-  state.mcpEnabled = config.mcpEnabled;
-  state.mcpServerUrl = config.mcpServerUrl;
-  state.mcpBearerToken = config.mcpBearerToken;
-  state.agentMaxIterations = parseAgentMaxIterations(config.agentMaxIterations);
-  state.systemPrompt = parseSystemPrompt(config.systemPrompt);
-  writeStoredState(state);
-}
-
-export function stashProviderLlmSettings(
-  provider: LlmProvider,
-  settings: ProviderLlmSettings,
-): void {
-  const state = loadStoredState();
-  state.providerSettings[provider] = settings;
-  writeStoredState(state);
-}
-
-/** Remember the current provider's LLM fields, then load the target provider. */
-export function switchAiConnectionProvider(
-  fromProvider: LlmProvider,
-  currentLlm: ProviderLlmSettings,
-  toProvider: LlmProvider,
-): AiConnectionConfig {
-  const state = loadStoredState();
-  state.providerSettings[fromProvider] = currentLlm;
-  state.llmProvider = toProvider;
-  writeStoredState(state);
-  return buildConfigFromState(state);
+/** Persist the global AI connection config to the backend. */
+export async function saveAiConnectionState(
+  state: StoredAiConnectionState,
+): Promise<StoredAiConnectionState> {
+  try {
+    const { json } = await SupersetClient.put({
+      endpoint: AI_CONNECTION_ENDPOINT,
+      jsonPayload: state,
+    });
+    const result = (json as { result?: Record<string, unknown> })?.result;
+    if (result && typeof result === 'object') {
+      return normalizeStoredState(result);
+    }
+    return state;
+  } catch (error) {
+    const clientError = await getClientErrorObject(error);
+    throw new Error(
+      clientError.message || clientError.error || 'Failed to save AI config',
+    );
+  }
 }
