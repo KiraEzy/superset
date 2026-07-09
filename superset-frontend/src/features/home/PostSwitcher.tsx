@@ -21,6 +21,7 @@ import { t } from '@apache-superset/core/translation';
 import { css, useTheme } from '@apache-superset/core/theme';
 import { Button, Dropdown, Icons, Tooltip } from '@superset-ui/core/components';
 import { useToasts } from 'src/components/MessageToasts/withToasts';
+import { usePublicGlobalConfig } from 'src/features/globalConfiguration/usePublicGlobalConfig';
 import { setActivePost } from 'src/features/posts/api';
 import type { UserPost } from 'src/types/bootstrapTypes';
 
@@ -55,6 +56,7 @@ export default function PostSwitcher({
 }: PostSwitcherProps) {
   const theme = useTheme();
   const { addDangerToast } = useToasts();
+  const { displayNameMaxWidthPx } = usePublicGlobalConfig();
   const [switching, setSwitching] = useState(false);
 
   const displayName = getPostSwitcherDisplayName({
@@ -84,37 +86,43 @@ export default function PostSwitcher({
     }
   };
 
-  const ellipsisCss = (maxWidthUnits: number) => css`
+  const displayNameEllipsisCss = css`
     display: inline-block;
-    max-width: ${theme.sizeUnit * maxWidthUnits}px;
+    max-width: ${displayNameMaxWidthPx}px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    vertical-align: bottom;
+    vertical-align: baseline;
   `;
 
   const rowCss = css`
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: ${theme.sizeUnit}px;
     color: ${theme.colorPrimary};
   `;
 
+  const greetingCss = css`
+    display: inline-flex;
+    align-items: baseline;
+  `;
+
   const postLabelNode = (
-    <Tooltip title={label}>
-      <span css={ellipsisCss(12)} title={label} data-test="post-switcher-label">
-        {label}
-      </span>
-    </Tooltip>
+    <span data-test="post-switcher-label">{label}</span>
   );
 
   return (
     <div css={rowCss} data-test="post-switcher-root">
       <Icons.UserOutlined iconSize="m" />
-      <span data-test="post-switcher-greeting">
+      <span css={greetingCss} data-test="post-switcher-greeting">
         {greetingBefore}
         <Tooltip title={displayName || undefined}>
-          <span css={ellipsisCss(16)} title={displayName}>
+          <span
+            css={displayNameEllipsisCss}
+            title={displayName}
+            data-test="post-switcher-display-name"
+            data-max-width={String(displayNameMaxWidthPx)}
+          >
             {displayName}
           </span>
         </Tooltip>
@@ -136,10 +144,13 @@ export default function PostSwitcher({
             buttonStyle="link"
             loading={switching}
             css={css`
-              display: flex;
-              align-items: center;
+              display: inline-flex;
+              align-items: baseline;
               gap: ${theme.sizeUnit}px;
-              padding-inline: 0;
+              padding: 0;
+              line-height: inherit;
+              height: auto;
+              min-height: 0;
             `}
             data-test="post-switcher"
           >

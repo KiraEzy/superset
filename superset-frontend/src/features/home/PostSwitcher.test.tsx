@@ -17,10 +17,22 @@
  * under the License.
  */
 import { render, screen } from 'spec/helpers/testing-library';
+import { usePublicGlobalConfig } from 'src/features/globalConfiguration/usePublicGlobalConfig';
 import PostSwitcher, { getPostSwitcherDisplayName } from './PostSwitcher';
+
+jest.mock('src/features/globalConfiguration/usePublicGlobalConfig', () => ({
+  usePublicGlobalConfig: jest.fn(() => ({ displayNameMaxWidthPx: 64 })),
+}));
+
+const mockedUsePublicGlobalConfig = jest.mocked(usePublicGlobalConfig);
 
 const viewer = { id: 1, name: 'viewer', label: 'Viewer' };
 const editor = { id: 2, name: 'editor', label: 'Editor' };
+const systemAdmin = { id: 3, name: 'system_admin', label: 'System Admin' };
+
+beforeEach(() => {
+  mockedUsePublicGlobalConfig.mockReturnValue({ displayNameMaxWidthPx: 64 });
+});
 
 test('getPostSwitcherDisplayName joins names and falls back to username', () => {
   expect(
@@ -134,5 +146,45 @@ test('exposes full display name via tooltip title for truncation', () => {
   );
 
   const fullName = `${longFirst} ${longLast}`;
-  expect(screen.getByTitle(fullName)).toBeInTheDocument();
+  expect(screen.getByTestId('post-switcher-display-name')).toHaveAttribute(
+    'title',
+    fullName,
+  );
+});
+
+test('uses displayNameMaxWidthPx from global config on display name', () => {
+  mockedUsePublicGlobalConfig.mockReturnValue({ displayNameMaxWidthPx: 120 });
+
+  render(
+    <PostSwitcher
+      firstName="Ada"
+      lastName="Lovelace"
+      username="ada"
+      activePost={viewer}
+      availablePosts={[viewer]}
+    />,
+    { useRedux: true, useTheme: true },
+  );
+
+  expect(screen.getByTestId('post-switcher-display-name')).toHaveAttribute(
+    'data-max-width',
+    '120',
+  );
+});
+
+test('renders long post label without truncation', () => {
+  render(
+    <PostSwitcher
+      firstName="Ada"
+      lastName="Lovelace"
+      username="ada"
+      activePost={systemAdmin}
+      availablePosts={[systemAdmin]}
+    />,
+    { useRedux: true, useTheme: true },
+  );
+
+  expect(screen.getByTestId('post-switcher-label')).toHaveTextContent(
+    'System Admin',
+  );
 });
