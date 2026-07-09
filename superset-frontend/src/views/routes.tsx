@@ -32,6 +32,7 @@ import getBootstrapData from 'src/utils/getBootstrapData';
 import Home from 'src/pages/Home';
 import AI from 'src/pages/AI';
 import AIConnection from 'src/pages/AIConnection';
+import GlobalConfiguration from 'src/pages/GlobalConfiguration';
 
 const ChartCreation = lazy(
   () =>
@@ -365,6 +366,13 @@ if (findPermission('can_write', 'AIConnectionConfig', user?.roles)) {
   routes.push({
     path: '/ai/connection/',
     Component: AIConnection,
+  });
+}
+
+if (findPermission('can_read', 'GlobalConfiguration', user?.roles)) {
+  routes.push({
+    path: '/global_configuration/',
+    Component: GlobalConfiguration,
   });
 }
 
