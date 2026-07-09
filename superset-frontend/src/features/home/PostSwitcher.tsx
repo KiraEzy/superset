@@ -19,17 +19,37 @@
 import { useState } from 'react';
 import { t } from '@apache-superset/core/translation';
 import { css, useTheme } from '@apache-superset/core/theme';
-import { Button, Dropdown, Icons } from '@superset-ui/core/components';
+import { Button, Dropdown, Icons, Tooltip } from '@superset-ui/core/components';
 import { useToasts } from 'src/components/MessageToasts/withToasts';
 import { setActivePost } from 'src/features/posts/api';
 import type { UserPost } from 'src/types/bootstrapTypes';
 
 export interface PostSwitcherProps {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
   activePost?: UserPost | null;
   availablePosts?: UserPost[];
 }
 
+export function getPostSwitcherDisplayName({
+  firstName,
+  lastName,
+  username,
+}: Pick<PostSwitcherProps, 'firstName' | 'lastName' | 'username'>): string {
+  const parts = [firstName, lastName]
+    .map(part => (part || '').trim())
+    .filter(Boolean);
+  if (parts.length > 0) {
+    return parts.join(' ');
+  }
+  return (username || '').trim();
+}
+
 export default function PostSwitcher({
+  firstName,
+  lastName,
+  username,
   activePost,
   availablePosts = [],
 }: PostSwitcherProps) {
@@ -37,10 +57,14 @@ export default function PostSwitcher({
   const { addDangerToast } = useToasts();
   const [switching, setSwitching] = useState(false);
 
-  // Nothing to switch between: hide the control entirely.
-  if (!availablePosts || availablePosts.length <= 1) {
-    return null;
-  }
+  const displayName = getPostSwitcherDisplayName({
+    firstName,
+    lastName,
+    username,
+  });
+  const fullGreeting = t('Hi, %s, you are logged in as,', displayName);
+  const label = activePost?.label || activePost?.name || t('Choose post');
+  const canSwitch = availablePosts.length > 1;
 
   const handleSelect = async (postId: number) => {
     if (activePost && postId === activePost.id) {
@@ -49,7 +73,6 @@ export default function PostSwitcher({
     setSwitching(true);
     try {
       await setActivePost(postId);
-      // Full reload so post-scoped permissions and the menu are rebuilt.
       window.location.reload();
     } catch (error) {
       addDangerToast(t('Could not switch post. Please try again.'));
@@ -57,34 +80,72 @@ export default function PostSwitcher({
     }
   };
 
-  const label = activePost?.label || activePost?.name || t('Choose post');
+  const ellipsisCss = (maxWidthUnits: number) => css`
+    display: inline-block;
+    max-width: ${theme.sizeUnit * maxWidthUnits}px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+  `;
+
+  const rowCss = css`
+    display: flex;
+    align-items: center;
+    gap: ${theme.sizeUnit}px;
+    color: ${theme.colorPrimary};
+  `;
+
+  const postLabelNode = (
+    <Tooltip title={label}>
+      <span css={ellipsisCss(12)} title={label} data-test="post-switcher-label">
+        {label}
+      </span>
+    </Tooltip>
+  );
 
   return (
-    <Dropdown
-      menu={{
-        selectable: true,
-        selectedKeys: activePost ? [String(activePost.id)] : [],
-        items: availablePosts.map(post => ({
-          key: String(post.id),
-          label: post.label || post.name,
-          onClick: () => handleSelect(post.id),
-        })),
-      }}
-    >
-      <Button
-        buttonStyle="link"
-        loading={switching}
-        css={css`
-          display: flex;
-          align-items: center;
-          gap: ${theme.sizeUnit}px;
-        `}
-        data-test="post-switcher"
-      >
-        <Icons.UserOutlined iconSize="m" />
-        {label}
-        <Icons.DownOutlined iconSize="s" />
-      </Button>
-    </Dropdown>
+    <div css={rowCss} data-test="post-switcher-root">
+      <Icons.UserOutlined iconSize="m" />
+      <Tooltip title={fullGreeting}>
+        <span
+          data-test="post-switcher-greeting"
+          css={ellipsisCss(28)}
+          title={displayName}
+        >
+          {fullGreeting}
+        </span>
+      </Tooltip>
+      {canSwitch ? (
+        <Dropdown
+          menu={{
+            selectable: true,
+            selectedKeys: activePost ? [String(activePost.id)] : [],
+            items: availablePosts.map(post => ({
+              key: String(post.id),
+              label: post.label || post.name,
+              onClick: () => handleSelect(post.id),
+            })),
+          }}
+        >
+          <Button
+            buttonStyle="link"
+            loading={switching}
+            css={css`
+              display: flex;
+              align-items: center;
+              gap: ${theme.sizeUnit}px;
+              padding-inline: 0;
+            `}
+            data-test="post-switcher"
+          >
+            {postLabelNode}
+            <Icons.DownOutlined iconSize="s" />
+          </Button>
+        </Dropdown>
+      ) : (
+        postLabelNode
+      )}
+    </div>
   );
 }

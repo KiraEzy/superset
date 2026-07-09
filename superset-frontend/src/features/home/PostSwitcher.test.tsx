@@ -17,10 +17,34 @@
  * under the License.
  */
 import { render, screen } from 'spec/helpers/testing-library';
-import PostSwitcher from './PostSwitcher';
+import PostSwitcher, { getPostSwitcherDisplayName } from './PostSwitcher';
 
 const viewer = { id: 1, name: 'viewer', label: 'Viewer' };
 const editor = { id: 2, name: 'editor', label: 'Editor' };
+
+test('getPostSwitcherDisplayName joins names and falls back to username', () => {
+  expect(
+    getPostSwitcherDisplayName({
+      firstName: ' Ada ',
+      lastName: ' Lovelace ',
+      username: 'ada',
+    }),
+  ).toBe('Ada Lovelace');
+  expect(
+    getPostSwitcherDisplayName({
+      firstName: '',
+      lastName: '  ',
+      username: 'ada',
+    }),
+  ).toBe('ada');
+  expect(
+    getPostSwitcherDisplayName({
+      firstName: 'Ada',
+      lastName: '',
+      username: 'ada',
+    }),
+  ).toBe('Ada');
+});
 
 test('renders greeting with first and last name and post label for a single post', () => {
   render(
@@ -31,6 +55,7 @@ test('renders greeting with first and last name and post label for a single post
       activePost={viewer}
       availablePosts={[viewer]}
     />,
+    { useRedux: true, useTheme: true },
   );
 
   expect(
@@ -49,6 +74,7 @@ test('falls back to username when first and last name are empty', () => {
       activePost={viewer}
       availablePosts={[viewer]}
     />,
+    { useRedux: true, useTheme: true },
   );
 
   expect(
@@ -65,6 +91,7 @@ test('shows dropdown when multiple posts are available', () => {
       activePost={viewer}
       availablePosts={[viewer, editor]}
     />,
+    { useRedux: true, useTheme: true },
   );
 
   expect(screen.getByTestId('post-switcher')).toBeInTheDocument();
@@ -83,6 +110,7 @@ test('still renders greeting when there are zero available posts', () => {
       activePost={null}
       availablePosts={[]}
     />,
+    { useRedux: true, useTheme: true },
   );
 
   expect(
@@ -102,6 +130,7 @@ test('exposes full display name via tooltip title for truncation', () => {
       activePost={viewer}
       availablePosts={[viewer]}
     />,
+    { useRedux: true, useTheme: true },
   );
 
   const fullName = `${longFirst} ${longLast}`;
