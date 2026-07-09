@@ -64,10 +64,7 @@ export default function PostSwitcher({
   });
   // Single i18n string; split on a sentinel so only the name segment truncates.
   const namePlaceholder = '\u0000';
-  const greetingTemplate = t(
-    'Hi, %s, you are logged in as,',
-    namePlaceholder,
-  );
+  const greetingTemplate = t('Hi, %s, you are logged in as,', namePlaceholder);
   const [greetingBefore = '', greetingAfter = ''] =
     greetingTemplate.split(namePlaceholder);
   const label = activePost?.label || activePost?.name || t('Choose post');
