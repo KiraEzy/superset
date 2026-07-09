@@ -27,7 +27,6 @@ import sqlalchemy as sa
 from superset.migrations.shared.utils import (
     create_fks_for_table,
     create_table,
-    drop_fks_for_table,
     drop_table,
 )
 
@@ -66,10 +65,4 @@ def upgrade():
 
 
 def downgrade():
-    drop_fks_for_table(
-        "fk_global_configuration_changed_by_fk_ab_user", "global_configuration"
-    )
-    drop_fks_for_table(
-        "fk_global_configuration_created_by_fk_ab_user", "global_configuration"
-    )
     drop_table("global_configuration")

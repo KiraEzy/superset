@@ -2,6 +2,7 @@ import pytest
 
 from superset.global_configuration.registry import (
     KEY_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX,
+    deserialize_stored,
     get_default,
     parse_and_validate,
     serialize_value,
@@ -25,3 +26,10 @@ def test_parse_invalid_width(value):
 
 def test_serialize_int():
     assert serialize_value(KEY_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX, 64) == "64"
+
+
+def test_deserialize_corrupt_int_falls_back_to_default():
+    assert (
+        deserialize_stored(KEY_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX, "not-a-number")
+        == get_default(KEY_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX)
+    )

@@ -18,8 +18,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from flask_login import current_user
-
 from superset.extensions import db
 from superset.global_configuration.registry import (
     KNOWN_KEYS,
@@ -29,13 +27,6 @@ from superset.global_configuration.registry import (
     serialize_value,
 )
 from superset.models.global_configuration import GlobalConfiguration
-
-
-def _user_id() -> int | None:
-    try:
-        return current_user.get_id() and int(current_user.get_id())
-    except Exception:  # noqa: BLE001
-        return None
 
 
 def get_all_rows() -> list[GlobalConfiguration]:

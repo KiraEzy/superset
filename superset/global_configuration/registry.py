@@ -90,5 +90,8 @@ def serialize_value(key: str, value: Any) -> str:
 
 def deserialize_stored(key: str, stored: str) -> Any:
     if key in KNOWN_KEYS and KNOWN_KEYS[key].value_type == "int":
-        return int(stored)
+        try:
+            return int(stored)
+        except (TypeError, ValueError):
+            return get_default(key)
     return stored
