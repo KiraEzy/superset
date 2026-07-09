@@ -108,7 +108,12 @@ class GlobalConfigurationRestApi(BaseApi):
     @safe
     @event_logger.log_this
     def delete_config(self, key: str) -> Response:
-        store.delete_key(key)
+        try:
+            store.delete_key(key)
+        except Exception as ex:  # noqa: BLE001
+            db.session.rollback()
+            logger.exception("Failed to delete global configuration key")
+            return self._json(400, {"message": str(ex)})
         return self._json(
             200,
             {
