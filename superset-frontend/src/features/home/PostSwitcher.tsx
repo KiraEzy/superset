@@ -62,7 +62,6 @@ export default function PostSwitcher({
     lastName,
     username,
   });
-  const fullGreeting = t('Hi, %s, you are logged in as,', displayName);
   const label = activePost?.label || activePost?.name || t('Choose post');
   const canSwitch = availablePosts.length > 1;
 
@@ -107,15 +106,15 @@ export default function PostSwitcher({
   return (
     <div css={rowCss} data-test="post-switcher-root">
       <Icons.UserOutlined iconSize="m" />
-      <Tooltip title={fullGreeting}>
-        <span
-          data-test="post-switcher-greeting"
-          css={ellipsisCss(28)}
-          title={displayName}
-        >
-          {fullGreeting}
-        </span>
-      </Tooltip>
+      <span data-test="post-switcher-greeting">
+        {t('Hi,')}{' '}
+        <Tooltip title={displayName || undefined}>
+          <span css={ellipsisCss(16)} title={displayName}>
+            {displayName}
+          </span>
+        </Tooltip>
+        {t(', you are logged in as,')}
+      </span>
       {canSwitch ? (
         <Dropdown
           menu={{

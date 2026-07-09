@@ -58,9 +58,9 @@ test('renders greeting with first and last name and post label for a single post
     { useRedux: true, useTheme: true },
   );
 
-  expect(
-    screen.getByText('Hi, Ada Lovelace, you are logged in as,'),
-  ).toBeInTheDocument();
+  expect(screen.getByTestId('post-switcher-greeting')).toHaveTextContent(
+    'Hi, Ada Lovelace, you are logged in as,',
+  );
   expect(screen.getByText('Viewer')).toBeInTheDocument();
   expect(screen.queryByTestId('post-switcher')).not.toBeInTheDocument();
 });
@@ -77,9 +77,9 @@ test('falls back to username when first and last name are empty', () => {
     { useRedux: true, useTheme: true },
   );
 
-  expect(
-    screen.getByText('Hi, ada, you are logged in as,'),
-  ).toBeInTheDocument();
+  expect(screen.getByTestId('post-switcher-greeting')).toHaveTextContent(
+    'Hi, ada, you are logged in as,',
+  );
 });
 
 test('shows dropdown when multiple posts are available', () => {
@@ -96,9 +96,9 @@ test('shows dropdown when multiple posts are available', () => {
 
   expect(screen.getByTestId('post-switcher')).toBeInTheDocument();
   expect(screen.getByText('Viewer')).toBeInTheDocument();
-  expect(
-    screen.getByText('Hi, Ada Lovelace, you are logged in as,'),
-  ).toBeInTheDocument();
+  expect(screen.getByTestId('post-switcher-greeting')).toHaveTextContent(
+    'Hi, Ada Lovelace, you are logged in as,',
+  );
 });
 
 test('still renders greeting when there are zero available posts', () => {
@@ -113,9 +113,9 @@ test('still renders greeting when there are zero available posts', () => {
     { useRedux: true, useTheme: true },
   );
 
-  expect(
-    screen.getByText('Hi, Ada Lovelace, you are logged in as,'),
-  ).toBeInTheDocument();
+  expect(screen.getByTestId('post-switcher-greeting')).toHaveTextContent(
+    'Hi, Ada Lovelace, you are logged in as,',
+  );
   expect(screen.getByText('Choose post')).toBeInTheDocument();
 });
 
