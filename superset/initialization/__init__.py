@@ -193,8 +193,10 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         from superset.views.all_entities import TaggedObjectsModelView
         from superset.ai_chat.api import AiChatSessionRestApi
         from superset.views.ai.api import AIRestApi
+        from superset.global_configuration.api import GlobalConfigurationRestApi
         from superset.views.ai.config_api import AIConnectionRestApi
         from superset.views.ai.views import AIConnectionView, AIView
+        from superset.views.global_configuration import GlobalConfigurationView
         from superset.views.annotations import AnnotationLayerView
         from superset.views.api import Api
         from superset.views.chart.views import SliceModelView
@@ -282,6 +284,7 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         appbuilder.add_api(LogRestApi)
         appbuilder.add_api(AIRestApi)
         appbuilder.add_api(AIConnectionRestApi)
+        appbuilder.add_api(GlobalConfigurationRestApi)
         appbuilder.add_api(AiChatSessionRestApi)
 
         if feature_flag_manager.is_feature_enabled("ENABLE_EXTENSIONS"):
@@ -395,6 +398,16 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
             ),
         )
 
+        appbuilder.add_view(
+            GlobalConfigurationView,
+            "Global Configuration",
+            label=_("Global Configuration"),
+            href="/global_configuration/",
+            icon="fa-cogs",
+            category="Manage",
+            category_label=_("Manage"),
+            category_icon="",
+        )
         appbuilder.add_view(
             DynamicPluginsView,
             "Plugins",

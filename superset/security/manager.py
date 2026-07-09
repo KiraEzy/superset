@@ -343,6 +343,7 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
         "User's Statistics",
         # Global LLM/MCP config — Admin-only by default (grant explicitly if needed)
         "AIConnectionConfig",
+        "GlobalConfiguration",
         # Guarding all AB_ADD_SECURITY_API = True REST APIs
         "RoleRestAPI",
         "Group",
