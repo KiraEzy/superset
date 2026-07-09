@@ -653,6 +653,9 @@ const RightMenu = ({
     <StyledDiv align={align}>
       {!navbarRight.user_is_anonymous && (
         <PostSwitcher
+          firstName={userValues.firstName}
+          lastName={userValues.lastName}
+          username={userValues.username}
           activePost={userValues.activePost}
           availablePosts={userValues.availablePosts}
         />
