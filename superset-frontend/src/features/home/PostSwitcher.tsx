@@ -62,6 +62,14 @@ export default function PostSwitcher({
     lastName,
     username,
   });
+  // Single i18n string; split on a sentinel so only the name segment truncates.
+  const namePlaceholder = '\u0000';
+  const greetingTemplate = t(
+    'Hi, %s, you are logged in as,',
+    namePlaceholder,
+  );
+  const [greetingBefore = '', greetingAfter = ''] =
+    greetingTemplate.split(namePlaceholder);
   const label = activePost?.label || activePost?.name || t('Choose post');
   const canSwitch = availablePosts.length > 1;
 
@@ -107,13 +115,13 @@ export default function PostSwitcher({
     <div css={rowCss} data-test="post-switcher-root">
       <Icons.UserOutlined iconSize="m" />
       <span data-test="post-switcher-greeting">
-        {t('Hi,')}{' '}
+        {greetingBefore}
         <Tooltip title={displayName || undefined}>
           <span css={ellipsisCss(16)} title={displayName}>
             {displayName}
           </span>
         </Tooltip>
-        {t(', you are logged in as,')}
+        {greetingAfter}
       </span>
       {canSwitch ? (
         <Dropdown
