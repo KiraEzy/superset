@@ -27,7 +27,9 @@ from flask import current_app, Flask, g, Request
 from flask_appbuilder import Model
 from flask_appbuilder.models.filters import BaseFilter
 from flask_appbuilder.security.sqla.apis import RoleApi, UserApi
+from flask_appbuilder.security.sqla.apis.user.schema import UserPostSchema
 from flask_appbuilder.security.sqla.manager import SecurityManager
+from marshmallow import validates_schema, ValidationError
 from flask_appbuilder.security.sqla.models import (
     assoc_group_role,
     assoc_permissionview_role,
@@ -156,10 +158,31 @@ class ExcludeUsersFilter(BaseFilter):  # pylint: disable=too-few-public-methods
         return query
 
 
+class FocalUserPostSchema(UserPostSchema):
+    """Allow creating users with no direct roles/groups under post-based RBAC.
+
+    FAB's default schema requires at least one role or group. With posts, roles
+    are assigned via ``ab_user_post`` after create, so empty roles/groups are valid.
+    """
+
+    @validates_schema
+    def validate_roles_or_groups_present(self, data, **kwargs):  # noqa: ARG002
+        if current_app.config.get("FOCAL_POST_RBAC_ENABLED", True):
+            return
+        roles = data.get("roles") or []
+        groups = data.get("groups") or []
+        if not roles and not groups:
+            raise ValidationError(
+                "At least one of 'roles' or 'groups' must be provided and non-empty."
+            )
+
+
 class SupersetUserApi(UserApi):
     """
     Overriding the UserApi to be able to delete users and filter excluded users
     """
+
+    add_model_schema = FocalUserPostSchema()
 
     base_filters = [["username", ExcludeUsersFilter, lambda: []]]
     search_columns = [
@@ -183,6 +206,22 @@ class SupersetUserApi(UserApi):
         Overriding this method to be able to delete items when they have constraints
         """
         item.roles = []
+
+    def pre_add(self, item: Model) -> None:
+        """
+        Under post-based RBAC, users are never assigned roles directly; roles are
+        granted through Posts. Strip any roles supplied on create.
+        """
+        if current_app.config.get("FOCAL_POST_RBAC_ENABLED", True):
+            item.roles = []
+
+    def pre_update(self, item: Model) -> None:
+        """
+        Under post-based RBAC, users are never assigned roles directly; roles are
+        granted through Posts. Strip any roles supplied on update.
+        """
+        if current_app.config.get("FOCAL_POST_RBAC_ENABLED", True):
+            item.roles = []
 
 
 # Limiting routes on FAB model views
@@ -302,6 +341,8 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
         "SQL Lab",
         "User Registrations",
         "User's Statistics",
+        # Global LLM/MCP config — Admin-only by default (grant explicitly if needed)
+        "AIConnectionConfig",
         # Guarding all AB_ADD_SECURITY_API = True REST APIs
         "RoleRestAPI",
         "Group",

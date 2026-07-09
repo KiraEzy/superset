@@ -129,6 +129,23 @@ def bootstrap_user_data(user: User, include_perms: bool = False) -> dict[str, An
             "loginCount": user.login_count,
         }
 
+    if (
+        not user.is_anonymous
+        and not security_manager.is_guest_user(user)
+        and hasattr(security_manager, "get_user_posts")
+    ):
+        posts = security_manager.get_user_posts(user)
+        active_id = security_manager.get_active_post_id()
+        active = next((p for p in posts if p.id == active_id), None)
+        payload["activePost"] = (
+            {"id": active.id, "name": active.name, "label": active.label}
+            if active
+            else None
+        )
+        payload["availablePosts"] = [
+            {"id": p.id, "name": p.name, "label": p.label} for p in posts
+        ]
+
     if include_perms:
         roles, permissions = get_permissions(user)
         payload["roles"] = roles
@@ -145,8 +162,8 @@ def get_config_value(key: str) -> Any:
 def get_permissions(
     user: User,
 ) -> tuple[dict[str, list[tuple[str]]], DefaultDict[str, list[str]]]:
-    if not user.roles and not user.groups:
-        raise AttributeError("User object does not have roles or groups")
+    if not user.roles and not user.groups and not getattr(user, "posts", None):
+        raise AttributeError("User object does not have roles, groups, or posts")
 
     data_permissions = defaultdict(set)
     roles_permissions = security_manager.get_user_roles_permissions(user)

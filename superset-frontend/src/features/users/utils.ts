@@ -19,24 +19,37 @@
 import { t } from '@apache-superset/core/translation';
 import { SupersetClient } from '@superset-ui/core';
 import { SelectOption } from 'src/components/ListView';
+import { setUserPosts } from 'src/features/posts/api';
 import { FormValues } from './types';
 
+// Under post-based RBAC, users are assigned to Posts (never roles directly).
+// We create/update the user without roles/groups, then set their posts via the
+// dedicated post assignment endpoint.
 export const createUser = async (values: FormValues) => {
-  const { confirmPassword, ...payload } = values;
+  const { confirmPassword, posts, roles, groups, ...payload } = values;
   if (payload.active == null) {
     payload.active = false;
   }
-  await SupersetClient.post({
+  const response = await SupersetClient.post({
     endpoint: '/api/v1/security/users/',
-    jsonPayload: { ...payload },
+    // roles are intentionally empty: the backend assigns roles via posts only.
+    jsonPayload: { ...payload, roles: [] },
   });
+  const newUserId = response.json?.id;
+  if (newUserId != null && Array.isArray(posts)) {
+    await setUserPosts(Number(newUserId), posts as number[]);
+  }
 };
 
 export const updateUser = async (user_Id: number, values: FormValues) => {
+  const { confirmPassword, posts, roles, groups, ...payload } = values;
   await SupersetClient.put({
     endpoint: `/api/v1/security/users/${user_Id}`,
-    jsonPayload: { ...values },
+    jsonPayload: { ...payload },
   });
+  if (Array.isArray(posts)) {
+    await setUserPosts(user_Id, posts as number[]);
+  }
 };
 
 export const deleteUser = async (userId: number) =>
@@ -62,3 +75,12 @@ export const atLeastOneRoleOrGroup =
       return Promise.resolve();
     },
   });
+
+export const atLeastOnePost = () => ({
+  validator(_: object, value: Array<number> | undefined) {
+    if (!value || value.length === 0) {
+      return Promise.reject(new Error(t('Please assign at least one post')));
+    }
+    return Promise.resolve();
+  },
+});

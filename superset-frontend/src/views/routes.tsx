@@ -172,6 +172,12 @@ const Register = lazy(
 const GroupsList: LazyExoticComponent<any> = lazy(
   () => import(/* webpackChunkName: "GroupsList" */ 'src/pages/GroupsList'),
 );
+const PostsList: LazyExoticComponent<any> = lazy(
+  () => import(/* webpackChunkName: "PostsList" */ 'src/pages/PostsList'),
+);
+const ChoosePost = lazy(
+  () => import(/* webpackChunkName: "ChoosePost" */ 'src/pages/ChoosePost'),
+);
 const UserRegistrations = lazy(
   () =>
     import(
@@ -221,6 +227,10 @@ export const routes: Routes = [
   {
     path: '/superset/welcome/',
     Component: Home,
+  },
+  {
+    path: '/superset/choose-post/',
+    Component: ChoosePost,
   },
   {
     path: '/superset/file-handler',
@@ -377,6 +387,10 @@ if (isAdmin) {
     {
       path: '/list_groups/',
       Component: GroupsList,
+    },
+    {
+      path: '/post/list/',
+      Component: PostsList,
     },
   );
 

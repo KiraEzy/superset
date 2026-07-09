@@ -201,6 +201,15 @@ CUSTOM_SECURITY_MANAGER = None
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # ---------------------------------------------------------
+# Post-based RBAC (User -> Post -> Role -> Permission)
+# ---------------------------------------------------------
+# When enabled (together with the FocalSecurityManager), a logged-in web user's
+# effective roles come only from the single active Post selected at login.
+# Direct user roles and group roles are ignored for authorization. System
+# contexts (CLI, migrations, tasks) fall back to the union of all post roles.
+FOCAL_POST_RBAC_ENABLED = True
+
+# ---------------------------------------------------------
 # FedRAMP Cryptographic Compliance
 # ---------------------------------------------------------
 

@@ -36,6 +36,12 @@ import {
   type Locale,
 } from '@apache-superset/core/translation';
 
+export type UserPost = {
+  id: number;
+  name: string;
+  label?: string | null;
+};
+
 export type User = {
   createdOn?: string;
   email?: string;
@@ -46,6 +52,10 @@ export type User = {
   userId?: number; // optional because guest user doesn't have a user id
   username: string;
   loginCount?: number;
+  // Post-based RBAC: the post the user is currently acting as, and the posts
+  // available for them to switch to.
+  activePost?: UserPost | null;
+  availablePosts?: UserPost[];
 };
 
 export type UserRoles = Record<string, [string, string][]>;

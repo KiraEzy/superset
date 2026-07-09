@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect, useRef, useState } from 'react';
 import { t } from '@apache-superset/core/translation';
 import { ModalTitleWithIcon } from 'src/components/ModalTitleWithIcon';
 import { useToasts } from 'src/components/MessageToasts/withToasts';
@@ -29,8 +30,10 @@ import {
 } from '@superset-ui/core/components';
 import { Group, Role, UserObject } from 'src/pages/UsersList/types';
 import { Actions } from 'src/constants';
+import { fetchPosts } from 'src/features/posts/api';
+import { PostObject } from 'src/features/posts/types';
 import { BaseUserListModalProps, FormValues } from './types';
-import { createUser, updateUser, atLeastOneRoleOrGroup } from './utils';
+import { createUser, updateUser, atLeastOnePost } from './utils';
 
 export interface UserModalProps extends BaseUserListModalProps {
   roles: Role[];
@@ -43,12 +46,29 @@ function UserListModal({
   show,
   onHide,
   onSave,
-  roles,
   isEditMode = false,
   user,
-  groups,
 }: UserModalProps) {
   const { addDangerToast, addSuccessToast } = useToasts();
+  const [posts, setPosts] = useState<PostObject[]>([]);
+  const formRef = useRef<FormInstance | null>(null);
+
+  useEffect(() => {
+    if (!show) {
+      return;
+    }
+    fetchPosts()
+      .then(fetchedPosts => {
+        setPosts(fetchedPosts);
+        if (isEditMode && user && formRef.current) {
+          const selected = fetchedPosts
+            .filter(post => post.user_ids?.includes(user.id))
+            .map(post => post.id);
+          formRef.current.setFieldsValue({ posts: selected });
+        }
+      })
+      .catch(() => addDangerToast(t('There was an error fetching posts')));
+  }, [show, isEditMode, user, addDangerToast]);
   const handleFormSubmit = async (values: FormValues) => {
     const handleError = async (
       err: any,
@@ -113,8 +133,7 @@ function UserListModal({
 
   const initialValues = {
     ...user,
-    roles: user?.roles?.map(role => role.id) || [],
-    groups: user?.groups?.map(group => group.id) || [],
+    posts: [],
   };
 
   return (
@@ -133,7 +152,9 @@ function UserListModal({
       requiredFields={requiredFields}
       initialValues={initialValues}
     >
-      {(form: FormInstance) => (
+      {(form: FormInstance) => {
+        formRef.current = form;
+        return (
         <>
           <FormItem
             name="first_name"
@@ -190,37 +211,17 @@ function UserListModal({
             <Input name="email" placeholder={t("Enter the user's email")} />
           </FormItem>
           <FormItem
-            name="roles"
-            label={t('Roles')}
-            dependencies={['groups']}
-            rules={[atLeastOneRoleOrGroup('groups')]}
+            name="posts"
+            label={t('Posts')}
+            rules={[atLeastOnePost()]}
           >
             <Select
-              name="roles"
+              name="posts"
               mode="multiple"
-              placeholder={t('Select roles')}
-              options={roles.map(role => ({
-                value: role.id,
-                label: role.name,
-              }))}
-              getPopupContainer={trigger =>
-                trigger.closest('.ant-modal-content')
-              }
-            />
-          </FormItem>
-          <FormItem
-            name="groups"
-            label={t('Groups')}
-            dependencies={['roles']}
-            rules={[atLeastOneRoleOrGroup('roles')]}
-          >
-            <Select
-              name="groups"
-              mode="multiple"
-              placeholder={t('Select groups')}
-              options={groups.map(group => ({
-                value: group.id,
-                label: group.name,
+              placeholder={t('Assign posts')}
+              options={posts.map(post => ({
+                value: post.id,
+                label: post.label || post.name,
               }))}
               getPopupContainer={trigger =>
                 trigger.closest('.ant-modal-content')
@@ -268,7 +269,8 @@ function UserListModal({
             </>
           )}
         </>
-      )}
+        );
+      }}
     </FormModal>
   );
 }

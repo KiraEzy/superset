@@ -18,15 +18,8 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from '@apache-superset/core/translation';
-import Tabs from '@superset-ui/core/components/Tabs';
 import { RoleObject } from 'src/pages/RolesList';
-import {
-  EmptyWrapperType,
-  FormModal,
-  TableView,
-  FormInstance,
-  Icons,
-} from '@superset-ui/core/components';
+import { FormModal, FormInstance, Icons } from '@superset-ui/core/components';
 import {
   BaseModalProps,
   RoleForm,
@@ -34,66 +27,21 @@ import {
 } from 'src/features/roles/types';
 import { useToasts } from 'src/components/MessageToasts/withToasts';
 import { fetchPaginatedData } from 'src/utils/fetchOptions';
-import { type UserObject } from 'src/pages/UsersList/types';
 import { ModalTitleWithIcon } from 'src/components/ModalTitleWithIcon';
-import {
-  GroupsField,
-  PermissionsField,
-  RoleNameField,
-  UsersField,
-} from './RoleFormItems';
+import { GroupsField, PermissionsField, RoleNameField } from './RoleFormItems';
 import {
   fetchPermissionsByIds,
   updateRoleGroups,
   updateRoleName,
   updateRolePermissions,
-  updateRoleUsers,
 } from './utils';
 
 export interface RoleListEditModalProps extends BaseModalProps {
   role: RoleObject;
 }
 
-const roleTabs = {
-  edit: {
-    key: 'edit',
-    name: t('Edit Role'),
-  },
-  users: {
-    key: 'users',
-    name: t('Users'),
-  },
-};
-
-const userColumns = [
-  {
-    accessor: 'first_name',
-    Header: t('First Name'),
-    id: 'first_name',
-  },
-  {
-    accessor: 'last_name',
-    Header: t('Last Name'),
-    id: 'last_name',
-  },
-  {
-    accessor: 'username',
-    Header: t('User Name'),
-    id: 'username',
-  },
-  {
-    accessor: 'email',
-    Header: t('Email'),
-    id: 'email',
-  },
-  {
-    accessor: 'active',
-    Header: t('Is Active?'),
-    Cell: ({ value }: { value: boolean }) => (value ? t('Yes') : t('No')),
-    id: 'active',
-  },
-];
-
+// Under post-based RBAC, users are never attached to roles directly (they get
+// roles through Posts), so the role editor no longer exposes a Users tab/field.
 function RoleListEditModal({
   show,
   onHide,
@@ -111,39 +59,14 @@ function RoleListEditModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(group_ids)],
   );
-  const [activeTabKey, setActiveTabKey] = useState(roleTabs.edit.key);
   const { addDangerToast, addSuccessToast } = useToasts();
-  const [roleUsers, setRoleUsers] = useState<UserObject[]>([]);
   const [rolePermissions, setRolePermissions] = useState<SelectOption[]>([]);
   const [roleGroups, setRoleGroups] = useState<SelectOption[]>([]);
-  const [loadingRoleUsers, setLoadingRoleUsers] = useState(true);
   const [loadingRolePermissions, setLoadingRolePermissions] = useState(true);
   const [loadingRoleGroups, setLoadingRoleGroups] = useState(true);
   const formRef = useRef<FormInstance | null>(null);
   const permissionFetchSucceeded = useRef(false);
   const groupFetchSucceeded = useRef(false);
-
-  useEffect(() => {
-    const filters = [{ col: 'roles', opr: 'rel_m_m', value: id }];
-
-    fetchPaginatedData({
-      endpoint: `/api/v1/security/users/`,
-      pageSize: 100,
-      setData: setRoleUsers,
-      filters,
-      setLoadingState: (loading: boolean) => setLoadingRoleUsers(loading),
-      loadingKey: 'roleUsers',
-      addDangerToast,
-      errorMessage: t('There was an error loading users.'),
-      mapResult: (user: UserObject) => ({
-        id: user.id,
-        username: user.username,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-      }),
-    });
-  }, [addDangerToast, id]);
 
   useEffect(() => {
     if (!stablePermissionIds.length) {
@@ -199,19 +122,6 @@ function RoleListEditModal({
   }, [addDangerToast, stableGroupIds, id]);
 
   useEffect(() => {
-    if (!loadingRoleUsers && formRef.current) {
-      const userOptions = roleUsers.map(user => ({
-        value: user.id,
-        label: user.username,
-      }));
-
-      formRef.current.setFieldsValue({
-        roleUsers: userOptions,
-      });
-    }
-  }, [loadingRoleUsers, roleUsers]);
-
-  useEffect(() => {
     if (
       !loadingRolePermissions &&
       formRef.current &&
@@ -265,13 +175,11 @@ function RoleListEditModal({
 
   const handleFormSubmit = async (values: RoleForm) => {
     try {
-      const userIds = values.roleUsers?.map(user => user.value) || [];
       const permissionIds = mapSelectedIds(values.rolePermissions);
       const groupIds = mapSelectedIds(values.roleGroups);
       await Promise.all([
         updateRoleName(id, values.roleName),
         updateRolePermissions(id, permissionIds),
-        updateRoleUsers(id, userIds),
         updateRoleGroups(id, groupIds),
       ]);
       addSuccessToast(t('The role has been updated successfully.'));
@@ -289,11 +197,6 @@ function RoleListEditModal({
       value: permissionId,
       label: String(permissionId),
     })),
-    roleUsers:
-      roleUsers?.map(user => ({
-        value: user.id,
-        label: user.username,
-      })) || [],
     roleGroups: group_ids.map(groupId => ({
       value: groupId,
       label: String(groupId),
@@ -320,39 +223,17 @@ function RoleListEditModal({
         formRef.current = form;
 
         return (
-          <Tabs
-            activeKey={activeTabKey}
-            onChange={activeKey => setActiveTabKey(activeKey)}
-          >
-            <Tabs.TabPane
-              tab={roleTabs.edit.name}
-              key={roleTabs.edit.key}
-              forceRender
-            >
-              <>
-                <RoleNameField />
-                <PermissionsField
-                  addDangerToast={addDangerToast}
-                  loading={loadingRolePermissions}
-                />
-                <UsersField
-                  addDangerToast={addDangerToast}
-                  loading={loadingRoleUsers}
-                />
-                <GroupsField
-                  addDangerToast={addDangerToast}
-                  loading={loadingRoleGroups}
-                />
-              </>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab={roleTabs.users.name} key={roleTabs.users.key}>
-              <TableView
-                columns={userColumns}
-                data={roleUsers}
-                emptyWrapperType={EmptyWrapperType.Small}
-              />
-            </Tabs.TabPane>
-          </Tabs>
+          <>
+            <RoleNameField />
+            <PermissionsField
+              addDangerToast={addDangerToast}
+              loading={loadingRolePermissions}
+            />
+            <GroupsField
+              addDangerToast={addDangerToast}
+              loading={loadingRoleGroups}
+            />
+          </>
         );
       }}
     </FormModal>

@@ -60,6 +60,7 @@ import { uploadUserPerms } from 'src/views/CRUD/utils';
 import { useThemeContext } from 'src/theme/ThemeProvider';
 import { useThemeMenuItems } from 'src/hooks/useThemeMenuItems';
 import { useLanguageMenuItems } from './LanguagePicker';
+import PostSwitcher from './PostSwitcher';
 import {
   ExtensionConfigs,
   GlobalMenuDataOptions,
@@ -650,6 +651,12 @@ const RightMenu = ({
 
   return (
     <StyledDiv align={align}>
+      {!navbarRight.user_is_anonymous && (
+        <PostSwitcher
+          activePost={userValues.activePost}
+          availablePosts={userValues.availablePosts}
+        />
+      )}
       {canDatabase && (
         <DatabaseModal
           onHide={handleOnHideModal}

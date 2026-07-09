@@ -950,6 +950,25 @@ class Superset(BaseSupersetView):
 
         return self.render_app_template(extra_bootstrap_data=payload)
 
+    @event_logger.log_this
+    @expose("/choose-post/")
+    def choose_post(self) -> FlaskResponse:
+        """Post picker shown after login for users with multiple posts.
+
+        Intentionally not gated by ``@has_access``: a user who has not yet
+        selected a post has no post-scoped permissions, so a permission check
+        would make the picker unreachable.
+        """
+        if not g.user or not get_user_id():
+            return redirect_to_login()
+
+        payload = {
+            "user": bootstrap_user_data(g.user, include_perms=True),
+            "common": common_bootstrap_payload(),
+        }
+
+        return self.render_app_template(extra_bootstrap_data=payload)
+
     @has_access
     @event_logger.log_this
     @expose("/sqllab/history/", methods=("GET",))

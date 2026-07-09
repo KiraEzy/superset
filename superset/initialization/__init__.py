@@ -184,6 +184,7 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
             SecurityRestApi,
             UserRegistrationsRestAPI,
         )
+        from superset.security.post_api import ActivePostRestApi, PostRestApi
         from superset.sqllab.api import SqlLabRestApi
         from superset.sqllab.permalink.api import SqlLabPermalinkRestApi
         from superset.tags.api import TagRestApi
@@ -209,6 +210,7 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         from superset.views.error_handling import set_app_error_handlers
         from superset.views.explore import ExplorePermalinkView, ExploreView
         from superset.views.groups import GroupsListView
+        from superset.views.posts import PostsListView
         from superset.views.log.api import LogRestApi
         from superset.views.logs import ActionLogView
         from superset.views.redirect import RedirectView
@@ -254,6 +256,8 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         appbuilder.add_api(ThemeRestApi)
         appbuilder.add_api(CurrentUserRestApi)
         appbuilder.add_api(UserRestApi)
+        appbuilder.add_api(PostRestApi)
+        appbuilder.add_api(ActivePostRestApi)
         appbuilder.add_api(DashboardFilterStateRestApi)
         appbuilder.add_api(DashboardPermalinkRestApi)
         appbuilder.add_api(DashboardRestApi)
@@ -373,6 +377,17 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
             GroupsListView,
             "List Groups",
             label=_("List Groups"),
+            category="Security",
+            category_label=_("Security"),
+            menu_cond=lambda: bool(
+                appbuilder.app.config.get("SUPERSET_SECURITY_VIEW_MENU", True)
+            ),
+        )
+
+        appbuilder.add_view(
+            PostsListView,
+            "List Posts",
+            label=_("List Posts"),
             category="Security",
             category_label=_("Security"),
             menu_cond=lambda: bool(
@@ -670,6 +685,13 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
     def register_request_handlers(self) -> None:
         """Register app-level request handlers"""
         from flask import request, Response
+
+        from superset.security.post_login import post_login_gate
+
+        @self.superset_app.before_request
+        def enforce_active_post() -> Response | None:
+            """Redirect multi-post users to the picker until they choose a post."""
+            return post_login_gate()
 
         @self.superset_app.after_request
         def apply_http_headers(response: Response) -> Response:

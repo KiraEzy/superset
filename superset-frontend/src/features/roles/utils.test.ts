@@ -55,45 +55,43 @@ test('fetchPermissionsByIds loads permission catalog without id filter', async (
   ]);
 });
 
-test('fetchPermissionOptions fetches all results on page 0 with large page_size', async () => {
+test('fetchPermissionOptions searches the unfiltered catalog locally', async () => {
   getMock.mockResolvedValue({
     json: {
-      count: 1,
+      count: 3,
       result: [
         {
           id: 10,
           permission: { name: 'can_access' },
           view_menu: { name: 'dataset_one' },
         },
+        {
+          id: 11,
+          permission: { name: 'menu_access' },
+          view_menu: { name: 'Charts' },
+        },
+        {
+          id: 12,
+          permission: { name: 'can_read' },
+          view_menu: { name: 'Dashboard' },
+        },
       ],
     },
   } as any);
   const addDangerToast = jest.fn();
 
-  const result = await fetchPermissionOptions('dataset', 0, 50, addDangerToast);
+  const result = await fetchPermissionOptions('menu ', 0, 50, addDangerToast);
 
-  // Two parallel requests with large page_size for full fetch
-  expect(getMock).toHaveBeenCalledTimes(2);
+  expect(getMock).toHaveBeenCalledTimes(1);
 
-  const calls = getMock.mock.calls.map(
-    ([call]) => (call as { endpoint: string }).endpoint,
-  );
-  const queries = calls.map(ep => rison.decode(ep.split('?q=')[1]));
-
-  expect(queries).toContainEqual({
+  const { endpoint } = getMock.mock.calls[0][0] as { endpoint: string };
+  expect(rison.decode(endpoint.split('?q=')[1])).toEqual({
     page: 0,
     page_size: 1000,
-    filters: [{ col: 'view_menu.name', opr: 'ct', value: 'dataset' }],
-  });
-  expect(queries).toContainEqual({
-    page: 0,
-    page_size: 1000,
-    filters: [{ col: 'permission.name', opr: 'ct', value: 'dataset' }],
   });
 
-  // Duplicates are removed; both calls return id=10 so result has one entry
   expect(result).toEqual({
-    data: [{ value: 10, label: 'can access dataset one' }],
+    data: [{ value: 11, label: 'menu access Charts' }],
     totalCount: 1,
   });
   expect(addDangerToast).not.toHaveBeenCalled();
@@ -109,9 +107,9 @@ test('fetchPermissionOptions serves cached slices on subsequent pages', async ()
         json: {
           count: 3,
           result: [
-            { id: 1, permission: { name: 'a' }, view_menu: { name: 'X' } },
-            { id: 2, permission: { name: 'b' }, view_menu: { name: 'Y' } },
-            { id: 3, permission: { name: 'c' }, view_menu: { name: 'Z' } },
+            { id: 1, permission: { name: 'test_a' }, view_menu: { name: 'X' } },
+            { id: 2, permission: { name: 'test_b' }, view_menu: { name: 'Y' } },
+            { id: 3, permission: { name: 'test_c' }, view_menu: { name: 'Z' } },
           ],
         },
       } as any);
@@ -120,9 +118,9 @@ test('fetchPermissionOptions serves cached slices on subsequent pages', async ()
   });
   const addDangerToast = jest.fn();
 
-  // Page 0 populates the cache
+  // Page 0 populates the catalog and search cache
   await fetchPermissionOptions('test', 0, 2, addDangerToast);
-  expect(getMock).toHaveBeenCalledTimes(2);
+  expect(getMock).toHaveBeenCalledTimes(1);
 
   getMock.mockReset();
 
@@ -130,7 +128,7 @@ test('fetchPermissionOptions serves cached slices on subsequent pages', async ()
   const page1 = await fetchPermissionOptions('test', 1, 2, addDangerToast);
   expect(getMock).not.toHaveBeenCalled();
   expect(page1).toEqual({
-    data: [{ value: 3, label: 'c Z' }],
+    data: [{ value: 3, label: 'test c Z' }],
     totalCount: 3,
   });
 });
@@ -152,7 +150,7 @@ test('fetchPermissionOptions makes single request when search term is empty', as
   });
 });
 
-test('fetchPermissionOptions fires single toast when both requests fail', async () => {
+test('fetchPermissionOptions fires single toast when catalog request fails', async () => {
   getMock.mockRejectedValue(new Error('request failed'));
   const addDangerToast = jest.fn();
 
@@ -170,49 +168,38 @@ test('fetchPermissionOptions fires single toast when both requests fail', async 
   expect(result).toEqual({ data: [], totalCount: 0 });
 });
 
-test('fetchPermissionOptions deduplicates results from both columns', async () => {
-  const sharedResult = {
-    id: 5,
-    permission: { name: 'can_read' },
-    view_menu: { name: 'ChartView' },
-  };
-  const viewMenuOnly = {
-    id: 6,
-    permission: { name: 'can_write' },
-    view_menu: { name: 'ChartView' },
-  };
-  const permissionOnly = {
-    id: 7,
-    permission: { name: 'can_read' },
-    view_menu: { name: 'DashboardView' },
-  };
-
-  let callCount = 0;
-  getMock.mockImplementation(() => {
-    callCount += 1;
-    if (callCount === 1) {
-      // view_menu.name search returns shared + viewMenuOnly
-      return Promise.resolve({
-        json: { count: 2, result: [sharedResult, viewMenuOnly] },
-      } as any);
-    }
-    // permission.name search returns shared + permissionOnly
-    return Promise.resolve({
-      json: { count: 2, result: [sharedResult, permissionOnly] },
-    } as any);
-  });
+test('fetchPermissionOptions matches permission and view menu labels locally', async () => {
+  getMock.mockResolvedValue({
+    json: {
+      count: 3,
+      result: [
+        {
+          id: 5,
+          permission: { name: 'can_read' },
+          view_menu: { name: 'ChartView' },
+        },
+        {
+          id: 6,
+          permission: { name: 'can_write' },
+          view_menu: { name: 'ChartView' },
+        },
+        {
+          id: 7,
+          permission: { name: 'can_read' },
+          view_menu: { name: 'DashboardView' },
+        },
+      ],
+    },
+  } as any);
 
   const addDangerToast = jest.fn();
   const result = await fetchPermissionOptions('chart', 0, 100, addDangerToast);
 
-  // id=5 appears in both results but should be deduplicated
   expect(result.data).toEqual([
     { value: 5, label: 'can read ChartView' },
     { value: 6, label: 'can write ChartView' },
-    { value: 7, label: 'can read DashboardView' },
   ]);
-  // totalCount reflects deduplicated cache length
-  expect(result.totalCount).toBe(3);
+  expect(result.totalCount).toBe(2);
 });
 
 test('fetchPermissionOptions preserves cache across empty searches', async () => {
@@ -220,12 +207,14 @@ test('fetchPermissionOptions preserves cache across empty searches', async () =>
   getMock.mockResolvedValue({
     json: {
       count: 1,
-      result: [{ id: 1, permission: { name: 'a' }, view_menu: { name: 'X' } }],
+      result: [
+        { id: 1, permission: { name: 'test_a' }, view_menu: { name: 'X' } },
+      ],
     },
   } as any);
   const addDangerToast = jest.fn();
   await fetchPermissionOptions('test', 0, 50, addDangerToast);
-  expect(getMock).toHaveBeenCalledTimes(2);
+  expect(getMock).toHaveBeenCalledTimes(1);
   getMock.mockReset();
 
   // Empty search makes a fresh request but does NOT clear search cache
@@ -300,17 +289,17 @@ test('fetchGroupOptions returns empty options on error', async () => {
   expect(result).toEqual({ data: [], totalCount: 0 });
 });
 
-test('fetchPermissionOptions fetches multiple pages when results exceed PAGE_SIZE', async () => {
+test('fetchPermissionOptions fetches multiple unfiltered catalog pages', async () => {
   const PAGE_SIZE = 1000;
   const totalCount = 1500;
   const page0Items = Array.from({ length: PAGE_SIZE }, (_, i) => ({
     id: i + 1,
-    permission: { name: `perm_${i}` },
+    permission: { name: `multi_perm_${i}` },
     view_menu: { name: `view_${i}` },
   }));
   const page1Items = Array.from({ length: totalCount - PAGE_SIZE }, (_, i) => ({
     id: PAGE_SIZE + i + 1,
-    permission: { name: `perm_${PAGE_SIZE + i}` },
+    permission: { name: `multi_perm_${PAGE_SIZE + i}` },
     view_menu: { name: `view_${PAGE_SIZE + i}` },
   }));
 
@@ -335,9 +324,7 @@ test('fetchPermissionOptions fetches multiple pages when results exceed PAGE_SIZ
   const addDangerToast = jest.fn();
   const result = await fetchPermissionOptions('multi', 0, 50, addDangerToast);
 
-  // Two search branches (view_menu + permission), each needing 2 pages = 4 calls
-  expect(getMock).toHaveBeenCalledTimes(4);
-  // Deduplicated: both branches return identical ids, so total is 1500
+  expect(getMock).toHaveBeenCalledTimes(2);
   expect(result.totalCount).toBe(totalCount);
 });
 
@@ -347,7 +334,7 @@ test('fetchPermissionOptions handles backend capping page_size below requested',
   const makeItems = (start: number, count: number) =>
     Array.from({ length: count }, (_, i) => ({
       id: start + i + 1,
-      permission: { name: `perm_${start + i}` },
+      permission: { name: `cap_perm_${start + i}` },
       view_menu: { name: `view_${start + i}` },
     }));
 
@@ -373,9 +360,7 @@ test('fetchPermissionOptions handles backend capping page_size below requested',
   const addDangerToast = jest.fn();
   const result = await fetchPermissionOptions('cap', 0, 50, addDangerToast);
 
-  // Two search branches, each needing 3 pages (500+500+200) = 6 calls
-  expect(getMock).toHaveBeenCalledTimes(6);
-  // Both branches return identical ids, so deduplicated total is 1200
+  expect(getMock).toHaveBeenCalledTimes(3);
   expect(result.totalCount).toBe(totalCount);
   expect(result.data).toHaveLength(50); // first page of client-side pagination
 });
@@ -396,11 +381,11 @@ test('fetchPermissionOptions shares cache across case variants', async () => {
   const addDangerToast = jest.fn();
 
   await fetchPermissionOptions('Dataset', 0, 50, addDangerToast);
-  expect(getMock).toHaveBeenCalledTimes(2);
+  expect(getMock).toHaveBeenCalledTimes(1);
 
   // Same letters, different case should be a cache hit (normalized key)
   const result = await fetchPermissionOptions('dataset', 0, 50, addDangerToast);
-  expect(getMock).toHaveBeenCalledTimes(2); // no new calls
+  expect(getMock).toHaveBeenCalledTimes(1); // no new calls
   expect(result).toEqual({
     data: [{ value: 10, label: 'can access dataset one' }],
     totalCount: 1,
@@ -408,22 +393,17 @@ test('fetchPermissionOptions shares cache across case variants', async () => {
 });
 
 test('fetchPermissionOptions evicts oldest cache entry when MAX_CACHE_ENTRIES is reached', async () => {
-  getMock.mockImplementation(({ endpoint }: { endpoint: string }) => {
-    const query = rison.decode(endpoint.split('?q=')[1]) as Record<string, any>;
-    const searchVal = query.filters?.[0]?.value || 'unknown';
-    return Promise.resolve({
-      json: {
-        count: 1,
-        result: [
-          {
-            id: Number(searchVal.replace('term', '')),
-            permission: { name: searchVal },
-            view_menu: { name: 'view' },
-          },
-        ],
-      },
-    } as any);
-  });
+  const catalog = Array.from({ length: 21 }, (_, i) => ({
+    id: i,
+    permission: { name: `term${i}` },
+    view_menu: { name: 'view' },
+  }));
+  getMock.mockResolvedValue({
+    json: {
+      count: catalog.length,
+      result: catalog,
+    },
+  } as any);
 
   const addDangerToast = jest.fn();
 
@@ -432,21 +412,20 @@ test('fetchPermissionOptions evicts oldest cache entry when MAX_CACHE_ENTRIES is
     await fetchPermissionOptions(`term${i}`, 0, 50, addDangerToast);
   }
 
-  getMock.mockClear();
+  expect(getMock).toHaveBeenCalledTimes(1);
 
   // Adding the 21st entry should evict the oldest (term0)
   await fetchPermissionOptions('term20', 0, 50, addDangerToast);
 
-  // term0 should have been evicted — re-fetching it should trigger API calls
   getMock.mockClear();
-  await fetchPermissionOptions('term0', 0, 50, addDangerToast);
-  expect(getMock).toHaveBeenCalled();
 
-  // term2 should still be cached — no API calls
-  // (term1 was evicted when term0 was re-added as the 21st entry)
-  getMock.mockClear();
-  await fetchPermissionOptions('term2', 0, 50, addDangerToast);
+  // Search cache eviction should not refetch the already-loaded catalog.
+  const evicted = await fetchPermissionOptions('term0', 0, 50, addDangerToast);
   expect(getMock).not.toHaveBeenCalled();
+  expect(evicted).toEqual({
+    data: [{ value: 0, label: 'term0 view' }],
+    totalCount: 1,
+  });
 });
 
 test('fetchPermissionOptions handles variable page sizes from backend', async () => {
@@ -463,7 +442,7 @@ test('fetchPermissionOptions handles variable page sizes from backend', async ()
     const start = pageSizes.slice(0, page).reduce((a, b) => a + b, 0);
     const items = Array.from({ length: size }, (_, i) => ({
       id: start + i + 1,
-      permission: { name: `perm_${start + i}` },
+      permission: { name: `var_perm_${start + i}` },
       view_menu: { name: `view_${start + i}` },
     }));
     return Promise.resolve({
@@ -474,7 +453,6 @@ test('fetchPermissionOptions handles variable page sizes from backend', async ()
   const addDangerToast = jest.fn();
   const result = await fetchPermissionOptions('var', 0, 50, addDangerToast);
 
-  // Both branches return identical IDs so deduplicated total is 1200
   expect(result.totalCount).toBe(totalCount);
   expect(result.data).toHaveLength(50);
 });
@@ -519,7 +497,7 @@ test('fetchPermissionOptions respects concurrency limit for parallel page fetche
   const addDangerToast = jest.fn();
   const fetchPromise = fetchPermissionOptions('conc', 0, 50, addDangerToast);
 
-  // Resolve page 0 for both branches (2 calls)
+  // Resolve page 0.
   await new Promise(r => setTimeout(r, 10));
   while (deferreds.length > 0) {
     // Resolve all pending, then check concurrency on next batch
@@ -530,11 +508,7 @@ test('fetchPermissionOptions respects concurrency limit for parallel page fetche
 
   await fetchPromise;
 
-  // Page 0 fires 2 requests simultaneously (one per branch).
-  // Remaining pages fire in batches of CONCURRENCY_LIMIT per branch.
-  // Max concurrent should not exceed 2 * CONCURRENCY_LIMIT
-  // (both branches may be fetching their next batch simultaneously).
-  expect(maxConcurrent).toBeLessThanOrEqual(2 * CONCURRENCY_LIMIT);
+  expect(maxConcurrent).toBeLessThanOrEqual(CONCURRENCY_LIMIT);
 });
 
 test('fetchPermissionOptions normalizes whitespace and case for cache keys', async () => {
@@ -554,7 +528,7 @@ test('fetchPermissionOptions normalizes whitespace and case for cache keys', asy
 
   // Seed cache with "Dataset"
   await fetchPermissionOptions('Dataset', 0, 50, addDangerToast);
-  expect(getMock).toHaveBeenCalledTimes(2);
+  expect(getMock).toHaveBeenCalledTimes(1);
 
   // "dataset" — same normalized key, cache hit
   getMock.mockClear();

@@ -438,7 +438,7 @@ def get_default_spinner_svg() -> str | None:
 
 @cache_manager.cache.memoize(timeout=60)
 def cached_common_bootstrap_data(  # pylint: disable=unused-argument
-    user_id: int | None, locale: Locale | None
+    user_id: int | None, locale: Locale | None, active_post_id: int | None = None
 ) -> dict[str, Any]:
     """Common data always sent to the client
 
@@ -531,7 +531,14 @@ def cached_common_bootstrap_data(  # pylint: disable=unused-argument
 
 
 def common_bootstrap_payload() -> dict[str, Any]:
-    return cached_common_bootstrap_data(utils.get_user_id(), get_locale())
+    active_post_id = (
+        security_manager.get_active_post_id()
+        if hasattr(security_manager, "get_active_post_id")
+        else None
+    )
+    return cached_common_bootstrap_data(
+        utils.get_user_id(), get_locale(), active_post_id
+    )
 
 
 def get_spa_payload(extra_data: dict[str, Any] | None = None) -> dict[str, Any]:
