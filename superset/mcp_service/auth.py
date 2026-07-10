@@ -687,4 +687,11 @@ def mcp_auth_hook(tool_func: F) -> F:  # noqa: C901
     # For functions with *args (parse_request output), the signature
     # is already set by parse_request without ctx.
 
+    # Preserve RBAC metadata for tools/list filtering. We intentionally do
+    # not set __wrapped__ (see above), so list-time checks must read attrs
+    # from the registered wrapper itself.
+    for attr in (CLASS_PERMISSION_ATTR, METHOD_PERMISSION_ATTR):
+        if hasattr(tool_func, attr):
+            setattr(new_wrapper, attr, getattr(tool_func, attr))
+
     return new_wrapper  # type: ignore[return-value]

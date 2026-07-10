@@ -28,7 +28,6 @@ from types import SimpleNamespace
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 from flask import Flask, g
 
 CLASS_PERMISSION_ATTR = "_class_permission_name"
@@ -152,3 +151,46 @@ def test_registered_in_middleware_list() -> None:
 
     middleware_list = build_middleware_list()
     assert any(isinstance(m, RbacToolListFilterMiddleware) for m in middleware_list)
+
+
+def test_mcp_auth_hook_preserves_permission_metadata() -> None:
+    """mcp_auth_hook copies RBAC attrs onto the registered wrapper (no __wrapped__)."""
+    from superset.mcp_service.auth import (
+        CLASS_PERMISSION_ATTR,
+        METHOD_PERMISSION_ATTR,
+        mcp_auth_hook,
+    )
+    from superset.mcp_service.middleware import RbacToolListFilterMiddleware
+
+    def list_datasets() -> None:
+        """List datasets."""
+
+    setattr(list_datasets, CLASS_PERMISSION_ATTR, "Dataset")
+    setattr(list_datasets, METHOD_PERMISSION_ATTR, "read")
+
+    wrapped = mcp_auth_hook(list_datasets)
+    assert getattr(wrapped, CLASS_PERMISSION_ATTR) == "Dataset"
+    assert getattr(wrapped, METHOD_PERMISSION_ATTR) == "read"
+    assert not hasattr(wrapped, "__wrapped__")
+
+    tool = SimpleNamespace(name="list_datasets", fn=wrapped)
+    app = _flask_app()
+    middleware = RbacToolListFilterMiddleware()
+
+    def fake_check(target: Any) -> bool:
+        # Real list path: attrs must be on the wrapper FastMCP registers.
+        return getattr(target, CLASS_PERMISSION_ATTR, None) != "Dataset"
+
+    async def _run() -> list[Any]:
+        with app.app_context():
+            g.user = MagicMock(username="viewer")
+            with patch(
+                "superset.mcp_service.auth.check_tool_permission",
+                side_effect=fake_check,
+            ):
+                return await middleware.on_list_tools(
+                    MagicMock(), AsyncMock(return_value=[tool])
+                )
+
+    result = asyncio.run(_run())
+    assert result == []
