@@ -91,7 +91,7 @@ class FocalSecurityManager(SupersetSecurityManager):
         )
 
     def get_active_post_id(self) -> Optional[int]:
-        if has_request_context() and getattr(g, "mcp_active_post_id", None):
+        if has_request_context() and getattr(g, "mcp_active_post_id", None) is not None:
             return int(g.mcp_active_post_id)
         if not has_request_context():
             return None
