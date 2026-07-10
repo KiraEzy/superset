@@ -122,7 +122,9 @@ SYNTHETIC_MCP_TOOLS = frozenset({"search_tools", "call_tool"})
 
 READ_ONLY_ROLE_NAMES = frozenset({"viewer", "gamma", "public"})
 
-# Mutating tools should not be exposed to read-only users (Viewer/Gamma/Public).
+# Temporary rollout safety net: mutating tools blocked for Viewer/Gamma/Public.
+# Permission-based MCP tools/list filtering (check_tool_permission) is the
+# source of truth; keep this extra deny until that path is fully validated.
 READ_ONLY_BLOCKED_MCP_TOOLS = frozenset(
     {
         "create_virtual_dataset",
