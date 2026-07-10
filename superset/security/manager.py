@@ -215,11 +215,15 @@ class SupersetUserApi(UserApi):
         if current_app.config.get("FOCAL_POST_RBAC_ENABLED", True):
             item.roles = []
 
-    def pre_update(self, item: Model) -> None:
+    def pre_update(self, item: Model, data: dict[str, Any]) -> None:
         """
         Under post-based RBAC, users are never assigned roles directly; roles are
         granted through Posts. Strip any roles supplied on update.
+
+        Signature must match FAB ``UserApi.pre_update(self, item, data)`` — the
+        put handler calls ``self.pre_update(model, item)``.
         """
+        super().pre_update(item, data)
         if current_app.config.get("FOCAL_POST_RBAC_ENABLED", True):
             item.roles = []
 
