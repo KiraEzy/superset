@@ -173,43 +173,156 @@ def load_user_with_relationships(
     return query.first()
 
 
+def _access_token_claims() -> dict[str, Any] | None:
+    """Return JWT claims from FastMCP access token or Authorization Bearer.
+
+    Claims-first resolution prefers the FastMCP-verified token when present.
+    Falls back to decoding ``Authorization: Bearer`` with ``MCP_JWT_SECRET``
+    (same algorithm / issuer / audience as minting in ``views/ai/mcp_jwt.py``).
+    """
+    try:
+        from fastmcp.server.dependencies import get_access_token
+
+        token = get_access_token()
+        if token is not None and getattr(token, "claims", None):
+            return dict(token.claims)
+    except Exception:
+        pass
+
+    try:
+        from flask import current_app, has_request_context, request
+
+        if not has_request_context():
+            return None
+
+        auth_header = request.headers.get("Authorization") or ""
+        if not auth_header.lower().startswith("bearer "):
+            return None
+        raw_token = auth_header[7:].strip()
+        if not raw_token:
+            return None
+
+        secret = current_app.config.get("MCP_JWT_SECRET")
+        if not secret:
+            return None
+
+        import jwt
+
+        algorithm = current_app.config.get("MCP_JWT_ALGORITHM") or "HS256"
+        decode_kwargs: dict[str, Any] = {
+            "algorithms": [algorithm],
+        }
+        issuer = current_app.config.get("MCP_JWT_ISSUER")
+        audience = current_app.config.get("MCP_JWT_AUDIENCE")
+        if issuer:
+            decode_kwargs["issuer"] = issuer
+        if audience:
+            decode_kwargs["audience"] = audience
+
+        return jwt.decode(raw_token, secret, **decode_kwargs)
+    except Exception:
+        return None
+
+
+def _username_from_claims(claims: dict[str, Any]) -> str | None:
+    """Resolve username from JWT claims via default_user_resolver or sub."""
+    try:
+        from flask import current_app
+        from superset.mcp_service.mcp_config import default_user_resolver
+
+        token = type(
+            "AccessToken",
+            (),
+            {"payload": claims, "subject": claims.get("sub")},
+        )()
+        username = default_user_resolver(current_app._get_current_object(), token)
+        if username:
+            return str(username)
+    except Exception:
+        pass
+
+    sub = claims.get("sub") or claims.get("username")
+    return str(sub) if sub else None
+
+
+def _bind_active_post_from_claims(user: User, claims: dict[str, Any]) -> None:
+    """Validate ``active_post_id`` from claims and bind ``g.mcp_active_post_id``."""
+    from flask import current_app
+
+    from superset import security_manager
+
+    post_id = claims.get("active_post_id")
+    if post_id is None:
+        if current_app.config.get("MCP_AUTH_ENABLED", False):
+            raise ValueError("JWT missing active_post_id")
+        return
+
+    post_id = int(post_id)
+    posts = {p.id for p in security_manager.get_user_posts(user)}
+    if post_id not in posts:
+        raise ValueError("Active post is not assigned to the current user")
+    g.mcp_active_post_id = post_id
+
+
 def get_user_from_request() -> User:
     """
     Get the current user for the MCP tool request.
 
-    Priority order:
-    1. g.user if already set (by Preset workspace middleware)
-    2. MCP_DEV_USERNAME from configuration (for development/testing)
+    Priority order (claims-first for JWT middleware correctness):
+    1. FastMCP access token claims (or decode Authorization Bearer with
+       MCP_JWT_SECRET) — load user from ``sub``, bind ``active_post_id``
+    2. ``g.user`` if already set (post binding from claims is covered by
+       step 1 when claims are present)
+    3. Only if ``MCP_AUTH_ENABLED`` is False: ``MCP_DEV_USERNAME``
+    4. Else raise
+
+    Claims-first is intentional: when a verified MCP JWT is present, the
+    request must run as that subject rather than a stale ``g.user``.
 
     Returns:
         User object with roles and groups eagerly loaded
 
     Raises:
-        ValueError: If user cannot be authenticated or found
+        ValueError: If user cannot be authenticated or found, or if
+            ``active_post_id`` is missing/unassigned when auth is enabled
     """
     from flask import current_app
 
-    # First check if user is already set by Preset workspace middleware
+    claims = _access_token_claims()
+    if claims:
+        username = _username_from_claims(claims)
+        if not username:
+            raise ValueError("JWT missing subject")
+        user = load_user_with_relationships(username)
+        if not user:
+            raise ValueError(f"User '{username}' not found")
+        _bind_active_post_from_claims(user, claims)
+        return user
+
+    # Preset workspace middleware / prior request context
     if hasattr(g, "user") and g.user:
         return g.user
 
-    # Fall back to configured username for development/single-user deployments
+    # Fail closed when JWT auth is required
+    if current_app.config.get("MCP_AUTH_ENABLED", False):
+        raise ValueError(
+            "MCP_AUTH_ENABLED is True but no JWT user context was provided"
+        )
+
+    # Development / single-user deployments only
     username = current_app.config.get("MCP_DEV_USERNAME")
 
     if not username:
-        auth_enabled = current_app.config.get("MCP_AUTH_ENABLED", False)
         jwt_configured = bool(
             current_app.config.get("MCP_JWKS_URI")
             or current_app.config.get("MCP_JWT_PUBLIC_KEY")
             or current_app.config.get("MCP_JWT_SECRET")
         )
-        details = []
-        details.append(
-            f"g.user was not set by JWT middleware "
-            f"(MCP_AUTH_ENABLED={auth_enabled}, "
-            f"JWT keys configured={jwt_configured})"
-        )
-        details.append("MCP_DEV_USERNAME is not configured")
+        details = [
+            "g.user was not set by JWT middleware "
+            f"(MCP_AUTH_ENABLED=False, JWT keys configured={jwt_configured})",
+            "MCP_DEV_USERNAME is not configured",
+        ]
         raise ValueError(
             "No authenticated user found. Tried:\n"
             + "\n".join(f"  - {d}" for d in details)
@@ -217,7 +330,6 @@ def get_user_from_request() -> User:
             "MCP_DEV_USERNAME for development."
         )
 
-    # Use helper function to load user with all required relationships
     user = load_user_with_relationships(username)
 
     if not user:
