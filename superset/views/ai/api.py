@@ -68,6 +68,10 @@ class AIRestApi(BaseApi):
         return token or None
 
     def _mcp_bearer_token_from_request(self, data: dict[str, Any]) -> str | None:
+        if current_app.config.get("MCP_AUTH_ENABLED", False):
+            from superset.views.ai.mcp_jwt import resolve_chat_mcp_bearer_token
+
+            return resolve_chat_mcp_bearer_token()
         # Prefer the currently authenticated user's bearer token so MCP calls
         # execute with per-user identity instead of a shared dev fallback.
         request_token = self._request_bearer_token()
@@ -79,8 +83,11 @@ class AIRestApi(BaseApi):
         return None
 
     def _resolve_mcp_bearer_token(self, stored_token: str | None) -> str | None:
-        # Per-user Authorization header wins; otherwise fall back to the stored
-        # global MCP bearer token.
+        if current_app.config.get("MCP_AUTH_ENABLED", False):
+            from superset.views.ai.mcp_jwt import resolve_chat_mcp_bearer_token
+
+            return resolve_chat_mcp_bearer_token()
+        # legacy: prefer request Authorization, else stored global token
         request_token = self._request_bearer_token()
         if request_token:
             return request_token
@@ -125,14 +132,21 @@ class AIRestApi(BaseApi):
     @protect()
     @safe
     def test_mcp(self) -> Response:
+        from superset.views.ai.mcp_jwt import McpJwtError
+
         data = self._config_from_request()
-        mcp_bearer_token = self._mcp_bearer_token_from_request(data)
         try:
+            mcp_bearer_token = self._mcp_bearer_token_from_request(data)
             result = test_mcp_connection(
                 mcp_server_url=data.get("mcpServerUrl", ""),
                 mcp_bearer_token=mcp_bearer_token,
             )
             return self._json_response(200, result)
+        except McpJwtError as ex:
+            return self._json_response(
+                400,
+                {"ok": False, "message": str(ex)},
+            )
         except Exception as ex:  # noqa: BLE001
             logger.exception("MCP connection test failed")
             return self._json_response(
@@ -144,12 +158,14 @@ class AIRestApi(BaseApi):
     @protect()
     @safe
     def chat(self) -> Response:
+        from superset.views.ai.mcp_jwt import McpJwtError
+
         data = self._config_from_request()
         config = config_store.resolve_active_config()
         mcp_enabled = bool(config["mcpEnabled"])
         mcp_server_url = config["mcpServerUrl"]
-        mcp_bearer_token = self._resolve_mcp_bearer_token(config["mcpBearerToken"])
         try:
+            mcp_bearer_token = self._resolve_mcp_bearer_token(config["mcpBearerToken"])
             self._validate_mcp_auth_identity(
                 mcp_enabled=mcp_enabled,
                 mcp_server_url=mcp_server_url,
@@ -167,6 +183,11 @@ class AIRestApi(BaseApi):
                 system_prompt=config["systemPrompt"],
             )
             return self._json_response(200, result)
+        except McpJwtError as ex:
+            return self._json_response(
+                400,
+                {"message": str(ex)},
+            )
         except Exception as ex:  # noqa: BLE001
             logger.exception("AI chat failed")
             return self._json_response(
@@ -178,11 +199,19 @@ class AIRestApi(BaseApi):
     @protect()
     @safe
     def chat_stream(self) -> Response:
+        from superset.views.ai.mcp_jwt import McpJwtError
+
         data = self._config_from_request()
         config = config_store.resolve_active_config()
         mcp_enabled = bool(config["mcpEnabled"])
         mcp_server_url = config["mcpServerUrl"]
-        mcp_bearer_token = self._resolve_mcp_bearer_token(config["mcpBearerToken"])
+        try:
+            mcp_bearer_token = self._resolve_mcp_bearer_token(config["mcpBearerToken"])
+        except McpJwtError as ex:
+            return self._json_response(
+                400,
+                {"message": str(ex)},
+            )
         self._validate_mcp_auth_identity(
             mcp_enabled=mcp_enabled,
             mcp_server_url=mcp_server_url,
