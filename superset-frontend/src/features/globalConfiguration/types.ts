@@ -20,9 +20,13 @@ export type GlobalConfigKnown = {
   navbar_display_name_max_width_px: number;
 };
 
+export type GlobalConfigAdminKnown = GlobalConfigKnown & {
+  mcp_jwt_ttl_seconds: number;
+};
+
 export type GlobalConfigRow = { key: string; value: string };
 
 export type GlobalConfigAdminPayload = {
-  known: GlobalConfigKnown;
+  known: GlobalConfigAdminKnown;
   rows: GlobalConfigRow[];
 };
