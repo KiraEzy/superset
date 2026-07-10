@@ -40,6 +40,7 @@ from superset.mcp_service.middleware import (
     create_response_size_guard_middleware,
     GlobalErrorHandlerMiddleware,
     LoggingMiddleware,
+    RbacToolListFilterMiddleware,
     StructuredContentStripperMiddleware,
 )
 from superset.mcp_service.storage import _create_redis_store
@@ -555,11 +556,14 @@ def build_middleware_list() -> list[Middleware]:
 
     1. StructuredContentStripper — safety net, converts exceptions
        to safe ToolResult text for transports that can't encode errors
-    2. LoggingMiddleware — logs tool calls with success/failure status
-    3. GlobalErrorHandler — catches tool exceptions, raises ToolError
+    2. RbacToolListFilter — omit tools the user cannot access from
+       tools/list (same check_tool_permission as call-time RBAC)
+    3. LoggingMiddleware — logs tool calls with success/failure status
+    4. GlobalErrorHandler — catches tool exceptions, raises ToolError
     """
     return [
         StructuredContentStripperMiddleware(),
+        RbacToolListFilterMiddleware(),
         LoggingMiddleware(),
         GlobalErrorHandlerMiddleware(),
     ]

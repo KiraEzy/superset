@@ -277,6 +277,54 @@ class PrivateToolMiddleware(Middleware):
         return await call_next(context)
 
 
+class RbacToolListFilterMiddleware(Middleware):
+    """Omit tools the current user cannot access from tools/list."""
+
+    async def on_list_tools(
+        self,
+        context: MiddlewareContext[mt.ListToolsRequest],
+        call_next: CallNext[mt.ListToolsRequest, Sequence[Tool]],
+    ) -> Sequence[Tool]:
+        tools = await call_next(context)
+        from flask import current_app, g, has_app_context
+
+        from superset.mcp_service.auth import (
+            check_tool_permission,
+            _setup_user_context,
+        )
+
+        # Ensure user context if missing (JWT binding via get_user_from_request)
+        if has_app_context() and not getattr(g, "user", None):
+            try:
+                _setup_user_context()
+            except Exception:
+                if current_app.config.get("MCP_AUTH_ENABLED", False):
+                    return []  # fail closed
+                return tools
+
+        if not has_app_context() or not getattr(g, "user", None):
+            if has_app_context() and current_app.config.get("MCP_AUTH_ENABLED", False):
+                return []
+            return tools
+
+        filtered: list[Tool] = []
+        for tool in tools:
+            fn = getattr(tool, "fn", None) or getattr(tool, "handler", None)
+            # Unwrap mcp_auth_hook wrappers; stop when unwrapping would
+            # drop permission metadata that lives on the outer fn.
+            while fn is not None and hasattr(fn, "__wrapped__"):
+                inner = fn.__wrapped__
+                if not getattr(inner, "_class_permission_name", None) and getattr(
+                    fn, "_class_permission_name", None
+                ):
+                    break
+                fn = inner
+            target = fn or tool
+            if check_tool_permission(target):
+                filtered.append(tool)
+        return filtered
+
+
 class StructuredContentStripperMiddleware(Middleware):
     """Strip ``outputSchema`` and ``structured_content`` to prevent encoding errors.
 
