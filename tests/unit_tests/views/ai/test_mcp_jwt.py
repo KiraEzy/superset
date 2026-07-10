@@ -79,6 +79,26 @@ def test_mint_requires_active_post():
         mcp_jwt.mint_mcp_user_token(user=user, active_post_id=None)
 
 
+def test_mint_requires_jwt_secret():
+    mcp_jwt = _load_mcp_jwt()
+    user = MagicMock(username="creator")
+    mock_sm = MagicMock()
+    mock_sm.get_user_posts.return_value = [MagicMock(id=7)]
+    with (
+        patch("superset.security_manager", mock_sm),
+        patch.object(mcp_jwt, "_jwt_ttl_seconds", return_value=120),
+        patch.object(mcp_jwt, "_jwt_issuer", return_value=None),
+        patch.object(mcp_jwt, "_jwt_audience", return_value=None),
+        patch.object(
+            mcp_jwt,
+            "_jwt_secret",
+            side_effect=mcp_jwt.McpJwtError("MCP_JWT_SECRET is not configured"),
+        ),
+    ):
+        with pytest.raises(mcp_jwt.McpJwtError, match="MCP_JWT_SECRET"):
+            mcp_jwt.mint_mcp_user_token(user=user, active_post_id=7)
+
+
 def test_mint_includes_claims_and_ttl():
     mcp_jwt = _load_mcp_jwt()
     user = MagicMock(username="creator")
