@@ -18,7 +18,12 @@
  */
 export const KEY_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX =
   'navbar_display_name_max_width_px';
+export const KEY_MCP_JWT_TTL_SECONDS = 'mcp_jwt_ttl_seconds';
 
 export const DEFAULT_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX = 64;
 export const MIN_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX = 32;
 export const MAX_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX = 400;
+
+export const DEFAULT_MCP_JWT_TTL_SECONDS = 600;
+export const MIN_MCP_JWT_TTL_SECONDS = 60;
+export const MAX_MCP_JWT_TTL_SECONDS = 3600;

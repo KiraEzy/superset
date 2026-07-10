@@ -33,8 +33,12 @@ import {
   saveGlobalConfig,
 } from 'src/features/globalConfiguration/api';
 import {
+  DEFAULT_MCP_JWT_TTL_SECONDS,
+  KEY_MCP_JWT_TTL_SECONDS,
   KEY_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX,
+  MAX_MCP_JWT_TTL_SECONDS,
   MAX_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX,
+  MIN_MCP_JWT_TTL_SECONDS,
   MIN_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX,
 } from 'src/features/globalConfiguration/constants';
 import type {
@@ -106,6 +110,9 @@ export default function GlobalConfiguration() {
   const [navbarWidth, setNavbarWidth] = useState<number>(
     MIN_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX,
   );
+  const [mcpJwtTtl, setMcpJwtTtl] = useState<number>(
+    DEFAULT_MCP_JWT_TTL_SECONDS,
+  );
   const [rows, setRows] = useState<GlobalConfigRow[]>([]);
   const [newKey, setNewKey] = useState('');
   const [newValue, setNewValue] = useState('');
@@ -114,6 +121,9 @@ export default function GlobalConfiguration() {
     setNavbarWidth(
       payload.known[KEY_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX] ??
         MIN_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX,
+    );
+    setMcpJwtTtl(
+      payload.known[KEY_MCP_JWT_TTL_SECONDS] ?? DEFAULT_MCP_JWT_TTL_SECONDS,
     );
     setRows(payload.rows);
   };
@@ -156,11 +166,25 @@ export default function GlobalConfiguration() {
       );
       return;
     }
+    if (
+      mcpJwtTtl < MIN_MCP_JWT_TTL_SECONDS ||
+      mcpJwtTtl > MAX_MCP_JWT_TTL_SECONDS
+    ) {
+      addDangerToast(
+        t(
+          'Enter a value between %s and %s',
+          MIN_MCP_JWT_TTL_SECONDS,
+          MAX_MCP_JWT_TTL_SECONDS,
+        ),
+      );
+      return;
+    }
     try {
       setSavingKnown(true);
       const result = await saveGlobalConfig({
         known: {
           [KEY_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX]: navbarWidth,
+          [KEY_MCP_JWT_TTL_SECONDS]: mcpJwtTtl,
         },
       });
       applyPayload(result);
@@ -243,6 +267,31 @@ export default function GlobalConfiguration() {
             onChange={value => {
               if (typeof value === 'number') {
                 setNavbarWidth(value);
+              }
+            }}
+          />
+        </FieldRow>
+
+        <FieldRow>
+          <Typography.Text>{t('MCP JWT TTL (seconds)')}</Typography.Text>
+          <Typography.Paragraph type="secondary" style={{ marginBottom: 0 }}>
+            {t(
+              'Lifetime for Focal AI MCP auth tokens. Range %s–%s seconds. Default %s.',
+              MIN_MCP_JWT_TTL_SECONDS,
+              MAX_MCP_JWT_TTL_SECONDS,
+              DEFAULT_MCP_JWT_TTL_SECONDS,
+            )}
+          </Typography.Paragraph>
+          <InputNumber
+            min={MIN_MCP_JWT_TTL_SECONDS}
+            max={MAX_MCP_JWT_TTL_SECONDS}
+            precision={0}
+            value={mcpJwtTtl}
+            disabled={loading}
+            style={{ width: '100%' }}
+            onChange={value => {
+              if (typeof value === 'number') {
+                setMcpJwtTtl(value);
               }
             }}
           />

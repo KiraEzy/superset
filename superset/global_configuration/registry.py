@@ -20,6 +20,7 @@ from dataclasses import dataclass
 from typing import Any
 
 KEY_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX = "navbar_display_name_max_width_px"
+KEY_MCP_JWT_TTL_SECONDS = "mcp_jwt_ttl_seconds"
 
 
 @dataclass(frozen=True)
@@ -40,6 +41,14 @@ KNOWN_KEYS: dict[str, KnownKey] = {
         public=True,
         min_value=32,
         max_value=400,
+    ),
+    KEY_MCP_JWT_TTL_SECONDS: KnownKey(
+        key=KEY_MCP_JWT_TTL_SECONDS,
+        value_type="int",
+        default=600,
+        public=False,
+        min_value=60,
+        max_value=3600,
     ),
 }
 
