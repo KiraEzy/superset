@@ -293,8 +293,10 @@ class RbacToolListFilterMiddleware(Middleware):
             _setup_user_context,
         )
 
-        # Ensure user context if missing (JWT binding via get_user_from_request)
-        if has_app_context() and not getattr(g, "user", None):
+        # Always refresh from JWT claims. Skipping when g.user is already set
+        # leaves a detached User from a prior request on the long-lived MCP
+        # app context and blows up tools/list with DetachedInstanceError.
+        if has_app_context():
             try:
                 _setup_user_context()
             except Exception:

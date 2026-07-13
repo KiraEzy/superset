@@ -91,7 +91,9 @@ class FocalSecurityManager(SupersetSecurityManager):
         )
 
     def get_active_post_id(self) -> Optional[int]:
-        if has_request_context() and getattr(g, "mcp_active_post_id", None) is not None:
+        # MCP binds the JWT post on ``g`` inside an app context that may not
+        # have a Flask request context (Starlette owns the HTTP request).
+        if getattr(g, "mcp_active_post_id", None) is not None:
             return int(g.mcp_active_post_id)
         if not has_request_context():
             return None
@@ -262,7 +264,16 @@ class FocalSecurityManager(SupersetSecurityManager):
             return super().get_user_roles(user)
 
         if user is None:
-            user = g.user if (has_request_context() and hasattr(g, "user")) else None
+            # MCP tools run under a Flask app context without a request
+            # context (Starlette owns HTTP). Still honor ``g.user`` so
+            # ``user_view_menu_names`` / dataset access filters resolve
+            # post-scoped ``database_access`` permissions.
+            from flask import has_app_context
+
+            if has_app_context() and hasattr(g, "user"):
+                user = g.user
+            else:
+                user = None
 
         # Userless system context (e.g. Celery with no user): nothing to scope.
         if user is None:
@@ -276,15 +287,19 @@ class FocalSecurityManager(SupersetSecurityManager):
         if self.is_guest_user(user):
             return super().get_user_roles(user)
 
+        # Active post from browser session or MCP JWT bind (``g.mcp_active_post_id``).
+        # Check before the no-request-context fallback so MCP tools/list and
+        # tools/call stay scoped to the JWT post even without a Flask request.
+        active_post_id = self.get_active_post_id()
+        if active_post_id:
+            return self._roles_for_active_post(user, active_post_id)
+
         # System / no-session context: union of every post's roles (unscoped).
         if not has_request_context():
             return self._all_post_roles(user)
 
-        # Logged-in web user: only the active post's roles grant permissions.
-        active_post_id = self.get_active_post_id()
-        if not active_post_id:
-            return []
-        return self._roles_for_active_post(user, active_post_id)
+        # Logged-in web user with no active post selected: no permissions.
+        return []
 
     def get_user_roles_permissions(
         self, user: Optional[User] = None
@@ -300,7 +315,12 @@ class FocalSecurityManager(SupersetSecurityManager):
             return super().get_user_roles_permissions(user)
 
         if user is None:
-            user = g.user if (has_request_context() and hasattr(g, "user")) else None
+            from flask import has_app_context
+
+            if has_app_context() and hasattr(g, "user"):
+                user = g.user
+            else:
+                user = None
         if user is None or user.is_anonymous:
             return super().get_user_roles_permissions(user)
         if self.is_guest_user(user):

@@ -138,3 +138,7 @@ PROJECT.md
 oxc-custom-build/
 *.code-workspace
 *.duckdb
+
+# Superpowers / local agent worktrees
+.worktrees/
+

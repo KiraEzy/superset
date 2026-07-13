@@ -114,9 +114,10 @@ def check_tool_permission(func: Callable[..., Any]) -> bool:
         )
 
         if not has_permission:
+            username = getattr(g.user, "username", None)
             logger.warning(
                 "Permission denied for user %s: %s on %s (tool: %s)",
-                g.user.username,
+                username,
                 permission_str,
                 class_permission_name,
                 func.__name__,
@@ -124,7 +125,9 @@ def check_tool_permission(func: Callable[..., Any]) -> bool:
 
         return has_permission
 
-    except (AttributeError, ValueError, RuntimeError) as e:
+    except Exception as e:
+        # Include DetachedInstanceError / InvalidRequestError so a stale
+        # g.user cannot turn tools/list into a hard MCP protocol error.
         logger.warning("Error checking tool permission: %s", e)
         return False
 
@@ -403,16 +406,20 @@ def _setup_user_context() -> User | None:
     Returns:
         User object with roles and groups loaded, or None if no Flask context
     """
-    # Clear stale g.user to prevent user impersonation across
-    # tool calls when no per-request middleware refreshes it.
-    # Only clear in app-context-only mode; preserve g.user when
-    # a request context is active (external middleware set it).
+    # Clear stale g.user to prevent user impersonation across tool calls.
+    # The MCP process keeps a long-lived app context, so a previous request's
+    # User can remain on ``g`` after the DB session expired it (DetachedInstance).
+    # Always refresh when JWT claims are present. Otherwise only clear in
+    # app-context-only mode so external request middleware can preset g.user.
     from flask import has_request_context
 
-    if not has_request_context():
+    claims = _access_token_claims()
+    if claims or not has_request_context():
         g.pop("user", None)
+        g.pop("mcp_active_post_id", None)
 
     from sqlalchemy.exc import OperationalError
+    from sqlalchemy.orm.exc import DetachedInstanceError
 
     user = None  # Ensure defined before loop in case of unexpected exit
 
@@ -429,6 +436,20 @@ def _setup_user_context() -> User | None:
                 user_groups = user.groups  # noqa: F841
 
             break
+        except DetachedInstanceError as e:
+            if attempt == 0:
+                logger.warning(
+                    "Detached user during MCP setup (attempt 1), "
+                    "clearing g.user and retrying: %s",
+                    e,
+                )
+                g.pop("user", None)
+                g.pop("mcp_active_post_id", None)
+                _cleanup_session_on_error()
+                continue
+            logger.error("Detached user on retry during MCP setup: %s", e)
+            _cleanup_session_on_error()
+            raise
         except RuntimeError as e:
             # No Flask application context (e.g., prompts before middleware runs)
             if "application context" in str(e):
