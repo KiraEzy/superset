@@ -60,6 +60,20 @@ describe('Pie transformProps', () => {
     theme: supersetTheme,
   });
 
+  test('uses an explicit slice-label color without a white hover background', () => {
+    const props = new ChartProps({
+      formData: { ...formData, labelColor: '#FFFFFF', labelsOutside: false },
+      width: 800,
+      height: 600,
+      queriesData: chartProps.queriesData,
+      theme: supersetTheme,
+    });
+    const { echartOptions } = transformProps(props as EchartsPieChartProps);
+    const series = echartOptions.series as PieSeriesOption[];
+    expect(series[0].label?.color).toBe('#FFFFFF');
+    expect(series[0].emphasis?.label?.backgroundColor).toBe('transparent');
+  });
+
   test('should transform chart props for viz', () => {
     expect(transformProps(chartProps as EchartsPieChartProps)).toEqual(
       expect.objectContaining({

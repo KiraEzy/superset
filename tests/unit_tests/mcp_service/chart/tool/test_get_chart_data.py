@@ -26,6 +26,58 @@ import pytest
 from superset.mcp_service.chart.schemas import GetChartDataRequest
 
 
+def test_native_and_chart_filters_reach_executable_query() -> None:
+    from superset.mcp_service.app import mcp  # noqa: F401
+    from superset.mcp_service.chart.tool.get_chart_data import (
+        _apply_extra_form_data,
+        _complete_fallback_query,
+    )
+
+    form_data = {
+        "adhoc_filters": [
+            {
+                "expressionType": "SIMPLE",
+                "clause": "WHERE",
+                "subject": "contractor",
+                "operator": "==",
+                "comparator": "FDS Solutions Limited",
+            }
+        ],
+        "granularity_sqla": "award_date",
+        "time_grain_sqla": "P3M",
+    }
+    _apply_extra_form_data(
+        form_data, {"filters": [{"col": "year", "op": "IN", "val": [2025]}]}
+    )
+    query = {"columns": ["award_date"], "metrics": ["sum_value"], "filters": []}
+    _complete_fallback_query(query, form_data, "postgresql")
+    assert {"col": "contractor", "op": "==", "val": "FDS Solutions Limited"} in query[
+        "filters"
+    ]
+    assert {"col": "year", "op": "IN", "val": [2025]} in query["filters"]
+    assert query["is_timeseries"] is True
+    assert query["columns"] == []
+    assert query["extras"]["time_grain_sqla"] == "P3M"
+    assert query["orderby"] == [("sum_value", False)]
+
+
+def test_saved_query_keeps_existing_filters_when_appending_native_filters() -> None:
+    from superset.mcp_service.app import mcp  # noqa: F401
+    from superset.mcp_service.chart.tool.get_chart_data import (
+        _apply_extra_form_data,
+        _apply_query_form_data,
+    )
+
+    original = {"col": "contractor", "op": "==", "val": "FDS"}
+    native = {"col": "category", "op": "IN", "val": ["A/Minor"]}
+    query = {"filters": [original], "extras": {"where": "amount > 0"}}
+    form_data = {}
+    _apply_extra_form_data(form_data, {"filters": [native]})
+    _apply_query_form_data(query, form_data, "postgresql")
+    assert query["filters"] == [original, native]
+    assert query["extras"]["where"] == "amount > 0"
+
+
 def _collect_groupby_extras(
     form_data: dict[str, Any],
     groupby_columns: list[str],

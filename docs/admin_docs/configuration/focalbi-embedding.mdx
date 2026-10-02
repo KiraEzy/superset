@@ -1,0 +1,98 @@
+---
+title: FocalBI embedded dashboard integration
+sidebar_position: 8
+---
+
+# FocalBI embedded dashboard integration
+
+The local example in `embedded-demo/` embeds a separate copy of the bundled
+Sales Dashboard using `@superset-ui/embedded-sdk`. It includes native filters,
+two tabs, charts, and viewer-specific row-level security.
+
+## Setup and verification
+
+See the [demo README](../../../embedded-demo/README.md) for the authoritative
+setup, run and test commands. Superset stays at http://localhost:8088; the host
+website runs at http://localhost:3100.
+
+## Key files
+
+- `embedded-demo/server.ts`: local demo sessions, authorization and JWT signing.
+- `embedded-demo/client.ts`: SDK mounting, viewer switching, renewal and teardown.
+- `embedded-demo/bootstrap.py`: independent dashboard/chart copies and viewer role.
+- `embedded-demo/setup.ps1`: repeatable local provisioning.
+- `embedded-demo/verification.test.ts`: live HTTP authorization and RLS checks.
+- `docker/pythonpath_dev/focal_embedding.py`: optional embedding configuration.
+
+## Contracts
+
+The host backend selects a fixed dashboard embedding UUID and a country rule
+from its own viewer map. It does not accept dashboard IDs, countries, SQL
+clauses or post IDs from the token request.
+
+The token contains `type: guest`, one dashboard resource, a dataset-specific
+`rls_rules` clause, audience `focalbi-embedded`, and a five-minute expiry.
+Direct signing uses `rls_rules`; Superset's token-issuing API instead accepts
+`rls` in its request body. These formats must not be interchanged.
+
+`GET /api/analytics/guest-token` and `GET /api/analytics/config` require a
+host session. Responses use `Cache-Control: no-store`. The browser receives only
+the guest token, never the signing secret. SDK renewal calls the token endpoint
+again. Viewer switching regenerates the session and reloads the host page.
+SDK 0.3.0 does not cancel renewal timers in its unmount method; reloading on
+viewer changes, logout and retry disposes those timers with the old document.
+
+`POST /api/demo/session` is deliberately a local sample identity selector,
+not an authentication mechanism. `POST /api/logout` destroys that session.
+Mutations require the configured Origin and JSON content type.
+
+## Security boundaries
+
+- The example binds only to loopback and refuses NODE_ENV=production.
+- The EmbeddedViewer role has an explicit viewer permission list, without
+  chart/dashboard authoring, SQL Lab or broad database/dataset grants.
+- Country RLS applies to the sample sales dataset. Ordinary dashboard filters
+  cannot broaden it.
+- FocalBI guest users do not inherit active-post permissions. Real host
+  authentication must map user/post entitlements to authorized resources and RLS.
+- Dashboard Allowed Domains and CSP frame-ancestors retain the port-3100 demo
+  and also allow the website previews at `http://localhost:3010` and
+  `http://192.168.10.27:3010` (CSP also retains self). Bootstrap preserves existing
+  allowed origins. No unrestricted CORS setting is needed.
+- Secrets live in ignored `docker/.focal-embed-secret.local` and
+  `embedded-demo/.env.local`. Without the secret file, embedding stays disabled.
+- Logging out stops new token issuance and removes the iframe; an already-issued
+  token remains valid until its five-minute expiry.
+
+## Adapting to a real website
+
+### Anonymous public-data website preview
+
+The FDS website's `#focal-bi` preview uses dashboard 11, embedding UUID
+`8c8f9356-6f22-4f64-a117-95b8d6f267e2`. Its nine charts and four native filters
+reference dataset 22, the public SOA-QPS5 government-award snapshot described in
+the [MCP dashboard guide](./focalbi-mcp.mdx). All public snapshot rows are allowed;
+the initial A/Minor category filter is a viewing preference, not an access rule.
+The dashboard's Allowed Domains are the localhost and LAN port-3010 origins.
+The website's separate local backend reads the existing signing file through
+`FOCALBI_GUEST_SECRET_FILE`; it does not use the port-3100 session endpoint or
+change its country rules. Tokens retain HS256, audience `focalbi-embedded`,
+300-second expiry, and a single dashboard resource. This exception is for
+reviewed public data on local/LAN previews only. Website setup and verification
+commands belong to that repository's README.
+
+### Authenticated deployments
+
+Replace the sample viewer selector with the website's login/session middleware
+and server-side dashboard/post entitlement checks. Replace the in-memory session
+store with an appropriate shared store. Use HTTPS, secure cookies and managed
+secrets. Configure the actual host origin in the backend, CSP and dashboard
+Allowed Domains, and use a browser-reachable Superset URL.
+
+Keep allowed datasets and RLS mapping synchronized with dashboard changes.
+Additional datasets require reviewed restrictions; a rule for one dataset does
+not automatically restrict another dataset. Pin and test SDK/server versions.
+
+The local host uses ordinary cookies only for its own session. The embedded
+dashboard authenticates using guest tokens, not a Superset login cookie.
+This integration does not provide chart Explore or dashboard layout editing.

@@ -379,7 +379,7 @@ export default function transformProps(
   const defaultLabel = {
     formatter,
     show: showLabels,
-    color: theme.colorText,
+    color: formData.labelColor || theme.colorText,
   };
   const legendData = transformedData
     .map(datum => datum.name)
@@ -430,7 +430,10 @@ export default function transformProps(
         label: {
           show: true,
           fontWeight: 'bold',
-          backgroundColor: theme.colorBgContainer,
+          backgroundColor:
+            formData.labelColor && !labelsOutside
+              ? 'transparent'
+              : theme.colorBgContainer,
         },
       },
       data: transformedData,

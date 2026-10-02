@@ -493,6 +493,7 @@ export default function transformProps(
     );
 
     if (transformedSeries) {
+      if (formData.secondaryBehindPrimary) transformedSeries.z = 2;
       series.push(transformedSeries);
       mapSeriesIdToAxis(transformedSeries, yAxisIndex);
     }
@@ -567,6 +568,7 @@ export default function transformProps(
     );
 
     if (transformedSeries) {
+      if (formData.secondaryBehindPrimary) transformedSeries.z = 1;
       series.push(transformedSeries);
       mapSeriesIdToAxis(transformedSeries, yAxisIndexB);
     }

@@ -714,7 +714,7 @@ class TestMapMixedTimeseriesConfig:
 
         assert result["time_grain_sqla"] is None
         assert result["granularity_sqla"] is None
-        assert result["x_axis_sort_series_type"] == "name"
+        assert result["x_axis_sort"] == "name"
 
 
 # ============================================================
@@ -975,3 +975,21 @@ class TestSchemaValidatorNewTypes:
         assert is_valid is False
         assert error is not None
         assert error.error_code == "INVALID_CHART_TYPE"
+
+
+def test_mixed_chart_fixed_filters_apply_to_both_queries() -> None:
+    config = MixedTimeseriesChartConfig(
+        chart_type="mixed_timeseries",
+        x=ColumnRef(name="award_date"),
+        y=[ColumnRef(name="fds_award_value", aggregate="SUM")],
+        y_secondary=[
+            ColumnRef(
+                name="fds_award_value", aggregate="SUM", ratio_denominator="award_value"
+            )
+        ],
+        filters=[FilterConfig(column="category", op="=", value="A/Minor")],
+    )
+    result = map_mixed_timeseries_config(config, dataset_id=22)
+    assert result["adhoc_filters_b"] == result["adhoc_filters"]
+    assert result["adhoc_filters_b"][0]["comparator"] == "A/Minor"
+    assert result["adhoc_filters_b"] is not result["adhoc_filters"]

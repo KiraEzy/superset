@@ -1,0 +1,58 @@
+<!doctype html>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements. See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FocalBI · Embedded sales demo</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <header>
+      <div>
+        <span class="brand">FocalBI</span
+        ><span class="demo">Local integration demo</span>
+      </div>
+      <h1>Sales analytics</h1>
+      <p>
+        Explore the sample sales dashboard as either team. Each viewer can
+        access only their country's data.
+      </p>
+      <div class="toolbar" aria-label="Demo viewer selection">
+        <button data-viewer="usa" aria-pressed="false">View as US team</button>
+        <button data-viewer="france" aria-pressed="false">
+          View as France team
+        </button>
+        <span id="identity">No demo viewer selected</span>
+        <button id="logout" hidden>End demo session</button>
+      </div>
+    </header>
+    <main>
+      <div class="message">
+        <p id="status" role="status">Connecting…</p>
+        <button id="retry" hidden>Retry</button>
+      </div>
+      <div id="dashboard" hidden></div>
+    </main>
+    <footer>
+      Sample data · Viewer selection is for this local demo only. Your website's
+      login replaces it in production.
+    </footer>
+  </body>
+</html>

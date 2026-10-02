@@ -30,6 +30,9 @@ The Superset Model Context Protocol (MCP) service provides a modular, schema-dri
 
 ## 🚀 Quickstart
 
+For the local FocalBI Codex connection, dashboard filter tool, and SOA-QPS
+snapshot contracts, see the [FocalBI MCP guide](../../docs/admin_docs/configuration/focalbi-mcp.mdx).
+
 ### Option 1: Docker Setup (Recommended) 🎯
 
 The fastest way to get everything running with Docker:

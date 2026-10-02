@@ -23,6 +23,7 @@ generation that can be used by both generate_chart and generate_explore_link too
 """
 
 import logging
+from copy import deepcopy
 from dataclasses import dataclass
 from typing import Any, Dict
 
@@ -483,6 +484,19 @@ def create_metric_object(col: ColumnRef) -> Dict[str, Any] | str:
     if col.saved_metric:
         return col.name
 
+    if col.ratio_denominator:
+        numerator = col.name.replace('"', '""')
+        denominator = col.ratio_denominator
+        return {
+            "expressionType": "SQL",
+            "sqlExpression": (
+                f'1.0 * SUM("{numerator}") / NULLIF(SUM("{denominator}"), 0)'
+            ),
+            "label": col.label or f"Share of {col.name}",
+            "optionName": f"ratio_{col.name}_{denominator}",
+            "hasCustomLabel": True,
+        }
+
     # Ensure aggregate is valid - default to SUM if not specified or invalid
     valid_aggregates = {
         "SUM",
@@ -542,6 +556,18 @@ def add_legend_config(form_data: Dict[str, Any], config: XYChartConfig) -> None:
             form_data["legend_orientation"] = config.legend.position
 
 
+def add_value_sort_config(form_data: Dict[str, Any], config: XYChartConfig) -> None:
+    """Order displayed categories without changing the query's top-N selection."""
+    if config.sort_by_value:
+        form_data["x_axis_sort"] = "sum"
+        ascending = config.sort_by_value == "asc"
+        form_data["x_axis_sort_asc"] = (
+            not ascending if config.orientation == "horizontal" else ascending
+        )
+    if config.show_value_sort_control:
+        form_data["show_value_sort_control"] = True
+
+
 def add_orientation_config(form_data: Dict[str, Any], config: XYChartConfig) -> None:
     """Add orientation configuration to form_data for bar charts.
 
@@ -572,8 +598,8 @@ def configure_temporal_handling(
             form_data["time_grain_sqla"] = time_grain
     else:
         # Non-temporal column - disable temporal handling to prevent DATE_TRUNC
-        form_data["x_axis_sort_series_type"] = "name"
-        form_data["x_axis_sort_series_ascending"] = True
+        form_data["x_axis_sort"] = "name"
+        form_data["x_axis_sort_asc"] = True
         form_data["time_grain_sqla"] = None
         form_data["granularity_sqla"] = None
         if time_grain:
@@ -681,6 +707,7 @@ def map_xy_config(
     add_axis_config(form_data, config)
     add_legend_config(form_data, config)
     add_orientation_config(form_data, config)
+    add_value_sort_config(form_data, config)
 
     return form_data
 
@@ -695,6 +722,7 @@ def map_pie_config(config: PieChartConfig) -> Dict[str, Any]:
         "metric": metric,
         "color_scheme": "supersetColors",
         "show_labels": config.show_labels,
+        "label_color": config.label_color,
         "show_legend": config.show_legend,
         "label_type": config.label_type,
         "number_format": config.number_format,
@@ -895,6 +923,11 @@ def map_mixed_timeseries_config(
         "metrics_b": [create_metric_object(col) for col in config.y_secondary],
         "seriesTypeB": _MIXED_SERIES_TYPE_MAP.get(config.secondary_kind, "bar"),
         "areaB": config.secondary_kind == "area",
+        "opacity": config.area_opacity,
+        "opacityB": config.area_opacity,
+        "secondary_behind_primary": config.secondary_behind_primary,
+        "markerEnabled": config.show_markers,
+        "markerEnabledB": config.show_markers,
         "yAxisIndexB": 1,
         # Display
         "show_legend": config.show_legend,
@@ -924,6 +957,9 @@ def map_mixed_timeseries_config(
     _add_mixed_axis_config(form_data, config)
 
     _add_adhoc_filters(form_data, config.filters)
+    if config.filters:
+        # Mixed chart Query B reads the suffixed filter controls.
+        form_data["adhoc_filters_b"] = deepcopy(form_data["adhoc_filters"])
 
     return form_data
 

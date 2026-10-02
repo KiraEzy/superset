@@ -21,6 +21,7 @@ MCP tool: get_chart_data
 
 import logging
 import time
+from copy import deepcopy
 from typing import Any, Dict, List, TYPE_CHECKING
 
 from fastmcp import Context
@@ -47,7 +48,10 @@ from superset.mcp_service.utils.oauth2_utils import (
     build_oauth2_redirect_message,
     OAUTH2_CONFIG_ERROR_MESSAGE,
 )
-from superset.utils.core import merge_extra_filters
+from superset.utils.core import (
+    merge_extra_filters,
+    split_adhoc_filters_into_base_filters,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +64,41 @@ def _apply_extra_form_data(
         return
     form_data["extra_form_data"] = extra_form_data
     merge_extra_filters(form_data)
+
+
+def _apply_query_form_data(
+    query: dict[str, Any], form_data: dict[str, Any], engine: str = ""
+) -> None:
+    """Translate form filters to executable QueryObject fields."""
+    converted = deepcopy(form_data)
+    split_adhoc_filters_into_base_filters(converted, engine)
+    filters = query.setdefault("filters", [])
+    for item in converted.get("filters", []):
+        if item not in filters:
+            filters.append(item)
+    extras = query.setdefault("extras", {})
+    for key in ("where", "having"):
+        if value := converted.get(key):
+            existing = extras.get(key)
+            extras[key] = f"({existing}) AND ({value})" if existing else value
+    for key in ("time_range", "granularity_sqla"):
+        if key in form_data:
+            query["granularity" if key == "granularity_sqla" else key] = form_data[key]
+    extras.update(form_data.get("extras", {}))
+
+
+def _complete_fallback_query(
+    query: dict[str, Any], form_data: dict[str, Any], engine: str = ""
+) -> None:
+    """Preserve filters, temporal grain and metric ordering in fallback queries."""
+    _apply_query_form_data(query, form_data, engine)
+    temporal = form_data.get("granularity_sqla")
+    if temporal and form_data.get("time_grain_sqla"):
+        query["is_timeseries"] = True
+        query["columns"] = [c for c in query["columns"] if c != temporal]
+        query["extras"]["time_grain_sqla"] = form_data["time_grain_sqla"]
+    if not query.get("orderby") and query.get("metrics"):
+        query["orderby"] = [(query["metrics"][0], not query.get("order_desc", True))]
 
 
 def _get_cached_form_data(form_data_key: str) -> str | None:
@@ -327,6 +366,8 @@ async def get_chart_data(  # noqa: C901
                 if cached_adhoc:
                     cached_query["adhoc_filters"] = cached_adhoc
 
+                _complete_fallback_query(cached_query, cached_form_data_dict)
+
                 query_context = factory.create(
                     datasource={
                         "id": datasource_id,
@@ -530,6 +571,10 @@ async def get_chart_data(  # noqa: C901
                 if fallback_adhoc:
                     fallback_query["adhoc_filters"] = fallback_adhoc
 
+                _complete_fallback_query(
+                    fallback_query, form_data, chart.datasource.database.backend
+                )
+
                 query_context = factory.create(
                     datasource={
                         "id": chart.datasource_id,
@@ -551,6 +596,17 @@ async def get_chart_data(  # noqa: C901
                 # Merge dashboard native filters into query_context's form_data
                 qc_form_data = query_context_json.setdefault("form_data", {})
                 _apply_extra_form_data(qc_form_data, request.extra_form_data)
+
+                if request.extra_form_data:
+                    # Saved queries already contain chart predicates. Append only
+                    # dashboard predicates to every executable query, not just
+                    # descriptive form_data (which the query factory ignores).
+                    native_form_data: dict[str, Any] = {}
+                    _apply_extra_form_data(native_form_data, request.extra_form_data)
+                    for query in query_context_json.get("queries", []):
+                        _apply_query_form_data(
+                            query, native_form_data, chart.datasource.database.backend
+                        )
 
                 # Create QueryContext from the saved context using the schema
                 # This is exactly how the API does it
@@ -876,17 +932,21 @@ async def _query_from_form_data(
 
     try:
         factory = QueryContextFactory()
+        _apply_extra_form_data(form_data, request.extra_form_data)
+        from superset.mcp_service.chart.preview_utils import _build_query_columns
+
+        metrics = metrics or ([form_data["metric"]] if form_data.get("metric") else [])
+        query = {
+            "filters": form_data.get("filters", []),
+            "columns": _build_query_columns(form_data) or groupby,
+            "metrics": metrics,
+            "row_limit": row_limit,
+            "order_desc": form_data.get("order_desc", True),
+        }
+        _complete_fallback_query(query, form_data)
         query_context = factory.create(
             datasource={"id": datasource_id, "type": datasource_type},
-            queries=[
-                {
-                    "filters": form_data.get("filters", []),
-                    "columns": groupby,
-                    "metrics": metrics,
-                    "row_limit": row_limit,
-                    "order_desc": form_data.get("order_desc", True),
-                }
-            ],
+            queries=[query],
             form_data=form_data,
             force=request.force_refresh,
         )

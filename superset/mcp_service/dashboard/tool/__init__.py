@@ -16,11 +16,13 @@
 # under the License.
 
 from .add_chart_to_existing_dashboard import add_chart_to_existing_dashboard
+from .configure_dashboard import configure_dashboard
 from .generate_dashboard import generate_dashboard
 from .get_dashboard_info import get_dashboard_info
 from .list_dashboards import list_dashboards
 
 __all__ = [
+    "configure_dashboard",
     "list_dashboards",
     "get_dashboard_info",
     "generate_dashboard",

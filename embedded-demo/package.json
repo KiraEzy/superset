@@ -1,0 +1,25 @@
+{
+  "name": "focalbi-embedded-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit && esbuild client.ts --bundle --format=esm --outfile=public/app.js",
+    "start": "node --env-file=.env.local --import tsx server.ts",
+    "test": "node --env-file=.env.local --import tsx --test verification.test.ts"
+  },
+  "dependencies": {
+    "@superset-ui/embedded-sdk": "0.3.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.0",
+    "@types/jsonwebtoken": "^9.0.0",
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

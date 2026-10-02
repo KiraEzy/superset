@@ -29,3 +29,9 @@ MCP_TOOL_SEARCH_CONFIG = {
 # Backend AI proxy: reach MCP + host LM Studio from inside Docker
 AI_MCP_INTERNAL_URL = "http://superset_mcp:5008/mcp"
 AI_DOCKER_HOST = "host.docker.internal"
+
+# Optional local dashboard embedding, provisioned by embedded-demo/setup.ps1.
+from focal_embedding import *  # noqa: E402,F403
+
+# Links returned by MCP should open the running local web application.
+WEBDRIVER_BASEURL_USER_FRIENDLY = "http://localhost:8088/"

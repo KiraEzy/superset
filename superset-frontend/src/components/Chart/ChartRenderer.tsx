@@ -308,6 +308,8 @@ class ChartRenderer extends Component<ChartRendererProps, ChartRendererState> {
         nextProps.labelsColorMap !== this.props.labelsColorMap ||
         nextFormData.color_scheme !== currentFormData.color_scheme ||
         nextFormData.stack !== currentFormData.stack ||
+        nextFormData.x_axis_sort !== currentFormData.x_axis_sort ||
+        nextFormData.x_axis_sort_asc !== currentFormData.x_axis_sort_asc ||
         nextFormData.subcategories !== currentFormData.subcategories ||
         nextProps.cacheBusterProp !== this.props.cacheBusterProp ||
         nextProps.emitCrossFilters !== this.props.emitCrossFilters ||

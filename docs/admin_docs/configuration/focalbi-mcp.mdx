@@ -1,0 +1,201 @@
+---
+title: FocalBI MCP and SOA-QPS dashboard
+sidebar_position: 9
+---
+
+# FocalBI MCP and SOA-QPS dashboard
+
+## Local Codex connection
+
+The Docker MCP service accepts Streamable HTTP at
+`http://127.0.0.1:5008/mcp`. The web application runs at
+`http://localhost:8088`. Service startup guidance is in the
+[MCP README](../../../superset/mcp_service/README.md).
+
+The local Codex server is named `focalbi` in
+`C:/Users/charleswong/.codex/config.toml`. It uses `http_headers_helper`
+to run `C:/Users/charleswong/.codex/helpers/focalbi_mcp_headers.py`.
+The helper invokes the existing `mint_mcp_user_token` function inside
+`superset_app`, for user `admin`, assigned Administrator post 1.
+Tokens are short-lived; neither the signing secret nor a bearer token is
+stored in Codex configuration. Docker access and the assigned post are required.
+This helper is for the trusted local development workstation, not a remote
+multi-user authentication service.
+
+Run `codex mcp get focalbi` to inspect the connection without exposing tokens.
+New Codex sessions load the configured tool catalog. A session opened before
+configuration may need to be restarted to discover the native tools. During
+setup, an authenticated JSON-RPC client can call the same MCP endpoint directly.
+Do not print or log the header helper's stdout: it contains a bearer token.
+
+In Codex Settings > MCP servers, keep `focalbi` enabled with the URL above.
+Leave the bearer-token environment variable and static-header fields empty;
+the header helper is configured in TOML and is not shown in those UI fields.
+`MCP_BEARER_TOKEN` is a UI placeholder, not a required credential name.
+
+For a native-runtime check, run the local diagnostic:
+
+```powershell
+python C:/Users/charleswong/.codex/helpers/validate_focalbi_mcp.py
+```
+
+It starts the installed Codex desktop app-server, loads the existing MCP config
+in an ephemeral diagnostic thread, discovers tools, and calls `get_chart_info`
+for chart 119 through Codex's `mcpServer/tool/call` API. No model turn or dashboard
+write is performed. Expected: `runtimeStatus: connected`, 25 tools, no discovery
+error, and the annual FDS chart title. The JSON report is saved beside the script.
+Helper authentication can show `authStatus: unknown` because it is not OAuth;
+a successful authenticated tool call is the relevant verification.
+
+After configuration changes, restart Codex and open a new conversation. Ask it
+to use the native `focalbi` MCP `get_chart_info` tool for chart 119 without a
+shell/HTTP fallback to confirm that the conversation received the tool catalog.
+
+## Dashboard configuration tool
+
+`configure_dashboard` adds or updates select filters and label colors on a
+dashboard. Its input has a `request` wrapper with:
+
+- `dashboard_id`: an existing dashboard the caller owns or can administer.
+- `filters`: objects with `name`, `dataset_id`, `column`, and `default_values`.
+  Optional `key` gives multiple filters on the same column distinct stable IDs.
+  Optional `scope_chart_ids` limits a filter to selected dashboard charts; IDs
+  must belong to the dashboard. Omission applies it to the whole dashboard.
+- `remove_filter_ids`: explicit dashboard-owned native filter IDs to remove.
+  Unknown IDs and removals that leave cascade dependencies are rejected.
+- `label_colors`: label-to-hex-color mapping, merged with existing colors.
+- `overview_layout`: explicitly rebuild the layout with a KPI row, paired
+  charts, and full-width tables. Defaults to false, preserving the layout.
+- `introduction`: optional Markdown note used when rebuilding the layout.
+- `full_width_chart_ids`: optional chart IDs for taller full-width overview rows
+  (75 grid units). Each ID must belong to the dashboard. Used with
+  `overview_layout`, for example for long department labels.
+- `remove_chart_ids`: detach existing dashboard charts when rebuilding the
+  overview. Requires membership and `overview_layout`; preserves saved charts
+  and their use on other dashboards.
+
+The tool enforces Dashboard write permission, ownership, chart data access,
+and filter dataset/column membership. It never changes publication, owners,
+roles, embedding permissions, or database write permissions. Filter IDs are
+stable by dataset/column and optional key; unrelated filters and metadata are
+preserved. Reconfiguring a filter replaces its scope with the supplied chart IDs,
+or whole-dashboard scope when omitted. Selected charts are implemented by
+excluding the other current dashboard charts from the native filter scope.
+Overview layout intentionally replaces existing tabs, text, and chart placement.
+
+Implementation: `superset/mcp_service/dashboard/tool/configure_dashboard.py`.
+Regression coverage: `tests/unit_tests/mcp_service/dashboard/tool/`.
+`get_chart_data` translates native and chart filters into executable query
+predicates; its fallback also preserves temporal grain and metric ordering.
+Tests live in `tests/unit_tests/mcp_service/chart/tool/test_get_chart_data.py`.
+
+Chart metric references accept `ratio_denominator` with `aggregate: "SUM"`.
+This generates a quoted-column aggregate ratio, `SUM(numerator) / SUM(denominator)`,
+using floating division and returning NULL for zero denominators. It does not
+accept arbitrary SQL or saved metrics. PostgreSQL is verified for this expression.
+Mixed time-series configs also accept `area_opacity` from 0 to 1 and
+`show_markers` to keep individual observations visible in single-period views.
+`secondary_kind: "area"` fills the secondary series; `secondary_behind_primary`
+places secondary series at z=1 and primary series at z=2. Structured `filters`
+apply to both mixed-chart queries through `adhoc_filters` and `adhoc_filters_b`;
+omitting Query B filters gives a different share denominator. Regression coverage
+is in `tests/unit_tests/mcp_service/chart/test_new_chart_types.py`.
+
+Pie configs accept `label_color` as a six-digit hex color. Inside labels retain
+a transparent background on hover when an explicit color is supplied.
+XY configs accept `sort_by_value: "asc" | "desc"` and
+`show_value_sort_control`. The chart-local control orders the returned categories
+by summed series value, accounting for horizontal axis direction. It preserves
+the query ranking and row limit: ascending displays the same top ten in reverse
+order, rather than selecting the bottom ten. `ChartRenderer` must re-render when
+`x_axis_sort` or `x_axis_sort_asc` changes, even when query results are unchanged.
+This is covered by `superset-frontend/src/components/Chart/ChartRenderer.test.tsx`.
+
+## FDS government IT dashboard
+
+The local review dashboard is `/superset/dashboard/11/`, titled
+**FDS Solutions | Government IT Track Record**. Dataset 22 contains a saved
+SOA-QPS5 snapshot, and charts 114–122 provide three FDS KPIs, value share,
+top-ten peers, annual value and value share, derived project themes,
+and individual award records. It remains unpublished in the dashboard catalogue
+and is available through the authorized `#focal-bi` website embed. Website guest
+tokens authorize dashboard 11 only; the previous sales dashboard 10 is retained
+but is no longer selected by that website. See the
+[embedding guide](./focalbi-embedding.mdx) for its UUID and allowed origins.
+
+The source is the [Digital Policy Office awards CSV](https://www.digitalpolicy.gov.hk/open_data/business_window/soa-qps-awarded-service-contracts.csv),
+retrieved 2 October 2026. The source's latest listed award is 31 August 2026;
+this does not guarantee completeness through that date. The snapshot contains
+3,163 SOA-QPS5 award records, with no exact duplicate rows found. Other framework
+versions are excluded. No company-name aliases have been merged.
+
+The default category is **A/Minor**. Four native filter controls have these scopes:
+
+- Service category: Top 10 contractor bar chart only.
+- Award year: seven charts, including details; excludes annual value/share (119).
+- Awarding department and project theme: all eight attached charts.
+
+Service category defaults to A/Minor. The KPIs, theme donut, and detail table
+have no category filter. The peer-share pie and annual value/share chart have
+saved chart-level
+`category = A/Minor` predicates, so their FDS/peer denominators always use A/Minor
+awards regardless of Service category. The annual category dropdown is removed.
+Department/theme apply to both; Award year applies to the peer-share pie. The three chart-specific year controls are
+removed; Award year is the single year selector. The annual value/share chart
+retains its full timeline and ignores Award year. FDS charts
+additionally restrict the contractor or
+aggregate FDS-only columns.
+Peer share divides FDS award value by all contractors' award value under the
+same criteria. There is no contractor filter or chart cross-filter that silently
+narrows the denominator to FDS. FDS is light blue (`#66B3E1`); other contractors
+are dark blue (`#142D59`) in both the peer-share pie and the Top 10 bar chart.
+Persistent hover emphasis
+for a particular pie slice is not exposed by the MCP config or pie renderer;
+its existing cursor-driven hover and tooltip remain available.
+
+The peer bar chart stacks its mutually exclusive FDS/other series so each bar
+is centered on its contractor label. Its value-sort buttons default to highest
+first and can reverse the displayed top ten. KPI cards omit repeated subtitles
+to avoid internal text scrolling. Chart 119 is a full-width annual mixed line/area chart:
+FDS awarded value uses the left HKD axis and dark blue area; FDS's fraction of
+all contractors' awarded value uses the right percentage axis and a lighter
+blue line and area behind the awarded-value area. Both use the full timeline,
+fixed A/Minor category, and shared department/theme predicates, without a
+contractor filter. Partial-year caveats still apply. Chart 120 (department
+experience) is detached from the dashboard; the department filter and KPI remain.
+Derived project themes use a
+donut of award counts, with white percentage labels and a total; exact counts
+are in tooltips.
+
+The unfiltered FDS snapshot has 53 awards, HK$72,002,518.80 in award value, and
+19 distinct departments. Within A/Minor, the denominator is 783 records and
+HK$920,362,123.34; FDS has 7.82% of value and ranks fourth by value. Award records
+and awarded value do not establish tender win rate, revenue, delivery quality,
+or customer satisfaction. 2022 and 2026 are partial years.
+
+The requested iData company page reported 55 FDS records and HK$74,394,221.
+That differs from the official snapshot. The discrepancy remains unresolved;
+the dashboard does not mix those sources or silently deduplicate iData records.
+Project themes use title keywords, with maintenance/support taking precedence,
+then study/advisory, then development/implementation, then other. They are not
+official service categories.
+
+## Snapshot and verification limitations
+
+Data creation, chart creation and dashboard configuration used MCP. The database
+disallows DML and MCP does not expose CSV upload, so the public CSV was converted
+to a read-only SQL `VALUES` snapshot via `create_virtual_dataset`. No write
+permission was enabled. This is suitable for a review snapshot; a scheduled
+production feed should load a governed physical table with source versioning.
+
+Large virtual SQL is echoed by `create_virtual_dataset` and can trigger the MCP
+response-size guard **after creation succeeds**. Check `list_datasets` with
+`select_columns: ["id", "table_name"]` before retrying to avoid duplicates.
+The local evidence and MCP build state are under
+`D:/Users/CharlesWong/FocalBI/output/soaqps-research/`.
+
+Use `get_chart_data` with `extra_form_data.filters` to test criteria and reconcile
+values to the CSV. Browser verification is a separate check: confirm filter
+controls, labels, tooltips, table scrolling and narrow-screen layout before
+publishing or replacing the website embed. See the
+[embedding guide](./focalbi-embedding.mdx) for guest-token integration.

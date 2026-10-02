@@ -524,6 +524,14 @@ class ColumnRef(BaseModel):
         "(use get_dataset_info to see available metrics). "
         "When set, 'aggregate' is ignored.",
     )
+    ratio_denominator: str | None = Field(
+        None,
+        min_length=1,
+        max_length=255,
+        pattern=r"^[a-zA-Z_][a-zA-Z0-9_]*$",
+        description="Divide SUM(name) by SUM(this column), returning NULL for zero. "
+        "For ordinary column SUM metrics only; computes share after filtering.",
+    )
 
     @property
     def is_metric(self) -> bool:
@@ -533,6 +541,8 @@ class ColumnRef(BaseModel):
     @model_validator(mode="after")
     def clear_aggregate_for_saved_metric(self) -> "ColumnRef":
         """Clear aggregate when saved_metric is True since it's ignored."""
+        if self.ratio_denominator and (self.saved_metric or self.aggregate != "SUM"):
+            raise ValueError("Ratio metrics require SUM and cannot use saved metrics")
         if self.saved_metric and self.aggregate is not None:
             self.aggregate = None
         return self
@@ -649,6 +659,7 @@ class PieChartConfig(UnknownFieldCheckMixin):
     )
     donut: bool = False
     show_labels: bool = True
+    label_color: str | None = Field(None, pattern=r"^#[0-9a-fA-F]{6}$")
     label_type: Literal[
         "key",
         "value",
@@ -755,6 +766,12 @@ class MixedTimeseriesChartConfig(UnknownFieldCheckMixin):
         validation_alias=AliasChoices("y_secondary", "metrics_b"),
     )
     secondary_kind: Literal["line", "bar", "area", "scatter"] = "bar"
+    area_opacity: float = Field(0.2, ge=0, le=1)
+    secondary_behind_primary: bool = False
+    show_markers: bool = Field(
+        False,
+        description="Show data-point markers, including single-period selections.",
+    )
     group_by_secondary: List[ColumnRef] | None = Field(
         None,
         description="Secondary series group by",
@@ -1082,6 +1099,8 @@ class XYChartConfig(UnknownFieldCheckMixin):
         False,
         validation_alias=AliasChoices("stacked", "stack"),
     )
+    sort_by_value: Literal["asc", "desc"] | None = None
+    show_value_sort_control: bool = False
     group_by: List[ColumnRef] | None = Field(
         None,
         description="Series breakdown columns",

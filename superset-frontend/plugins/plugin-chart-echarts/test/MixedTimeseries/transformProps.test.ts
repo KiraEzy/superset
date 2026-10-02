@@ -146,6 +146,36 @@ const queriesData: ChartDataResponseResult[] = [
   createTestQueryData(defaultQueryRows, { label_map: defaultLabelMap }),
 ];
 
+test('keeps secondary areas behind primary areas on separate value axes', () => {
+  const props = createEchartsTimeseriesTestChartProps<
+    EchartsMixedTimeseriesFormData,
+    EchartsMixedTimeseriesProps
+  >({
+    ...MIXED_TIMESERIES_CHART_PROPS_DEFAULTS,
+    defaultQueriesData: queriesData,
+    formData: {
+      ...formData,
+      area: true,
+      areaB: true,
+      yAxisIndex: 0,
+      yAxisIndexB: 1,
+      secondaryBehindPrimary: true,
+    },
+    queriesData,
+  });
+  const series = transformProps(props).echartOptions.series as SeriesOption[];
+  const primary = series.filter(
+    item => 'yAxisIndex' in item && item.yAxisIndex === 0,
+  );
+  const secondary = series.filter(
+    item => 'yAxisIndex' in item && item.yAxisIndex === 1,
+  );
+  expect(primary.length).toBeGreaterThan(0);
+  expect(secondary.length).toBeGreaterThan(0);
+  expect(primary.every(item => item.z === 2)).toBe(true);
+  expect(secondary.every(item => item.z === 1)).toBe(true);
+});
+
 test('should transform chart props for viz with showQueryIdentifiers=false', () => {
   const chartProps = createEchartsTimeseriesTestChartProps<
     EchartsMixedTimeseriesFormData,

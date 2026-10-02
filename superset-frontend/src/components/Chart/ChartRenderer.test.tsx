@@ -446,3 +446,35 @@ test('does not render chart during loading when last data has errors', () => {
   const { queryByTestId } = render(<ChartRenderer {...props} />);
   expect(queryByTestId('mock-super-chart')).not.toBeInTheDocument();
 });
+
+test.each([
+  { x_axis_sort: 'sum', x_axis_sort_asc: false },
+  { x_axis_sort: 'name', x_axis_sort_asc: true },
+])(
+  'renders chart-local sorting changes without new query results: %j',
+  sorting => {
+    const initialProps = {
+      ...requiredProps,
+      chartStatus: 'success',
+      chartIsStale: false,
+      queriesResponse: [],
+      formData: {
+        datasource: '',
+        viz_type: 'echarts_timeseries_bar',
+        x_axis_sort: 'sum',
+        x_axis_sort_asc: true,
+      },
+    } as ChartRendererProps;
+    const { rerender, getByTestId } = render(
+      <ChartRenderer {...initialProps} />,
+    );
+    const updatedProps = {
+      ...initialProps,
+      formData: { ...initialProps.formData, ...sorting },
+    };
+    rerender(<ChartRenderer {...updatedProps} />);
+    expect(getByTestId('mock-super-chart')).toHaveTextContent(
+      JSON.stringify(updatedProps.formData),
+    );
+  },
+);

@@ -27,6 +27,8 @@ import {
   LegendState,
   ensureIsArray,
 } from '@superset-ui/core';
+import { t } from '@apache-superset/core/translation';
+import { sharedControlComponents } from '@superset-ui/chart-controls';
 import type { ViewRootGroup } from 'echarts/types/src/util/types';
 import type GlobalModel from 'echarts/types/src/model/Global';
 import type ComponentModel from 'echarts/types/src/model/Component';
@@ -37,6 +39,7 @@ import { formatSeriesName } from '../utils/series';
 import { ExtraControls } from '../components/ExtraControls';
 
 const TIMER_DURATION = 300;
+const { RadioButtonControl } = sharedControlComponents;
 
 export default function EchartsTimeseries({
   formData,
@@ -360,6 +363,29 @@ export default function EchartsTimeseries({
   return (
     <>
       <div ref={extraControlRef}>
+        {formData.showValueSortControl && (
+          <RadioButtonControl
+            options={[
+              ['desc', t('Value: highest first')],
+              ['asc', t('Value: lowest first')],
+            ]}
+            value={
+              Boolean(formData.xAxisSortAsc) ===
+              (formData.orientation === 'horizontal')
+                ? 'desc'
+                : 'asc'
+            }
+            onChange={value => {
+              setControlValue?.('x_axis_sort', 'sum');
+              setControlValue?.(
+                'x_axis_sort_asc',
+                formData.orientation === 'horizontal'
+                  ? value === 'desc'
+                  : value === 'asc',
+              );
+            }}
+          />
+        )}
         <ExtraControls formData={formData} setControlValue={setControlValue} />
       </div>
       <Echart

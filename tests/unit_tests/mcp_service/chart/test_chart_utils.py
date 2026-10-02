@@ -26,6 +26,7 @@ from superset.constants import NO_TIME_RANGE
 from superset.mcp_service.chart.chart_utils import (
     _add_adhoc_filters,
     _ensure_temporal_adhoc_filter,
+    add_value_sort_config,
     adhoc_filters_to_query_filters,
     configure_temporal_handling,
     create_metric_object,
@@ -49,8 +50,56 @@ from superset.mcp_service.chart.schemas import (
 from superset.utils.core import FilterOperator, GenericDataType
 
 
+@pytest.mark.parametrize("direction,axis_ascending", [("desc", True), ("asc", False)])
+def test_horizontal_value_sort_preserves_top_n_query(
+    direction: Any, axis_ascending: bool
+) -> None:
+    config = XYChartConfig(
+        x=ColumnRef(name="contractor"),
+        y=[ColumnRef(name="award_value", aggregate="SUM")],
+        kind="bar",
+        orientation="horizontal",
+        sort_by_value=direction,
+        show_value_sort_control=True,
+    )
+    form_data = {"row_limit": 10, "order_desc": True}
+    add_value_sort_config(form_data, config)
+    assert form_data["row_limit"] == 10
+    assert form_data["order_desc"] is True
+    assert form_data["x_axis_sort"] == "sum"
+    assert form_data["x_axis_sort_asc"] is axis_ascending
+    assert form_data["show_value_sort_control"] is True
+
+
 class TestCreateMetricObject:
     """Test create_metric_object function"""
+
+    def test_ratio_uses_aggregated_denominator_and_guards_zero(self) -> None:
+        result = create_metric_object(
+            ColumnRef(name="fds_value", aggregate="SUM", ratio_denominator="value")
+        )
+        assert isinstance(result, dict)
+        assert result["expressionType"] == "SQL"
+        assert result["sqlExpression"] == (
+            '1.0 * SUM("fds_value") / NULLIF(SUM("value"), 0)'
+        )
+
+    @pytest.mark.parametrize("denominator", ["value); DROP TABLE x", 'a"b'])
+    def test_ratio_rejects_sql_in_denominator(self, denominator: str) -> None:
+        with pytest.raises(ValueError, match="ratio_denominator"):
+            ColumnRef(name="fds_value", aggregate="SUM", ratio_denominator=denominator)
+
+    @pytest.mark.parametrize("aggregate,saved", [("AVG", False), ("SUM", True)])
+    def test_ratio_rejects_incompatible_metrics(
+        self, aggregate: str, saved: bool
+    ) -> None:
+        with pytest.raises(ValueError, match="Ratio metrics require SUM"):
+            ColumnRef(
+                name="fds_value",
+                aggregate=aggregate,
+                saved_metric=saved,
+                ratio_denominator="value",
+            )
 
     def test_create_metric_object_with_aggregate(self) -> None:
         """Test creating metric object with specified aggregate"""
@@ -1363,8 +1412,8 @@ class TestConfigureTemporalHandling:
         form_data: dict[str, Any] = {}
         configure_temporal_handling(form_data, x_is_temporal=False, time_grain=None)
 
-        assert form_data["x_axis_sort_series_type"] == "name"
-        assert form_data["x_axis_sort_series_ascending"] is True
+        assert form_data["x_axis_sort"] == "name"
+        assert form_data["x_axis_sort_asc"] is True
         assert form_data["time_grain_sqla"] is None
         assert form_data["granularity_sqla"] is None
 
@@ -1375,7 +1424,7 @@ class TestConfigureTemporalHandling:
 
         # Should still set categorical config, not time_grain
         assert form_data["time_grain_sqla"] is None
-        assert form_data["x_axis_sort_series_type"] == "name"
+        assert form_data["x_axis_sort"] == "name"
 
 
 class TestMapXYConfigWithNonTemporalColumn:
@@ -1396,8 +1445,8 @@ class TestMapXYConfigWithNonTemporalColumn:
         result = map_xy_config(config, dataset_id=123)
 
         assert result["x_axis"] == "year"
-        assert result["x_axis_sort_series_type"] == "name"
-        assert result["x_axis_sort_series_ascending"] is True
+        assert result["x_axis_sort"] == "name"
+        assert result["x_axis_sort_asc"] is True
         assert result["time_grain_sqla"] is None
         assert result["granularity_sqla"] is None
 
@@ -1419,7 +1468,7 @@ class TestMapXYConfigWithNonTemporalColumn:
         assert result["x_axis"] == "created_at"
         assert result["time_grain_sqla"] == "P1W"
         assert result["granularity_sqla"] == "created_at"
-        assert "x_axis_sort_series_type" not in result
+        assert "x_axis_sort" not in result
         # Temporal x-axis should have a TEMPORAL_RANGE adhoc filter
         temporal_filters = [
             f
@@ -1446,7 +1495,7 @@ class TestMapXYConfigWithNonTemporalColumn:
 
         # time_grain_sqla should be None, not P1M
         assert result["time_grain_sqla"] is None
-        assert result["x_axis_sort_series_type"] == "name"
+        assert result["x_axis_sort"] == "name"
 
 
 class TestEnsureTemporalAdhocFilter:

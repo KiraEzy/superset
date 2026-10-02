@@ -37,6 +37,7 @@ export type EchartsPieFormData = QueryFormData &
     groupby: QueryFormColumn[];
     innerRadius: number;
     labelLine: boolean;
+    labelColor?: string;
     labelType: EchartsPieLabelType;
     labelTemplate: string | null;
     labelsOutside: boolean;
