@@ -1,0 +1,38 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+# Native runtime restoration; no rendering extension, settings or module mount.
+x-native-environment: &native-environment
+  PYTHONPATH: /app:/app/superset-core/src:/app/docker/pythonpath_dev:/app/pythonpath
+services:
+  superset:
+    image: apachesuperset.docker.scarf.sh/apache/superset@sha256:5822dff49c41fd745ce33e38af502f9c64df30d133aeba148c5d89b35a1004ef
+    command: ["/usr/bin/run-server.sh"]
+    environment: *native-environment
+  superset-mcp:
+    healthcheck:
+      test: ["CMD", "/app/.venv/bin/python", "-c", "import socket; socket.create_connection(('127.0.0.1', 5008), 5).close()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    command: ["superset", "mcp", "run", "--host", "0.0.0.0", "--port", "5008", "--debug"]
+    environment: *native-environment
+  superset-worker:
+    command: ["celery", "--app=superset.tasks.celery_app:app", "worker", "-O", "fair", "-l", "INFO", "--concurrency=2"]
+    environment: *native-environment
+  superset-worker-beat:
+    command: ["celery", "--app=superset.tasks.celery_app:app", "beat", "--pidfile=/tmp/focalbi-rendering-beat.pid", "-l", "INFO", "-s", "/app/superset_home/celerybeat-schedule"]
+    environment: *native-environment

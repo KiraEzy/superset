@@ -1,0 +1,49 @@
+{
+  "release": {
+    "release_id": "dc2021-f099e9b34408",
+    "census_year": 2021,
+    "resource_url": "https://data.gov.hk/en-data/dataset/hk-censtatd-census21c-d5212109/resource/34eeab77-54d2-423c-803b-b2a68c7345fb",
+    "download_url": "https://www.censtatd.gov.hk/en/data/stat_report/product/D5212109/att/D5212109B2021XXXXB.zip",
+    "file_name": "DC_21C.CSV",
+    "csv_sha256": "f099e9b344086be215ac19ca99cc38e3fb093b0ee038cd467e409c40349656c7",
+    "archive_sha256": "9a4f84c82ec239d7b2859aae2aa436dc33705a3cf6d4ec945a0f535da1becc1e",
+    "retrieved_at_utc": "2026-10-04T15:52:51.061478+00:00",
+    "resource_updated_date": "2026-04-27",
+    "provider": "Census and Statistics Department",
+    "symbols_url": "https://www.census2021.gov.hk/doc/pub/21c-main-results.pdf",
+    "coverage": "18 land districts; code 99 is a separate Land total reference",
+    "source_notes_json": "{\"3\": \"Persons who study in the same district include: (a) those who live on Hong Kong Island or in Kowloon and study in the same District Council district; (b) those who live in a new town and study in the same new town; and (c) those who live in other areas in the New Territories and study in areas other than new town areas of the same District Council district.\", \"7\": \"Persons who work in the same district include: (a) those who live on Hong Kong Island or in Kowloon and work in the same District Council district; (b) those who live in a new town and work in the same new town; and (c) those who live in other areas in the New Territories and work in areas other than new town areas of the same District Council district. Persons who work at home are excluded.\", \"22\": \"Persons having internally migrated were those whose area of current residence was different from the area of residence 5 years ago. In defining internal migration, a change in the area of residence refers to a move (a) from a District Council district to another District Council district; or (b) within a District Council district in the New Territories, from a new town to another new town, or from a new town to other areas in the district or vice versa.\", \"1\": \"Figures include persons who reported more than one ethnicity.\", \"2\": \"Figures exclude mute persons.\", \"4\": \"The proportion of labour force in the total population aged 15 and over.\", \"5\": \"The classification of economic activity status for economically inactive population adopted in the 2021 Population Census (i.e. “Home-makers”, “Students”, “Retired persons”, “Unpaid carers” and “Others”) slightly differs from that adopted in the 2011 Population Census and 2016 Population By-census (i.e. “Home-makers”, “Students”, “Retired persons” and “Others”). Therefore, caution should be taken when comparing figures for 2021 with those for 2011 and/or 2016.\", \"6\": \"Unpaid carers refer to persons who are engaged in unpaid care to family members or other persons (including persons with chronic diseases/disability and old/young persons).\", \"8\": \"A new occupation classification scheme which follows “International Standard Classification Occupations 2008 (ISCO-08)” more closely was adopted in the 2021 Population Census.\", \"9\": \"Figures are compiled based on the industry classification modelled on the Hong Kong Standard Industrial Classification Version 2.0.\", \"10\": \"\\\"Others\\\" include \\\"Agriculture, forestry and fishing\\\"; \\\"Mining and quarrying\\\"; \\\"Electricity and gas supply\\\"; \\\"Water supply; sewerage, waste management and remediation activities\\\" and industrial activities unidentifiable or inadequately described.\", \"11\": \"A household comprising a married couple without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).\", \"12\": \"A household comprising a couple and their unmarried child(ren) without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).\", \"13\": \"A household comprising a father or mother and his/ her unmarried child(ren) without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).\", \"14\": \"A household comprising a couple and at least one of their parents (including the parent(s) of the wife and/ or husband) without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).\", \"15\": \"A household comprising a couple, at least one of their parents (including the parent(s) of the wife and/ or husband) and their unmarried children without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).\", \"16\": \"A household comprising a group of related persons but not being classified in the other categories. It may or may not include other unrelated persons (e.g. domestic helpers).\", \"17\": \"A household with only one person.\", \"18\": \"A household comprising unrelated person(s).\", \"19\": \"Economically active household refers to a domestic household with at least one member (excluding foreign domestic helpers) being economically active.\", \"20\": \"Zero rent households include households living in accommodation of friends or relatives without paying any rent with or without permission, main tenant households with total rental receipts from sub-tenant(s) greater than or equal to rent paid, and those households whose quarters were provided free by employers.\", \"21\": \"Figures exclude domestic households living in unsheltered accommodation or on board vessels. Floor area of common area shared among households is excluded.\", \"23\": \"Figures include persons who currently live in the same address as 5 years ago but had moved elsewhere during the 5 years and then moved back.\"}"
+  },
+  "validation": {
+    "districts": 18,
+    "cells": 3895,
+    "indicator_count": 205,
+    "totals": {
+      "t_pop": 7411945,
+      "dh": 2673714,
+      "age_5": 1451444,
+      "t_wp": 3680407,
+      "t_lf": 3942678
+    },
+    "reconciled_families": [
+      "population",
+      "age",
+      "household_size",
+      "household_income",
+      "household_housing",
+      "tenure"
+    ],
+    "elderly_share": "0.1958249825113381170529462914"
+  },
+  "whole_hong_kong_reference": {
+    "population": 7413070,
+    "domestic_households": 2674161,
+    "source_url": "https://www.censtatd.gov.hk/en/scode470.html",
+    "used_in_district_aggregation": false
+  },
+  "source_symbols": {
+    "-": "published nil; preserve sampling caveat",
+    "..": "not applicable",
+    "N.A.": "not available"
+  }
+}

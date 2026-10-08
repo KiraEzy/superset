@@ -1,0 +1,13 @@
+{
+  "name": "focalbi-localization",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "node --max-old-space-size=12288 --experimental-strip-types scripts/build.ts",
+    "build:combined": "node --max-old-space-size=12288 --experimental-strip-types scripts/build.ts --with-rendering",
+    "typecheck": "node --max-old-space-size=12288 --experimental-strip-types scripts/typecheck.ts",
+    "test": "python -m unittest discover -s tests -v"
+  }
+}

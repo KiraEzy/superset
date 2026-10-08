@@ -1,0 +1,9 @@
+# Operator tools and rendering verification follow repository lint conventions.
+[tool.ruff]
+extend = "../../pyproject.toml"
+exclude = ["vendor", "dist", "node_modules", ".build", ".runtime", "test-results"]
+[tool.ruff.lint]
+extend-ignore = ["TID251"]
+[tool.ruff.lint.per-file-ignores]
+# Unit tests intentionally run with Python's dependency-free unittest runner.
+"tests/test_*.py" = ["PT009", "PT027", "E402"]

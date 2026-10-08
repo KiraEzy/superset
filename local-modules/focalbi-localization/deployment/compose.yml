@@ -1,0 +1,19 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements. See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# Licensed under the Apache License, Version 2.0 (the "License").
+services:
+  superset:
+    image: apachesuperset.docker.scarf.sh/apache/superset@sha256:5822dff49c41fd745ce33e38af502f9c64df30d133aeba148c5d89b35a1004ef
+    command: ["/usr/bin/run-server.sh"]
+    env_file:
+      - ./local-modules/focalbi-localization/.runtime/localization.env
+    environment:
+      SUPERSET_CONFIG_PATH: /app/focalbi-localization/config.py
+      PYTHONPATH: /app:/app/superset-core/src:/app/docker/pythonpath_dev:/app/pythonpath
+    volumes:
+      - ./local-modules/focalbi-localization/deployment/config.py:/app/focalbi-localization/config.py:ro
+      - ./local-modules/focalbi-localization/dist:/app/focalbi-localization/dist:ro
+      - ./local-modules/focalbi-localization/.runtime/extension:/app/focalbi-localization/extension:ro
+      - ./local-modules/focalbi-localization/scripts:/app/focalbi-localization/scripts:ro
+      - ./local-modules/focalbi-localization/tests:/app/focalbi-localization/tests:ro

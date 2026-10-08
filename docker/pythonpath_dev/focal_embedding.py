@@ -49,4 +49,13 @@ if _secret_file.is_file():
             "http://localhost:3100",
             "http://localhost:3010",
             "http://192.168.10.27:3010",
+            # FDS Plasmic public site and Studio preview ancestors.
+            "http://localhost:3040",
+            "http://127.0.0.1:3040",
+            "http://192.168.10.27:3040",
+            "http://localhost:3013",
+            "http://127.0.0.1:3013",
+            "http://localhost:3014",
+            "http://127.0.0.1:3014",
+            "http://192.168.10.27:3014",
         ]

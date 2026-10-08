@@ -1,0 +1,6 @@
+extend = "../../pyproject.toml"
+
+[lint.per-file-ignores]
+# These three SELECT templates use fixed table/column names and validated tokens.
+# validate_sql_token rejects quotes, whitespace and arbitrary SQL fragments.
+"prepare.py" = ["S608"]

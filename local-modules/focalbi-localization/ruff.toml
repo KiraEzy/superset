@@ -1,0 +1,12 @@
+extend = "../../pyproject.toml"
+
+[lint]
+# Catalog and operator commands also run without the Superset runtime.
+ignore = ["TID251"]
+
+[lint.per-file-ignores]
+# The isolated tests use the stdlib runner instead of the native test stack.
+"tests/test_catalog.py" = ["PT009", "PT027"]
+# Declarative field discovery and validation enumerate supported contracts.
+"backend/src/focalbi_localization/resources.py" = ["C901"]
+"backend/src/focalbi_localization/catalog.py" = ["C901"]

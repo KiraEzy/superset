@@ -1,0 +1,11 @@
+{
+  "website_root": "C:/path/to/existing-website",
+  "original_embed": {
+    "dashboardUuid": "original-approved-embedding-uuid",
+    "supersetOrigin": "http://superset-host:8088"
+  },
+  "native_embed": {
+    "dashboardUuid": "approved-native-embedding-uuid",
+    "supersetOrigin": "http://superset-host:8088"
+  }
+}

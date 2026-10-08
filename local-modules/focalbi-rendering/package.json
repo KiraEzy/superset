@@ -1,0 +1,20 @@
+{
+  "name": "focalbi-rendering",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "node --experimental-strip-types scripts/build.ts",
+    "typecheck": "node --experimental-strip-types scripts/typecheck.ts",
+    "test": "python -m unittest discover -s tests -v",
+    "integrity": "python scripts/snapshot.py --verify"
+  },
+  "dependencies": {
+    "react-error-boundary": "4.1.2",
+    "react-js-cron": "5.1.0"
+  },
+  "devDependencies": {
+    "pngjs": "7.0.0"
+  }
+}

@@ -1,0 +1,58 @@
+---
+title: Hong Kong Census 2021 dashboard
+sidebar_position: 10
+---
+
+# Hong Kong Census 2021 dashboard
+
+The separate native dashboard **Hong Kong Census 2021 - People, Households and
+Districts** is published at `/superset/dashboard/18/` for authenticated users.
+It uses the official
+2021 Census and Statistics Department district profile: 18 land districts,
+205 published indicators, and 31 charts across six subject tabs.
+
+Data preparation, source provenance and resource specifications live under
+`local-data/hk-census-2021/`. Setup, verification, editing and removal commands
+belong to its [workflow README](../../../local-data/hk-census-2021/README.md).
+The [resource manifest](../../../local-data/hk-census-2021/resources.json)
+records created IDs and UUIDs. The
+[source provenance](../../../local-data/hk-census-2021/provenance.json)
+records the reviewed release, file hashes and benchmarks.
+
+## Data and filters
+
+Four physical tables retain the release, geographies, bilingual indicator
+metadata and original source cells. The 23 analytical virtual datasets exclude
+the separate Land reference. Published cells are aggregate statistics, not
+individual respondent records or invented intersections of marginal totals.
+
+Region and District multiselects apply to every chart. District values depend
+on Region. Source topic affects only the published-source-cell table. Clearing
+geography selections restores All. Categories from unrelated statistical
+populations do not cross-filter other distributions.
+
+The 18-district totals are 7,411,945 people and 2,673,714 domestic households.
+Whole Hong Kong reference figures include different coverage and remain fixed
+in the introductory note. Elderly share uses summed population counts as its
+denominator. Published district medians, means and rates are never summed or
+averaged into a false aggregate indicator. Detailed definitions, source tokens
+and notes remain available in the source table.
+
+## Native editing and rendering
+
+Datasets, charts and dashboard controls were provisioned using the configured
+FocalBI MCP. Native file upload supplies physical tables; native editors own
+layout, cascading filters, column labels/formatting and publication where these
+settings are not exposed by MCP. Database DML permissions remain disabled.
+
+Edit chart definitions in native Explore and add/remove charts with Edit
+dashboard. No additional rendering-module configuration is needed. The Renderer
+dropdown selects the existing baseline or fork implementation; data queries,
+permissions and filtering remain native Superset behavior. This workflow
+introduces no Superset, MCP or renderer source changes.
+The workflow README records the observed inactive-tab table sizing limitation
+when switching renderers and its UI workaround.
+
+This dashboard does not replace the FDS website embed or extend its anonymous
+resource grants. Separate website embedding requires the ordinary
+[embedding setup](./focalbi-embedding.mdx).

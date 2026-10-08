@@ -54,6 +54,7 @@ services:
       - ./docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
   superset:
+    init: true
     env_file:
       - path: docker/.env # default
         required: true
@@ -91,6 +92,7 @@ services:
       disable: true
 
   superset-worker:
+    init: true
     image: *superset-image
     container_name: superset_worker
     command: ["/app/docker/docker-bootstrap.sh", "worker"]
@@ -113,6 +115,7 @@ services:
         ]
 
   superset-worker-beat:
+    init: true
     image: *superset-image
     container_name: superset_worker_beat
     command: ["/app/docker/docker-bootstrap.sh", "beat"]

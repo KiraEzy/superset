@@ -1,0 +1,71 @@
+{
+  "dashboardId": 16,
+  "translations": {
+    "Government IT awards | Company comparison": {"zh-Hant":"政府資訊科技項目批出分析｜公司比較","zh-Hans":"政府信息科技项目批出分析｜公司比较"},
+    "Awarded value (HKD)": {"zh-Hant":"批出金額（港元）","zh-Hans":"批出金额（港元）"},
+    "Awarded value": {"zh-Hant":"批出金額","zh-Hans":"批出金额"},
+    "Award records": {"zh-Hant":"批出項目記錄","zh-Hans":"批出项目记录"},
+    "Departments served": {"zh-Hant":"服務部門數目","zh-Hans":"服务部门数目"},
+    "Department relationships": {"zh-Hant":"公司與部門服務關係數目","zh-Hans":"公司与部门服务关系数目"},
+    "Award value share - selected companies and peers": {"zh-Hant":"批出金額佔比－所選公司與其他承辦商","zh-Hans":"批出金额占比－所选公司与其他承办商"},
+    "Award value": {"zh-Hant":"批出金額","zh-Hans":"批出金额"},
+    "Top 10 contractors by awarded value (HKD)": {"zh-Hant":"批出金額最高的十大承辦商（港元）","zh-Hans":"批出金额最高的十大承办商（港元）"},
+    "Project themes - derived from titles": {"zh-Hant":"項目主題－按標題歸類","zh-Hans":"项目主题－按标题归类"},
+    "Projects": {"zh-Hant":"項目數目","zh-Hans":"项目数目"},
+    "Award value and value share by year": {"zh-Hant":"各年批出金額及佔比","zh-Hans":"各年批出金额及占比"},
+    "Award value (HKD)": {"zh-Hant":"批出金額（港元）","zh-Hans":"批出金额（港元）"},
+    "Award value share (%)": {"zh-Hant":"批出金額佔比（%）","zh-Hans":"批出金额占比（%）"},
+    "Award details - source records": {"zh-Hant":"批出項目詳情－來源記錄","zh-Hans":"批出项目详情－来源记录"},
+    "{selection} awarded value (HKD)": {"zh-Hant":"{selection} 批出金額（港元）","zh-Hans":"{selection} 批出金额（港元）"},
+    "{selection} award records": {"zh-Hant":"{selection} 批出項目記錄","zh-Hans":"{selection} 批出项目记录"},
+    "{selection} departments served": {"zh-Hant":"{selection} 服務部門數目","zh-Hans":"{selection} 服务部门数目"},
+    "Award value share - {selection} and peers": {"zh-Hant":"批出金額佔比－{selection} 與其他承辦商","zh-Hans":"批出金额占比－{selection} 与其他承办商"},
+    "{selection} project themes - derived from titles": {"zh-Hant":"{selection} 項目主題－按標題歸類","zh-Hans":"{selection} 项目主题－按标题归类"},
+    "{selection} award value and value share by year": {"zh-Hant":"{selection} 各年批出金額及佔比","zh-Hans":"{selection} 各年批出金额及占比"},
+    "{selection} award details - source records": {"zh-Hant":"{selection} 批出項目詳情－來源記錄","zh-Hans":"{selection} 批出项目详情－来源记录"},
+    "Company": {"zh-Hant":"公司","zh-Hans":"公司"},
+    "Service category": {"zh-Hant":"服務類別","zh-Hans":"服务类别"},
+    "Award year": {"zh-Hant":"批出年份","zh-Hans":"批出年份"},
+    "Awarding department": {"zh-Hant":"批出部門","zh-Hans":"批出部门"},
+    "Project theme": {"zh-Hant":"項目主題","zh-Hans":"项目主题"},
+    "Company Name": {"zh-Hant":"公司名稱","zh-Hans":"公司名称"},
+    "Company name": {"zh-Hant":"公司名稱","zh-Hans":"公司名称"},
+    "Award Date": {"zh-Hant":"批出日期","zh-Hans":"批出日期"},
+    "Award date": {"zh-Hant":"批出日期","zh-Hans":"批出日期"},
+    "Department": {"zh-Hant":"部門","zh-Hans":"部门"},
+    "Assignment Title": {"zh-Hant":"項目名稱","zh-Hans":"项目名称"},
+    "Assignment title": {"zh-Hant":"項目名稱","zh-Hans":"项目名称"},
+    "Project / Assignment Title": {"zh-Hant":"項目名稱","zh-Hans":"项目名称"},
+    "Awarded Value (HKD)": {"zh-Hant":"批出金額（港元）","zh-Hans":"批出金额（港元）"},
+    "Award Value (HKD)": {"zh-Hant":"批出金額（港元）","zh-Hans":"批出金额（港元）"},
+    "Service Category": {"zh-Hant":"服務類別","zh-Hans":"服务类别"},
+    "Project Theme": {"zh-Hant":"項目主題","zh-Hans":"项目主题"},
+    "contractor": {"zh-Hant":"承辦商","zh-Hans":"承办商"},
+    "award_date": {"zh-Hant":"批出日期","zh-Hans":"批出日期"},
+    "department": {"zh-Hant":"部門","zh-Hans":"部门"},
+    "assignment_title": {"zh-Hant":"項目名稱","zh-Hans":"项目名称"},
+    "award_value": {"zh-Hant":"批出金額（港元）","zh-Hans":"批出金额（港元）"},
+    "category": {"zh-Hant":"服務類別","zh-Hans":"服务类别"},
+    "title_theme": {"zh-Hant":"項目主題","zh-Hans":"项目主题"}
+  },
+  "fieldRules": [
+    {"type":"dashboard","keyPattern":"^layout/.*/code$","values":{"zh-Hant":"## 政府資訊科技項目批出分析\n選擇一間或多間公司並套用篩選條件。金額為項目批出金額，並非營業收入或中標率。來源：數字政策辦公室 SOA-QPS5 快照，於 2026 年 10 月 2 日擷取。2022 年及 2026 年為部分年度資料。服務部門數目計算公司與部門的服務關係。","zh-Hans":"## 政府信息科技项目批出分析\n选择一家或多家公司并应用筛选条件。金额为项目批出金额，并非营业收入或中标率。来源：数字政策办公室 SOA-QPS5 快照，于 2026 年 10 月 2 日获取。2022 年及 2026 年为部分年度数据。服务部门数目计算公司与部门的服务关系。"}}
+  ],
+  "dictionaries": {
+    "title_theme": [
+      {"value":"Development and implementation","values":{"zh-Hant":"開發及實施","zh-Hans":"开发及实施"}},
+      {"value":"Maintenance and support","values":{"zh-Hant":"維護及支援","zh-Hans":"维护及支持"}},
+      {"value":"Infrastructure and hosting","values":{"zh-Hant":"基礎設施及託管","zh-Hans":"基础设施及托管"}},
+      {"value":"Data and GIS","values":{"zh-Hant":"數據及地理資訊系統","zh-Hans":"数据及地理信息系统"}},
+      {"value":"Security and compliance","values":{"zh-Hant":"保安及合規","zh-Hans":"安全及合规"}},
+      {"value":"Other","values":{"zh-Hant":"其他","zh-Hans":"其他"}}
+    ],
+    "comparison_entity": [{"value":"Other contractors","values":{"zh-Hant":"其他承辦商","zh-Hans":"其他承办商"}}],
+    "category": [{"value":"A/Minor","values":{"zh-Hant":"A／小型項目","zh-Hans":"A／小型项目"}}],
+    "department": [
+      {"value":"Electrical and Mechanical Services Department","values":{"zh-Hant":"機電工程署","zh-Hans":"机电工程署"}},
+      {"value":"Department of Health","values":{"zh-Hant":"衛生署","zh-Hans":"卫生署"}},
+      {"value":"Civil Service Bureau","values":{"zh-Hant":"公務員事務局","zh-Hans":"公务员事务局"}}
+    ]
+  }
+}

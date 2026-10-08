@@ -5,6 +5,9 @@ sidebar_position: 9
 
 # FocalBI MCP and SOA-QPS dashboard
 
+For the separate population dashboard, see the
+[Hong Kong Census 2021 guide](./hk-census-2021.mdx) and its native MCP data workflow.
+
 ## Local Codex connection
 
 The Docker MCP service accepts Streamable HTTP at
@@ -50,6 +53,68 @@ a successful authenticated tool call is the relevant verification.
 After configuration changes, restart Codex and open a new conversation. Ask it
 to use the native `focalbi` MCP `get_chart_info` tool for chart 119 without a
 shell/HTTP fallback to confirm that the conversation received the tool catalog.
+
+## Query-result caching
+
+The local operator configuration in `docker/pythonpath_dev/superset_config_docker.py`
+sets `DATA_CACHE_CONFIG` to Redis with `CACHE_DEFAULT_TIMEOUT: 86400` (24 hours).
+Native table, chart and filter-option query results use this default unless a
+request, chart, dataset or database provides its own timeout. The setting applies
+independently of the rendering and localization modules. Native cache keys still
+include the applicable permissions, filters and row-level security context.
+
+Metadata and thumbnail caches retain their five-minute settings; filter-state and
+Explore-state lifetimes remain separate. The new lifetime applies when results
+are written; existing Redis entries retain their original expiry. **Force refresh**
+re-queries immediately. Expiring a query result does not refresh a physical source
+snapshot; see the [snapshot guide](../../../local-data/soa-qps5/README.md).
+
+After changing operator cache settings, use the service reload procedure below.
+
+## Loading indicator
+
+The local operator configuration uses Superset's native `brandSpinnerSvg` theme
+token to display a blue circular spinner during initial page and standard chart
+loading. `docker/pythonpath_dev/focalbi_blue_spinner.svg` contains the animation;
+`docker/pythonpath_dev/superset_config_docker.py` applies it to copies of the
+native light and dark themes, preserving their other settings. The SVG respects
+the browser's reduced-motion preference and needs no external image request.
+
+This setting applies independently of rendering/localization activation, including
+embedded dashboards and both renderer options. No frontend build or Superset
+source edit is needed. Reload the services after changing the asset or tokens:
+
+```powershell
+docker restart superset_app superset_worker superset_worker_beat superset_mcp
+```
+
+Superset synchronizes config-defined system themes using its existing startup
+mechanism. Reloading every process prevents a process holding the old config from
+seeding stale system-theme definitions. The image-tag Compose deployment enables
+`init: true` for the web application and both Celery workers to reap child
+processes. Workers without an init process have exhibited zombie-process restart
+failures. Container recreation is required when changing the Compose setting;
+preserve the installed image digest and existing module overlays.
+
+If an older web container reports
+"tried to kill container, but did not receive an exit event", recreate only that
+service using the same installed image and active deployment/assets overlays.
+The `init: true` setting takes effect on recreation.
+
+Native application pages render a server-side startup spinner. Guest embedded
+HTML supplies the same theme in its bootstrap payload but leaves the initial
+application container empty; its loading indicators appear when the native
+frontend starts. The configuration replaces existing indicators without changing
+that startup sequence.
+
+Custom dashboard themes, administrator themes and browser development overrides
+can override the spinner token through native theme precedence. Keep an intentional
+override, or remove its spinner token to inherit the operator default. Components
+with an explicit loading-image prop also take precedence over the theme.
+
+To restore the native branded spinner, remove the loading-theme block from the
+operator configuration and reload the services. Delete the SVG only after removing
+the configuration reference. Analytical resources and module activation are unaffected.
 
 ## Dashboard configuration tool
 
@@ -113,14 +178,19 @@ This is covered by `superset-frontend/src/components/Chart/ChartRenderer.test.ts
 
 ## FDS government IT dashboard
 
+The newer company-comparison dashboard 16 uses datasets 24/25 backed by a physical
+snapshot, avoiding repeated parsing of inline records on cached requests. See the
+[snapshot operator guide](../../../local-data/soa-qps5/README.md) for ownership,
+verification and rollback. The original dashboard described below remains unchanged.
+
 The local review dashboard is `/superset/dashboard/11/`, titled
 **FDS Solutions | Government IT Track Record**. Dataset 22 contains a saved
 SOA-QPS5 snapshot, and charts 114–122 provide three FDS KPIs, value share,
 top-ten peers, annual value and value share, derived project themes,
 and individual award records. It remains unpublished in the dashboard catalogue
-and is available through the authorized `#focal-bi` website embed. Website guest
-tokens authorize dashboard 11 only; the previous sales dashboard 10 is retained
-but is no longer selected by that website. See the
+and is retained unchanged as the native editor and rollback target. The original
+website backend authorizes dashboard 11 for the native `#focal-bi` embed. The
+previous sales dashboard 10 is retained. See the
 [embedding guide](./focalbi-embedding.mdx) for its UUID and allowed origins.
 
 The source is the [Digital Policy Office awards CSV](https://www.digitalpolicy.gov.hk/open_data/business_window/soa-qps-awarded-service-contracts.csv),
@@ -179,6 +249,47 @@ the dashboard does not mix those sources or silently deduplicate iData records.
 Project themes use title keywords, with maintenance/support taking precedence,
 then study/advisory, then development/implementation, then other. They are not
 official service categories.
+
+{/* focalbi.rendering:begin */}
+## Company-wide rendering module
+
+The removable module in `local-modules/focalbi-rendering/` adds a Renderer dropdown
+and optional applied-selection titles, highlighting and layering to native
+dashboards. Native Superset owns definitions, filters, queries, aggregation and
+access checks. No Superset/MCP source changes are introduced by this overlay.
+Ordinary native dashboard creation and chart addition/removal need no module JSON.
+
+The native company comparison dashboard 16 uses datasets 24/25 and charts 131–138,
+created with Codex's configured FocalBI MCP. The original dashboard 11, charts and
+dataset 22 remain unchanged. Native saved metrics/SQL combine selected companies
+and preserve the eligible market denominator; this business logic is not renderer
+code. Native SQL-template processing is enabled in ordinary operator configuration,
+independent of renderer activation. Anonymous website tokens approve only dashboard
+16; unrelated compatibility test resources receive no website guest grant.
+
+Module setup, startup, test and removal commands belong to the
+[module README](../../../local-modules/focalbi-rendering/README.md).
+Its [architecture](../../../local-modules/focalbi-rendering/ARCHITECTURE.md)
+defines the presentation boundary and metadata contract. Native filter configuration
+on dashboard 16 defaults to FDS and A/Minor, applies category/department/theme
+globally, and excludes the annual chart from Award year. Company selection does
+not restrict the Top 10 comparison population; it controls highlighting there.
+
+Annual chart 137 displays awarded value as dark-blue bars on the left HKD axis and
+awarded-value share as an unfilled blue line on the right percentage axis. Its
+native chart styles and optional secondary-behind-primary presentation setting
+are saved configuration, not renderer code. The older chart 119 retains its
+original presentation as part of dashboard 11's rollback target.
+
+The verified baseline is 53 records, HKD 72,002,518.80 and 19 department relationships.
+Selecting FDS plus OPM gives 150 records, HKD 183,079,390.79 and 52 relationships,
+with about 19.89% of eligible A/Minor awarded value. Department relationships count
+distinct `(company, department)` pairs, preserving a shared department once per company.
+The native MCP `get_chart_data` wrapper does not populate the Flask form-data
+context used by Jinja `filter_values`. Validate templated comparisons through
+the native dashboard/chart-data API. MCP can create/configure these resources;
+no query-context workaround is installed in MCP core.
+{/* focalbi.rendering:end */}
 
 ## Snapshot and verification limitations
 

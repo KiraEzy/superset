@@ -1,0 +1,41 @@
+---
+title: FocalBI content localization
+sidebar_position: 11
+---
+
+# FocalBI content localization
+
+The optional `local-modules/focalbi-localization` extension and removable frontend
+adapter translate content on the same saved dataset, chart and dashboard in `en`,
+`zh-Hant` and `zh-Hans`. Native query construction, aggregation, filters, guest
+permissions, RLS, source records and exports are retained.
+
+The [module README](../../../local-modules/focalbi-localization/README.md) owns
+setup, build, health, authoring, embedding, verification and removal commands.
+The [architecture contract](../../../local-modules/focalbi-localization/ARCHITECTURE.md)
+documents UUID field identity, override order, storage, authorization, coverage
+and the origin-checked embedding bridge. `.supx` installation alone is insufficient
+for surfaces without extension hooks in the pinned Superset 6.1.0 checkout.
+
+Authors use one **Translations** dialog per saved resource and a separate
+**Save translations** transaction. Original native text remains editable through
+native controls. Source changes suspend stale translations until reviewed.
+Missing translations retain original text, without Chinese-script substitution.
+The module's separate PostgreSQL database contains catalogs, not source records.
+
+Native dashboards and Explore provide a **Content language** selector. Embedded
+dashboards accept `content_locale` through SDK `dashboardUiConfig.urlParams`;
+the reusable client helper changes it after mounting without replacing frames or
+requesting chart data. Content language does not change Superset application UI,
+currency, numeric/date formats or native CSV output.
+
+Dashboard viewing controls also follow content language: filter actions and option
+counts, table search/page-size/empty states, legend All/Invert, value sorting,
+donut totals and the renderer dropdown. These are built-in module translations,
+not per-resource catalog fields. Application navigation, editing and administration
+keep their application UI language. Each embed resolves controls independently.
+
+Localization works independently of the [rendering module](../../../local-modules/focalbi-rendering/README.md)
+and composes with both renderer choices. Removal restores the remaining module;
+translation data is retained unless explicitly purged. FDS labels are validation
+catalog content. Census definitions and content are not changed by localization.

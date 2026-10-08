@@ -50,6 +50,15 @@ A modern, enterprise-ready business intelligence web application.
 
 ### Documentation
 
+- **[FocalBI content localization](local-modules/focalbi-localization/README.md)** - Three-language content catalogs, authoring, embedding, verification and independent removal.
+- **[SOA-QPS5 snapshot storage](local-data/soa-qps5/README.md)** - Physical source storage, dataset migration and rollback for the company-comparison dashboard.
+
+<!-- focalbi.rendering:begin -->
+- **[FocalBI rendering module](local-modules/focalbi-rendering/README.md)** - Setup, optional presentation settings, verification and removal of the native dashboard rendering overlay.
+<!-- focalbi.rendering:end -->
+
+- **[Hong Kong Census 2021 workflow](local-data/hk-census-2021/README.md)** - Official source preparation, native Superset dashboard resources, verification and removal.
+
 - **[User Guide](https://superset.apache.org/user-docs/)** — For analysts and business users. Explore data, build charts, create dashboards, and connect databases.
 - **[Administrator Guide](https://superset.apache.org/admin-docs/)** — Install, configure, and operate Superset. Covers security, scaling, and database drivers.
 - **[Developer Guide](https://superset.apache.org/developer-docs/)** — Contribute to Superset or build on its REST API and extension framework.

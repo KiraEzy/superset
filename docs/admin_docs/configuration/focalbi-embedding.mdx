@@ -66,10 +66,15 @@ Mutations require the configured Origin and JSON content type.
 
 ## Adapting to a real website
 
+For three-language content on the same saved dashboard, see
+[FocalBI content localization](./focalbi-localization.mdx). Its client bridge relays
+website language changes to the existing SDK iframe, retaining native tokens,
+filters and dashboard bindings.
+
 ### Anonymous public-data website preview
 
-The FDS website's `#focal-bi` preview uses dashboard 11, embedding UUID
-`8c8f9356-6f22-4f64-a117-95b8d6f267e2`. Its nine charts and four native filters
+The original FDS website preview and rollback target use dashboard 11, embedding UUID
+`8c8f9356-6f22-4f64-a117-95b8d6f267e2`. Its eight charts and four native filters
 reference dataset 22, the public SOA-QPS5 government-award snapshot described in
 the [MCP dashboard guide](./focalbi-mcp.mdx). All public snapshot rows are allowed;
 the initial A/Minor category filter is a viewing preference, not an access rule.
@@ -80,6 +85,23 @@ change its country rules. Tokens retain HS256, audience `focalbi-embedded`,
 300-second expiry, and a single dashboard resource. This exception is for
 reviewed public data on local/LAN previews only. Website setup and verification
 commands belong to that repository's README.
+
+{/* focalbi.rendering:begin */}
+With the presentation-only overlay active, the existing website token service
+authorizes native company dashboard 16, embedding UUID
+`52b05f1b-58a9-4e69-a879-a3e27af47cab`. The unchanged SDK opens the native
+`/embedded/<uuid>` route. Native Superset loads definitions, applies filters,
+builds queries and authorizes chart-data requests. The module changes renderer
+dispatch and optional presentation settings only. There is no extension data
+endpoint, custom aggregation pipeline or replacement token service.
+The original dashboard above remains unchanged for rollback. Operator-controlled
+`FOCALBI_DASHBOARD_UUID` binds both website configuration and signed token resources;
+visitors cannot override the resource.
+See the [module README](../../../local-modules/focalbi-rendering/README.md) for
+activation, configuration, verification and uninstall commands; its architecture
+owns the rendering boundary and optional presentation contract. New native dashboards
+and chart additions/removals need no separate module dashboard definition.
+{/* focalbi.rendering:end */}
 
 ### Authenticated deployments
 

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.build/
+.runtime/
+test-results/
+playwright-report/
+__pycache__/
+*.pyc

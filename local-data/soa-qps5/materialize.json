@@ -1,0 +1,13 @@
+{
+  "source": {"id": 22, "uuid": "f9a3b25d-ea77-471d-93dc-4744512b377a"},
+  "targets": [
+    {"id": 24, "uuid": "cd21081c-78b2-40c6-b74c-146381bf5cc6"},
+    {"id": 25, "uuid": "6c81b36c-cde2-45e4-b45d-6590e8792bc6"}
+  ],
+  "postgres_container": "superset_db",
+  "database": "examples",
+  "role": "superset",
+  "reader_role": "examples",
+  "schema": "public",
+  "table": "soa_qps5_awards_20261002"
+}

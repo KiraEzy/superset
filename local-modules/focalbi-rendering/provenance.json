@@ -1,0 +1,1438 @@
+{
+    "revision":  "b991c57336e667c328b3be2b2db5bdb7fc45067a",
+    "files":  {
+                  "vendor/baseline/echarts/constants.ts":  {
+                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/constants.ts",
+                                                               "sha256":  "b09d8d4b71ac086f097ac7c757da8d397dbc8b2281ec4f531f57158ff7041414"
+                                                           },
+                  "vendor/baseline/echarts/controls.tsx":  {
+                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/controls.tsx",
+                                                               "sha256":  "86403bc0616792c04c1d3712b31bccf99a6989f87728b323465ccee454f561f2"
+                                                           },
+                  "vendor/baseline/echarts/defaults.ts":  {
+                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/defaults.ts",
+                                                              "sha256":  "2d7350682c03cde232598d1e4adc1e823962e485f8019f1140e5bf0f9141923a"
+                                                          },
+                  "vendor/baseline/echarts/index.ts":  {
+                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/index.ts",
+                                                           "sha256":  "ba853ad5b8d8579384bf5a52fc27358e5f470e9f7f0c69314d3032c3690bff1d"
+                                                       },
+                  "vendor/baseline/echarts/types.ts":  {
+                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/types.ts",
+                                                           "sha256":  "e7f0a5e1e02a7ca648d33e6740a741bc97a8fc9b43e037ba0662359b60283ac4"
+                                                       },
+                  "vendor/baseline/echarts/BigNumber/BigNumberViz.tsx":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberViz.tsx",
+                                                                             "sha256":  "bbb9211995ee9e680d33f7b8d548d04ec4b5f9e3785eceedc5b560759b1c4892"
+                                                                         },
+                  "vendor/baseline/echarts/BigNumber/CHANGELOG.md":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/CHANGELOG.md",
+                                                                         "sha256":  "4e6450f45f297fbb040c21734f669011579c11999504c04f94dcb54e1ed1f2e6"
+                                                                     },
+                  "vendor/baseline/echarts/BigNumber/index.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/index.ts",
+                                                                     "sha256":  "3757bd6cb2c85d4a0dffb8500bed2325a3dcd1f895124d60ce7f329e6447b988"
+                                                                 },
+                  "vendor/baseline/echarts/BigNumber/sharedControls.ts":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/sharedControls.ts",
+                                                                              "sha256":  "d1ad4f01901f22770f87326e1afcbb96fac1dc987e35c3200bead6137e47e673"
+                                                                          },
+                  "vendor/baseline/echarts/BigNumber/types.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/types.ts",
+                                                                     "sha256":  "efbd478b8a3ee75d490ddf47814e8a93545def5798bd9f7088190ecba0c0d7fa"
+                                                                 },
+                  "vendor/baseline/echarts/BigNumber/utils.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/utils.ts",
+                                                                     "sha256":  "3c35503b14efab7cfee5be877d7c42dd78b3a6ddcc8d37d9c6e0ef462df8d6ce"
+                                                                 },
+                  "vendor/baseline/echarts/BoxPlot/buildQuery.ts":  {
+                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/buildQuery.ts",
+                                                                        "sha256":  "2b6bae8af0df580a9a994867e81e2f315762aa6050efc5cbf774bfeeec1c5474"
+                                                                    },
+                  "vendor/baseline/echarts/BoxPlot/controlPanel.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/controlPanel.ts",
+                                                                          "sha256":  "cecea617f3aa047f3652c27e15e60faf02694812e9d645c2d8762398f94a404c"
+                                                                      },
+                  "vendor/baseline/echarts/BoxPlot/EchartsBoxPlot.tsx":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/EchartsBoxPlot.tsx",
+                                                                             "sha256":  "8356fdf1ef0b230df9755d64d353cacb846f7e30d118afd6ac0f5e866cf1923f"
+                                                                         },
+                  "vendor/baseline/echarts/BoxPlot/index.ts":  {
+                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/index.ts",
+                                                                   "sha256":  "cf8e22d044d558c6578490a6b6bfa7836a143525b626e1abef3eafab781d28d6"
+                                                               },
+                  "vendor/baseline/echarts/BoxPlot/transformProps.ts":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/transformProps.ts",
+                                                                            "sha256":  "3d437faf1c0d135624f23160e5d5cdaf27fbde60b0707c7a4f7ad04200af300c"
+                                                                        },
+                  "vendor/baseline/echarts/BoxPlot/types.ts":  {
+                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/types.ts",
+                                                                   "sha256":  "ef7269a73f03908b96535d8c64f49bb89af58b8aa5f9a51b00f36117ff1c9b27"
+                                                               },
+                  "vendor/baseline/echarts/Bubble/buildQuery.ts":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/buildQuery.ts",
+                                                                       "sha256":  "8147c0937759a858c45b0804b52885a5fc0a41d1f2074d41028d60d289abf564"
+                                                                   },
+                  "vendor/baseline/echarts/Bubble/constants.ts":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/constants.ts",
+                                                                      "sha256":  "000ff94eb5fac3d51cf21ee2ed05f8d3fccd4510a9a4fd7f4316f6946bf14c85"
+                                                                  },
+                  "vendor/baseline/echarts/Bubble/controlPanel.tsx":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/controlPanel.tsx",
+                                                                          "sha256":  "9125a8d1a70b31221f52f8a0a20ef41de30ecaa95e9ab14d0870b52b3038a727"
+                                                                      },
+                  "vendor/baseline/echarts/Bubble/EchartsBubble.tsx":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/EchartsBubble.tsx",
+                                                                           "sha256":  "f6a7b7ea5e139883469fe25621df9d3e2b2e4b3ac7cda4db8728551134a0a43a"
+                                                                       },
+                  "vendor/baseline/echarts/Bubble/index.ts":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/index.ts",
+                                                                  "sha256":  "f207a0535678a224e2b42a5b58f98028d9424b66edc4f1c03726e14f32c2b665"
+                                                              },
+                  "vendor/baseline/echarts/Bubble/transformProps.ts":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/transformProps.ts",
+                                                                           "sha256":  "2a5ac2087eebb3f36c98c3fc9e92004c0480e46cf419a45179bbcbd173a50a34"
+                                                                       },
+                  "vendor/baseline/echarts/Bubble/types.ts":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/types.ts",
+                                                                  "sha256":  "7b01bf95b52965c986f03a2caf750a2895ce669bea9a0b957974b060112fc8d7"
+                                                              },
+                  "vendor/baseline/echarts/components/Echart.tsx":  {
+                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/components/Echart.tsx",
+                                                                        "sha256":  "d24c0e228658cdfd93ce9a460b404418403df2b9242a476aa219fb72aab56682"
+                                                                    },
+                  "vendor/baseline/echarts/components/ExtraControls.tsx":  {
+                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/components/ExtraControls.tsx",
+                                                                               "sha256":  "46da328a820ad5d3126cee18e2e985f7fe10acffa1562eda56a47cec29f66f6b"
+                                                                           },
+                  "vendor/baseline/echarts/Funnel/buildQuery.ts":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/buildQuery.ts",
+                                                                       "sha256":  "6545bb9e424f69889f3f634c9ad0be213105d7149bf948dde9a35cacc0414cd3"
+                                                                   },
+                  "vendor/baseline/echarts/Funnel/controlPanel.tsx":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/controlPanel.tsx",
+                                                                          "sha256":  "90596f41215aecf6ad9a2843c8f4c739f115c3452bf542ce60d5ea2e79115f78"
+                                                                      },
+                  "vendor/baseline/echarts/Funnel/EchartsFunnel.tsx":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/EchartsFunnel.tsx",
+                                                                           "sha256":  "4c21c054ff414cb4acb7c14296ef8d98f235fcb62094792222f56fc416bc8550"
+                                                                       },
+                  "vendor/baseline/echarts/Funnel/index.ts":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/index.ts",
+                                                                  "sha256":  "e99695c6bb18dbb1b4dbb3ec6740d282ddce5e51604862bf6fe7fe2f59523a52"
+                                                              },
+                  "vendor/baseline/echarts/Funnel/transformProps.ts":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/transformProps.ts",
+                                                                           "sha256":  "d717ec3f6e3ccacf9da9fe060530158672d470aa332a58f163d92a9dcb9c38df"
+                                                                       },
+                  "vendor/baseline/echarts/Funnel/types.ts":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/types.ts",
+                                                                  "sha256":  "69e6e7e4841726baeb8b15b0afc6f60815ec514a692269cf35d8b5f85fdfe820"
+                                                              },
+                  "vendor/baseline/echarts/Gantt/buildQuery.ts":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/buildQuery.ts",
+                                                                      "sha256":  "9ad34959fa678ccc5c34b239964283cd72fcfab65c9bbf3b4dfc4d8f44757682"
+                                                                  },
+                  "vendor/baseline/echarts/Gantt/constants.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/constants.ts",
+                                                                     "sha256":  "2b80ec6dbfb95480410513c123449a84e0d7771837e6bca178aad45f01efa675"
+                                                                 },
+                  "vendor/baseline/echarts/Gantt/controlPanel.tsx":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/controlPanel.tsx",
+                                                                         "sha256":  "7d68bce8b8d2a2b65e5ea467291b5739aefed77e349a6ff874b7e7f1e463d9c8"
+                                                                     },
+                  "vendor/baseline/echarts/Gantt/EchartsGantt.tsx":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/EchartsGantt.tsx",
+                                                                         "sha256":  "43237ebb73b0b2271e6698e51d6bf0009cb01015175bb658e2128c50c4294e41"
+                                                                     },
+                  "vendor/baseline/echarts/Gantt/index.ts":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/index.ts",
+                                                                 "sha256":  "d6a958778e3ae79aa0ecaf8cf9d77f5bcedc7a6d414fabf576802bcfb78d7849"
+                                                             },
+                  "vendor/baseline/echarts/Gantt/transformProps.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/transformProps.ts",
+                                                                          "sha256":  "3c69119b4f0af697bc3243de6147cd4600ae627a2402419163226ea9e7f98e51"
+                                                                      },
+                  "vendor/baseline/echarts/Gantt/types.ts":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/types.ts",
+                                                                 "sha256":  "b43105fed2bd7cadbe40d8410641416fceefa5935e160d2712a2c40ea0898937"
+                                                             },
+                  "vendor/baseline/echarts/Gauge/buildQuery.ts":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/buildQuery.ts",
+                                                                      "sha256":  "6545bb9e424f69889f3f634c9ad0be213105d7149bf948dde9a35cacc0414cd3"
+                                                                  },
+                  "vendor/baseline/echarts/Gauge/constants.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/constants.ts",
+                                                                     "sha256":  "2777278ffbb333a880f00e98907c534324437b1f428c9fc809cdee27527d9cc5"
+                                                                 },
+                  "vendor/baseline/echarts/Gauge/controlPanel.tsx":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/controlPanel.tsx",
+                                                                         "sha256":  "e69eff3afadc067984e732710fb2d020028c8baaf821c26b672eee255e46a3d7"
+                                                                     },
+                  "vendor/baseline/echarts/Gauge/EchartsGauge.tsx":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/EchartsGauge.tsx",
+                                                                         "sha256":  "bd8af8c8a05fb514b7e22671316007809861b5bbde8129becc674f18c70ab0e4"
+                                                                     },
+                  "vendor/baseline/echarts/Gauge/index.ts":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/index.ts",
+                                                                 "sha256":  "f2494adf213c156585003a8a5c59183abcfaf3926bdaff817ab340d19aa6723d"
+                                                             },
+                  "vendor/baseline/echarts/Gauge/transformProps.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/transformProps.ts",
+                                                                          "sha256":  "c9692411aee55c9d2643d1acf934566dbe20709e88a03bdc2d166c67cfb399c1"
+                                                                      },
+                  "vendor/baseline/echarts/Gauge/types.ts":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/types.ts",
+                                                                 "sha256":  "cf7fc5920468565e21b7d09d385b6f7cbaf20b206aeee002c9ba78cd3aa31167"
+                                                             },
+                  "vendor/baseline/echarts/Graph/buildQuery.ts":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/buildQuery.ts",
+                                                                      "sha256":  "7f58c640429fe4acb1f3e1d5e0ba11b53a92da06f790c771b3bb009c033e096e"
+                                                                  },
+                  "vendor/baseline/echarts/Graph/constants.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/constants.ts",
+                                                                     "sha256":  "8f91d81d8d6e91608a68128f8aaea1f5221ffaf217452b6b6ee676fc6b99cc66"
+                                                                 },
+                  "vendor/baseline/echarts/Graph/controlPanel.tsx":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/controlPanel.tsx",
+                                                                         "sha256":  "f10face056f423a481010cd857983cab4bcaafbcd118c944f980503f1dea7910"
+                                                                     },
+                  "vendor/baseline/echarts/Graph/EchartsGraph.tsx":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/EchartsGraph.tsx",
+                                                                         "sha256":  "db1cc84e913c2fa7fe3d8c8c195bb693f6e3736238b009022cf156bc9215c77d"
+                                                                     },
+                  "vendor/baseline/echarts/Graph/index.ts":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/index.ts",
+                                                                 "sha256":  "4f2d8244d44ac2499c16995aa85a5780e0614bbb2fb14a3635230b5c251c189e"
+                                                             },
+                  "vendor/baseline/echarts/Graph/transformProps.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/transformProps.ts",
+                                                                          "sha256":  "50ac44740f1c9a0a2499d330577b40b388ffcb1ad476f54a96c02fe39ae01f6b"
+                                                                      },
+                  "vendor/baseline/echarts/Graph/types.ts":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/types.ts",
+                                                                 "sha256":  "e88b5d0fb31943509e9f9873f8e9d88ca2f9f38aab2776864cc41c6cae442de0"
+                                                             },
+                  "vendor/baseline/echarts/Heatmap/buildQuery.ts":  {
+                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/buildQuery.ts",
+                                                                        "sha256":  "dc5cc0773ae25acbc4421e62ddb19948cb69f0815ed6e111875d215d54c6510b"
+                                                                    },
+                  "vendor/baseline/echarts/Heatmap/controlPanel.tsx":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/controlPanel.tsx",
+                                                                           "sha256":  "b2f6a135248cab47c0a2aaa2facb4e9ac3c93818ccef2e6c26e8ec2396da78fe"
+                                                                       },
+                  "vendor/baseline/echarts/Heatmap/Heatmap.tsx":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/Heatmap.tsx",
+                                                                      "sha256":  "ee7904621c7fd4049f3cc4acc4fe88b28bfd42e412bb333673cd03adad79f7a4"
+                                                                  },
+                  "vendor/baseline/echarts/Heatmap/index.ts":  {
+                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/index.ts",
+                                                                   "sha256":  "f04e97d952e2611d42ab4463695bdb83262739a8d4109649cbbf9fe79c3d2cce"
+                                                               },
+                  "vendor/baseline/echarts/Heatmap/transformProps.ts":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/transformProps.ts",
+                                                                            "sha256":  "342a9a4c57e6492e1fb1e2efcff9139f0919a7a4027970f0cd920cd854e718b5"
+                                                                        },
+                  "vendor/baseline/echarts/Heatmap/types.ts":  {
+                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/types.ts",
+                                                                   "sha256":  "7160ac079e3583e1e819ad3ec279de757d47ad52440e7db19f5e04156a78b241"
+                                                               },
+                  "vendor/baseline/echarts/Histogram/buildQuery.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/buildQuery.ts",
+                                                                          "sha256":  "eb930207665658ec6e33017feca5884c60959b7d1da7833f815ad2dc282c21ea"
+                                                                      },
+                  "vendor/baseline/echarts/Histogram/controlPanel.tsx":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/controlPanel.tsx",
+                                                                             "sha256":  "3c4c346a0263ab55ba00bec59192f6cfa3b7d12b3dc503da0dca225945542ba5"
+                                                                         },
+                  "vendor/baseline/echarts/Histogram/Histogram.tsx":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/Histogram.tsx",
+                                                                          "sha256":  "c59f08e48d164932055a6355b1abdd7f7456a4ab894a587effd2a2e2f1cad34c"
+                                                                      },
+                  "vendor/baseline/echarts/Histogram/index.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/index.ts",
+                                                                     "sha256":  "990c0e2666e0320740d0337e35e981d261cd9dc7f3813d8af99cabc83908da8f"
+                                                                 },
+                  "vendor/baseline/echarts/Histogram/transformProps.ts":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/transformProps.ts",
+                                                                              "sha256":  "9801aad5ab268f501b11851b9e96e3e7b7afe0f7243921dfaf98a36a6b315e52"
+                                                                          },
+                  "vendor/baseline/echarts/Histogram/types.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/types.ts",
+                                                                     "sha256":  "90bdcc41fbc3c545691b4d46256c30304f6e1d7251c7ff5505bc4c0742ccc617"
+                                                                 },
+                  "vendor/baseline/echarts/MixedTimeseries/buildQuery.ts":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/buildQuery.ts",
+                                                                                "sha256":  "60e36c38b84d283a0b78c55d467cc66b6e67a8cdad661c2293e12b4e27f64cc4"
+                                                                            },
+                  "vendor/baseline/echarts/MixedTimeseries/controlPanel.tsx":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/controlPanel.tsx",
+                                                                                   "sha256":  "43010046984f71a6124927f33fda67f3b313dff488d52ea03f06c64d230bb336"
+                                                                               },
+                  "vendor/baseline/echarts/MixedTimeseries/EchartsMixedTimeseries.tsx":  {
+                                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/EchartsMixedTimeseries.tsx",
+                                                                                             "sha256":  "f1f1673a5feea616ab2a92ea8ebfa73d429aa150a563e4786c9d3ed35cfd11f0"
+                                                                                         },
+                  "vendor/baseline/echarts/MixedTimeseries/index.ts":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/index.ts",
+                                                                           "sha256":  "72f7275876736de0f80f595c265897f29fd10d280c3d5b6d34109f5a3b2dbb87"
+                                                                       },
+                  "vendor/baseline/echarts/MixedTimeseries/transformProps.ts":  {
+                                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/transformProps.ts",
+                                                                                    "sha256":  "f7ff6b22ecc6635300398d5b3998224864c305ff111a5d15971d366ba3c230f5"
+                                                                                },
+                  "vendor/baseline/echarts/MixedTimeseries/types.ts":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/types.ts",
+                                                                           "sha256":  "f948a0a5fa2712468146a099964159ab6b90324c20a30386502895fb2fc7ee28"
+                                                                       },
+                  "vendor/baseline/echarts/Pie/buildQuery.ts":  {
+                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/buildQuery.ts",
+                                                                    "sha256":  "91ea7ba35672fb6a89cd2ec712f635058a82f5be25c8226e15e34c8852ae7009"
+                                                                },
+                  "vendor/baseline/echarts/Pie/constants.ts":  {
+                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/constants.ts",
+                                                                   "sha256":  "7a7090cc0e04ca086c5c53b03a495e0d02b78752fa0eca0bfc443c09406120bd"
+                                                               },
+                  "vendor/baseline/echarts/Pie/controlPanel.tsx":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/controlPanel.tsx",
+                                                                       "sha256":  "8ec77a9836ee25ff26310f1d6032904ee2f729a98444de4413074587f8d3c490"
+                                                                   },
+                  "vendor/baseline/echarts/Pie/EchartsPie.tsx":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/EchartsPie.tsx",
+                                                                     "sha256":  "38735cc4d0b3351c79b3f58858c62bbf312a00fa70a030c7e1066cb376c441f8"
+                                                                 },
+                  "vendor/baseline/echarts/Pie/index.ts":  {
+                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/index.ts",
+                                                               "sha256":  "d7825e7fba8731f2018e791b04e62c0af062ed0a6ca649dbfa608038686cd2a0"
+                                                           },
+                  "vendor/baseline/echarts/Pie/transformProps.ts":  {
+                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/transformProps.ts",
+                                                                        "sha256":  "bec812549d5f751508858c718fd79f9cf0e5dfa77fab8495601e0ce6f997d986"
+                                                                    },
+                  "vendor/baseline/echarts/Pie/types.ts":  {
+                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/types.ts",
+                                                               "sha256":  "3a052df3f85925a9aea3883b602e7d3e04f6884d956943144406f9c6c520151f"
+                                                           },
+                  "vendor/baseline/echarts/Pie/utils.ts":  {
+                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/utils.ts",
+                                                               "sha256":  "59c7e5ea48164bcc0696fe54696f2e8330322e0482d00dd7779b9d702a4f0801"
+                                                           },
+                  "vendor/baseline/echarts/Radar/buildQuery.ts":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/buildQuery.ts",
+                                                                      "sha256":  "2ae882464de507ca5ee14232e8f42e40137c30037dca740fca11c1988bddda28"
+                                                                  },
+                  "vendor/baseline/echarts/Radar/controlPanel.tsx":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/controlPanel.tsx",
+                                                                         "sha256":  "57a90f738258b303d5d266fae2fffe49625f4cf767c845ca3c46c75a65e93beb"
+                                                                     },
+                  "vendor/baseline/echarts/Radar/EchartsRadar.tsx":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/EchartsRadar.tsx",
+                                                                         "sha256":  "3ed2b9d58544b2051a3b291afc14da394b5f97189f21155342c45ee4a71428c3"
+                                                                     },
+                  "vendor/baseline/echarts/Radar/index.ts":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/index.ts",
+                                                                 "sha256":  "abac610d7a635ef5952928d7cc3742d3e9a393664a3356d399dea872fb26b1c1"
+                                                             },
+                  "vendor/baseline/echarts/Radar/transformProps.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/transformProps.ts",
+                                                                          "sha256":  "cba987f5236d8e108ee118e64abd907494656660fbba2cd45f18be8471edb706"
+                                                                      },
+                  "vendor/baseline/echarts/Radar/types.ts":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/types.ts",
+                                                                 "sha256":  "5ad02b8c44a5a1df6a9936c750879a606626c740798a2a7495fcbcbefe56b90c"
+                                                             },
+                  "vendor/baseline/echarts/Radar/utils.ts":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/utils.ts",
+                                                                 "sha256":  "271b9ba378ee963b4d35743ce2e565d8c2542f4a6ee9445024029dc4f4e1a171"
+                                                             },
+                  "vendor/baseline/echarts/Sankey/buildQuery.ts":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/buildQuery.ts",
+                                                                       "sha256":  "ff2beac132fd00aa97624e0a0fe362d3b23ad19b9bc7a04dc62267b42bec6304"
+                                                                   },
+                  "vendor/baseline/echarts/Sankey/controlPanel.tsx":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/controlPanel.tsx",
+                                                                          "sha256":  "4530d25079c4499ed2bdfd343b9f554e41fe0d71d6f5674961b900783a50f68a"
+                                                                      },
+                  "vendor/baseline/echarts/Sankey/index.ts":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/index.ts",
+                                                                  "sha256":  "7a2daa1a4ee7771418b835d81a206f0b3865aebeec82849089439742120ee7c4"
+                                                              },
+                  "vendor/baseline/echarts/Sankey/Sankey.tsx":  {
+                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/Sankey.tsx",
+                                                                    "sha256":  "f3bb1449530912de8d19a6fb87504da4a0b364bb87f290c540dde3da198e4acb"
+                                                                },
+                  "vendor/baseline/echarts/Sankey/transformProps.ts":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/transformProps.ts",
+                                                                           "sha256":  "561c47fa6f5c75df23d15268b7ed485f5e266551dce6b825fdeffb18eaf47411"
+                                                                       },
+                  "vendor/baseline/echarts/Sankey/types.ts":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/types.ts",
+                                                                  "sha256":  "1080f01bc40024c6ab0663bde6ca4196e2a177e3bd4b6031507d94cb99e8e848"
+                                                              },
+                  "vendor/baseline/echarts/Sunburst/buildQuery.ts":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/buildQuery.ts",
+                                                                         "sha256":  "6545bb9e424f69889f3f634c9ad0be213105d7149bf948dde9a35cacc0414cd3"
+                                                                     },
+                  "vendor/baseline/echarts/Sunburst/controlPanel.tsx":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/controlPanel.tsx",
+                                                                            "sha256":  "14f35779bd0e916987460e85cb3e38b7a6de75b64805a8afce4ad74744716151"
+                                                                        },
+                  "vendor/baseline/echarts/Sunburst/EchartsSunburst.tsx":  {
+                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/EchartsSunburst.tsx",
+                                                                               "sha256":  "2dcc3bb47b039c887a7cfed4243027c915a0ae14c1f08606f689ac26f8106ed9"
+                                                                           },
+                  "vendor/baseline/echarts/Sunburst/index.ts":  {
+                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/index.ts",
+                                                                    "sha256":  "45a9903ebbbafd53d31a1231155b85bbd639ca7d9a4295fb0336f647e53983a1"
+                                                                },
+                  "vendor/baseline/echarts/Sunburst/transformProps.ts":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/transformProps.ts",
+                                                                             "sha256":  "036229b35c209642a1b8336c1f7e3062a86d89a43be7ed1238f03928d2545868"
+                                                                         },
+                  "vendor/baseline/echarts/Sunburst/types.ts":  {
+                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/types.ts",
+                                                                    "sha256":  "feb77a72085a6c61f0d07b88822842d0cb1118604e4143cb55990fca72d9f2ae"
+                                                                },
+                  "vendor/baseline/echarts/Timeseries/buildQuery.ts":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/buildQuery.ts",
+                                                                           "sha256":  "32563c5b9bcdbb81f3f5a9a02111903c2d965a82756e18c05abfaf5950569569"
+                                                                       },
+                  "vendor/baseline/echarts/Timeseries/constants.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/constants.ts",
+                                                                          "sha256":  "fe1348ef8ab965a5327c890315d20cba0287952a2bea0cf60123f83c5c72feff"
+                                                                      },
+                  "vendor/baseline/echarts/Timeseries/EchartsTimeseries.tsx":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/EchartsTimeseries.tsx",
+                                                                                   "sha256":  "daba357d276eef7b1675e8feeca12eb14513ad22d916add016aa77f6dc9323f3"
+                                                                               },
+                  "vendor/baseline/echarts/Timeseries/index.ts":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/index.ts",
+                                                                      "sha256":  "9ac74ceda3fd46fd9e99e14a30d8ebba09cf70860394b34c5d8cfcebfd63a793"
+                                                                  },
+                  "vendor/baseline/echarts/Timeseries/transformers.ts":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/transformers.ts",
+                                                                             "sha256":  "6df7ec56d84d5943f1b0e1daff21cb6f8bb1f51ec816271a5bacde034256bd61"
+                                                                         },
+                  "vendor/baseline/echarts/Timeseries/transformProps.ts":  {
+                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/transformProps.ts",
+                                                                               "sha256":  "6ad678511fde3b2f87908949b9d3d63069d8c2debfc32738a94dd88644596396"
+                                                                           },
+                  "vendor/baseline/echarts/Timeseries/types.ts":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/types.ts",
+                                                                      "sha256":  "c2ad4c29a7fa4c652a54fb1206170fca4af894322d282528c6b27c0613478ad4"
+                                                                  },
+                  "vendor/baseline/echarts/Tree/buildQuery.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/buildQuery.ts",
+                                                                     "sha256":  "4aaa98a82a1561f54d86a6cabf65ca545046984af0762bc71640371acbe3aa59"
+                                                                 },
+                  "vendor/baseline/echarts/Tree/constants.ts":  {
+                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/constants.ts",
+                                                                    "sha256":  "2a07c0defeb8b45052c8e00349007d362dd6615f5c5910e09fe86eba96ffb6af"
+                                                                },
+                  "vendor/baseline/echarts/Tree/controlPanel.tsx":  {
+                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/controlPanel.tsx",
+                                                                        "sha256":  "30bd70b3690c947ba6bcc8bbbba967ff4a49de06a0818a5f3485f7e758a096e0"
+                                                                    },
+                  "vendor/baseline/echarts/Tree/EchartsTree.tsx":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/EchartsTree.tsx",
+                                                                       "sha256":  "26ceb5ca5e8ce53dada71711a9036824c1f0ec1322c4225ae002df00198537de"
+                                                                   },
+                  "vendor/baseline/echarts/Tree/index.ts":  {
+                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/index.ts",
+                                                                "sha256":  "cb70d67cf9e59602a4b69ddb96096ae3bfa640541f9c6b9abdcad28a7a20ab24"
+                                                            },
+                  "vendor/baseline/echarts/Tree/transformProps.ts":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/transformProps.ts",
+                                                                         "sha256":  "18a17d023112eedc45e723e3132509277b93ebea19f7888d8de5f51d16414c20"
+                                                                     },
+                  "vendor/baseline/echarts/Tree/types.ts":  {
+                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/types.ts",
+                                                                "sha256":  "c6ca84bf4665e60a98ceca67cc268eecd2a94985e6815cd948108e324b71c673"
+                                                            },
+                  "vendor/baseline/echarts/Treemap/buildQuery.ts":  {
+                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/buildQuery.ts",
+                                                                        "sha256":  "b8a90e190e155f39cd901e6cd53a390e91548aa4747a0578a527076f0125d25d"
+                                                                    },
+                  "vendor/baseline/echarts/Treemap/constants.ts":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/constants.ts",
+                                                                       "sha256":  "c0427e7149c06a81eb84a1aaa9d32b068e0b9e015088a69a53cdda38c0296766"
+                                                                   },
+                  "vendor/baseline/echarts/Treemap/controlPanel.tsx":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/controlPanel.tsx",
+                                                                           "sha256":  "670053679abf7c1b916b095be3997018d3366565fd5a5eed47a3f61df71460ff"
+                                                                       },
+                  "vendor/baseline/echarts/Treemap/EchartsTreemap.tsx":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/EchartsTreemap.tsx",
+                                                                             "sha256":  "51ecf5a69ae33a0d1c93d8d2e83c687299a1de8b85bcdf684b717d27272e060d"
+                                                                         },
+                  "vendor/baseline/echarts/Treemap/index.ts":  {
+                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/index.ts",
+                                                                   "sha256":  "57e6f4523b989a1a95e3e5988c70620c5a81c279e78eb12e485d8063c657a009"
+                                                               },
+                  "vendor/baseline/echarts/Treemap/transformProps.ts":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/transformProps.ts",
+                                                                            "sha256":  "e35cb6d6528fa8bdb8ef11f82ca0a57c666eebd3582b450f201a665643475cd5"
+                                                                        },
+                  "vendor/baseline/echarts/Treemap/types.ts":  {
+                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/types.ts",
+                                                                   "sha256":  "0346676cc8ee04134fd1f7f46bf6462b29c640909a1a88953ada8ffd4a918e3a"
+                                                               },
+                  "vendor/baseline/echarts/utils/annotation.ts":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/annotation.ts",
+                                                                      "sha256":  "9a95f3396aa3cc2da6e6c4d0c70b0bfccb35d2bff604d9e5224f5033b0332692"
+                                                                  },
+                  "vendor/baseline/echarts/utils/controls.ts":  {
+                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/controls.ts",
+                                                                    "sha256":  "94f6d5d6221a012199f8c24b8990cb0bc1cbaec3681e721b4cb37fbce12133aa"
+                                                                },
+                  "vendor/baseline/echarts/utils/convertInteger.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/convertInteger.ts",
+                                                                          "sha256":  "e5561257c8b5bca5e3f6890b41c48e0974df6fcaa6b3e43cc309533c76a7b380"
+                                                                      },
+                  "vendor/baseline/echarts/utils/eChartOptionsSchema.ts":  {
+                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/eChartOptionsSchema.ts",
+                                                                               "sha256":  "e28ca8e4c66e15641ec5ba2f1b4a339b93a360a601a4a449666749d06b503731"
+                                                                           },
+                  "vendor/baseline/echarts/utils/eventHandlers.ts":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/eventHandlers.ts",
+                                                                         "sha256":  "531a27e991903d4d9e56cbf11a91fdb45ef30987fe7749d980d66b40ec226582"
+                                                                     },
+                  "vendor/baseline/echarts/utils/forecast.ts":  {
+                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/forecast.ts",
+                                                                    "sha256":  "794195de79d902fb254d900f0cec6d91ecd7b1e58ebc5ad9ce4bfe113f4fd557"
+                                                                },
+                  "vendor/baseline/echarts/utils/formatters.ts":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/formatters.ts",
+                                                                      "sha256":  "dff48f037ef65e22df7ccdcfde57f1f9dfb6949c7147d40864029421c4450de4"
+                                                                  },
+                  "vendor/baseline/echarts/utils/formDataSuffix.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/formDataSuffix.ts",
+                                                                          "sha256":  "fb671f030f2165ca8e2697f598bdd5c4a1380cf43afeebe8517358f8f4c634a6"
+                                                                      },
+                  "vendor/baseline/echarts/utils/legendLayout.ts":  {
+                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/legendLayout.ts",
+                                                                        "sha256":  "0d540199567ef97da85fbd16128dd68830facf9d34d7a4781428716daa4a647a"
+                                                                    },
+                  "vendor/baseline/echarts/utils/mergeCustomEChartOptions.ts":  {
+                                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/mergeCustomEChartOptions.ts",
+                                                                                    "sha256":  "7fec4a993283d5f47c50a4933e526395f235e1134180099df0fc3d5f330d5543"
+                                                                                },
+                  "vendor/baseline/echarts/utils/metricDisplayName.ts":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/metricDisplayName.ts",
+                                                                             "sha256":  "1d4fa91e4ddfd4bf34f04dc1f8f766ba079f5c5d1a184c769fa8c5d9201814c2"
+                                                                         },
+                  "vendor/baseline/echarts/utils/orderby.ts":  {
+                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/orderby.ts",
+                                                                   "sha256":  "7100fb52ab3b832992714a5c4fc77cba38158236c210a6cb0b6af5a80f89e2d4"
+                                                               },
+                  "vendor/baseline/echarts/utils/safeEChartOptionsParser.ts":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/safeEChartOptionsParser.ts",
+                                                                                   "sha256":  "5a2227d48a070dbe127084ce59fb339d03c5472a6ca83e1bceb33d9d2cfb19d1"
+                                                                               },
+                  "vendor/baseline/echarts/utils/series.ts":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/series.ts",
+                                                                  "sha256":  "4c8922b7099dc65fe43ebd137e087cec1fcfa17c226dd0b8dc0e102e6f27f8e0"
+                                                              },
+                  "vendor/baseline/echarts/utils/themeOverrides.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/themeOverrides.ts",
+                                                                          "sha256":  "cd882017d806af74c6109c6c4cd0c7410201176819539baec62fea26311ddd62"
+                                                                      },
+                  "vendor/baseline/echarts/utils/tooltip.ts":  {
+                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/tooltip.ts",
+                                                                   "sha256":  "9d3d59e27069ddf5842bfff0441af06130c41e5a7f588d8515502cd4b0653fb4"
+                                                               },
+                  "vendor/baseline/echarts/utils/treeBuilder.ts":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/utils/treeBuilder.ts",
+                                                                       "sha256":  "e99926412231ae04b9ccac95c24359634afa8622c659575515adc8833c1448d3"
+                                                                   },
+                  "vendor/baseline/echarts/Waterfall/buildQuery.ts":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/buildQuery.ts",
+                                                                          "sha256":  "65fdbd68e0b04574f481db5c3ae778eef6b960e8a58cf5699ecb3cf6fe3545b4"
+                                                                      },
+                  "vendor/baseline/echarts/Waterfall/constants.ts":  {
+                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/constants.ts",
+                                                                         "sha256":  "3c6aee06ffbeda0d5809540d1055d63bf6d7dd50fe69836e5718920e52b8b06f"
+                                                                     },
+                  "vendor/baseline/echarts/Waterfall/controlPanel.tsx":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/controlPanel.tsx",
+                                                                             "sha256":  "5dd27567c21cfcd28ad94f9a1b9ca159601bf22a33cc40448b18dadb9bbf5e16"
+                                                                         },
+                  "vendor/baseline/echarts/Waterfall/EchartsWaterfall.tsx":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/EchartsWaterfall.tsx",
+                                                                                 "sha256":  "3de5d9d857fc5c156181832cd186f6a761b8e4995ef930e761d5e4d3381c4eea"
+                                                                             },
+                  "vendor/baseline/echarts/Waterfall/index.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/index.ts",
+                                                                     "sha256":  "5ea5907a42a0a3cd8597e0d906204af856ddfc32481710695b0032c6e622f13e"
+                                                                 },
+                  "vendor/baseline/echarts/Waterfall/transformProps.ts":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/transformProps.ts",
+                                                                              "sha256":  "64c9b6e8dd7a4dc78d73d762beec220a2571e0ad2cd89f556cff40e5e1b44109"
+                                                                          },
+                  "vendor/baseline/echarts/Waterfall/types.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/types.ts",
+                                                                     "sha256":  "c70fb3fc094c6fbf1d6a0176fd453d9850e51e993209945e8e032029f918b23d"
+                                                                 },
+                  "vendor/baseline/echarts/Waterfall/images/example1-dark.png":  {
+                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/images/example1-dark.png",
+                                                                                     "sha256":  "d81b10a96d397b3d51592d066cd3b8252523ac9947746a662aea92de0265c2f8"
+                                                                                 },
+                  "vendor/baseline/echarts/Waterfall/images/example1.png":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/images/example1.png",
+                                                                                "sha256":  "aa5c7f611ad2d2c1b9ce37160dd6267eda60b59e155c16d1211b112ef7407fca"
+                                                                            },
+                  "vendor/baseline/echarts/Waterfall/images/example2-dark.png":  {
+                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/images/example2-dark.png",
+                                                                                     "sha256":  "252a23e6898c93b20122029be719111987e07057b7194cce108734bbb8266011"
+                                                                                 },
+                  "vendor/baseline/echarts/Waterfall/images/example2.png":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/images/example2.png",
+                                                                                "sha256":  "b041cf3b6ee31ff51dd82ba5cb97101f2f7fdb49182501bfdb57f4bedba62dfd"
+                                                                            },
+                  "vendor/baseline/echarts/Waterfall/images/example3-dark.png":  {
+                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/images/example3-dark.png",
+                                                                                     "sha256":  "a4875106169211b4de73fea911117bd405a85a9f5973009c89abd3e86d1ee789"
+                                                                                 },
+                  "vendor/baseline/echarts/Waterfall/images/example3.png":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/images/example3.png",
+                                                                                "sha256":  "025102003eb77aa77bfe80f128afbe3ce9c49701e46e36a345788821970b29d3"
+                                                                            },
+                  "vendor/baseline/echarts/Waterfall/images/thumbnail-dark.png":  {
+                                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/images/thumbnail-dark.png",
+                                                                                      "sha256":  "102dbe3c5cae46f26538d4764b3904437f580737b6b1fc912a92c95a16785a86"
+                                                                                  },
+                  "vendor/baseline/echarts/Waterfall/images/thumbnail.png":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Waterfall/images/thumbnail.png",
+                                                                                 "sha256":  "d99e405e3903e6a0467e3c4727d3e98c085708a6127c934307f76bd0926b3965"
+                                                                             },
+                  "vendor/baseline/echarts/Treemap/images/thumbnail-dark.png":  {
+                                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/images/thumbnail-dark.png",
+                                                                                    "sha256":  "ca2b522261d64ed9e88d9065b5a9e37bc067406fb2ffffa7eb5f0362479a393f"
+                                                                                },
+                  "vendor/baseline/echarts/Treemap/images/thumbnail.png":  {
+                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/images/thumbnail.png",
+                                                                               "sha256":  "d5882359ab3525711133ad16b3157ef711ffeb7d5992f7a3c7f6b1f863d3c59b"
+                                                                           },
+                  "vendor/baseline/echarts/Treemap/images/treemap_v2_1-dark.png":  {
+                                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/images/treemap_v2_1-dark.png",
+                                                                                       "sha256":  "881cb9ae2244782a0e9541e324b97aa3f59cd88c5e73983c5c23d7f0ddc69dfb"
+                                                                                   },
+                  "vendor/baseline/echarts/Treemap/images/treemap_v2_1.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/images/treemap_v2_1.png",
+                                                                                  "sha256":  "29f962f355abf0b6eb7f9c93286d1b5988a14662fb6840b08f29aee7beaf725a"
+                                                                              },
+                  "vendor/baseline/echarts/Treemap/images/treemap_v2_2-dark.jpg":  {
+                                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/images/treemap_v2_2-dark.jpg",
+                                                                                       "sha256":  "476a3d5fc9f6e282ad4046bce72a6cbd06df7d57b54ef2a44acd8b2ff2a8ab55"
+                                                                                   },
+                  "vendor/baseline/echarts/Treemap/images/treemap_v2_2.jpg":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Treemap/images/treemap_v2_2.jpg",
+                                                                                  "sha256":  "cfe4d4886b4ba358463b42d28ab62dd4f995606ca0eba4e06dd7a14bf74bbbe2"
+                                                                              },
+                  "vendor/baseline/echarts/Tree/images/thumbnail-dark.png":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/images/thumbnail-dark.png",
+                                                                                 "sha256":  "83142c594c0192ecd1c50651cecd7fde288509a1b42aea44d8cb3cb64e4784f2"
+                                                                             },
+                  "vendor/baseline/echarts/Tree/images/thumbnail.png":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/images/thumbnail.png",
+                                                                            "sha256":  "0ae19c6bfd2e880a449c2f96d02f1abe227868c697ebafd4a0b50d440326acc4"
+                                                                        },
+                  "vendor/baseline/echarts/Tree/images/tree-dark.png":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/images/tree-dark.png",
+                                                                            "sha256":  "d9b8497a14db7d20cccf1afdc35ae8992ce6d4776e3d7cdb288212526229ba9c"
+                                                                        },
+                  "vendor/baseline/echarts/Tree/images/tree.png":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Tree/images/tree.png",
+                                                                       "sha256":  "d710566ddaf0fe8f23b88f09f16b0a4d8fe55c655fc5dd83241e1a7cb60100cd"
+                                                                   },
+                  "vendor/baseline/echarts/Timeseries/Area/controlPanel.tsx":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Area/controlPanel.tsx",
+                                                                                   "sha256":  "729757b8664d6d69df7b12ccf93de3ce35f0030da01794243652fd0ba8b1bd34"
+                                                                               },
+                  "vendor/baseline/echarts/Timeseries/Area/index.ts":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Area/index.ts",
+                                                                           "sha256":  "d826561a1ca809d6a862947099f84f7811da9ffec9e2faf357e4f49c3d290f2d"
+                                                                       },
+                  "vendor/baseline/echarts/Timeseries/images/thumbnail-dark.png":  {
+                                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/images/thumbnail-dark.png",
+                                                                                       "sha256":  "7d77c3504c06e9e21c58f0e28b03a1933aba4166b46e5e8d021653b3cc0f732f"
+                                                                                   },
+                  "vendor/baseline/echarts/Timeseries/images/thumbnail.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/images/thumbnail.png",
+                                                                                  "sha256":  "8050ec0ab43c97bdf72564d546f406d658340f93303bf904b71a322ff2504523"
+                                                                              },
+                  "vendor/baseline/echarts/Timeseries/images/Time-series_Chart-dark.jpg":  {
+                                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/images/Time-series_Chart-dark.jpg",
+                                                                                               "sha256":  "e35e723da62361900f7999bb5e9de2925d5e2a657c2cee484b5d1748cb5cbc29"
+                                                                                           },
+                  "vendor/baseline/echarts/Timeseries/images/Time-series_Chart.jpg":  {
+                                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/images/Time-series_Chart.jpg",
+                                                                                          "sha256":  "e34eea665e77f89ded3e0002e6e0c9b315ea0ec9b2f4f64c4ab38c6bdee767d3"
+                                                                                      },
+                  "vendor/baseline/echarts/Timeseries/Step/controlPanel.tsx":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Step/controlPanel.tsx",
+                                                                                   "sha256":  "d47c369e74007230924980221c47cca727afead0961ee3b8b9d3bda3dbc88e4f"
+                                                                               },
+                  "vendor/baseline/echarts/Timeseries/Step/index.ts":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Step/index.ts",
+                                                                           "sha256":  "aae03662ab8d445e7fa7a1d828ea3586349d10428c79ce5939550575bb5a21fd"
+                                                                       },
+                  "vendor/baseline/echarts/Timeseries/Step/images/Step1-dark.png":  {
+                                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Step/images/Step1-dark.png",
+                                                                                        "sha256":  "83149ac81bc8c43158f7dfc524b27c111772a67483f3866089b636480ecaede2"
+                                                                                    },
+                  "vendor/baseline/echarts/Timeseries/Step/images/Step1.png":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Step/images/Step1.png",
+                                                                                   "sha256":  "2bf250c0516f49d5c2a4456a1862d4b0aba6eb67aaf8ce0ab77e0945da4a4f4e"
+                                                                               },
+                  "vendor/baseline/echarts/Timeseries/Step/images/Step2-dark.png":  {
+                                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Step/images/Step2-dark.png",
+                                                                                        "sha256":  "578a7cdaa0178f8a02053297180534758a7a899b78ae198eb5b1bc8371c02b9c"
+                                                                                    },
+                  "vendor/baseline/echarts/Timeseries/Step/images/Step2.png":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Step/images/Step2.png",
+                                                                                   "sha256":  "cfb08e0257ac81593c143511325b4115dd7102dc1b4861e39b09eeb0f565b667"
+                                                                               },
+                  "vendor/baseline/echarts/Timeseries/Step/images/thumbnail-dark.png":  {
+                                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Step/images/thumbnail-dark.png",
+                                                                                            "sha256":  "9ca6674417fe398c96d410e4045b2c4fa08eea36cd283e7241a7eff76db93af9"
+                                                                                        },
+                  "vendor/baseline/echarts/Timeseries/Step/images/thumbnail.png":  {
+                                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Step/images/thumbnail.png",
+                                                                                       "sha256":  "3cd004a400640841c67c46c37adf3b618471bb20b5d124c5b728039b2f0c74a6"
+                                                                                   },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/controlPanel.tsx":  {
+                                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/controlPanel.tsx",
+                                                                                          "sha256":  "cc4c901c5d53a681c5311e8646e858172bb2e71cc094eddaa66323b9eaa0490f"
+                                                                                      },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/index.ts":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/index.ts",
+                                                                                  "sha256":  "8fe5db5a4918035145da2e3fb141941abf64acc309e2d860e681b3cf75c3486b"
+                                                                              },
+                  "vendor/baseline/echarts/Timeseries/Regular/Line/controlPanel.tsx":  {
+                                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Line/controlPanel.tsx",
+                                                                                           "sha256":  "978e43a00956c27874adc6d0c073ad8bfdb2ca4af0c0d980534580754683bc7b"
+                                                                                       },
+                  "vendor/baseline/echarts/Timeseries/Regular/Line/index.ts":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Line/index.ts",
+                                                                                   "sha256":  "bfce44c2554df2b2a7af2ae4061c94bea6e015f001303d7e4be63db1025527bf"
+                                                                               },
+                  "vendor/baseline/echarts/Timeseries/Regular/Scatter/controlPanel.tsx":  {
+                                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Scatter/controlPanel.tsx",
+                                                                                              "sha256":  "83a7f8570c75738cf2f93933b2d38b93d80b22d25bdb693579a0348722f52f7e"
+                                                                                          },
+                  "vendor/baseline/echarts/Timeseries/Regular/Scatter/index.ts":  {
+                                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Scatter/index.ts",
+                                                                                      "sha256":  "808a730eefcbc32fe2fce35a6c0d447f942a601052c314eeaf772aa26229fba3"
+                                                                                  },
+                  "vendor/baseline/echarts/Timeseries/Regular/SmoothLine/controlPanel.tsx":  {
+                                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/SmoothLine/controlPanel.tsx",
+                                                                                                 "sha256":  "166e2af59cab83bcabe50b2e8f5d2f219ade5f42cc130a5919eb0c92b812d474"
+                                                                                             },
+                  "vendor/baseline/echarts/Timeseries/Regular/SmoothLine/index.ts":  {
+                                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/SmoothLine/index.ts",
+                                                                                         "sha256":  "08789b7aa2975091c2d053b03dd26241610ed9b2e0ed41f499c6bde990774b9c"
+                                                                                     },
+                  "vendor/baseline/echarts/Timeseries/Regular/SmoothLine/images/SmoothLine1-dark.png":  {
+                                                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/SmoothLine/images/SmoothLine1-dark.png",
+                                                                                                            "sha256":  "29e0941d41ee702ddef7a778db8d401fdedb0bf5c66270b44d3246eb6d6179b9"
+                                                                                                        },
+                  "vendor/baseline/echarts/Timeseries/Regular/SmoothLine/images/SmoothLine1.png":  {
+                                                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/SmoothLine/images/SmoothLine1.png",
+                                                                                                       "sha256":  "44b7510c4588e05dbb7e6773ffb7d736643be4995c229568a40bd16fc133c0ce"
+                                                                                                   },
+                  "vendor/baseline/echarts/Timeseries/Regular/SmoothLine/images/thumbnail-dark.png":  {
+                                                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/SmoothLine/images/thumbnail-dark.png",
+                                                                                                          "sha256":  "de9cde9c01bbb36e40ee98d1c05757295c08a2fc3ef015ca3d5888e88eb539b5"
+                                                                                                      },
+                  "vendor/baseline/echarts/Timeseries/Regular/SmoothLine/images/thumbnail.png":  {
+                                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/SmoothLine/images/thumbnail.png",
+                                                                                                     "sha256":  "6c29ed2e1d037be6b2cc28667c0b4aa7cbf3bd64fd9bc0ab44df189641e5d051"
+                                                                                                 },
+                  "vendor/baseline/echarts/Timeseries/Regular/Scatter/images/Scatter1-dark.png":  {
+                                                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Scatter/images/Scatter1-dark.png",
+                                                                                                      "sha256":  "491295404955a387b38a4739275c7986ba25d9201383c2a17669e4d6696e28f4"
+                                                                                                  },
+                  "vendor/baseline/echarts/Timeseries/Regular/Scatter/images/Scatter1.png":  {
+                                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Scatter/images/Scatter1.png",
+                                                                                                 "sha256":  "16c53e817b7f1a8f710c2838fe57cf95f993ef6c7d728ef0d03101c04c80d8c4"
+                                                                                             },
+                  "vendor/baseline/echarts/Timeseries/Regular/Scatter/images/thumbnail-dark.png":  {
+                                                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Scatter/images/thumbnail-dark.png",
+                                                                                                       "sha256":  "3c5368f88edddad66db0614d6b5c346cf8adb0e0cb874cdf77029d3d0c682eda"
+                                                                                                   },
+                  "vendor/baseline/echarts/Timeseries/Regular/Scatter/images/thumbnail.png":  {
+                                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Scatter/images/thumbnail.png",
+                                                                                                  "sha256":  "0688f2b811a41044ddeec5e6bb14c70b254f8a81cd2e7b5a1c0c23443d7cd2e5"
+                                                                                              },
+                  "vendor/baseline/echarts/Timeseries/Regular/Line/images/Line1-dark.png":  {
+                                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Line/images/Line1-dark.png",
+                                                                                                "sha256":  "4ad01d5e2262142d57643526ed140c25decd966d49ef9a1a0f6e3200f02169c3"
+                                                                                            },
+                  "vendor/baseline/echarts/Timeseries/Regular/Line/images/Line1.png":  {
+                                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Line/images/Line1.png",
+                                                                                           "sha256":  "8ed1e4407fdcbd1f867499f15a47b6697763b24c03551382a77534999df6322c"
+                                                                                       },
+                  "vendor/baseline/echarts/Timeseries/Regular/Line/images/Line2-dark.png":  {
+                                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Line/images/Line2-dark.png",
+                                                                                                "sha256":  "d0c7e77ce1f697fe777e7b7e122c33cf67c76b7e20b2ac8d7874907361b4660e"
+                                                                                            },
+                  "vendor/baseline/echarts/Timeseries/Regular/Line/images/Line2.png":  {
+                                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Line/images/Line2.png",
+                                                                                           "sha256":  "a1c9d92795703eb7832962b3cc612cb87b59ce0de1777e88a7a6e928c619b81e"
+                                                                                       },
+                  "vendor/baseline/echarts/Timeseries/Regular/Line/images/thumbnail-dark.png":  {
+                                                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Line/images/thumbnail-dark.png",
+                                                                                                    "sha256":  "d12ea84efb911cae816be743c51b7a3e34d35b3a55bfb750565f05d6e97d4793"
+                                                                                                },
+                  "vendor/baseline/echarts/Timeseries/Regular/Line/images/thumbnail.png":  {
+                                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Line/images/thumbnail.png",
+                                                                                               "sha256":  "827f3649dda08469a6fcb255e69d070aede4931e7eda61af9568283863c22357"
+                                                                                           },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/images/Bar1-dark.png":  {
+                                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/images/Bar1-dark.png",
+                                                                                              "sha256":  "5532644bdced167e450d6d5d35ffbd53135eafd172f00f23aac52e921b6a2a52"
+                                                                                          },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/images/Bar1.png":  {
+                                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/images/Bar1.png",
+                                                                                         "sha256":  "b15accc73d24e330f8410440cc582c222cd2b667a11ee95223c7c29b94376f75"
+                                                                                     },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/images/Bar2-dark.png":  {
+                                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/images/Bar2-dark.png",
+                                                                                              "sha256":  "f10533bfa4fe5dc6930fc94a799635b1fd60e03c4b0d17d159cfcfc3dec2560a"
+                                                                                          },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/images/Bar2.png":  {
+                                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/images/Bar2.png",
+                                                                                         "sha256":  "da500781370404e34a07ced3ae5881b4c7ffbe0cc0beedab5971267f7dbd7b5d"
+                                                                                     },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/images/Bar3-dark.png":  {
+                                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/images/Bar3-dark.png",
+                                                                                              "sha256":  "262748d889a488b77c241f061ad0dc3f6bc852348ad9c61faed7a362fbdc5399"
+                                                                                          },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/images/Bar3.png":  {
+                                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/images/Bar3.png",
+                                                                                         "sha256":  "f244c8aa2f6cb69ad3210d27560635cc1516d9b30e97906cdd84b04454265633"
+                                                                                     },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/images/thumbnail-dark.png":  {
+                                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/images/thumbnail-dark.png",
+                                                                                                   "sha256":  "65215fbeee3babc668efe2b443e2d4c509aa5f23b2a3bce62375eae824309276"
+                                                                                               },
+                  "vendor/baseline/echarts/Timeseries/Regular/Bar/images/thumbnail.png":  {
+                                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/images/thumbnail.png",
+                                                                                              "sha256":  "18b4b95397be3bef3c271596fd8a4954cb6d4f36dbf2591f1b2891e9798b2833"
+                                                                                          },
+                  "vendor/baseline/echarts/Timeseries/Area/images/Area1-dark.png":  {
+                                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Area/images/Area1-dark.png",
+                                                                                        "sha256":  "09cbaccefddc2715c19c73f8304d575309bf86035e5a90525c3eb7088ebff7c2"
+                                                                                    },
+                  "vendor/baseline/echarts/Timeseries/Area/images/Area1.png":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Area/images/Area1.png",
+                                                                                   "sha256":  "a94907cdbeab6bbe4cffaf47774bd1d4405454996abef1acf61cd4fad11a79b6"
+                                                                               },
+                  "vendor/baseline/echarts/Timeseries/Area/images/thumbnail-dark.png":  {
+                                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Area/images/thumbnail-dark.png",
+                                                                                            "sha256":  "d3150e89c38a56c49e4392dcfacbe24a9f15a3e7da487ecb251847d3ec229893"
+                                                                                        },
+                  "vendor/baseline/echarts/Timeseries/Area/images/thumbnail.png":  {
+                                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Area/images/thumbnail.png",
+                                                                                       "sha256":  "97308705aa9d6cf5a25529ecbefdbe6de0576a5dde84c60df80810369185e15d"
+                                                                                   },
+                  "vendor/baseline/echarts/Sunburst/images/Sunburst1-dark.png":  {
+                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/images/Sunburst1-dark.png",
+                                                                                     "sha256":  "1a089f309dcf4a7b2d9369762472956e7e30e92ca5585f23933f4bd2eedceadd"
+                                                                                 },
+                  "vendor/baseline/echarts/Sunburst/images/Sunburst1.png":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/images/Sunburst1.png",
+                                                                                "sha256":  "e6f5271509c0f63b369f52d28c055a07e57d6dd2ab9ac4c83b119c9473f9043b"
+                                                                            },
+                  "vendor/baseline/echarts/Sunburst/images/Sunburst2-dark.png":  {
+                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/images/Sunburst2-dark.png",
+                                                                                     "sha256":  "7b868a1a1afd49614b202561c2fa9a3cb53cc474805905f4f5dd9683bbfb8c31"
+                                                                                 },
+                  "vendor/baseline/echarts/Sunburst/images/Sunburst2.png":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/images/Sunburst2.png",
+                                                                                "sha256":  "83f246cbeafc0d81dfa97a5595cc35fc0b26f61f7d1cc1a16d262fbd4bd3734f"
+                                                                            },
+                  "vendor/baseline/echarts/Sunburst/images/thumbnail-dark.png":  {
+                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/images/thumbnail-dark.png",
+                                                                                     "sha256":  "8cd0938d332a5cfe83d872d30c1da6075e5bd7e6e1fea7b343ad6261326cdc92"
+                                                                                 },
+                  "vendor/baseline/echarts/Sunburst/images/thumbnail.png":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sunburst/images/thumbnail.png",
+                                                                                "sha256":  "e6f5271509c0f63b369f52d28c055a07e57d6dd2ab9ac4c83b119c9473f9043b"
+                                                                            },
+                  "vendor/baseline/echarts/Sankey/images/example1-dark.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/images/example1-dark.png",
+                                                                                  "sha256":  "68b8c83c7b63b59f1eb082740bbc790f7f038cd106e8d83e9eaddb861cd4ce90"
+                                                                              },
+                  "vendor/baseline/echarts/Sankey/images/example1.png":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/images/example1.png",
+                                                                             "sha256":  "b52c55c567b49a980fe0529a11e9db0444d3ede97da34acade8a34a5f0cf5c78"
+                                                                         },
+                  "vendor/baseline/echarts/Sankey/images/example2-dark.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/images/example2-dark.png",
+                                                                                  "sha256":  "d859e29a8e564acae98d5b1c2d1978dd32da6f74262cba4519f9f78f17257aa0"
+                                                                              },
+                  "vendor/baseline/echarts/Sankey/images/example2.png":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/images/example2.png",
+                                                                             "sha256":  "616e098f323d70c469e80a088e684525a9a84183d158207af0c40388d84b9f50"
+                                                                         },
+                  "vendor/baseline/echarts/Sankey/images/thumbnail-dark.png":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/images/thumbnail-dark.png",
+                                                                                   "sha256":  "e4bf475a02dacacbd71fb921c8eb9fe124602c06b0bca60d1d23afd92684a5d7"
+                                                                               },
+                  "vendor/baseline/echarts/Sankey/images/thumbnail.png":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Sankey/images/thumbnail.png",
+                                                                              "sha256":  "d4e1faf22c67072c55a450753e21a74de8cd41f82eab8d086b5d82848873dd15"
+                                                                          },
+                  "vendor/baseline/echarts/Radar/images/example1-dark.jpg":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/images/example1-dark.jpg",
+                                                                                 "sha256":  "5e96fef4e31bfc7f705d374494f20a78a01acc62165acd724383e40a37f90451"
+                                                                             },
+                  "vendor/baseline/echarts/Radar/images/example1.jpg":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/images/example1.jpg",
+                                                                            "sha256":  "24214e6c5d9185d5dda98917be0192a3371401c2530505e5155406d6ab9effba"
+                                                                        },
+                  "vendor/baseline/echarts/Radar/images/example2-dark.jpg":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/images/example2-dark.jpg",
+                                                                                 "sha256":  "9983bfda2dc0047ef37e28d176aaead41fab45141d25e75a1f8fbdd92bf44f6e"
+                                                                             },
+                  "vendor/baseline/echarts/Radar/images/example2.jpg":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/images/example2.jpg",
+                                                                            "sha256":  "9a131d4d5880f81a5d93f1dca8b7f1f5ebab27819f0a74a2e3a984ee048ecda6"
+                                                                        },
+                  "vendor/baseline/echarts/Radar/images/thumbnail-dark.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/images/thumbnail-dark.png",
+                                                                                  "sha256":  "d3e4921c371804d76cade04d87436f0faea3e898968382ace449871350de3f93"
+                                                                              },
+                  "vendor/baseline/echarts/Radar/images/thumbnail.png":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Radar/images/thumbnail.png",
+                                                                             "sha256":  "5e102147bd262500231c8c362a3e97fa5525229be3197ce493994365c48d4a1a"
+                                                                         },
+                  "vendor/baseline/echarts/Pie/images/Pie1-dark.jpg":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/Pie1-dark.jpg",
+                                                                           "sha256":  "500a28fe085e2ea7f85af664aec5359779842fc680d07629dd51a48fda80317a"
+                                                                       },
+                  "vendor/baseline/echarts/Pie/images/Pie1.jpg":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/Pie1.jpg",
+                                                                      "sha256":  "f76d9289e4a629366d2bf0fad4cb9b1250fc6591998f26c148851ff76aaffc28"
+                                                                  },
+                  "vendor/baseline/echarts/Pie/images/Pie2-dark.jpg":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/Pie2-dark.jpg",
+                                                                           "sha256":  "0252afb2f0b3925074a2f0b109f8825ce956944103eb44721f3fdca8e4dc77f4"
+                                                                       },
+                  "vendor/baseline/echarts/Pie/images/Pie2.jpg":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/Pie2.jpg",
+                                                                      "sha256":  "9962209107ebd0aaf88f0312deca0be5d1328ec17abc08aee3f8068d3a1db866"
+                                                                  },
+                  "vendor/baseline/echarts/Pie/images/Pie3-dark.jpg":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/Pie3-dark.jpg",
+                                                                           "sha256":  "2db492a72bd9541c46de7d7c84169ca49290a614e1450b498779e1b017b1b4d8"
+                                                                       },
+                  "vendor/baseline/echarts/Pie/images/Pie3.jpg":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/Pie3.jpg",
+                                                                      "sha256":  "73158aeea8cc9f16b775b88aa7325cca2b7b24cc99b339330d9641f5ece54dfd"
+                                                                  },
+                  "vendor/baseline/echarts/Pie/images/Pie4-dark.jpg":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/Pie4-dark.jpg",
+                                                                           "sha256":  "a4d656ddafbe19e03a51cb798d868fecd794b0e6ee4c480134cafdaf1048ebc3"
+                                                                       },
+                  "vendor/baseline/echarts/Pie/images/Pie4.jpg":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/Pie4.jpg",
+                                                                      "sha256":  "a45b1d4378abe52be77723b72e2b719e6b6028aa8d60feec92d9fcbeedea2469"
+                                                                  },
+                  "vendor/baseline/echarts/Pie/images/thumbnail-dark.png":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/thumbnail-dark.png",
+                                                                                "sha256":  "7462b344d55d28399e042d4434fbfd8fc2bd3369c4067847d298370a71601cf2"
+                                                                            },
+                  "vendor/baseline/echarts/Pie/images/thumbnail.png":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Pie/images/thumbnail.png",
+                                                                           "sha256":  "4fc07f226128f9060e12744ae5ac40dcde8e688db372e4272d56d52ec0efccea"
+                                                                       },
+                  "vendor/baseline/echarts/MixedTimeseries/images/example-dark.jpg":  {
+                                                                                          "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/images/example-dark.jpg",
+                                                                                          "sha256":  "ace5519edd8f31f8886114d9089e9a6f494bdd5f998331edfa438087d978034d"
+                                                                                      },
+                  "vendor/baseline/echarts/MixedTimeseries/images/example.jpg":  {
+                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/images/example.jpg",
+                                                                                     "sha256":  "38f63a2b5afb41e606801483ccb70eef0336bf165ddc5edc1aa1741e679d1e07"
+                                                                                 },
+                  "vendor/baseline/echarts/MixedTimeseries/images/thumbnail-dark.png":  {
+                                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/images/thumbnail-dark.png",
+                                                                                            "sha256":  "d96c54ebaaee63eefb3102369fb84a7eb93f5f69fc6d5062e439ddd5c1a92249"
+                                                                                        },
+                  "vendor/baseline/echarts/MixedTimeseries/images/thumbnail.png":  {
+                                                                                       "source":  "superset-frontend/plugins/plugin-chart-echarts/src/MixedTimeseries/images/thumbnail.png",
+                                                                                       "sha256":  "a308f99ae3cf0cbddc30d47b6cb4d57cc603e04eeabb6d46d9f7b06b9881dc76"
+                                                                                   },
+                  "vendor/baseline/echarts/Histogram/images/example1-dark.png":  {
+                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/images/example1-dark.png",
+                                                                                     "sha256":  "3b0b9f2e6e87f18af9ddb0aed1391e3bc2604ea48074e0b9bdf8d76f8ddbe467"
+                                                                                 },
+                  "vendor/baseline/echarts/Histogram/images/example1.png":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/images/example1.png",
+                                                                                "sha256":  "ca7b7f074a03ca2f9734d104501993de2a2b74970ecb47c10154972acf557c8f"
+                                                                            },
+                  "vendor/baseline/echarts/Histogram/images/example2-dark.png":  {
+                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/images/example2-dark.png",
+                                                                                     "sha256":  "c9e077f8babfc4ae35d6ad58fc19685fdd23e1d3803f39c5e8b222aa20633db6"
+                                                                                 },
+                  "vendor/baseline/echarts/Histogram/images/example2.png":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/images/example2.png",
+                                                                                "sha256":  "fdc1601c6437dd6e54cd48eecbd155ab88dc7dda6ed9e33fe9cac945097f088e"
+                                                                            },
+                  "vendor/baseline/echarts/Histogram/images/thumbnail-dark.png":  {
+                                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/images/thumbnail-dark.png",
+                                                                                      "sha256":  "f3fd9d150ed8c659fda1fcb383084b297551b27c9b8743613dd5502b95082bd8"
+                                                                                  },
+                  "vendor/baseline/echarts/Histogram/images/thumbnail.png":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Histogram/images/thumbnail.png",
+                                                                                 "sha256":  "c7444a3a981f3978e96f0eecd584045285c6c5c62cfdf6269aacc419b63f0dfa"
+                                                                             },
+                  "vendor/baseline/echarts/Heatmap/images/example1-dark.png":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/images/example1-dark.png",
+                                                                                   "sha256":  "9816fcfe046072fc4d989fce27095303f66cef04d8412e9431b484b43313a923"
+                                                                               },
+                  "vendor/baseline/echarts/Heatmap/images/example1.png":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/images/example1.png",
+                                                                              "sha256":  "b1062aa9368fdaafcb764f69b1c1e4aaec7f6560930d1c79c7b4e9845fc51807"
+                                                                          },
+                  "vendor/baseline/echarts/Heatmap/images/example2-dark.png":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/images/example2-dark.png",
+                                                                                   "sha256":  "297740cfff74dafc06caceaac8df146ccd582866f68b9d16e2d6c5fc5ee65032"
+                                                                               },
+                  "vendor/baseline/echarts/Heatmap/images/example2.png":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/images/example2.png",
+                                                                              "sha256":  "7c6d3cdf6c59102b345d8622b8561fb6faeff6ea2aa4fa3462b73b7ef011d135"
+                                                                          },
+                  "vendor/baseline/echarts/Heatmap/images/example3-dark.png":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/images/example3-dark.png",
+                                                                                   "sha256":  "8be9bdd1a12f9b9e777aed5c437d6a1188fdcdf59f9ae40c21a767858d64381d"
+                                                                               },
+                  "vendor/baseline/echarts/Heatmap/images/example3.png":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/images/example3.png",
+                                                                              "sha256":  "23436383a69f325564c54e60cd056b0d785315199ee28b0cbebd4e6d72e20dc7"
+                                                                          },
+                  "vendor/baseline/echarts/Heatmap/images/thumbnail-dark.png":  {
+                                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/images/thumbnail-dark.png",
+                                                                                    "sha256":  "e7a9bee13825647aa7af001655404b6d418df095877083f4c6b2872d1d39676c"
+                                                                                },
+                  "vendor/baseline/echarts/Heatmap/images/thumbnail.png":  {
+                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Heatmap/images/thumbnail.png",
+                                                                               "sha256":  "f85dbea31b587758c716e25df3618e534358831f37b83b22180cde479c217cc6"
+                                                                           },
+                  "vendor/baseline/echarts/Graph/images/example-dark.jpg":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/images/example-dark.jpg",
+                                                                                "sha256":  "b0ffd841a28e68b57f700e9b53d2f3f048b02ae5255bea1cac68fa714a240bf7"
+                                                                            },
+                  "vendor/baseline/echarts/Graph/images/example.jpg":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/images/example.jpg",
+                                                                           "sha256":  "e74411ee77fa0e92eab3b7091cb410b3565a2e8711aaf93314a9f9a79d5ba64a"
+                                                                       },
+                  "vendor/baseline/echarts/Graph/images/thumbnail-dark.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/images/thumbnail-dark.png",
+                                                                                  "sha256":  "27f67b9aef5fa70efb4617995670c6e38aa8ff066626211e32478929deccbaa1"
+                                                                              },
+                  "vendor/baseline/echarts/Graph/images/thumbnail.png":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Graph/images/thumbnail.png",
+                                                                             "sha256":  "3d3cc1f5132cd966951b76deb7859d76fdae838c4ef9eb59f4ad18b76b400206"
+                                                                         },
+                  "vendor/baseline/echarts/Gauge/images/example1-dark.jpg":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/images/example1-dark.jpg",
+                                                                                 "sha256":  "8e097b2ad7212732bcc0db051172946859c4f085c20146652341b05ab8372597"
+                                                                             },
+                  "vendor/baseline/echarts/Gauge/images/example1.jpg":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/images/example1.jpg",
+                                                                            "sha256":  "e3d7cd8e2c312811651ec3d87b750a82e0ef6256a662bc02aec604d7578951c5"
+                                                                        },
+                  "vendor/baseline/echarts/Gauge/images/example2-dark.jpg":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/images/example2-dark.jpg",
+                                                                                 "sha256":  "9605359fecb093373dbbb31f3d53752954a9ddd19da54a2b9e6eac314e5dd570"
+                                                                             },
+                  "vendor/baseline/echarts/Gauge/images/example2.jpg":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/images/example2.jpg",
+                                                                            "sha256":  "16b24b93d9cb6ed90db1773734713cc1d0696a5a439f51d4bfebc3d751197f55"
+                                                                        },
+                  "vendor/baseline/echarts/Gauge/images/thumbnail-dark.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/images/thumbnail-dark.png",
+                                                                                  "sha256":  "18fa4951a929f91e90e17a63fa304974914da84513ca9b4498fd7c51c6ef9e47"
+                                                                              },
+                  "vendor/baseline/echarts/Gauge/images/thumbnail.png":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gauge/images/thumbnail.png",
+                                                                             "sha256":  "94944768de8e84a0bc003fb94d05085e9b8b35b46a699777b94791fd65e729ee"
+                                                                         },
+                  "vendor/baseline/echarts/Gantt/images/example1-dark.png":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/images/example1-dark.png",
+                                                                                 "sha256":  "cac479aeb8ee732171b4d6ea9edfc23091e0c5a34c97edf8d0a7888fcf68d551"
+                                                                             },
+                  "vendor/baseline/echarts/Gantt/images/example1.png":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/images/example1.png",
+                                                                            "sha256":  "d72f0fc71c613ff55f288513cc2e4c6ed745ba7ae62f48f01127893d3d6e3eeb"
+                                                                        },
+                  "vendor/baseline/echarts/Gantt/images/example2-dark.png":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/images/example2-dark.png",
+                                                                                 "sha256":  "324ad40cb197325834bccfa54ccd45feadcc2798339928d097db2ce6e5187e73"
+                                                                             },
+                  "vendor/baseline/echarts/Gantt/images/example2.png":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/images/example2.png",
+                                                                            "sha256":  "047298bdc7a885f1f866688c4c0b940e62c51e51e4664f28eb5aa81bc2e80e55"
+                                                                        },
+                  "vendor/baseline/echarts/Gantt/images/thumbnail-dark.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/images/thumbnail-dark.png",
+                                                                                  "sha256":  "d7305956886590fd303f036dd2328d7cdc81276ee316fed4c8c2c7b4b9039012"
+                                                                              },
+                  "vendor/baseline/echarts/Gantt/images/thumbnail.png":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Gantt/images/thumbnail.png",
+                                                                             "sha256":  "1781119918726967b32400f179c3b49ca565deb2a50952b2886ee7e46435c680"
+                                                                         },
+                  "vendor/baseline/echarts/Funnel/images/example-dark.jpg":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/images/example-dark.jpg",
+                                                                                 "sha256":  "5b6060301ee96720fb5cdc46bd0693bc1a7fd425685ebe5bbe41ff0e962c43cf"
+                                                                             },
+                  "vendor/baseline/echarts/Funnel/images/example.jpg":  {
+                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/images/example.jpg",
+                                                                            "sha256":  "ac80df82e5d938b833cef9d714ed89cf3e4d39baea22c65df6e4a9b9f036026e"
+                                                                        },
+                  "vendor/baseline/echarts/Funnel/images/thumbnail-dark.png":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/images/thumbnail-dark.png",
+                                                                                   "sha256":  "97a0518f233a1c5f3c28ac6972e0b834a15bf1f985e1e29eeb96c66503a035eb"
+                                                                               },
+                  "vendor/baseline/echarts/Funnel/images/thumbnail.png":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Funnel/images/thumbnail.png",
+                                                                              "sha256":  "2010007e7001299e9096d60cf1326948881bcc41baa5b1dd754bb670177576fa"
+                                                                          },
+                  "vendor/baseline/echarts/Bubble/images/example1-dark.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/images/example1-dark.png",
+                                                                                  "sha256":  "c4d11056a210215e32dbac3703c29dfa9f38662fa9475b4e58daf12fba7a0c19"
+                                                                              },
+                  "vendor/baseline/echarts/Bubble/images/example1.png":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/images/example1.png",
+                                                                             "sha256":  "d1d83730ee2552e408f62d7cd6b03aa00afa763c810efe9da526126519dcc935"
+                                                                         },
+                  "vendor/baseline/echarts/Bubble/images/example2-dark.png":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/images/example2-dark.png",
+                                                                                  "sha256":  "84865814ea3b2bcd294ebf3df2b8a6b02dc8aa14e5d7eb98648fb687e56a44aa"
+                                                                              },
+                  "vendor/baseline/echarts/Bubble/images/example2.png":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/images/example2.png",
+                                                                             "sha256":  "d3d44fb5d521b74aae1dc5aed6b37996916465aea64e7655ad6ebc7ef92f81b0"
+                                                                         },
+                  "vendor/baseline/echarts/Bubble/images/thumbnail-dark.png":  {
+                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/images/thumbnail-dark.png",
+                                                                                   "sha256":  "7d780100622cbe823e2b4abedd33de12ed70e5b48ac38123afeb36766141aaf1"
+                                                                               },
+                  "vendor/baseline/echarts/Bubble/images/thumbnail.png":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/Bubble/images/thumbnail.png",
+                                                                              "sha256":  "5dceb05e0961df21929d66b7b9dd02553d5cbc098b87d1a23435752044e52070"
+                                                                          },
+                  "vendor/baseline/echarts/BoxPlot/images/BoxPlot-dark.jpg":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/images/BoxPlot-dark.jpg",
+                                                                                  "sha256":  "627270ac87b57bef05b39a13f511134703b0c8c5d719e15dc083d6294d33a950"
+                                                                              },
+                  "vendor/baseline/echarts/BoxPlot/images/BoxPlot.jpg":  {
+                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/images/BoxPlot.jpg",
+                                                                             "sha256":  "3b34c746cad695040927cbb035d1bc0854fd2f246bed1dce8b7ffc39d65f2bd0"
+                                                                         },
+                  "vendor/baseline/echarts/BoxPlot/images/thumbnail-dark.png":  {
+                                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/images/thumbnail-dark.png",
+                                                                                    "sha256":  "8b0d0cf889e9a1efa71bb5e85a8a1b1a9875f2984ad225af3fa8ea8412429728"
+                                                                                },
+                  "vendor/baseline/echarts/BoxPlot/images/thumbnail.png":  {
+                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BoxPlot/images/thumbnail.png",
+                                                                               "sha256":  "e199c5e64927cc4dfa55ea171e79bc839ae64e67bfdae6cef760036bec50930a"
+                                                                           },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/buildQuery.ts":  {
+                                                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/buildQuery.ts",
+                                                                                                    "sha256":  "9eda611dad4401e0b6f64030d2f68cc29d9ce5829f8245a52980bea7f967ad6f"
+                                                                                                },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/controlPanel.ts":  {
+                                                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/controlPanel.ts",
+                                                                                                      "sha256":  "8249e26b3f20404456fe32f685b14777f22933c80df65160b6020437c1bb3880"
+                                                                                                  },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/index.ts":  {
+                                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/index.ts",
+                                                                                               "sha256":  "c36af60ce8f50e79af7039a63bc71fcb9bf50e13dd018494183df38af11b4504"
+                                                                                           },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/PopKPI.tsx":  {
+                                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/PopKPI.tsx",
+                                                                                                 "sha256":  "da27926da96249cda4d541884dff9fc935d2bcc0ee3d024d6788fe12c7987acf"
+                                                                                             },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/transformProps.ts":  {
+                                                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/transformProps.ts",
+                                                                                                        "sha256":  "20c8e4f14e70a3a4d379745e00a66d6e9e506c8b054763c39cdf8a5c97fc5a78"
+                                                                                                    },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/types.ts":  {
+                                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/types.ts",
+                                                                                               "sha256":  "37863231790514e024c13ecc8e46b593bc0c85d08b610cdfdf87fd88cfbcc6b2"
+                                                                                           },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/useOverflowDetection.ts":  {
+                                                                                                              "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/useOverflowDetection.ts",
+                                                                                                              "sha256":  "a95bde9c9c7b82ed490b95305d1661ea4344ed68853f70f20d898481770962ff"
+                                                                                                          },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/utils.ts":  {
+                                                                                               "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/utils.ts",
+                                                                                               "sha256":  "337db83ba04f003571eca18d25ef002377c04130cc97a55bbc4588050f5afecf"
+                                                                                           },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/buildQuery.ts":  {
+                                                                                         "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/buildQuery.ts",
+                                                                                         "sha256":  "d3fac65d7ea3a443d4ee7ee850c6111b3bb28cc77ed401ead93a02aba35927dd"
+                                                                                     },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/controlPanel.ts":  {
+                                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/controlPanel.ts",
+                                                                                           "sha256":  "11630773522e14bc0135fb97bc142bc206917e3ba5024b2810cd7203c2cce8ea"
+                                                                                       },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/index.ts":  {
+                                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/index.ts",
+                                                                                    "sha256":  "dface8810fd2fda1aedea037a4fa5f53fd2095b82f45ec6f87d34ae337e10336"
+                                                                                },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/transformProps.ts":  {
+                                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/transformProps.ts",
+                                                                                             "sha256":  "03a09c8ceef360986da9f2b23aa8fbc8294d08d083516097f121d5095f6f4012"
+                                                                                         },
+                  "vendor/baseline/echarts/BigNumber/BigNumberWithTrendline/buildQuery.ts":  {
+                                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/buildQuery.ts",
+                                                                                                 "sha256":  "72438932fc17f3cb2596bb2a534b0c1ee50a17bfb84502cf254cc998c7fe1f9f"
+                                                                                             },
+                  "vendor/baseline/echarts/BigNumber/BigNumberWithTrendline/controlPanel.tsx":  {
+                                                                                                    "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/controlPanel.tsx",
+                                                                                                    "sha256":  "a499cbffd81a0b4161f28fbe45bf8eabb019e35057e897ef52fb885f435bb4d9"
+                                                                                                },
+                  "vendor/baseline/echarts/BigNumber/BigNumberWithTrendline/index.ts":  {
+                                                                                            "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/index.ts",
+                                                                                            "sha256":  "7a6ca9d40e1501942a8e2df12deecb43bb7c05438e98d99a4fbc6e1fd6160cbd"
+                                                                                        },
+                  "vendor/baseline/echarts/BigNumber/BigNumberWithTrendline/transformProps.ts":  {
+                                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/transformProps.ts",
+                                                                                                     "sha256":  "15f76421d03b9424e5d7ebc27896865d3b1685bd6ec8c51826cc59c90c0ebc7b"
+                                                                                                 },
+                  "vendor/baseline/echarts/BigNumber/BigNumberWithTrendline/images/Big_Number_Trendline-dark.jpg":  {
+                                                                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/images/Big_Number_Trendline-dark.jpg",
+                                                                                                                        "sha256":  "e6809e64071d9880260931014ec1d7f29fd1b3cdf88b220b8c423d1e205a2833"
+                                                                                                                    },
+                  "vendor/baseline/echarts/BigNumber/BigNumberWithTrendline/images/Big_Number_Trendline.jpg":  {
+                                                                                                                   "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/images/Big_Number_Trendline.jpg",
+                                                                                                                   "sha256":  "1a81392f337428fb0ea61a9ebe3c1a575f0acd7b4559c55fd4db01d7d2f2cedc"
+                                                                                                               },
+                  "vendor/baseline/echarts/BigNumber/BigNumberWithTrendline/images/thumbnail-dark.png":  {
+                                                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/images/thumbnail-dark.png",
+                                                                                                             "sha256":  "af5c48c097688a3d75efb873dee100dc5c76cc548e0e66dc0e2d4ea4ae050a83"
+                                                                                                         },
+                  "vendor/baseline/echarts/BigNumber/BigNumberWithTrendline/images/thumbnail.png":  {
+                                                                                                        "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/images/thumbnail.png",
+                                                                                                        "sha256":  "d78f4753d5577bb05314f4b83d6712fd828943af33c4a49d7a5ac9c21b92cfb8"
+                                                                                                    },
+                  "vendor/baseline/echarts/BigNumber/BigNumberWithTrendline/images/thumbnailLarge.png":  {
+                                                                                                             "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/images/thumbnailLarge.png",
+                                                                                                             "sha256":  "7dd05c767bf5ec9484898f411311d975babf1fbf1fb13c077fdf710ecd86f5e9"
+                                                                                                         },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/images/BigNumber-dark.jpg":  {
+                                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/images/BigNumber-dark.jpg",
+                                                                                                     "sha256":  "39346aa46509b0ace9c3c726b0d3bcf9145ae1c17b8f670eee675a68f7c28261"
+                                                                                                 },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/images/BigNumber.jpg":  {
+                                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/images/BigNumber.jpg",
+                                                                                                "sha256":  "023d42317930aebe07039cbde9beeaf783cbe6c223e6aa383314e191a62b5c0c"
+                                                                                            },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/images/BigNumber2-dark.jpg":  {
+                                                                                                      "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/images/BigNumber2-dark.jpg",
+                                                                                                      "sha256":  "03eb0080c929dc9c9be82b8646d59f2c247385d3782067c70c3252564482d878"
+                                                                                                  },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/images/BigNumber2.jpg":  {
+                                                                                                 "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/images/BigNumber2.jpg",
+                                                                                                 "sha256":  "ed825508c451996dac9d336af6f4a2c9952d5f918be9dfe00dc214a171761ab0"
+                                                                                             },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/images/thumbnail-dark.png":  {
+                                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/images/thumbnail-dark.png",
+                                                                                                     "sha256":  "11c2c9e4eafbe24609506bdfa44c988bed9c02a915c3acd77480c33a60a213af"
+                                                                                                 },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/images/thumbnail.png":  {
+                                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/images/thumbnail.png",
+                                                                                                "sha256":  "73c2356ebbb9b40af8586b356cea155996daccb5acb5756f9bdaaf03ee0b533e"
+                                                                                            },
+                  "vendor/baseline/echarts/BigNumber/BigNumberTotal/images/thumbnailLarge.png":  {
+                                                                                                     "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/images/thumbnailLarge.png",
+                                                                                                     "sha256":  "2f7f6c0511f15903bff5e4579f4f940b662c703c11f9b44e455069e65a99e9a9"
+                                                                                                 },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/images/thumbnail-dark.png":  {
+                                                                                                                "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/images/thumbnail-dark.png",
+                                                                                                                "sha256":  "625a5979ed4a933ea6691f0c0d327d5995ca5077440fd6dc94abee14928acecc"
+                                                                                                            },
+                  "vendor/baseline/echarts/BigNumber/BigNumberPeriodOverPeriod/images/thumbnail.png":  {
+                                                                                                           "source":  "superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/images/thumbnail.png",
+                                                                                                           "sha256":  "ee482bff47767a24c05edf8855f1bc27cc321635685e7b3d0dc464e9331d01c5"
+                                                                                                       },
+                  "vendor/baseline/table/buildQuery.ts":  {
+                                                              "source":  "superset-frontend/plugins/plugin-chart-table/src/buildQuery.ts",
+                                                              "sha256":  "73c15dc49f3792688869dc3a63dc7ef621f508e0d65de37caee947d7c41f5ca8"
+                                                          },
+                  "vendor/baseline/table/consts.ts":  {
+                                                          "source":  "superset-frontend/plugins/plugin-chart-table/src/consts.ts",
+                                                          "sha256":  "8643f7093fa4b2257d7f1ea8b589e3bc492b608f65e1912f7c8a6a927dc2ac97"
+                                                      },
+                  "vendor/baseline/table/controlPanel.tsx":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-table/src/controlPanel.tsx",
+                                                                 "sha256":  "d3333b2703471d3b4fd338a718c4fe2f9a2a7b26fd2186a257dd0bcdc4bde734"
+                                                             },
+                  "vendor/baseline/table/index.ts":  {
+                                                         "source":  "superset-frontend/plugins/plugin-chart-table/src/index.ts",
+                                                         "sha256":  "a63dca9b96e24dad643e6f0c89cb19404b5394003f1622abcdb9ba73d0aa947b"
+                                                     },
+                  "vendor/baseline/table/Styles.tsx":  {
+                                                           "source":  "superset-frontend/plugins/plugin-chart-table/src/Styles.tsx",
+                                                           "sha256":  "2db342693798292c98b4ee5c411d27771b6070ad23b4df12b51d0349fddad0da"
+                                                       },
+                  "vendor/baseline/table/TableChart.tsx":  {
+                                                               "source":  "superset-frontend/plugins/plugin-chart-table/src/TableChart.tsx",
+                                                               "sha256":  "d68288f37007eeb07b756688cb008369c9a22b06af06e7de504a1d1407c2800c"
+                                                           },
+                  "vendor/baseline/table/transformProps.ts":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-table/src/transformProps.ts",
+                                                                  "sha256":  "e87b29fee001bbbe0287115c5442155d8a732b3577b6d3f797c23268f46e7542"
+                                                              },
+                  "vendor/baseline/table/types.ts":  {
+                                                         "source":  "superset-frontend/plugins/plugin-chart-table/src/types.ts",
+                                                         "sha256":  "3b48b4fc8a0cd913f66dbef7261203cf52b15a5e3cdb922d02f3f16a50c673ab"
+                                                     },
+                  "vendor/baseline/table/DataTable/DataTable.tsx":  {
+                                                                        "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/DataTable.tsx",
+                                                                        "sha256":  "f0d4bf981a708e62e3139a9577556352ec206af21113f654ef2425888ae4d4e4"
+                                                                    },
+                  "vendor/baseline/table/DataTable/index.tsx":  {
+                                                                    "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/index.tsx",
+                                                                    "sha256":  "5ac3b452c0bab8ee7e2658ff6fe6afcdd98d580fc689ca5ab7a2593c49eecf51"
+                                                                },
+                  "vendor/baseline/table/DataTable/README.md":  {
+                                                                    "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/README.md",
+                                                                    "sha256":  "a6946d660e5ebe4458f35c6b5b35ea140d71724c1ee94b5b0268a4d1762a784b"
+                                                                },
+                  "vendor/baseline/table/images/Table-dark.jpg":  {
+                                                                      "source":  "superset-frontend/plugins/plugin-chart-table/src/images/Table-dark.jpg",
+                                                                      "sha256":  "7f4b3233032690267e2cb61cad5ca7f9465dfe05dc8cfc1a97b81823740da103"
+                                                                  },
+                  "vendor/baseline/table/images/Table.jpg":  {
+                                                                 "source":  "superset-frontend/plugins/plugin-chart-table/src/images/Table.jpg",
+                                                                 "sha256":  "127d6f0d437e8d233a17c0b37a70049564e224d6290c51eff15e846ef83aa6c6"
+                                                             },
+                  "vendor/baseline/table/images/Table2-dark.jpg":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-table/src/images/Table2-dark.jpg",
+                                                                       "sha256":  "c4b1554b546c41fa04a1c979b1e7692d284a0593d20483845a7b885f92f970d8"
+                                                                   },
+                  "vendor/baseline/table/images/Table2.jpg":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-table/src/images/Table2.jpg",
+                                                                  "sha256":  "c9c211b262a3d82bad1fa69e848a97d9238f88cd8a2b15d215cf29da4d5c2e05"
+                                                              },
+                  "vendor/baseline/table/images/Table3-dark.jpg":  {
+                                                                       "source":  "superset-frontend/plugins/plugin-chart-table/src/images/Table3-dark.jpg",
+                                                                       "sha256":  "27f3f2c18199bd7ee015bd2ce51e9c4dcfcf3803b52d18df9c43605f1502aa59"
+                                                                   },
+                  "vendor/baseline/table/images/Table3.jpg":  {
+                                                                  "source":  "superset-frontend/plugins/plugin-chart-table/src/images/Table3.jpg",
+                                                                  "sha256":  "e7406fd4df471fb74e554f01688f9d7135c6fa740a0bb0f99b04514a14831593"
+                                                              },
+                  "vendor/baseline/table/images/thumbnail-dark.png":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-table/src/images/thumbnail-dark.png",
+                                                                          "sha256":  "4aa8c6dbeada44600efcd9c6da58464ea67cdf457dcb5f07c7af43df8d6145fa"
+                                                                      },
+                  "vendor/baseline/table/images/thumbnail.png":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-table/src/images/thumbnail.png",
+                                                                     "sha256":  "d31715f0277af6d876c4542dd2fea11a1e273cfbaf00f8a00a42438d3d50f906"
+                                                                 },
+                  "vendor/baseline/table/images/thumbnailLarge.png":  {
+                                                                          "source":  "superset-frontend/plugins/plugin-chart-table/src/images/thumbnailLarge.png",
+                                                                          "sha256":  "f0977cf7178b4331255d2dd49bbf1c61b9a18a81f0a0aef6be9922723a24c3cf"
+                                                                      },
+                  "vendor/baseline/table/utils/DateWithFormatter.ts":  {
+                                                                           "source":  "superset-frontend/plugins/plugin-chart-table/src/utils/DateWithFormatter.ts",
+                                                                           "sha256":  "7fdbf7efd06b28e7296e7f34ed7d18ec87d43141e0aa3832bb9ad35f47c1dfad"
+                                                                       },
+                  "vendor/baseline/table/utils/extent.ts":  {
+                                                                "source":  "superset-frontend/plugins/plugin-chart-table/src/utils/extent.ts",
+                                                                "sha256":  "a80925d36a08caf7044a289aebc0cb52782b499be6d8a212a91a1df8a5be99b7"
+                                                            },
+                  "vendor/baseline/table/utils/formatValue.ts":  {
+                                                                     "source":  "superset-frontend/plugins/plugin-chart-table/src/utils/formatValue.ts",
+                                                                     "sha256":  "b865dc7e7a0933aeb0556eee1e0ebfab667edb6490096a785f7018b3431e0c3f"
+                                                                 },
+                  "vendor/baseline/table/utils/isEqualColumns.ts":  {
+                                                                        "source":  "superset-frontend/plugins/plugin-chart-table/src/utils/isEqualColumns.ts",
+                                                                        "sha256":  "9db07e664822d8f4d86ed51f97c4cf409c05be4d57a837543697c3f37e1c12bc"
+                                                                    },
+                  "vendor/baseline/table/DataTable/components/GlobalFilter.tsx":  {
+                                                                                      "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/components/GlobalFilter.tsx",
+                                                                                      "sha256":  "9a494ea1cd904a2572b1b91b53d5904980cbe41c643c0ac45e7e23338e5852c2"
+                                                                                  },
+                  "vendor/baseline/table/DataTable/components/Pagination.tsx":  {
+                                                                                    "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/components/Pagination.tsx",
+                                                                                    "sha256":  "f9d5fca1b39f1d9daf8e88ebe2bb16dfff52b4e480256107657feab67cdd4f9f"
+                                                                                },
+                  "vendor/baseline/table/DataTable/components/SearchSelectDropdown.tsx":  {
+                                                                                              "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/components/SearchSelectDropdown.tsx",
+                                                                                              "sha256":  "b104fd37c30dbeb2ee4ac2aed7bf498093bd55ba339f96c48c5975d1b0e963c6"
+                                                                                          },
+                  "vendor/baseline/table/DataTable/components/SelectPageSize.tsx":  {
+                                                                                        "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/components/SelectPageSize.tsx",
+                                                                                        "sha256":  "8e9945ca40af89e8ce29ad9a11f9f845e5787052e0c9b78f93cde89eb0202a0a"
+                                                                                    },
+                  "vendor/baseline/table/DataTable/hooks/useSticky.tsx":  {
+                                                                              "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/hooks/useSticky.tsx",
+                                                                              "sha256":  "9effa135b9842322395ba33073269727f4b280a06da277d570fc544ac4595e0a"
+                                                                          },
+                  "vendor/baseline/table/DataTable/types/react-table.d.ts":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/types/react-table.d.ts",
+                                                                                 "sha256":  "d9f50f2af3bd97d4599de92a25cd186c07d4413909de25180d3cee2639b4766f"
+                                                                             },
+                  "vendor/baseline/table/DataTable/utils/externalAPIs.ts":  {
+                                                                                "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/utils/externalAPIs.ts",
+                                                                                "sha256":  "e311289f37bac2e85da7cfbb63369ef5bbbefaca55607c2e3f88b6e86066ffcd"
+                                                                            },
+                  "vendor/baseline/table/DataTable/utils/getScrollBarSize.ts":  {
+                                                                                    "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/utils/getScrollBarSize.ts",
+                                                                                    "sha256":  "c5bb040fac14b31e63008c61a3ec0ede1001adddaca62394bbc5c1e75d70c276"
+                                                                                },
+                  "vendor/baseline/table/DataTable/utils/needScrollBar.ts":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/utils/needScrollBar.ts",
+                                                                                 "sha256":  "6d87166b54fef8b5c678e0bd28876089fba9dbf4c5b434315a02f45180a6fb5f"
+                                                                             },
+                  "vendor/baseline/table/DataTable/utils/sortAlphanumericCaseInsensitive.ts":  {
+                                                                                                   "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/utils/sortAlphanumericCaseInsensitive.ts",
+                                                                                                   "sha256":  "077961dc16721319fd27bf5de87b24a8e00171799385cce7ebbd9942e3024dd0"
+                                                                                               },
+                  "vendor/baseline/table/DataTable/utils/useAsyncState.ts":  {
+                                                                                 "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/utils/useAsyncState.ts",
+                                                                                 "sha256":  "3f2a2f73241720e6abe587d14dec55692376c88063e25f6bbdd3135bcc9edc75"
+                                                                             },
+                  "vendor/baseline/table/DataTable/utils/useMountedMemo.ts":  {
+                                                                                  "source":  "superset-frontend/plugins/plugin-chart-table/src/DataTable/utils/useMountedMemo.ts",
+                                                                                  "sha256":  "34b1dd984cb81ae875af6a90c96b2565d86399a1c67b557418a143bb300be62f"
+                                                                              },
+                  "vendor/shared/core/components/atomic-design.png":  {
+                                                                          "source":  "superset-frontend/packages/superset-ui-core/src/components/atomic-design.png",
+                                                                          "sha256":  "c7a3ed6eab998f50f735585c12fa5f9895229c47211f7e2591f84b166843066c"
+                                                                      },
+                  "vendor/shared/core/components/assets/images/.!80135!loading.gif":  {
+                                                                                          "source":  "superset-frontend/packages/superset-ui-core/src/components/assets/images/.!80135!loading.gif",
+                                                                                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                                                                                      },
+                  "vendor/shared/core/components/assets/images/.!80342!loading.gif":  {
+                                                                                          "source":  "superset-frontend/packages/superset-ui-core/src/components/assets/images/.!80342!loading.gif",
+                                                                                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                                                                                      },
+                  "vendor/shared/core/components/assets/images/.!80520!loading.gif":  {
+                                                                                          "source":  "superset-frontend/packages/superset-ui-core/src/components/assets/images/.!80520!loading.gif",
+                                                                                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                                                                                      },
+                  "vendor/shared/core/components/assets/images/.!80903!loading.gif":  {
+                                                                                          "source":  "superset-frontend/packages/superset-ui-core/src/components/assets/images/.!80903!loading.gif",
+                                                                                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                                                                                      },
+                  "vendor/shared/core/components/assets/images/loading.gif":  {
+                                                                                  "source":  "superset-frontend/packages/superset-ui-core/src/components/assets/images/loading.gif",
+                                                                                  "sha256":  "803140a7c2bb5836d8c1a0362a8f1a6d8d45910274bb276e0ce22711e1c5cf76"
+                                                                              }
+              },
+    "dependencyLockSha256":  "68841147eb10908e5ac753e78cc8be09466a05094f61875301a5e283ba166464",
+    "retiredSharedCode":  {
+                              "fileCount":  580,
+                              "reason":  "Removed duplicate shared core and dashboard code. Native Superset shared dependencies are reused unchanged; renderer baseline hashes are preserved."
+                          }
+}

@@ -1,0 +1,10 @@
+{
+  "publisher": "focalbi",
+  "name": "content-localization",
+  "displayName": "FocalBI Content Localization",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "description": "Resource-based display translations without changing native analytical queries",
+  "permissions": [],
+  "backend": { "files": ["src/focalbi_localization/**/*.py"] }
+}
