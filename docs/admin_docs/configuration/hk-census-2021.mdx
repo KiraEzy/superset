@@ -16,13 +16,16 @@ Data preparation, source provenance and resource specifications live under
 belong to its [workflow README](../../../local-data/hk-census-2021/README.md).
 The [resource manifest](../../../local-data/hk-census-2021/resources.json)
 records created IDs and UUIDs. The
+district map disables dragging and zoom gestures and hides its diagnostic renderer
+label. Native auto-fit keeps the map inside the chart on resize; hover and filters
+remain available. See the workflow README for the saved flags. The
 [source provenance](../../../local-data/hk-census-2021/provenance.json)
 records the reviewed release, file hashes and benchmarks.
 
 ## Data and filters
 
-Four physical tables retain the release, geographies, bilingual indicator
-metadata and original source cells. The 23 analytical virtual datasets exclude
+Five physical tables retain the release, geographies, bilingual indicator
+metadata, original source cells and joint age/sex counts. The 28 analytical virtual datasets exclude
 the separate Land reference. Published cells are aggregate statistics, not
 individual respondent records or invented intersections of marginal totals.
 
@@ -37,6 +40,20 @@ in the introductory note. Elderly share uses summed population counts as its
 denominator. Published district medians, means and rates are never summed or
 averaged into a false aggregate indicator. Detailed definitions, source tokens
 and notes remain available in the source table.
+
+Households and income combines district income distributions and published medians
+in one chart: percentage bars with overlaid HKD dots, ordered by median income.
+The percentage axis is above the bars and the HKD axis below; every band tooltip
+includes the district's published median.
+Labels support English and both Chinese locales. Its data definitions, template,
+dashboard CSS requirements and checks are recorded in the
+[workflow README](../../../local-data/hk-census-2021/README.md#district-household-income-comparison).
+
+Housing type uses a 200-square waffle with exact source counts and percentages
+in its legend and tooltips. Each square represents approximately 0.5%; geography
+filters recalculate the shares and square allocation. English and both Chinese
+locales are supported. Its saved metrics and presentation files are documented
+in the [workflow README](../../../local-data/hk-census-2021/README.md#domestic-households-by-housing-type).
 
 ## Native editing and rendering
 

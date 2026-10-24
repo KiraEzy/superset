@@ -75,8 +75,10 @@ python scripts/seed.py fixtures/fds.json --origin http://localhost:8088 --cookie
 ```
 
 The sample translates labels, themes, the remainder category and three department
-names. Other free-text project records retain their source text. Census catalogs
-are not seeded or changed.
+names. Other free-text project records retain their source text. This FDS fixture
+does not change census catalogs. The separately authored
+[census catalog](../../local-data/hk-census-2021/README.md#content-languages)
+owns census translations and its application command.
 
 ## Website integration
 

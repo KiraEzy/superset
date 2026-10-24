@@ -192,6 +192,8 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         from superset.views.alerts import AlertView, ReportView
         from superset.views.all_entities import TaggedObjectsModelView
         from superset.ai_chat.api import AiChatSessionRestApi
+        from superset.ai_runtime.api import AIRuntimeRestApi
+        from superset.ai_runtime.connection_api import AIConnectionCatalogueRestApi
         from superset.views.ai.api import AIRestApi
         from superset.global_configuration.api import GlobalConfigurationRestApi
         from superset.views.ai.config_api import AIConnectionRestApi
@@ -283,6 +285,8 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         appbuilder.add_api(SqlLabPermalinkRestApi)
         appbuilder.add_api(LogRestApi)
         appbuilder.add_api(AIRestApi)
+        appbuilder.add_api(AIRuntimeRestApi)
+        appbuilder.add_api(AIConnectionCatalogueRestApi)
         appbuilder.add_api(AIConnectionRestApi)
         appbuilder.add_api(GlobalConfigurationRestApi)
         appbuilder.add_api(AiChatSessionRestApi)

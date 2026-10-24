@@ -55,6 +55,7 @@ Object.assign(options.paths, {
   ],
 });
 const files = [
+  "DeckGL.tsx",
   "DashboardBuilder.tsx",
   "SuperChartCore.tsx",
   "SliceHeader.tsx",

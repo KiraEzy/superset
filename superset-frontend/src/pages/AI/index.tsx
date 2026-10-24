@@ -21,6 +21,9 @@ import { t } from '@apache-superset/core/translation';
 import { styled, css } from '@apache-superset/core/theme';
 import { DeleteModal, Loading } from '@superset-ui/core/components';
 import { Icons } from '@superset-ui/core/components/Icons';
+import { Alert } from '@apache-superset/core/components';
+import RuntimeWorkspace from 'src/features/ai/components/RuntimeWorkspace';
+import { runtimeGet, RuntimeMetadata } from 'src/features/ai/runtime';
 import ChatMarkdown from 'src/features/ai/components/ChatMarkdown';
 import ChatChartEmbed from 'src/features/ai/components/ChatChartEmbed';
 import { useAiChatSessions } from 'src/features/ai/hooks/useAiChatSessions';
@@ -171,7 +174,9 @@ const SessionDeleteButton = styled.button`
     color: ${theme.colorTextSecondary};
     cursor: pointer;
     opacity: 0;
-    transition: opacity 0.15s, color 0.15s;
+    transition:
+      opacity 0.15s,
+      color 0.15s;
 
     &:hover {
       color: ${theme.colorError};
@@ -256,7 +261,10 @@ const ResponseDuration = styled.div`
   `}
 `;
 
-const MessageBubble = styled.div<{ role: 'user' | 'assistant'; error?: boolean }>`
+const MessageBubble = styled.div<{
+  role: 'user' | 'assistant';
+  error?: boolean;
+}>`
   ${({ theme, role, error }) => css`
     max-width: ${role === 'assistant' ? '90%' : '80%'};
     padding: ${theme.sizeUnit * 2.5}px ${theme.sizeUnit * 3.5}px;
@@ -265,27 +273,25 @@ const MessageBubble = styled.div<{ role: 'user' | 'assistant'; error?: boolean }
     line-height: 1.6;
     word-break: break-word;
 
-    ${
-      error
+    ${error
+      ? css`
+          background: ${theme.colorErrorBg};
+          color: ${theme.colorErrorText};
+          border: 1px solid ${theme.colorErrorBorder};
+          border-bottom-left-radius: ${theme.borderRadiusSM}px;
+        `
+      : role === 'user'
         ? css`
-            background: ${theme.colorErrorBg};
-            color: ${theme.colorErrorText};
-            border: 1px solid ${theme.colorErrorBorder};
-            border-bottom-left-radius: ${theme.borderRadiusSM}px;
+            background: ${theme.colorPrimary};
+            color: #fff;
+            border-bottom-right-radius: ${theme.borderRadiusSM}px;
+            white-space: pre-wrap;
           `
-        : role === 'user'
-          ? css`
-              background: ${theme.colorPrimary};
-              color: #fff;
-              border-bottom-right-radius: ${theme.borderRadiusSM}px;
-              white-space: pre-wrap;
-            `
-          : css`
-              background: ${theme.colorBgLayout};
-              color: ${theme.colorText};
-              border-bottom-left-radius: ${theme.borderRadiusSM}px;
-            `
-    }
+        : css`
+            background: ${theme.colorBgLayout};
+            color: ${theme.colorText};
+            border-bottom-left-radius: ${theme.borderRadiusSM}px;
+          `}
   `}
 `;
 
@@ -386,7 +392,7 @@ const LoadingWrapper = styled.div`
   flex: 1;
 `;
 
-export default function AI() {
+function LegacyAI() {
   const {
     sessions,
     activeSession,
@@ -586,10 +592,7 @@ export default function AI() {
                 <Icons.StopOutlined iconSize="s" />
               </StopButton>
             ) : (
-              <SendButton
-                disabled={!inputValue.trim()}
-                onClick={handleSend}
-              >
+              <SendButton disabled={!inputValue.trim()} onClick={handleSend}>
                 <Icons.CaretRightOutlined iconSize="s" />
               </SendButton>
             )}
@@ -597,5 +600,42 @@ export default function AI() {
         </InputArea>
       </MainArea>
     </PageWrapper>
+  );
+}
+
+export default function AI() {
+  const [runtime, setRuntime] = useState<RuntimeMetadata | null>(null);
+  const [checked, setChecked] = useState(false);
+  const [runtimeError, setRuntimeError] = useState(false);
+  useEffect(() => {
+    let mounted = true;
+    runtimeGet<RuntimeMetadata>('runtime/')
+      .then(metadata => {
+        if (mounted) setRuntime(metadata);
+      })
+      .catch(() => {
+        if (mounted) setRuntimeError(true);
+      })
+      .finally(() => {
+        if (mounted) setChecked(true);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+  if (!checked) return <Loading />;
+  if (runtimeError)
+    return (
+      <Alert
+        type="error"
+        message={t(
+          'Chat could not load. Check your connection and active post, then refresh.',
+        )}
+      />
+    );
+  return runtime?.enabled ? (
+    <RuntimeWorkspace metadata={runtime} />
+  ) : (
+    <LegacyAI />
   );
 }

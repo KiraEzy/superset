@@ -26,6 +26,10 @@ under the License.
 
 # MCP Integration
 
+For the built-in Chat client, durable turns, global administrator settings and action
+policy, see [Durable AI Chat runtime](./ai-chat-runtime.md). That client treats
+this MCP service as an external dependency and does not modify server behavior.
+
 Model Context Protocol (MCP) integration allows extensions to register custom AI agent capabilities that integrate seamlessly with Superset's MCP service. Extensions can provide both **tools** (executable functions) and **prompts** (interactive guidance) that AI agents can discover and use.
 
 ## What is MCP?

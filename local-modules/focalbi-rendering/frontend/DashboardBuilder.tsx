@@ -24,7 +24,15 @@ import type { Engine } from "./settings";
 export default function DashboardBuilder(
   props: ComponentProps<typeof NativeBuilder>,
 ) {
+  const [showRendererSelector] = useState(() => {
+    try {
+      return localStorage.getItem("focalbi.rendererSelector") === "true";
+    } catch {
+      return false;
+    }
+  });
   const [engine, setEngine] = useState<Engine>(() => {
+    if (!showRendererSelector) return "fork";
     try {
       return localStorage.getItem("focalbi.renderer") === "baseline"
         ? "baseline"
@@ -35,30 +43,32 @@ export default function DashboardBuilder(
   });
   return (
     <RendererContext.Provider value={engine}>
-      <Space
-        style={{ padding: "8px 16px" }}
-        data-test="focalbi-renderer-toolbar"
-      >
-        <label htmlFor="focalbi-renderer">Renderer</label>
-        <Select
-          id="focalbi-renderer"
-          aria-label="Renderer"
-          value={engine}
-          style={{ width: 190 }}
-          options={[
-            { value: "baseline", label: "Superset baseline" },
-            { value: "fork", label: "FocalBI fork" },
-          ]}
-          onChange={(value: Engine) => {
-            setEngine(value);
-            try {
-              localStorage.setItem("focalbi.renderer", value);
-            } catch {
-              /* Storage is optional. */
-            }
-          }}
-        />
-      </Space>
+      {showRendererSelector && (
+        <Space
+          style={{ padding: "8px 16px" }}
+          data-test="focalbi-renderer-toolbar"
+        >
+          <label htmlFor="focalbi-renderer">Renderer</label>
+          <Select
+            id="focalbi-renderer"
+            aria-label="Renderer"
+            value={engine}
+            style={{ width: 190 }}
+            options={[
+              { value: "baseline", label: "Superset baseline" },
+              { value: "fork", label: "FocalBI fork" },
+            ]}
+            onChange={(value: Engine) => {
+              setEngine(value);
+              try {
+                localStorage.setItem("focalbi.renderer", value);
+              } catch {
+                /* Storage is optional. */
+              }
+            }}
+          />
+        </Space>
+      )}
       <NativeBuilder {...props} />
     </RendererContext.Provider>
   );

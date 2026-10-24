@@ -35,6 +35,11 @@ class CreateAiChatSessionCommand(BaseCommand):
     @transaction(on_error=partial(on_error, reraise=AiChatSessionCreateFailedError))
     def run(self) -> Model:
         self.validate()
+        from superset.ai_runtime.settings import enabled
+        if enabled():
+            from superset.ai_runtime.store import current_scope
+            _, post_id = current_scope()
+            self._properties.update(runtime_version=2, post_id=post_id, profile_id="default")
         return AiChatSessionDAO.create(attributes=self._properties)
 
     def validate(self) -> None:

@@ -26,6 +26,239 @@ under the License.
 
 # Using AI with Superset
 
+## Set up Focal BI Chat
+
+The model connection generates responses and requests tools. The MCP connection
+provides access to BI tools and resources. Both must work for data exploration
+and chart creation. A successful connection test alone does not verify the full
+model-to-tool flow; complete the checks below.
+
+### Administrator: configure the shared connections
+
+1. As an administrator, open **Settings → AI Connection** (`/ai/connection/`).
+   These settings apply globally to every user's new Chat turns. Ordinary users
+   cannot view or edit this configuration.
+2. Under **LLM connections**, choose **Add a connection**, give it a name, and
+   enter the provider, **API base URL**, exact test **Model**, **API key**, and
+   API protocol. Multiple connections may use the same provider.
+3. **Test LLM connection** checks connectivity without saving. Click **Verify and
+   save connection** to discover models and test the selected model's real chat
+   and tool-call behavior. Wait for success. Failed verification preserves the
+   previously saved connection. An image probe separately checks image support.
+   In the right-side **Models available in Chat** panel, select discovered models
+   and use the right arrow to verify/add them. Choose a default, adjust order,
+   then click **Save model availability**. Discovery does not verify every model.
+4. Under **Superset MCP**, turn on **Enable MCP** and enter the administrator's
+   **MCP server URL**, including its `/mcp` path. The Chat backend and AI worker
+   must be able to reach this address; a URL reachable only from the user's
+   laptop is insufficient. The standard Docker service address is
+   `http://superset_mcp:5008/mcp` when both services share that network.
+5. Use the authentication configured for the deployment. When Focal BI's
+   user/post JWT integration is enabled, Chat supplies the signed identity
+   automatically. Enter a separate MCP bearer token only when the administrator
+   requires it; the model API key is not an MCP token.
+6. Click **Test MCP connection**, then **Save MCP and agent settings**. Testing does not save changes.
+   Reload Chat after saving and use a new conversation for setup verification.
+7. Optionally configure **MCP tool access by role and user** on this same page.
+   Choose a role or user, then select their allowed Chat tools. No rule means
+   existing Superset permissions apply. An empty selected tool list blocks BI
+   tools for that rule. Matching role lists combine; a user-specific list further
+   restricts that result. These controls never grant permissions that Superset
+   itself denies. **Manage role permissions** and **Manage users and role
+   assignments** link to the existing administrative screens.
+
+If the durable workspace is unavailable or accepted turns remain queued, the
+operator should check the Chat feature flag and dedicated AI worker using the
+[deployment instructions](../../../README.md#durable-ai-chat). Changing the
+Superset MCP server is not part of normal Chat setup.
+
+### User: select context and verify the complete flow
+
+1. Sign in, select the correct active post and open **Ask Focal AI** (`/ai/`).
+   Confirm the post displayed above the conversation. Your account needs Chat
+   access and permission to the datasets, charts or dashboards you want to use.
+2. Click **New chat**. The default published model is selected automatically.
+   Use the model menu in the input bar to choose another administrator-approved
+   model. Model changes apply to the next turn; running work keeps its model.
+   Server, credential, token and OAuth settings remain administrator-only. Your
+   Focal BI identity and active-post permissions determine data/tool access.
+3. Send: **“Check the Focal BI connection health. Report only its status.”**
+   Confirm the turn completes and its activity contains a completed BI tool call.
+4. Send: **“List the datasets I can access, with their IDs and names.”** Then
+   choose a returned ID and ask: **“Inspect dataset ID and explain its columns
+   and metrics.”** Replace `ID` with the actual number.
+5. Optionally attach that dataset under **Context and tools**: choose the context
+   type, enter its ID, leave **Filters JSON** as `{}` if no filters are needed,
+   and click **Attach context**. Select a workflow such as **Create chart** when
+   useful; workflows are optional.
+6. Ask for a table or chart preview using the inspected columns and say
+   **“Do not save it yet.”** Check the **Preview** artifact and its sources in
+   the right pane. Use **Inspect** or **Open in Explore** to review it.
+7. When ready to persist a real chart, say **“Save this chart exactly as
+   previewed.”** Confirm the resulting artifact says **Saved** and the response
+   identifies the saved chart. Refresh the page and confirm the same conversation
+   and artifact remain available.
+
+Setup is successful when the model completes a real permitted tool call, returns
+resource evidence and renders an artifact. Saving is an additional verification
+step that creates a BI resource; perform it only when you want that chart saved.
+
+### Watch work in progress
+
+The **Working...** panel opens while a reply runs. It shows thinking phases,
+public reasoning summaries when supplied by the model provider, and tool calls
+with their running, completed, failed or cancelled state. Expand a thinking phase
+to inspect its summary or a tool call to inspect its details. Some providers,
+including GPUStack configurations, supply model reasoning separately from public
+summaries. For a saved self-hosted compatible connection, administrators can enable
+**Show model reasoning to users** and click **Save reasoning display** in AI
+Connection. It applies to new turns on that connection and displays streamed text
+as **Model reasoning**. It does not enable the model's thinking mode. The text can
+include sensitive context; disabling the setting does not remove text already
+displayed. Other connections keep the thinking-status/tool-activity fallback.
+Empty thinking phases do not contain an expandable placeholder.
+
+The panel becomes **Worked for Xm Ys** and collapses when work finishes, unless
+you opened or closed it manually. Activity survives refresh and reconnection.
+Interrupted work is labelled accordingly; it is not presented as completed.
+
+### Refine a generated chart
+
+You can refer to the chart from your previous reply, including after a refresh:
+?Make that chart horizontal and hide its legend; keep the same data and filters.?
+The agent retrieves its saved conversation configuration and creates a new preview
+version. You can also request a specific chart by its title when several are present.
+It preserves the dataset, metrics and filters unless you request changes. Unsupported
+style options should be explained. A preview change does not edit a saved BI chart;
+explicitly request saving when you want a permanent resource.
+
+### Dataset availability and evidence
+
+A general dataset-availability question shows a short page of permitted dataset
+IDs/names and the server's total count, with an option to explore more. A page of
+10 datasets does not mean only 10 datasets exist. Ask for all datasets when you
+want the assistant to fetch every server page.
+
+`read_evidence` is a Chat utility for inspecting omitted details from a result
+already recorded in this conversation. It does not query new server pages or
+change BI resources. A failed path can be corrected using the fields the tool
+returns. For technical field meanings, see the
+[evidence contract](../../developer_docs/extensions/ai-chat-runtime.md#evidence-contracts-and-latency-diagnostics).
+
+### Long conversations
+
+Chat automatically reduces repeated guidance and large tool results before sending
+context to the model. Older work may be represented by excerpts and evidence
+references; the full saved conversation and artifacts remain available. The agent
+can retrieve exact earlier evidence when needed. This does not undo saved BI changes.
+If discovery repeatedly returns the same information or evidence retrieval cannot
+make progress, Chat asks the model to finish from the evidence already collected
+and explain any gaps. A partial listing is not proof that no other datasets exist;
+ask a focused follow-up to explore a particular topic or dataset.
+If the current request or attachments alone exceed the configured model budget,
+reduce the attached context or ask an administrator to configure a suitable model.
+
+### Attach images
+
+Use the model name and chevron in the composer to open the model menu. Select a
+model by name; a check marks the current selection. Long names wrap in the menu.
+
+Choose an image-verified model (marked **Images** in the administrator model
+catalogue), then use **+ > Attach images**, paste an image,
+or drop it onto the composer. JPEG, PNG and static WebP are supported. Wait for
+upload completion; remove an attachment or retry a failed upload before sending.
+Defaults are four images across retained history, 5 MiB each, and 20 megapixels.
+Images stay private to your user and active post and survive refresh and branching.
+A conversation containing images requires an image-verified model. If its model
+becomes unavailable, choose an available compatible model before continuing.
+
+Enter sends your message; Shift+Enter inserts a line. During execution you can
+send text guidance or use Stop. Model selection and new image attachments remain
+locked until the turn finishes. Retry and edited resend use your selected model
+and retain the source message's images.
+
+### If the shared service needs attention
+
+Ask an administrator to repair the configuration in **AI Connection**. You do
+not need personal credentials or OAuth linking. If the turn pauses for service
+repair, use **Resume after administrator repair** once it has been resolved.
+Accepted turns keep their captured model configuration; start a new turn when
+the administrator changes the selected provider or model.
+
+### Setup troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| AI Connection settings are missing | This is expected for ordinary users. An administrator configures the shared services. |
+| Model test fails or reports an unavailable model | Check the exact model ID, API base URL, provider key and provider-side access. |
+| MCP test cannot connect | Check the `/mcp` path and backend/worker network reachability with the operator. |
+| Replies contain text but no BI activity | Ask explicitly for a BI resource lookup. The administrator should verify MCP is enabled, model tool calling works and your tool policy permits the operation. |
+| Permission denied or missing resources | Check the active post and confirm you can open the same resource directly in Focal BI. |
+| A turn stays queued | Ask the operator to check the dedicated AI worker and dispatch queue. |
+| A save stops with an uncertain outcome | Inspect the target and recorded activity before retrying; do not blindly submit the same write again. |
+
+## Focal BI Chat workspace
+
+When the durable Chat runtime is enabled, **AI Chat** shows your active post and
+its conversation history on the left, the conversation in the center, and chart,
+table, SQL and source artifacts on the right. On a smaller screen, use History,
+Chat and Artifacts to switch panes. Attach permitted dataset, chart or dashboard
+references and filters under **Context and tools**, and choose an optional
+workflow. Your browser sends references; the server loads history and the shared
+connection configuration.
+
+History uses compact, single-line titles. Long titles end in an ellipsis; hover
+over an entry to see its full title. On desktop, use the arrow beside **AI Chat**
+to collapse or expand the sidebar, or drag its right edge to resize it. You can
+also focus the divider and use the left/right arrow keys to adjust its width.
+The title, collapse control and icon-and-text **New chat** action stay pinned
+above the independently scrolling conversation list.
+Use a chat's three-dot menu to **Pin/Unpin**, **Rename**, or **Delete** it. Pinned
+chats stay ahead of recent chats and remain pinned after refreshing. Deletion
+requires confirmation and removes conversation history, not saved BI resources;
+stop an active turn before deleting its chat.
+Your historical messages have **Copy message** and **Edit message** icons. Edit
+opens an inline editor with Cancel and Send; Ctrl/Cmd+Enter also sends. Sending
+creates a new branch immediately before that message and submits the revised
+text with its original BI context and workflow selection. The selected message
+and later messages are omitted from the revised branch. The original conversation
+and previously saved BI resources remain intact. Stop active work before editing.
+On wide screens, drag the divider between Chat and Artifacts to resize the
+artifact pane, or focus it and use the arrow keys. Its width stays between 300
+and 960 pixels, with at least 320 pixels reserved for Chat; the upper limit
+shrinks to fit the available space. Smaller screens retain pane navigation.
+
+You can refresh or reconnect while a task runs. Its progress and tool evidence
+remain attached to the same conversation. **Stop** prevents subsequent tool work;
+completed saves remain recorded. The composer stays available for steering at
+the next safe boundary. Answer questions or review exact proposed actions in the
+conversation cards. If an interrupted save has an unknown outcome, inspect the
+target before starting another operation.
+
+Explore first, then say **Save this chart** to save its preview. Explicit, scoped
+edits may proceed; ambiguous, destructive or access-changing actions require
+review. See the [canonical action policy](../../developer_docs/extensions/ai-chat-runtime.md#canonical-action-policy).
+Each assistant reply has **Copy**, **Retry**, and **Fork chat** icons. Copy copies
+the reply text. Messages use a centered reading column, with your requests in
+right-aligned bubbles and assistant replies on the plain conversation background.
+Retry starts a new branch using that reply's original prompt and
+context; Fork chat preserves the selected reply and opens a branch without
+running a new task. Both preserve the original conversation and saved BI resources.
+Above a reply, expand **Worked for Xm Ys** to inspect its tool calls and visible
+progress. Time measures active execution, excluding queue time and waits for user
+input. See [Watch work in progress](#watch-work-in-progress) for summaries and
+administrator-enabled self-hosted model reasoning. Work details remain available
+after refresh and in forked conversations.
+Retry is blocked for dispatched writes or uncertain effects; fork and continue
+from the recorded evidence instead. Changing posts opens a separate workspace; a running task retains its
+original post identity and current permissions.
+
+Administrators own shared connections and user/role tool restrictions in **AI
+Connection**. Users supply their task, optional BI context and a published model choice. Existing
+encrypted settings are preserved. Credentials and opaque hosted-provider reasoning
+are not shown in activity cards. Sharing a service configuration does not share another
+user's identity, post or conversation.
+
 Superset supports AI assistants through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/). Connect Claude, ChatGPT, or other MCP-compatible clients to explore your data, build charts, create dashboards, and run SQL -- all through natural language.
 
 :::info
@@ -222,6 +455,8 @@ Ask your admin for the MCP server URL and any authentication tokens you need.
 
 - **Be specific** -- "Create a bar chart of monthly revenue by region from the sales dataset" works better than "Make me a chart"
 - **Start with exploration** -- ask what datasets and charts exist before creating new ones
+- **Name the dataset precisely** -- include its table name and, when ambiguous, its database or schema. Broad searches can also match SQL references in other datasets.
+- **Continue from discovered results** -- Chat keeps discovered dataset IDs available for schema inspection and chart previews. Repeated searches can be redirected to recorded evidence; this does not mean the inference server or BI tools failed. If the remaining context cannot support the next step, Chat reports unfinished work instead of claiming a chart was created.
 - **Review AI-generated content** -- always check chart configurations and SQL before saving or sharing
 - **Use Explore for refinement** -- ask AI for an Explore link, then fine-tune interactively in the Superset UI
 - **Check permissions if you get errors** -- AI respects Superset's RBAC, so you can only access data your roles allow

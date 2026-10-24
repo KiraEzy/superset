@@ -44,7 +44,8 @@ class AiChatSessionPostSchema(Schema):
 
 
 class AiChatSessionPutSchema(Schema):
-    title = fields.String(required=True, validate=validate.Length(1, 256))
+    title = fields.String(validate=validate.Length(1, 256))
+    is_pinned = fields.Boolean()
 
 
 class AiChatMessagePostSchema(Schema):
@@ -54,6 +55,12 @@ class AiChatMessagePostSchema(Schema):
 
 
 class AiChatSessionResponseSchema(Schema):
+    is_pinned = fields.Boolean()
+    runtime_version = fields.Integer()
+    post_id = fields.Integer(allow_none=True)
+    profile_id = fields.String()
+    active_turn = fields.Dict(allow_none=True)
+    latest_turn = fields.Dict(allow_none=True)
     id = fields.Integer()
     uuid = fields.String()
     title = fields.String()
@@ -63,6 +70,7 @@ class AiChatSessionResponseSchema(Schema):
 
 
 class AiChatSessionSummarySchema(Schema):
+    is_pinned = fields.Boolean()
     id = fields.Integer()
     uuid = fields.String()
     title = fields.String()

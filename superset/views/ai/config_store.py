@@ -22,13 +22,13 @@ The config is persisted as a single encrypted JSON blob (see
 
 from __future__ import annotations
 
-import json
 import logging
 from typing import Any
 
 from superset.constants import PASSWORD_MASK
 from superset.extensions import db
 from superset.models.ai_chat import AiConnectionConfig
+from superset.utils import json
 
 logger = logging.getLogger(__name__)
 
@@ -99,6 +99,12 @@ def _normalize_state(parsed: dict[str, Any]) -> dict[str, Any]:
         state["agentMaxIterations"] = raw_iterations
     if isinstance(parsed.get("systemPrompt"), str):
         state["systemPrompt"] = parsed["systemPrompt"]
+    from superset.ai_runtime.tool_access import normalize_policy
+
+    state["mcpToolAccess"] = normalize_policy(parsed.get("mcpToolAccess", {}))
+    state["llmAdapter"] = parsed.get("llmAdapter", "chat_completions")
+    if state["llmAdapter"] not in {"chat_completions", "responses"}:
+        raise ValueError("Unsupported model API protocol")
     return state
 
 
@@ -140,6 +146,8 @@ def resolve_active_config() -> dict[str, Any]:
         "mcpBearerToken": state["mcpBearerToken"],
         "agentMaxIterations": state["agentMaxIterations"],
         "systemPrompt": state["systemPrompt"],
+        "mcpToolAccess": state.get("mcpToolAccess", {"roles": {}, "users": {}}),
+        "llmAdapter": state.get("llmAdapter", "chat_completions"),
     }
 
 
@@ -162,6 +170,11 @@ def save_state(incoming: dict[str, Any]) -> dict[str, Any]:
     """Persist the incoming state, preserving masked secrets from the DB."""
     existing = load_stored_state()
     new_state = _normalize_state(incoming)
+    # Older settings clients must not erase administrator tool restrictions.
+    if "mcpToolAccess" not in incoming:
+        new_state["mcpToolAccess"] = existing.get(
+            "mcpToolAccess", {"roles": {}, "users": {}}
+        )
 
     # Preserve MCP bearer token if the client sent back the mask (unchanged).
     if incoming.get("mcpBearerToken") == PASSWORD_MASK:
@@ -182,3 +195,33 @@ def save_state(incoming: dict[str, Any]) -> dict[str, Any]:
     row.config = json.dumps(new_state)
     db.session.commit()
     return new_state
+
+
+def resolve_test_key(data: dict[str, Any]) -> str | None:
+    """Resolve a masked model key only for that provider's stored destination."""
+    key = data.get("llmApiKey")
+    if key != PASSWORD_MASK:
+        return key
+    if data.get("llmConnectionId"):
+        from superset.models.ai_model_catalog import AiModelConnection
+        from superset.views.ai.proxy import normalize_llm_base_url
+
+        row = db.session.query(AiModelConnection).get(data["llmConnectionId"])
+        saved = json.loads(row.config_json) if row else {}
+        if saved.get("llmProvider") != data.get("llmProvider") or saved.get(
+            "llmApiBaseUrl", ""
+        ).rstrip("/") != normalize_llm_base_url(
+            str(data.get("llmApiBaseUrl", ""))
+        ).rstrip("/"):
+            raise ValueError("Enter a new API key to test a different destination")
+        return saved.get("llmApiKey", "")
+    state = load_stored_state()
+    provider = data.get("llmProvider", state["llmProvider"])
+    if provider not in VALID_PROVIDERS:
+        raise ValueError("Unknown model provider")
+    saved = _provider_llm({**state, "llmProvider": provider})
+    if str(data.get("llmApiBaseUrl", "")).rstrip("/") != saved["llmApiBaseUrl"].rstrip(
+        "/"
+    ):
+        raise ValueError("Enter an API key to test a different provider endpoint")
+    return saved["llmApiKey"]

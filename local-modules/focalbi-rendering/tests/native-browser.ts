@@ -22,6 +22,10 @@ const require = createRequire(
 const { chromium } = require("playwright");
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 const page = await browser.newPage({ viewport: { width: 1500, height: 1100 } });
+// Switching remains opt-in; ordinary viewers use the fork without the toolbar.
+await page.addInitScript(() => {
+  localStorage.setItem("focalbi.rendererSelector", "true");
+});
 const errors: string[] = [];
 let queries = 0;
 page.on("pageerror", (error: Error) => errors.push(error.message));

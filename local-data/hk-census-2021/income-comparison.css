@@ -1,0 +1,59 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
+[id^="user-content-ci-census-income--"]{min-width:940px;color:#233745;font:13px/1.4 Arial,"Noto Sans",sans-serif;padding:2px 10px 18px 2px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-tc--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-sc--"]{display:none}
+body:has([id$="ci-income-locale"][lang="zh-Hant"]) [id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-en--"],body:has([id$="ci-income-locale"][lang="zh-Hans"]) [id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-en--"]{display:none}
+body:has([id$="ci-income-locale"][lang="zh-Hant"]) [id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-tc--"],body:has([id$="ci-income-locale"][lang="zh-Hans"]) [id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-sc--"]{display:inline}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-summary--"]{color:#536773;margin-bottom:16px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-legend--"]{display:flex;align-items:center;gap:9px 18px;flex-wrap:wrap;margin-bottom:24px;font-size:12px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-legend--"]>span{white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-swatch--"]{display:inline-block;width:17px;height:12px;border:1px solid #aebfca}
+[id^="user-content-ci-census-income--"] :is([id^="user-content-ci-inc-heading--"],[id^="user-content-ci-inc-axes--"],[id^="user-content-ci-inc-bottom-axes--"],[id^="user-content-ci-inc-row--"]){display:grid;grid-template-columns:155px minmax(600px,1fr) 110px;column-gap:20px;align-items:center}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-heading--"]{margin-bottom:12px;font-size:14px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-axes--"]{font-size:11px;color:#566a77;margin-bottom:7px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-percent-ticks--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-money-ticks--"]{display:flex;justify-content:space-between}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-rows--"]{display:flex;flex-direction:column}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-row--"]{height:34px;border-bottom:1px solid #eff2f5}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-district--"]{grid-column:1;grid-row:1;white-space:nowrap;font-size:12px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-stack--"]{grid-column:2;grid-row:1;display:flex;height:24px;width:100%;position:relative}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]{display:block;position:relative;height:24px;box-shadow:inset -1px 0 rgba(255,255,255,.65);cursor:help;flex-shrink:0}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:focus,[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:focus{outline:2px solid #182f40;outline-offset:2px;z-index:4}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot-track--"]{grid-column:2;grid-row:1;height:24px;position:relative;pointer-events:none;z-index:21}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]{position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;background:#ffca55;border:2px solid #162f45;box-shadow:0 0 0 2px white;border-radius:50%;cursor:help;pointer-events:auto}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-value--"]{grid-column:3;grid-row:1;font-variant-numeric:tabular-nums;font-size:12px;text-align:right;white-space:nowrap}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-tip--"]{display:none;position:absolute;bottom:calc(100% + 7px);left:0;background:#173447;color:white;border-radius:4px;padding:8px 11px;white-space:nowrap;z-index:20;font-size:12px;font-weight:400;box-shadow:0 3px 12px #0003}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:hover,[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:focus,[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:hover,[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:focus{z-index:20}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:hover>[id^="user-content-ci-inc-tip--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:focus>[id^="user-content-ci-inc-tip--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:hover>[id^="user-content-ci-inc-tip--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:focus>[id^="user-content-ci-inc-tip--"]{display:block}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-foot--"]{margin-top:18px;color:#536773;font-size:12px}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-1"]{background:#e1edf7}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-2"]{background:#bed8ec}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-3"]{background:#91bddb}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-4"]{background:#64a0c8}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-5"]{background:#3c80b0}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-6"]{background:#205e91}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-7"]{background:#123c65}
+
+[id^="user-content-ci-inc-segment--"]{width:attr(title type(<percentage>),0%)}
+[id^="user-content-ci-inc-dot--"]{left:attr(title type(<percentage>),0%)}
+[id^="user-content-ci-inc-bottom-axes--"]{font-size:11px;color:#566a77;margin-top:7px;row-gap:10px}
+[id^="user-content-ci-inc-money-title--"]{text-align:center;font-size:14px;font-weight:600;color:#233745}
+[id^="user-content-ci-inc-dot-key--"]{display:inline-block;width:12px;height:12px;background:#ffca55;border:2px solid #162f45;border-radius:50%}
+[id^="user-content-ci-inc-segment--"][id$="--inc-band-7"]>[id^="user-content-ci-inc-tip--"]{left:auto;right:0}
+[id^="user-content-ci-inc-row--"]:has([id^="user-content-ci-inc-segment--"]:hover),[id^="user-content-ci-inc-row--"]:focus-within,[id^="user-content-ci-inc-row--"]:has([id^="user-content-ci-inc-dot--"]:hover){position:relative;z-index:25}

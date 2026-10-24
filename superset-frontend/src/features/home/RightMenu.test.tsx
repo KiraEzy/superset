@@ -477,38 +477,46 @@ test('hides logout button when embedded and flag is enabled', async () => {
   expect(screen.queryByText('Logout')).not.toBeInTheDocument();
 });
 
-test('shows AI Connection in settings for users with the AIConnectionConfig write permission', async () => {
-  useSelectorMock.mockReturnValueOnce({
-    createdOn: '2021-04-27T18:12:38.952304',
-    email: 'creator@example.com',
-    firstName: 'Creator',
-    isActive: true,
-    lastName: 'User',
-    permissions: {},
-    roles: {
-      Alpha: [['can_write', 'AIConnectionConfig']],
-    },
-    userId: 2,
-    username: 'creator',
-  });
-  useSelectorMock.mockReturnValueOnce(undefined);
-  useSelectorMock.mockReturnValueOnce({
-    CSV_EXTENSIONS: ['csv'],
-    EXCEL_EXTENSIONS: ['xls', 'xlsx'],
-    COLUMNAR_EXTENSIONS: ['parquet', 'zip'],
-    ALLOWED_EXTENSIONS: ['parquet', 'zip', 'xls', 'xlsx', 'csv'],
-  });
+test.each(['Admin', 'Alpha'])(
+  'AI Connection configuration remains administrator-only for role %s',
+  async role => {
+    useSelectorMock.mockReturnValueOnce({
+      createdOn: '2021-04-27T18:12:38.952304',
+      email: 'creator@example.com',
+      firstName: 'Creator',
+      isActive: true,
+      lastName: 'User',
+      permissions: {},
+      roles: {
+        [role]: [['can_write', 'AIConnectionConfig']],
+      },
+      userId: 2,
+      username: 'creator',
+    });
+    useSelectorMock.mockReturnValueOnce(undefined);
+    useSelectorMock.mockReturnValueOnce({
+      CSV_EXTENSIONS: ['csv'],
+      EXCEL_EXTENSIONS: ['xls', 'xlsx'],
+      COLUMNAR_EXTENSIONS: ['parquet', 'zip'],
+      ALLOWED_EXTENSIONS: ['parquet', 'zip', 'xls', 'xlsx', 'csv'],
+    });
 
-  render(<RightMenu {...createProps()} />, {
-    useRedux: true,
-    useQueryParams: true,
-    useRouter: true,
-    useTheme: true,
-  });
+    render(<RightMenu {...createProps()} />, {
+      useRedux: true,
+      useQueryParams: true,
+      useRouter: true,
+      useTheme: true,
+    });
 
-  userEvent.hover(await screen.findByText(/Settings/i));
-  expect(await screen.findByText('AI Connection')).toBeInTheDocument();
-});
+    await userEvent.hover(await screen.findByText(/Settings/i));
+    if (role === 'Admin') {
+      expect(await screen.findByText('AI Connection')).toBeInTheDocument();
+    } else {
+      await screen.findByText('Logout');
+      expect(screen.queryByText('AI Connection')).not.toBeInTheDocument();
+    }
+  },
+);
 
 test('hides AI Connection in settings for Viewer role', async () => {
   useSelectorMock.mockReturnValueOnce({

@@ -72,6 +72,13 @@ config.plugins = config.plugins.filter(
 );
 config.plugins.push(
   new webpack.NormalModuleReplacementPlugin(
+    /^@deck\.gl\/react$/,
+    (resource: { request: string; context: string }) => {
+      if (/[\\/]legacy-preset-chart-deckgl[\\/]src$/.test(resource.context))
+        resource.request = resolve(root, "frontend/DeckGL.tsx");
+    },
+  ),
+  new webpack.NormalModuleReplacementPlugin(
     /DashboardBuilder|SliceHeader|SuperChartCore|setupPluginsExtra|DataTable$/,
     (resource: { request: string; context: string }) => {
       if (resource.request.startsWith("focalbi-native/")) return;

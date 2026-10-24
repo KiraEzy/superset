@@ -22,7 +22,7 @@ from datetime import datetime
 from typing import Any
 
 from flask_appbuilder import Model
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from superset.extensions import encrypted_field_factory
@@ -37,6 +37,11 @@ class AiChatSession(AuditMixinNullable, UUIDMixin, Model):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(256), nullable=False, default="New chat")
+    is_pinned = Column(Boolean, nullable=False, default=False, server_default="0")
+    runtime_version = Column(Integer, nullable=False, default=1, server_default="1")
+    post_id = Column(Integer, nullable=True, index=True)
+    profile_id = Column(String(64), nullable=False, default="default", server_default="default")
+    parent_uuid = Column(String(36), nullable=True)
     messages = relationship(
         "AiChatMessage",
         back_populates="session",

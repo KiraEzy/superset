@@ -155,6 +155,13 @@ for (const name of thinWrappers)
   );
 config.plugins.push(
   new webpack.NormalModuleReplacementPlugin(
+    /^@deck\.gl\/react$/,
+    (resource: { request: string; context: string }) => {
+      if (combined && /[\\/]legacy-preset-chart-deckgl[\\/]src$/.test(resource.context))
+        resource.request = resolve(rendering, "frontend/DeckGL.tsx");
+    },
+  ),
+  new webpack.NormalModuleReplacementPlugin(
     /DashboardBuilder|SliceHeader|SuperChartCore|ExploreViewContainer|ExploreChartHeader|DatasourceEditor|Chart|Tab|Markdown|Header|FilterControl|setupPluginsExtra|DataTable/,
     (resource: { request: string; context: string }) => {
       if (

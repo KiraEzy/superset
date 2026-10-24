@@ -25,6 +25,14 @@ from superset.views.base import BaseFilter
 
 class AiChatSessionFilter(BaseFilter):
     def apply(self, query: BaseQuery, value: Any) -> BaseQuery:
-        return query.filter(
+        query = query.filter(
             AiChatSession.created_by == g.user  # pylint: disable=comparison-with-callable
         )
+        from superset.ai_runtime.settings import enabled
+        if enabled():
+            from superset.ai_runtime.store import current_scope
+            _, post_id = current_scope()
+            query = query.filter(AiChatSession.post_id == post_id, AiChatSession.runtime_version == 2)
+        else:
+            query = query.filter(AiChatSession.runtime_version == 1)
+        return query

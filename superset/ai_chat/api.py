@@ -26,6 +26,7 @@ from flask import request, Response
 from flask_appbuilder.api import expose, protect, safe
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 from marshmallow import ValidationError
+from sqlalchemy.orm import Query
 
 from superset.ai_chat.filters import AiChatSessionFilter
 from superset.ai_chat.schemas import (
@@ -63,16 +64,55 @@ def session_to_dict(
         "id": session.id,
         "uuid": str(session.uuid),
         "title": session.title,
+        "is_pinned": session.is_pinned,
         "created_on": session.created_on,
         "changed_on": session.changed_on,
+        "runtime_version": session.runtime_version,
+        "post_id": session.post_id,
+        "profile_id": session.profile_id,
+        "active_turn": None,
+        "latest_turn": None,
     }
+    if session.runtime_version == 2:
+        from superset.models.ai_runtime import AiRuntimeTurn
+        active = db.session.query(AiRuntimeTurn).filter_by(active_key=str(session.uuid)).first()
+        if active:
+            data["active_turn"] = {"id": active.id, "status": active.status}
+        latest = db.session.query(AiRuntimeTurn).filter_by(session_id=session.id).order_by(AiRuntimeTurn.created_on.desc()).first()
+        if latest:
+            data["latest_turn"] = {"id": latest.id, "status": latest.status}
+            from superset.ai_runtime.store import loads
+            data["model_id"] = loads(latest.state_json).get("config", {}).get("model_id")
     if include_messages:
         data["messages"] = [message.data for message in session.messages]
+        if session.runtime_version == 2:
+            from superset.ai_runtime.store import work_activity
+            from superset.models.ai_runtime import AiRuntimeItem
+            turns = db.session.query(AiRuntimeTurn).filter_by(session_id=session.id).all()
+            items = db.session.query(AiRuntimeItem).filter(AiRuntimeItem.turn_id.in_([turn.id for turn in turns])).order_by(AiRuntimeItem.created_on).all()
+            grouped: dict[str, list[AiRuntimeItem]] = {}
+            for item in items:
+                grouped.setdefault(item.turn_id, []).append(item)
+            activity = {turn.id: work_activity(turn, grouped.get(turn.id, [])) for turn in turns}
+            for message in data["messages"]:
+                extra = dict(message.get("extra") or {})
+                identifier = extra.get("runtime_turn_id")
+                if message["role"] == "assistant" and identifier in activity:
+                    message["extra"] = {**extra, "activity": activity[identifier]}
     return data
 
 
+class AiChatSessionInterface(SQLAInterface):
+    """Keep pinned conversations before recent conversations before pagination."""
+
+    def apply_order_by(self, query: Query, *args: Any, **kwargs: Any) -> Query:
+        return super().apply_order_by(
+            query.order_by(AiChatSession.is_pinned.desc()), *args, **kwargs
+        )
+
+
 class AiChatSessionRestApi(BaseSupersetModelRestApi):
-    datamodel = SQLAInterface(AiChatSession)
+    datamodel = AiChatSessionInterface(AiChatSession)
     resource_name = "ai_chat_session"
     allow_browser_login = True
     class_permission_name = "AiChatSession"
@@ -95,6 +135,7 @@ class AiChatSessionRestApi(BaseSupersetModelRestApi):
         "id",
         "uuid",
         "title",
+        "is_pinned",
         "created_on",
         "changed_on",
         "changed_on_delta_humanized",
@@ -198,6 +239,11 @@ class AiChatSessionRestApi(BaseSupersetModelRestApi):
     )
     def delete(self, session_uuid: str) -> Response:
         try:
+            session = self._get_session_by_uuid(session_uuid)
+            if session and session.runtime_version == 2:
+                from superset.models.ai_runtime import AiRuntimeTurn
+                if db.session.query(AiRuntimeTurn).filter_by(active_key=str(session.uuid)).first():
+                    return self.response(409, message="Stop the active turn before deleting this conversation")
             DeleteAiChatSessionCommand(UUID(session_uuid)).run()
             return self.response(200, message="OK")
         except AiChatSessionNotFoundError:
@@ -219,6 +265,9 @@ class AiChatSessionRestApi(BaseSupersetModelRestApi):
     )
     def append_message(self, session_uuid: str) -> Response:
         try:
+            session = self._get_session_by_uuid(session_uuid)
+            if session and session.runtime_version == 2:
+                return self.response(409, message="Runtime conversations accept input through the turns API")
             data = self.message_post_schema.load(request.json or {})
             message = AppendAiChatMessageCommand(UUID(session_uuid), data).run()
             session = self._get_session_by_uuid(session_uuid)

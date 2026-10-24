@@ -16,9 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { SupersetClient } from '@superset-ui/core';
+import { SupersetClient, getClientErrorObject } from '@superset-ui/core';
 import {
   generateSessionTitle,
+  getChatSessionByUuid,
+  ChatSessionRequestError,
   listChatSessions,
   mapApiMessage,
   mapApiSession,
@@ -36,6 +38,20 @@ jest.mock('@superset-ui/core', () => ({
 }));
 
 const mockedGet = SupersetClient.get as jest.Mock;
+
+test('missing conversations preserve HTTP status for a safe post-switch redirect', async () => {
+  mockedGet.mockRejectedValueOnce(new Error('not found'));
+  (getClientErrorObject as jest.Mock).mockResolvedValueOnce({
+    message: 'Not found',
+    status: 404,
+  });
+  const request = getChatSessionByUuid('other-post-thread');
+  await expect(request).rejects.toMatchObject({
+    status: 404,
+    message: 'Not found',
+  });
+  await expect(request).rejects.toBeInstanceOf(ChatSessionRequestError);
+});
 
 describe('aiChatSessionApi', () => {
   beforeEach(() => {

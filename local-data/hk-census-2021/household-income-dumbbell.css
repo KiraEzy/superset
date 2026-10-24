@@ -1,0 +1,22 @@
+/* BEGIN CENSUS HOUSEHOLD DUMBBELL */
+[id="user-content-hhdb-root"] { min-width:850px; color:#233745; font:13px/1.4 Arial,sans-serif; padding:8px 18px; }
+[id="user-content-hhdb-root"] p { margin:0 0 12px; }
+[id^="user-content-hhdb-tc--"],[id^="user-content-hhdb-sc--"] { display:none; }
+body:has([id$="hh-income-locale"][lang="zh-Hant"]) [id^="user-content-hhdb-en--"],body:has([id$="hh-income-locale"][lang="zh-Hans"]) [id^="user-content-hhdb-en--"] { display:none; }
+body:has([id$="hh-income-locale"][lang="zh-Hant"]) [id^="user-content-hhdb-tc--"],body:has([id$="hh-income-locale"][lang="zh-Hans"]) [id^="user-content-hhdb-sc--"] { display:inline; }
+[id="user-content-hhdb-axis"],[id^="user-content-hhdb-row--"] { display:grid; grid-template-columns:170px minmax(480px,1fr) 115px; gap:24px; align-items:center; }
+[id="user-content-hhdb-axis"] { font-size:11px; margin:25px 0 9px; }
+[id="user-content-hhdb-ticks"] { display:flex; justify-content:space-between; }
+[id^="user-content-hhdb-row--"] { height:35px; border-bottom:1px solid #eef2f5; }
+[id^="user-content-hhdb-track--"] { position:relative; height:35px; border-left:1px solid #dce4e9; border-right:1px solid #dce4e9; background:repeating-linear-gradient(to right,transparent 0%,transparent 14.15%,#edf1f5 14.15%,#edf1f5 14.2857%); }
+[id^="user-content-hhdb-start--"] { position:absolute; left:attr(title type(<percentage>),0%); top:50%; width:100%; height:0; }
+[id^="user-content-hhdb-link--"] { display:block; height:3px; background:#7395af; width:attr(title type(<percentage>),0%); transform:translateY(-50%); }
+[id^="user-content-hhdb-dot-"] { position:absolute; left:attr(title type(<percentage>),0%); top:50%; transform:translate(-50%,-50%); width:12px; height:12px; border-radius:50%; border:1px solid white; cursor:help; }
+[id^="user-content-hhdb-dot-all--"] { background:#70b5df; }
+[id^="user-content-hhdb-dot-active--"] { background:#173f66; }
+[id^="user-content-hhdb-tip-"] { display:none; position:absolute; bottom:18px; left:50%; transform:translateX(-50%); white-space:nowrap; padding:8px 11px; border-radius:4px; background:#173447; color:white; z-index:20; font-size:12px; }
+[id^="user-content-hhdb-dot-"]:hover,[id^="user-content-hhdb-dot-"]:focus { z-index:20; outline:2px solid #355d7d; outline-offset:2px; }
+[id^="user-content-hhdb-dot-"]:hover>[id^="user-content-hhdb-tip-"],[id^="user-content-hhdb-dot-"]:focus>[id^="user-content-hhdb-tip-"] { display:block; }
+[id^="user-content-hhdb-gap--"] { text-align:right; font-variant-numeric:tabular-nums; }
+[id="user-content-hhdb-foot"] { margin-top:18px!important; color:#536773; font-size:12px; }
+/* END CENSUS HOUSEHOLD DUMBBELL */

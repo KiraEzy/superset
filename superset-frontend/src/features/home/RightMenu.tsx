@@ -148,11 +148,9 @@ const RightMenu = ({
   const canChart = findPermission('can_write', 'Chart', roles);
   const canDatabase = findPermission('can_write', 'Database', roles);
   const canDataset = findPermission('can_write', 'Dataset', roles);
-  const canAiConnection = findPermission(
-    'can_write',
-    'AIConnectionConfig',
-    roles,
-  );
+  const canAiConnection =
+    isUserAdmin(user) &&
+    findPermission('can_write', 'AIConnectionConfig', roles);
 
   const { canUploadData, canUploadCSV, canUploadColumnar, canUploadExcel } =
     uploadUserPerms(

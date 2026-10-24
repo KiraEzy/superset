@@ -14,6 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+from flask import abort
 from flask_appbuilder import expose, has_access, permission_name
 
 from superset import event_logger
@@ -26,10 +27,12 @@ class AIView(BaseSupersetView):
     class_permission_name = "AI"
 
     @expose("/")
+    @expose("/<session_uuid>")
+    @expose("/<session_uuid>/")
     @has_access
     @permission_name("chat")
     @event_logger.log_this
-    def index(self) -> FlaskResponse:
+    def index(self, session_uuid: str | None = None) -> FlaskResponse:
         return super().render_app_template()
 
 
@@ -48,4 +51,8 @@ class AIConnectionView(BaseSupersetView):
     @permission_name("read")
     @event_logger.log_this
     def index(self) -> FlaskResponse:
+        from superset import security_manager
+
+        if not security_manager.is_admin():
+            abort(403)
         return super().render_app_template()

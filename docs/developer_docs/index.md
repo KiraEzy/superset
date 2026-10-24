@@ -36,6 +36,7 @@ Welcome to the Apache Superset Developer Docs - your comprehensive resource for 
 ### Extension Development
 - [Extension Development](/developer-docs/extensions/development)
 - [Extension Architecture](/developer-docs/extensions/architecture)
+- [Durable AI Chat runtime and action policy](/developer-docs/extensions/ai-chat-runtime)
 - [Quick Start](/developer-docs/extensions/quick-start)
 
 ## Documentation Sections

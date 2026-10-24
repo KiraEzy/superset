@@ -1,0 +1,14 @@
+{
+  "source_url": "https://www.censtatd.gov.hk/en/data/stat_report/product/D5212101/att/D5212101E2021XXXXE.zip",
+  "table": "A204",
+  "source_release_date": "2022-05-31",
+  "reference_year": 2021,
+  "archive_sha256": "19cdbe99c9652c454489d8a63465455a18d4171b1d19ceba550341e7190ad802",
+  "csv_sha256": "c40adb3b197996f9f5d2091c8ad166cd25fda4378610f2cce7164e352b775f3d",
+  "rows": 648,
+  "coverage": "18 land districts, all residents including foreign domestic helpers; excludes Marine and Land reference",
+  "transformation": "Sum single ages 0-84 into five-year bands; retain published 85+ top code. No age-by-sex estimation.",
+  "validation": "Each district's male/female counts and five broad age-band counts exactly match reviewed DC_21C.CSV.",
+  "population": 7411945,
+  "maximum_district_sex_age_share": 0.06769249227631302
+}

@@ -1,0 +1,87 @@
+/* Census ethnicity heatmap: chart 155 only. */
+#chart-id-155 { color:#0b1f33; font:14px/1.35 Arial,sans-serif; }
+#chart-id-155 p { margin:0 0 8px; }
+#chart-id-155 p:nth-of-type(2),#chart-id-155 p:last-child { font-size:12px; color:#40566b; }
+#chart-id-155 div:has(>span:nth-child(4)) { display:flex; align-items:center; gap:10px; margin:12px 0; font-size:12px; }
+#chart-id-155 div:has(>span:nth-child(4))>span:nth-child(2) { display:inline-block; width:180px; height:12px; background:linear-gradient(to right,#f7fbff,#4c92c3); }
+#chart-id-155 table { width:100%; border-collapse:separate; border-spacing:2px; table-layout:fixed; }
+#chart-id-155 th { font-weight:500; text-align:center; background:#fff; padding:5px 8px; }
+#chart-id-155 thead th:first-child,#chart-id-155 tbody th { width:27%; text-align:left; }
+#chart-id-155 tbody th span { font-size:11px; color:#526777; }
+#chart-id-155 td { text-align:center; padding:7px; position:relative; color:#0b1f33; font-variant-numeric:tabular-nums; }
+#chart-id-155 td>span:nth-child(2) { display:none; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); background:#fff; color:#0b1f33; border:1px solid #8299ab; border-radius:4px; padding:8px 12px; min-width:175px; box-shadow:0 2px 8px #0002; pointer-events:none; z-index:8; font-size:12px; }
+#chart-id-155 td:hover>span:nth-child(2),#chart-id-155 td:focus>span:nth-child(2) { display:block; }
+#chart-id-155 td:focus { outline:2px solid #142d59; outline-offset:-2px; }
+#chart-id-155 table+p { margin-top:12px; }
+#chart-id-155 td[title^="Central and Western /"][title*="— Filipino /"] { background-color:rgb(135,182,216); }
+#chart-id-155 td[title^="Central and Western /"][title*="— Indonesian /"] { background-color:rgb(211,229,242); }
+#chart-id-155 td[title^="Central and Western /"][title*="— White /"] { background-color:rgb(166,201,227); }
+#chart-id-155 td[title^="Central and Western /"][title*="— Others /"] { background-color:rgb(159,197,224); }
+#chart-id-155 td[title^="Eastern /"][title*="— Filipino /"] { background-color:rgb(198,221,238); }
+#chart-id-155 td[title^="Eastern /"][title*="— Indonesian /"] { background-color:rgb(210,228,242); }
+#chart-id-155 td[title^="Eastern /"][title*="— White /"] { background-color:rgb(241,247,253); }
+#chart-id-155 td[title^="Eastern /"][title*="— Others /"] { background-color:rgb(208,227,241); }
+#chart-id-155 td[title^="Islands /"][title*="— Filipino /"] { background-color:rgb(172,205,229); }
+#chart-id-155 td[title^="Islands /"][title*="— Indonesian /"] { background-color:rgb(226,238,248); }
+#chart-id-155 td[title^="Islands /"][title*="— White /"] { background-color:rgb(163,199,226); }
+#chart-id-155 td[title^="Islands /"][title*="— Others /"] { background-color:rgb(115,170,209); }
+#chart-id-155 td[title^="Kowloon City /"][title*="— Filipino /"] { background-color:rgb(185,213,233); }
+#chart-id-155 td[title^="Kowloon City /"][title*="— Indonesian /"] { background-color:rgb(211,229,242); }
+#chart-id-155 td[title^="Kowloon City /"][title*="— White /"] { background-color:rgb(244,249,254); }
+#chart-id-155 td[title^="Kowloon City /"][title*="— Others /"] { background-color:rgb(196,219,237); }
+#chart-id-155 td[title^="Kwai Tsing /"][title*="— Filipino /"] { background-color:rgb(233,242,250); }
+#chart-id-155 td[title^="Kwai Tsing /"][title*="— Indonesian /"] { background-color:rgb(228,239,248); }
+#chart-id-155 td[title^="Kwai Tsing /"][title*="— White /"] { background-color:rgb(246,250,255); }
+#chart-id-155 td[title^="Kwai Tsing /"][title*="— Others /"] { background-color:rgb(217,232,244); }
+#chart-id-155 td[title^="Kwun Tong /"][title*="— Filipino /"] { background-color:rgb(232,242,250); }
+#chart-id-155 td[title^="Kwun Tong /"][title*="— Indonesian /"] { background-color:rgb(227,238,248); }
+#chart-id-155 td[title^="Kwun Tong /"][title*="— White /"] { background-color:rgb(246,250,255); }
+#chart-id-155 td[title^="Kwun Tong /"][title*="— Others /"] { background-color:rgb(226,238,248); }
+#chart-id-155 td[title^="North /"][title*="— Filipino /"] { background-color:rgb(233,242,250); }
+#chart-id-155 td[title^="North /"][title*="— Indonesian /"] { background-color:rgb(223,237,247); }
+#chart-id-155 td[title^="North /"][title*="— White /"] { background-color:rgb(245,250,254); }
+#chart-id-155 td[title^="North /"][title*="— Others /"] { background-color:rgb(233,242,250); }
+#chart-id-155 td[title^="Sai Kung /"][title*="— Filipino /"] { background-color:rgb(199,221,238); }
+#chart-id-155 td[title^="Sai Kung /"][title*="— Indonesian /"] { background-color:rgb(218,233,245); }
+#chart-id-155 td[title^="Sai Kung /"][title*="— White /"] { background-color:rgb(226,238,247); }
+#chart-id-155 td[title^="Sai Kung /"][title*="— Others /"] { background-color:rgb(210,228,242); }
+#chart-id-155 td[title^="Sham Shui Po /"][title*="— Filipino /"] { background-color:rgb(220,234,245); }
+#chart-id-155 td[title^="Sham Shui Po /"][title*="— Indonesian /"] { background-color:rgb(224,237,247); }
+#chart-id-155 td[title^="Sham Shui Po /"][title*="— White /"] { background-color:rgb(244,249,254); }
+#chart-id-155 td[title^="Sham Shui Po /"][title*="— Others /"] { background-color:rgb(211,229,242); }
+#chart-id-155 td[title^="Sha Tin /"][title*="— Filipino /"] { background-color:rgb(217,232,244); }
+#chart-id-155 td[title^="Sha Tin /"][title*="— Indonesian /"] { background-color:rgb(220,234,246); }
+#chart-id-155 td[title^="Sha Tin /"][title*="— White /"] { background-color:rgb(244,249,254); }
+#chart-id-155 td[title^="Sha Tin /"][title*="— Others /"] { background-color:rgb(226,238,248); }
+#chart-id-155 td[title^="Southern /"][title*="— Filipino /"] { background-color:rgb(171,204,228); }
+#chart-id-155 td[title^="Southern /"][title*="— Indonesian /"] { background-color:rgb(216,232,244); }
+#chart-id-155 td[title^="Southern /"][title*="— White /"] { background-color:rgb(208,227,241); }
+#chart-id-155 td[title^="Southern /"][title*="— Others /"] { background-color:rgb(194,219,236); }
+#chart-id-155 td[title^="Tai Po /"][title*="— Filipino /"] { background-color:rgb(210,228,242); }
+#chart-id-155 td[title^="Tai Po /"][title*="— Indonesian /"] { background-color:rgb(217,232,244); }
+#chart-id-155 td[title^="Tai Po /"][title*="— White /"] { background-color:rgb(239,246,252); }
+#chart-id-155 td[title^="Tai Po /"][title*="— Others /"] { background-color:rgb(226,238,248); }
+#chart-id-155 td[title^="Tsuen Wan /"][title*="— Filipino /"] { background-color:rgb(209,227,242); }
+#chart-id-155 td[title^="Tsuen Wan /"][title*="— Indonesian /"] { background-color:rgb(217,232,244); }
+#chart-id-155 td[title^="Tsuen Wan /"][title*="— White /"] { background-color:rgb(243,249,254); }
+#chart-id-155 td[title^="Tsuen Wan /"][title*="— Others /"] { background-color:rgb(220,235,246); }
+#chart-id-155 td[title^="Tuen Mun /"][title*="— Filipino /"] { background-color:rgb(228,239,248); }
+#chart-id-155 td[title^="Tuen Mun /"][title*="— Indonesian /"] { background-color:rgb(227,239,248); }
+#chart-id-155 td[title^="Tuen Mun /"][title*="— White /"] { background-color:rgb(243,248,254); }
+#chart-id-155 td[title^="Tuen Mun /"][title*="— Others /"] { background-color:rgb(223,236,247); }
+#chart-id-155 td[title^="Wan Chai /"][title*="— Filipino /"] { background-color:rgb(112,168,207); }
+#chart-id-155 td[title^="Wan Chai /"][title*="— Indonesian /"] { background-color:rgb(200,222,239); }
+#chart-id-155 td[title^="Wan Chai /"][title*="— White /"] { background-color:rgb(184,212,233); }
+#chart-id-155 td[title^="Wan Chai /"][title*="— Others /"] { background-color:rgb(146,189,220); }
+#chart-id-155 td[title^="Wong Tai Sin /"][title*="— Filipino /"] { background-color:rgb(233,242,250); }
+#chart-id-155 td[title^="Wong Tai Sin /"][title*="— Indonesian /"] { background-color:rgb(225,238,247); }
+#chart-id-155 td[title^="Wong Tai Sin /"][title*="— White /"] { background-color:rgb(246,250,255); }
+#chart-id-155 td[title^="Wong Tai Sin /"][title*="— Others /"] { background-color:rgb(228,239,248); }
+#chart-id-155 td[title^="Yau Tsim Mong /"][title*="— Filipino /"] { background-color:rgb(192,217,236); }
+#chart-id-155 td[title^="Yau Tsim Mong /"][title*="— Indonesian /"] { background-color:rgb(214,231,243); }
+#chart-id-155 td[title^="Yau Tsim Mong /"][title*="— White /"] { background-color:rgb(234,243,250); }
+#chart-id-155 td[title^="Yau Tsim Mong /"][title*="— Others /"] { background-color:rgb(103,163,205); }
+#chart-id-155 td[title^="Yuen Long /"][title*="— Filipino /"] { background-color:rgb(220,235,246); }
+#chart-id-155 td[title^="Yuen Long /"][title*="— Indonesian /"] { background-color:rgb(220,234,245); }
+#chart-id-155 td[title^="Yuen Long /"][title*="— White /"] { background-color:rgb(245,250,254); }
+#chart-id-155 td[title^="Yuen Long /"][title*="— Others /"] { background-color:rgb(206,226,241); }

@@ -20,7 +20,31 @@ outside the dashboard context. Chart addition, removal and arrangement require n
 module dashboard JSON, source provisioning or rebuild. Unsupported chart types
 use their native renderer with a fallback label; native filters are not fallbacks.
 
+Optional saved chart flags are defined in `chart-options.schema.json`.
+`focalbi_disable_map_drag: true` supplies a chart-local React context to the
+deck.gl adapter, disabling pan/rotation dragging while retaining native picking,
+tooltips, wheel/pinch zoom and filter-driven fitting. It applies in both engines;
+omitting the flag preserves the native controller. The removable build adapter
+wraps only the native DeckGLContainer's renderer import, without editing Superset.
+`focalbi_disable_map_zoom: true` disables wheel, pinch, double-click and keyboard
+camera controls. With drag disabled too, the camera controller is removed;
+hover/picking remain native. Native `autozoom: true` still fits GeoJSON bounds
+with 20px padding when chart dimensions or filtered features change.
+`focalbi_hide_native_renderer_label: true` omits that chart's fallback diagnostic.
+Both options require literal boolean true and never depend on resource IDs.
+
 ## Integration
+
+`frontend/treemap-colors.ts` decorates native `treemap_v2` options only when a valid
+`focalbi_treemap_group_colors` map is saved. Keys match raw first-level grouping
+values below the native metric root. Descendants share their parent's hue, with
+white-mixed shades derived from their stable hierarchy paths; filtering, sorting
+and changes in metric values cannot reassign a surviving node's shade. Colours
+encode group identity, not numeric intensity. Black/white labels follow fill
+luminance. Both renderer choices and Explore use this presentation decoration.
+Unconfigured groups retain native styling; missing/invalid settings are a no-op.
+Source nodes, names, values, hierarchy, filter identities and callbacks are never
+mutated. No chart ID, dataset ID or business label activates the feature.
 
 `scripts/build.ts` uses native Webpack entries/configuration. Replacements wrap
 DashboardBuilder, SliceHeader, SuperChartCore and table interaction restoration;
@@ -57,8 +81,13 @@ Save/Discard/undo/redo govern persistence. Titles use successful request values,
 not filter drafts. Native requests retain native per-chart loading/error behavior;
 there is no custom dashboard-wide transaction or failed-request override.
 
-Both engines receive identical data and presentation inputs. Preference is local
-storage `focalbi.renderer`, default fork. Switching changes component dispatch only,
+Both engines receive identical data and presentation inputs. The renderer toolbar
+is hidden by default and uses the fork, ignoring any saved baseline preference.
+Local storage `focalbi.rendererSelector` must equal `"true"` at mount to enable the
+toolbar. Only then is the `focalbi.renderer` preference read (default fork).
+Unavailable browser storage falls back to the hidden toolbar and fork. Hiding the
+toolbar preserves the saved preference for later reactivation; it is a presentation
+setting, not an access boundary. Switching changes component dispatch only,
 without navigation, query or data-mask action. ECharts legend/zoom state persists.
 Native client-table sort/search/page/column state is restored across a component
 swap; subsequent data updates and user actions retain native behavior. Native own

@@ -25,7 +25,9 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parent
 
 
-def upload(origin: str, cookie_path: Path) -> list[dict[str, object]]:
+def upload(
+    origin: str, cookie_path: Path, tables: list[str] | None = None
+) -> list[dict[str, object]]:
     """Use an existing administrator session without printing or storing its token."""
     address = urlsplit(origin)
     if address.scheme not in {"http", "https"} or not address.netloc:
@@ -34,6 +36,8 @@ def upload(origin: str, cookie_path: Path) -> list[dict[str, object]]:
         raise ValueError("Pass an origin, not a URL with a path or query")
     origin = origin.rstrip("/")
     cookie = json.loads(cookie_path.read_text(encoding="utf-8-sig"))
+    if cookie["domain"].lstrip(".") != address.hostname:
+        raise ValueError("Session cookie must belong to the requested origin")
     headers = {"Accept": "application/json", "X-Requested-With": "XMLHttpRequest"}
     jar = CookieJar()
     jar.set_cookie(
@@ -43,7 +47,7 @@ def upload(origin: str, cookie_path: Path) -> list[dict[str, object]]:
             value=cookie["value"],
             port=None,
             port_specified=False,
-            domain=cookie["domain"],
+            domain="localhost.local" if cookie["domain"] == "localhost" else cookie["domain"],
             domain_specified=False,
             domain_initial_dot=False,
             path=cookie.get("path", "/"),
@@ -63,12 +67,18 @@ def upload(origin: str, cookie_path: Path) -> list[dict[str, object]]:
     with opener.open(request, timeout=30) as response:
         csrf = json.load(response)["result"]
     results = []
-    for table in ["release", "geography", "indicator", "cell"]:
+    selected = tables if tables is not None else ["release", "geography", "indicator", "cell"]
+    if not set(selected) <= {"release", "geography", "indicator", "cell", "age_sex"}:
+        raise ValueError("Unknown census table")
+    for table in selected:
         path = ROOT / "snapshot" / f"hk_census_2021_{table}.csv"
         with path.open(encoding="utf-8", newline="") as stream:
             fieldnames = next(csv.reader(stream))
         types = dict.fromkeys(fieldnames, "string")
-        for field in ["census_year", "boundary_year", "category_order"]:
+        for field in [
+            "census_year", "boundary_year", "category_order", "age_lower",
+            "count_value", "signed_count", "district_population",
+        ]:
             if field in types:
                 types[field] = "int64"
         if "numeric_value" in types:
@@ -137,5 +147,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--origin", required=True)
     parser.add_argument("--session-cookie", required=True, type=Path)
+    parser.add_argument(
+        "--tables", nargs="+", choices=["release", "geography", "indicator", "cell", "age_sex"]
+    )
     args = parser.parse_args()
-    upload(args.origin.rstrip("/"), args.session_cookie)
+    upload(args.origin.rstrip("/"), args.session_cookie, args.tables)

@@ -1,0 +1,6032 @@
+{
+  "dashboardId": 18,
+  "translations": {
+    "Average Household Size": {
+      "zh-Hant": "平均家庭住戶人數",
+      "zh-Hans": "平均家庭住户人数"
+    },
+    "COUNT(*)": {
+      "zh-Hant": "記錄數目",
+      "zh-Hans": "记录数目"
+    },
+    "Category": {
+      "zh-Hant": "類別",
+      "zh-Hans": "类别"
+    },
+    "Count": {
+      "zh-Hant": "數目",
+      "zh-Hans": "数目"
+    },
+    "District": {
+      "zh-Hant": "地區",
+      "zh-Hans": "地区"
+    },
+    "District comparison - published indicators": {
+      "zh-Hant": "地區比較－已公布指標",
+      "zh-Hans": "地区比较－已公布指标"
+    },
+    "Domestic Households": {
+      "zh-Hant": "家庭住戶",
+      "zh-Hans": "家庭住户"
+    },
+    "Domestic household composition": {
+      "zh-Hant": "家庭住戶結構",
+      "zh-Hans": "家庭住户结构"
+    },
+    "Domestic household size": {
+      "zh-Hant": "家庭住戶人數",
+      "zh-Hans": "家庭住户人数"
+    },
+    "Domestic households": {
+      "zh-Hant": "家庭住戶",
+      "zh-Hans": "家庭住户"
+    },
+    "Domestic households by housing type": {
+      "zh-Hant": "按房屋類型劃分的家庭住戶",
+      "zh-Hans": "按房屋类型划分的家庭住户"
+    },
+    "Domestic households by tenure": {
+      "zh-Hant": "按居所租住權劃分的家庭住戶",
+      "zh-Hans": "按居所租住权划分的家庭住户"
+    },
+    "Education and work": {
+      "zh-Hant": "教育與工作",
+      "zh-Hans": "教育与工作"
+    },
+    "Full-time students by place of study": {
+      "zh-Hant": "按上課地點劃分的全日制學生",
+      "zh-Hans": "按上课地点划分的全日制学生"
+    },
+    "Highest level attended - population aged 15+": {
+      "zh-Hant": "最高就讀教育程度－15歲及以上人口",
+      "zh-Hans": "最高就读教育程度－15岁及以上人口"
+    },
+    "Hong Kong Census 2021 - People, Households and Districts": {
+      "zh-Hant": "香港2021年人口普查－人口、住戶與地區",
+      "zh-Hans": "香港2021年人口普查－人口、住户与地区"
+    },
+    "Households": {
+      "zh-Hant": "住戶數目",
+      "zh-Hans": "住户数目"
+    },
+    "Households and income": {
+      "zh-Hant": "住戶與收入",
+      "zh-Hans": "住户与收入"
+    },
+    "Housing": {
+      "zh-Hant": "住屋",
+      "zh-Hans": "住屋"
+    },
+    "Housing costs and space - published district medians": {
+      "zh-Hant": "住屋開支與面積－已公布的地區中位數",
+      "zh-Hans": "住屋开支与面积－已公布的地区中位数"
+    },
+    "Labour Force Participation (%)": {
+      "zh-Hant": "勞動人口參與率（%）",
+      "zh-Hans": "劳动人口参与率（%）"
+    },
+    "Labour force participation by district (%)": {
+      "zh-Hant": "按地區劃分的勞動人口參與率（%）",
+      "zh-Hans": "按地区划分的劳动人口参与率（%）"
+    },
+    "Marital status by sex - population aged 15+": {
+      "zh-Hant": "按性別劃分的婚姻狀況－15歲及以上人口",
+      "zh-Hans": "按性别划分的婚姻状况－15岁及以上人口"
+    },
+    "Median Age": {
+      "zh-Hant": "年齡中位數",
+      "zh-Hans": "年龄中位数"
+    },
+    "Median Floor Area (m2)": {
+      "zh-Hant": "樓面面積中位數（平方米）",
+      "zh-Hans": "楼面面积中位数（平方米）"
+    },
+    "Median Monthly Household Income (HKD)": {
+      "zh-Hant": "家庭住戶每月收入中位數（港元）",
+      "zh-Hans": "家庭住户每月收入中位数（港元）"
+    },
+    "Median Monthly Mortgage Payment (HKD)": {
+      "zh-Hant": "每月按揭供款中位數（港元）",
+      "zh-Hans": "每月按揭供款中位数（港元）"
+    },
+    "Median Monthly Rent (HKD)": {
+      "zh-Hant": "每月租金中位數（港元）",
+      "zh-Hans": "每月租金中位数（港元）"
+    },
+    "Median Mortgage Payment to Income (%)": {
+      "zh-Hant": "按揭供款與收入比率中位數（%）",
+      "zh-Hans": "按揭供款与收入比率中位数（%）"
+    },
+    "Median Rent to Income (%)": {
+      "zh-Hant": "租金與收入比率中位數（%）",
+      "zh-Hans": "租金与收入比率中位数（%）"
+    },
+    "Median monthly household income by district (HKD)": {
+      "zh-Hant": "按地區劃分的家庭住戶每月收入中位數（港元）",
+      "zh-Hans": "按地区划分的家庭住户每月收入中位数（港元）"
+    },
+    "Mobility and sources": {
+      "zh-Hant": "人口流動與資料來源",
+      "zh-Hans": "人口流动与资料来源"
+    },
+    "Monthly domestic household income bands (HKD)": {
+      "zh-Hant": "家庭住戶每月收入組別（港元）",
+      "zh-Hans": "家庭住户每月收入组别（港元）"
+    },
+    "Monthly employment income (HKD) - excluding helpers and unpaid family workers": {
+      "zh-Hant": "每月主要職業收入（港元）－不包括外籍家庭傭工及無酬家庭從業員",
+      "zh-Hans": "每月主要职业收入（港元）－不包括外籍家庭佣工及无酬家庭从业员"
+    },
+    "Original Value": {
+      "zh-Hant": "原始數值",
+      "zh-Hans": "原始数值"
+    },
+    "Overview": {
+      "zh-Hant": "概覽",
+      "zh-Hans": "概览"
+    },
+    "People and diversity": {
+      "zh-Hant": "人口與多元背景",
+      "zh-Hans": "人口与多元背景"
+    },
+    "Persons": {
+      "zh-Hant": "人數",
+      "zh-Hans": "人数"
+    },
+    "Population": {
+      "zh-Hant": "人口",
+      "zh-Hans": "人口"
+    },
+    "Population Aged 65+ (%)": {
+      "zh-Hant": "65歲及以上人口比例（%）",
+      "zh-Hans": "65岁及以上人口比例（%）"
+    },
+    "Population aged 65+ share": {
+      "zh-Hant": "65歲及以上人口比例",
+      "zh-Hans": "65岁及以上人口比例"
+    },
+    "Population by age band": {
+      "zh-Hant": "按年齡組別劃分的人口",
+      "zh-Hans": "按年龄组别划分的人口"
+    },
+    "Population by birthplace": {
+      "zh-Hant": "按出生地點劃分的人口",
+      "zh-Hans": "按出生地点划分的人口"
+    },
+    "Population by district": {
+      "zh-Hant": "按地區劃分的人口",
+      "zh-Hans": "按地区划分的人口"
+    },
+    "Population by ethnicity": {
+      "zh-Hant": "按種族劃分的人口",
+      "zh-Hans": "按种族划分的人口"
+    },
+    "Population by sex": {
+      "zh-Hant": "按性別劃分的人口",
+      "zh-Hans": "按性别划分的人口"
+    },
+    "Previous area of residence - internal migrants aged 5+": {
+      "zh-Hant": "先前居住地區－5歲及以上曾作內部遷移的人口",
+      "zh-Hans": "先前居住地区－5岁及以上曾作内部迁移的人口"
+    },
+    "Published Value": {
+      "zh-Hant": "已公布數值",
+      "zh-Hans": "已公布数值"
+    },
+    "Published census source cells": {
+      "zh-Hant": "已公布人口普查原始統計數值",
+      "zh-Hans": "已公布人口普查原始统计数值"
+    },
+    "Region": {
+      "zh-Hant": "地域",
+      "zh-Hans": "地域"
+    },
+    "Residence change over preceding five years - population aged 5+": {
+      "zh-Hant": "過去五年的居住地點變動－5歲及以上人口",
+      "zh-Hans": "过去五年的居住地点变动－5岁及以上人口"
+    },
+    "Rooms excluding kitchens and bathrooms": {
+      "zh-Hant": "房間數目（不包括廚房及浴室）",
+      "zh-Hans": "房间数目（不包括厨房及浴室）"
+    },
+    "Source Field": {
+      "zh-Hant": "來源欄位",
+      "zh-Hans": "来源栏位"
+    },
+    "Source Notes": {
+      "zh-Hant": "來源註釋",
+      "zh-Hans": "来源注释"
+    },
+    "Source Status": {
+      "zh-Hant": "來源數值狀態",
+      "zh-Hans": "来源数值状态"
+    },
+    "Source Topic": {
+      "zh-Hant": "來源主題",
+      "zh-Hans": "来源主题"
+    },
+    "Source URL": {
+      "zh-Hant": "來源網址",
+      "zh-Hans": "来源网址"
+    },
+    "Source topic": {
+      "zh-Hant": "來源主題",
+      "zh-Hans": "来源主题"
+    },
+    "Statistical Population": {
+      "zh-Hant": "統計涵蓋人口",
+      "zh-Hans": "统计涵盖人口"
+    },
+    "Unit": {
+      "zh-Hant": "單位",
+      "zh-Hans": "单位"
+    },
+    "Usual spoken language - population aged 5+": {
+      "zh-Hant": "慣用交談語言－5歲及以上人口",
+      "zh-Hans": "惯用交谈语言－5岁及以上人口"
+    },
+    "Working population": {
+      "zh-Hant": "工作人口",
+      "zh-Hans": "工作人口"
+    },
+    "Working population by employment status": {
+      "zh-Hant": "按就業身分劃分的工作人口",
+      "zh-Hans": "按就业身分划分的工作人口"
+    },
+    "Working population by industry": {
+      "zh-Hant": "按行業劃分的工作人口",
+      "zh-Hans": "按行业划分的工作人口"
+    },
+    "Working population by occupation": {
+      "zh-Hant": "按職業劃分的工作人口",
+      "zh-Hans": "按职业划分的工作人口"
+    },
+    "Working population by place of work": {
+      "zh-Hant": "按工作地點劃分的工作人口",
+      "zh-Hans": "按工作地点划分的工作人口"
+    },
+    "category_label": {
+      "zh-Hant": "類別",
+      "zh-Hans": "类别"
+    },
+    "category_order": {
+      "zh-Hant": "類別次序",
+      "zh-Hans": "类别次序"
+    },
+    "census_year": {
+      "zh-Hant": "人口普查年份",
+      "zh-Hans": "人口普查年份"
+    },
+    "children_population": {
+      "zh-Hant": "兒童人口",
+      "zh-Hans": "儿童人口"
+    },
+    "count_value": {
+      "zh-Hant": "數目",
+      "zh-Hans": "数目"
+    },
+    "district_code": {
+      "zh-Hant": "地區代碼",
+      "zh-Hans": "地区代码"
+    },
+    "district_name": {
+      "zh-Hant": "地區",
+      "zh-Hans": "地区"
+    },
+    "elderly_population": {
+      "zh-Hant": "長者人口",
+      "zh-Hans": "长者人口"
+    },
+    "footnotes": {
+      "zh-Hant": "註釋",
+      "zh-Hans": "注释"
+    },
+    "indicator_code": {
+      "zh-Hant": "指標代碼",
+      "zh-Hans": "指标代码"
+    },
+    "labour_force": {
+      "zh-Hant": "勞動人口",
+      "zh-Hans": "劳动人口"
+    },
+    "measure_kind": {
+      "zh-Hant": "量度類型",
+      "zh-Hans": "量度类型"
+    },
+    "region": {
+      "zh-Hant": "地域",
+      "zh-Hans": "地域"
+    },
+    "sex": {
+      "zh-Hant": "性別",
+      "zh-Hans": "性别"
+    },
+    "source_category": {
+      "zh-Hant": "來源類別",
+      "zh-Hans": "来源类别"
+    },
+    "unit": {
+      "zh-Hant": "單位",
+      "zh-Hans": "单位"
+    },
+    "universe": {
+      "zh-Hant": "統計涵蓋人口",
+      "zh-Hans": "统计涵盖人口"
+    },
+    "value_status": {
+      "zh-Hant": "數值狀態",
+      "zh-Hans": "数值状态"
+    },
+    "working_population": {
+      "zh-Hant": "工作人口",
+      "zh-Hans": "工作人口"
+    },
+    "### 2021 Census · 18 land districts\n\nDistrict totals exclude Marine. Published Hong Kong benchmarks: **7,413,070 people** and **2,674,161 domestic households**. These reference figures stay fixed when filters change. [Official district source](https://data.gov.hk/en-data/dataset/hk-censtatd-census21c-d5212109) · [Hong Kong totals](https://www.censtatd.gov.hk/en/scode470.html).\n\nPublished aggregates, not individual census records. Counts can be combined across districts; district medians, averages and published rates cannot. Language covers age 5+ (excluding mute persons); marital status and education cover age 15+. Employment income excludes foreign domestic helpers and unpaid family workers. Work/study/migration use the official district/new-town definitions; see **Mobility and sources → Published census source cells** for notes and original values.": {
+      "zh-Hant": "### 2021年人口普查 · 18個陸上地區\n\n地區總數不包括水上人口。已公布的全港基準數字：**7,413,070人**及**2,674,161個家庭住戶**。這些參考數字不隨篩選條件改變。[官方地區資料](https://data.gov.hk/en-data/dataset/hk-censtatd-census21c-d5212109) · [全港總數](https://www.censtatd.gov.hk/en/scode470.html)。\n\n本頁展示已公布的匯總統計，並非個別人士的人口普查記錄。各地區的人數及住戶數可相加；地區中位數、平均數及已公布比率則不可相加。語言統計涵蓋5歲及以上人口（不包括失去語言能力人士）；婚姻狀況及教育統計涵蓋15歲及以上人口。職業收入不包括外籍家庭傭工及無酬家庭從業員。工作、就學及遷移統計採用官方地區／新市鎮定義；註釋及原始數值請參閱**人口流動與資料來源 → 已公布人口普查原始統計數值**。",
+      "zh-Hans": "### 2021年人口普查 · 18个陆上地区\n\n地区总数不包括水上人口。已公布的全港基准数字：**7,413,070人**及**2,674,161个家庭住户**。这些参考数字不随筛选条件改变。[官方地区资料](https://data.gov.hk/en-data/dataset/hk-censtatd-census21c-d5212109) · [全港总数](https://www.censtatd.gov.hk/en/scode470.html)。\n\n本页展示已公布的汇总统计，并非个别人士的人口普查记录。各地区的人数及住户数可相加；地区中位数、平均数及已公布比率则不可相加。语言统计涵盖5岁及以上人口（不包括失去语言能力人士）；婚姻状况及教育统计涵盖15岁及以上人口。职业收入不包括外籍家庭佣工及无酬家庭从业员。工作、就学及迁移统计采用官方地区／新市镇定义；注释及原始数值请参阅**人口流动与资料来源 → 已公布人口普查原始统计数值**。"
+    },
+    "Hong Kong district population map": {
+      "zh-Hant": "香港各區人口地圖",
+      "zh-Hans": "香港各区人口地图"
+    },
+    "HK Census 2021 - District population map": {
+      "zh-Hant": "2021年人口普查 — 各區人口地圖",
+      "zh-Hans": "2021年人口普查 — 各区人口地图"
+    },
+    "### Hong Kong, district by district\n2021 Census · 18 land districts. Use Region and District to explore local communities. Detailed definitions and source data are on the Mobility and sources page.": {
+      "zh-Hant": "### 透視香港十八區\n2021年人口普查 · 十八個陸上地區。使用「區域」和「地區」篩選器探索各區社區。「流動與資料來源」頁載有詳細定義及來源數據。",
+      "zh-Hans": "### 透视香港十八区\n2021年人口普查 · 十八个陆上地区。使用“区域”和“地区”筛选器探索各区社区。“流动与资料来源”页载有详细定义及来源数据。"
+    },
+    "**Population per district — light to dark:** <200,000 · 200,000–349,999 · 350,000–499,999 · 500,000–649,999 · ≥650,000. Hover for population, age 65+ share and median monthly household income.\n\n2021 boundaries and statistics: [Census and Statistics Department / CSDI](https://data.gov.hk/en-data/dataset/hk-censtatd-census_geo-2021-population-census-by-dcd). Colour shows population, not density.": {
+      "zh-Hant": "**各區人口 — 由淺至深：** <200,000 · 200,000–349,999 · 350,000–499,999 · 500,000–649,999 · ≥650,000。將游標移至地區可查看人口、65歲及以上人口比例及每月住戶收入中位數。\n\n2021年界線及統計數字：[政府統計處 / CSDI](https://data.gov.hk/en-data/dataset/hk-censtatd-census_geo-2021-population-census-by-dcd)。顏色表示人口數目，並非人口密度。",
+      "zh-Hans": "**各区人口 — 由浅至深：** <200,000 · 200,000–349,999 · 350,000–499,999 · 500,000–649,999 · ≥650,000。将光标移至地区可查看人口、65岁及以上人口比例及每月住户收入中位数。\n\n2021年界线及统计数字：[政府统计处 / CSDI](https://data.gov.hk/en-data/dataset/hk-censtatd-census_geo-2021-population-census-by-dcd)。颜色表示人口数目，并非人口密度。"
+    },
+    "English use and birthplace by district": {
+      "zh-Hant": "各區出生地與英語使用",
+      "zh-Hans": "各区出生地与英语使用"
+    },
+    "**Reading this chart:** Each dot is one district; colours identify regions. Born elsewhere means outside Hong Kong, Mainland China, Macao and Taiwan (all ages). English usage covers residents aged 5+ and excludes mute persons.\n\nThese separate district totals show an association, not individual language use or causation. Hover for district percentages and population; use Region and District to focus the view.": {
+      "zh-Hant": "**圖表說明：** 每點代表一個地區，顏色代表地域。其他地方出生指在香港、中國內地、澳門及台灣以外出生的人口（所有年齡）。慣用英語比例涵蓋5歲及以上人口，不包括失去語言能力人士。\n\n兩項地區總數只顯示地區層面的關聯，並非個人的語言使用或因果關係。將游標移至圓點可查看地區比例及人口；使用地域及地區篩選器縮小範圍。",
+      "zh-Hans": "**图表说明：** 每点代表一个地区，颜色代表地域。其他地方出生指在香港、中国内地、澳门及台湾以外出生的人口（所有年龄）。惯用英语比例涵盖5岁及以上人口，不包括失去语言能力人士。\n\n两项地区总数只显示地区层面的关联，并非个人的语言使用或因果关系。将光标移至圆点可查看地区比例及人口；使用地域及地区筛选器缩小范围。"
+    },
+    "Each point is one 2021 district. X: residents born outside Hong Kong, Mainland China, Macao and Taiwan, as a share of all residents. Y: English as usual spoken language, as a share of residents aged 5+ excluding mute persons. Separate district totals show an association, not individual language use or causation.": {
+      "zh-Hant": "每點代表一個2021年地區。橫軸：在香港、中國內地、澳門及台灣以外出生的人口佔全區人口比例。縱軸：5歲及以上人口中以英語為慣用交談語言的比例，不包括失去語言能力人士。兩項地區總數只顯示關聯，並非個人的語言使用或因果關係。",
+      "zh-Hans": "每点代表一个2021年地区。横轴：在香港、中国内地、澳门及台湾以外出生的人口占全区人口比例。纵轴：5岁及以上人口中以英语为惯用交谈语言的比例，不包括失去语言能力人士。两项地区总数只显示关联，并非个人的语言使用或因果关系。"
+    },
+    "Population pyramid by age and sex": {
+      "zh-Hant": "按年齡及性別劃分的人口金字塔",
+      "zh-Hans": "按年龄及性别划分的人口金字塔"
+    },
+    "Population share": {
+      "zh-Hant": "人口比例",
+      "zh-Hans": "人口比例"
+    },
+    "Share of selected population": {
+      "zh-Hant": "佔所選地區總人口比例",
+      "zh-Hans": "占所选地区总人口比例"
+    },
+    "**Population pyramid:** Male on the left, female on the right; youngest ages at the bottom. Bars show each age-sex group as a share of the selected districts' total population. Minus signs indicate the male side only. Five-year bands, with ages 85+ combined. Source: 2021 Census A204; includes foreign domestic helpers and excludes Marine.": {
+      "zh-Hant": "**人口金字塔：** 男性在左，女性在右；年齡由下至上遞增。長條代表各年齡及性別組別佔所選地區總人口的比例。負號只表示男性向左延伸。每組相隔五歲，85歲及以上合併一組。資料來源：2021年人口普查A204；包括外籍家庭傭工，不包括水上人口。",
+      "zh-Hans": "**人口金字塔：** 男性在左，女性在右；年龄由下至上递增。长条代表各年龄及性别组别占所选地区总人口的比例。负号只表示男性向左延伸。每组相隔五岁，85岁及以上合并一组。资料来源：2021年人口普查A204；包括外籍家庭佣工，不包括水上人口。"
+    },
+    "2021 Census A204. Five-year age bands, plus 85+. Male on the left; female on the right. Each bar is a share of the selected districts' total population. Includes foreign domestic helpers; excludes Marine. Minus signs on male shares indicate leftward direction, not negative population.": {
+      "zh-Hant": "2021年人口普查A204。五歲年齡組別及85歲以上組別；男性在左，女性在右。各長條顯示佔所選地區總人口的比例。包括外籍家庭傭工，不包括水上人口。男性比例的負號只表示向左延伸，並非負人口。",
+      "zh-Hans": "2021年人口普查A204。五岁年龄组别及85岁以上组别；男性在左，女性在右。各长条显示占所选地区总人口的比例。包括外籍家庭佣工，不包括水上人口。男性比例的负号只表示向左延伸，并非负人口。"
+    },
+    "Ethnicity by district - non-Chinese groups": {
+      "zh-Hant": "按地區劃分的種族人口比例－非華人族群",
+      "zh-Hans": "按地区划分的种族人口比例－非华人族群"
+    },
+    "District ethnicity shares: each cell uses the district total population as its denominator. Hover or focus for counts. The Chinese/non-Chinese baseline always covers all 18 land districts; Marine is excluded. Others includes people reporting more than one ethnicity. Fixed colour scale: 0-12%.": {
+      "zh-Hant": "各格以該區總人口為分母；移至或選取格子可查看人數。華人／非華人基準比例固定涵蓋全港18個陸上地區，不包括水上。「其他」包括報稱多於一個種族的人士。色階固定為0–12%。",
+      "zh-Hans": "各格以该区总人口为分母；移至或选取格子可查看人数。华人／非华人基准比例固定涵盖全港18个陆上地区，不包括水上。“其他”包括报称多于一个种族的人士。色阶固定为0–12%。"
+    },
+    "Elderly dependency ratio by district": {
+      "zh-Hant": "各區老年撫養比率",
+      "zh-Hans": "各区老年抚养比率"
+    },
+    "65+ per 1,000 aged 15-64": {
+      "zh-Hant": "每千名15至64歲人口的65歲及以上人數",
+      "zh-Hans": "每千名15至64岁人口的65岁及以上人数"
+    },
+    "2021 Census: residents aged 65+ per 1,000 residents aged 15-64. Calculated from published district age counts. This describes age structure, not actual employment, care needs or financial dependence. Source: Census and Statistics Department, 2021 district profiles; definition: https://www.census2021.gov.hk/doc/pub/21c-main-results.pdf": {
+      "zh-Hant": "2021年人口普查：每千名15至64歲人口的65歲及以上人口數目，按已公布的地區年齡組別人口計算。此指標反映年齡結構，並非實際就業、照顧需要或經濟依賴程度。資料來源：政府統計處2021年人口普查地區概覽。定義：https://www.census2021.gov.hk/doc/pub/21c-main-results.pdf",
+      "zh-Hans": "2021年人口普查：每千名15至64岁人口的65岁及以上人口数目，按已公布的地区年龄组别人口计算。此指标反映年龄结构，并非实际就业、照顾需要或经济依赖程度。资料来源：政府统计处2021年人口普查地区概览。定义：https://www.census2021.gov.hk/doc/pub/21c-main-results.pdf"
+    },
+    "Residents aged 65+ per 1,000 residents aged 15-64. Derived from 2021 district census age counts; not a measure of employment or financial dependence.": {
+      "zh-Hant": "每千名15至64歲人口的65歲及以上人口數目。按2021年地區年齡組別人口計算，並非就業或經濟依賴指標。",
+      "zh-Hans": "每千名15至64岁人口的65岁及以上人口数目。按2021年地区年龄组别人口计算，并非就业或经济依赖指标。"
+    },
+    "Household income distribution and median by district": {
+      "zh-Hant": "各區家庭住戶每月收入分布及收入中位數",
+      "zh-Hans": "各区家庭住户每月收入分布及收入中位数"
+    },
+    "<span id=\"ci-income-locale\" lang=\"en\">2021 Census · Domestic households. Income bands sum to each district’s household count. Median values are the published district figures; they are not calculated from band midpoints. Region and District filters select rows.</span>": {
+      "zh-Hant": "<span id=\"ci-income-locale\" lang=\"zh-Hant\">2021年人口普查 · 家庭住戶。各收入組別合計為該區住戶總數。收入中位數採用已公布的地區數值，並非按收入組別中點估算。地域及地區篩選器用於選取地區。</span>",
+      "zh-Hans": "<span id=\"ci-income-locale\" lang=\"zh-Hans\">2021年人口普查 · 家庭住户。各收入组别合计为该区住户总数。收入中位数采用已公布的地区数值，并非按收入组别中点估算。地域及地区筛选器用于选取地区。</span>"
+    },
+    "Domestic household composition by district": {
+      "zh-Hant": "按地區劃分的家庭住戶結構",
+      "zh-Hans": "按地区划分的家庭住户结构"
+    },
+    "Share of district households": {
+      "zh-Hant": "佔該區家庭住戶比例",
+      "zh-Hans": "占该区家庭住户比例"
+    },
+    "2021 Census: each district bar represents 100% of its domestic households. Eight mutually exclusive household-composition categories; denominator is all domestic households in that district, not population. Geography filters select districts without changing their shares. Includes all 18 land districts; excludes Marine.": {
+      "zh-Hant": "2021年人口普查：每條地區長條代表該區全部家庭住戶（100%），分為八個互不重疊的住戶結構類別。分母為該區家庭住戶總數，而非人口。地區篩選不會改變各區比例。涵蓋18個陸上地區，不包括水上。",
+      "zh-Hans": "2021年人口普查：每条地区长条代表该区全部家庭住户（100%），分为八个互不重叠的住户结构类别。分母为该区家庭住户总数，而非人口。地区筛选不会改变各区比例。涵盖18个陆上地区，不包括水上。"
+    },
+    "Household income - all and economically active households": {
+      "zh-Hant": "家庭住戶收入比較：全體與經濟活躍住戶",
+      "zh-Hans": "家庭住户收入比较：全体与经济活跃住户"
+    },
+    "Cumulative household income by region": {
+      "zh-Hant": "按地域劃分的家庭住戶收入累積分布",
+      "zh-Hans": "按地域划分的家庭住户收入累积分布"
+    },
+    "Households below threshold": {
+      "zh-Hant": "收入低於門檻的住戶比例",
+      "zh-Hans": "收入低于门槛的住户比例"
+    },
+    "Monthly household income threshold (HK$)": {
+      "zh-Hant": "家庭住戶每月收入門檻（港元）",
+      "zh-Hans": "家庭住户每月收入门槛（港元）"
+    },
+    "<span id=\"hh-income-locale\" lang=\"en\">2021 Census · The dumbbell compares published medians for overlapping household populations. Regional curves show the share below each income threshold, using household-weighted counts from the selected districts. Lines between markers are visual guides, not estimates within income bands.</span>": {
+      "zh-Hant": "<span id=\"hh-income-locale\" lang=\"zh-Hant\">2021年人口普查 · 啞鈴圖比較兩組有重疊的住戶群體之已公布收入中位數。地域曲線按所選地區的住戶數目加權，顯示收入低於各門檻的住戶比例。圓點之間的連線僅供閱讀，並非收入組別內的估計。</span>",
+      "zh-Hans": "<span id=\"hh-income-locale\" lang=\"zh-Hans\">2021年人口普查 · 哑铃图比较两组有重叠的住户群体之已公布收入中位数。地域曲线按所选地区的住户数目加权，显示收入低于各门槛的住户比例。圆点之间的连线仅供阅读，并非收入组别内的估计。</span>"
+    },
+    "2021 Census published district medians: all domestic households versus the economically active subset. The connecting segment is a population comparison, not change over time. Sorted by difference. Medians are not averaged across districts.": {
+      "zh-Hant": "2021年人口普查已公布地區中位數：全體家庭住戶與其經濟活躍住戶子集。連線比較兩組住戶，並非時間變化。按差額排列；不平均各區中位數。",
+      "zh-Hans": "2021年人口普查已公布地区中位数：全体家庭住户与其经济活跃住户子集。连线比较两组住户，并非时间变化。按差额排列；不平均各区中位数。"
+    },
+    "2021 Census: share of domestic households below each published monthly income threshold. Each regional point sums household counts across the selected districts before division. Lines connect observed thresholds only; they do not estimate income within bands.": {
+      "zh-Hant": "2021年人口普查：家庭住戶收入低於各已公布每月收入門檻的比例。每個地域數據點先合計所選地區的住戶數目再計算比例；連線並非收入組別內的估計。",
+      "zh-Hans": "2021年人口普查：家庭住户收入低于各已公布每月收入门槛的比例。每个地域数据点先合计所选地区的住户数目再计算比例；连线并非收入组别内的估计。"
+    },
+    "2021 Census, all domestic households. Bars use the top 0–100% axis; overlaid median dots use the bottom HK$0–60,000 axis. Dot positions do not identify income bands. Hover or focus any segment for its count, share and district median. Sorted by published median, highest first; medians are not estimated from bands or averaged across districts.": {
+      "zh-Hant": "2021年人口普查，所有家庭住戶。橫棒參照上方0–100%刻度；疊加的中位數圓點參照下方HK$0–60,000刻度。圓點位置不代表收入組別。游標移至或鍵盤選取任何色塊可查看住戶數目、比例及該區中位數。按已公布中位數由高至低排列；中位數並非按收入組別估算，亦非各區中位數的平均值。",
+      "zh-Hans": "2021年人口普查，所有家庭住户。横棒参照上方0–100%刻度；叠加的中位数圆点参照下方HK$0–60,000刻度。圆点位置不代表收入组别。光标移至或键盘选中任何色块可查看住户数目、比例及该区中位数。按已公布中位数由高至低排列；中位数并非按收入组别估算，亦非各区中位数的平均值。"
+    },
+    "<span id=\"housing-waffle-locale\" lang=\"en\">2021 Census · Domestic households in the selected districts. Each square represents approximately 0.5%; square allocations are rounded. Counts and percentages in the legend and tooltips use the exact source totals. Very small shares may have no square but remain in the legend.</span>": {
+      "zh-Hant": "<span id=\"housing-waffle-locale\" lang=\"zh-Hant\">2021年人口普查 · 所選地區的家庭住戶。每格約佔0.5%；方格數目經四捨五入分配。圖例及提示中的住戶數目和百分比按來源確切總數計算。極小比例可能沒有方格，但仍列於圖例。</span>",
+      "zh-Hans": "<span id=\"housing-waffle-locale\" lang=\"zh-Hans\">2021年人口普查 · 所选地区的家庭住户。每格约占0.5%；方格数目经四舍五入分配。图例及提示中的住户数目和百分比按来源确切总数计算。极小比例可能没有方格，但仍列于图例。</span>"
+    },
+    "2021 Census domestic households by housing type. A 200-square waffle shows the selected districts' composition; each square is approximately 0.5%. Exact source counts and percentages remain in the legend and hover/focus tooltips. Square allocation is rounded and sums to 200; tiny categories remain in the legend even when they receive no square. Marine and the separate Land reference are excluded.": {
+      "zh-Hant": "2021年人口普查按房屋類型劃分的家庭住戶。200格華夫圖顯示所選地區的住戶構成；每格約佔0.5%。圖例及游標／鍵盤提示列出來源確切住戶數目和百分比。方格分配經四捨五入，合共200格；極小類別即使沒有方格，仍列於圖例。不包括水上人口及獨立的陸上參考總計。",
+      "zh-Hans": "2021年人口普查按房屋类型划分的家庭住户。200格华夫图显示所选地区的住户构成；每格约占0.5%。图例及光标／键盘提示列出来源确切住户数目和百分比。方格分配经四舍五入，合共200格；极小类别即使没有方格，仍列于图例。不包括水上人口及独立的陆上参考总计。"
+    },
+    "**Tenure sunburst:** Inner ring = owner-occupied / rented / other arrangements. Outer ring = six published tenure categories. Shared tenancy includes co-tenants, main tenants and sub-tenants. Tiny categories remain in the chart; hover to see their household counts and shares. Geography filters recalculate the selected household total.": {
+      "zh-Hant": "**租住權旭日圖：** 內圈為自置／租住／其他安排；外圈為六個已公布的租住權類別。「共同租住」包括合租、主租及分租。佔比較小的類別仍保留於圖中，移至扇形可查看住戶數目及比例。地域篩選會重新計算所選住戶總數。",
+      "zh-Hans": "**租住权旭日图：** 内圈为自置／租住／其他安排；外圈为六个已公布的租住权类别。“共同租住”包括合租、主租及分租。占比较小的类别仍保留于图中，移至扇形可查看住户数目及比例。地域筛选会重新计算所选住户总数。"
+    },
+    "2021 Census domestic households. Inner ring: derived owner-occupied, rented and other-arrangement groups. Outer ring: six published tenure categories. Shared tenancy means co-tenant/main tenant/sub-tenant. Hover shows household counts, share of all selected households and share of the parent group. Counts exclude Marine.": {
+      "zh-Hant": "2021年人口普查家庭住戶。內圈為整理所得的自置、租住及其他安排群組；外圈為六個已公布租住權類別。共同租住包括合租、主租及分租。移至扇形可查看住戶數目、佔全部所選住戶比例及佔所屬群組比例。不包括水上。",
+      "zh-Hans": "2021年人口普查家庭住户。内圈为整理所得的自置、租住及其他安排群组；外圈为六个已公布租住权类别。共同租住包括合租、主租及分租。移至扇形可查看住户数目、占全部所选住户比例及占所属群组比例。不包括水上。"
+    },
+    "Educational attainment by region - population aged 15+": {
+      "zh-Hant": "按地域劃分的最高就讀程度－15歲及以上人口",
+      "zh-Hans": "按地域划分的最高就读程度－15岁及以上人口"
+    },
+    "Degree-level attendance and professional occupations by district": {
+      "zh-Hant": "各區學位課程就讀比例與管理及專業職業比例",
+      "zh-Hans": "各区学位课程就读比例与管理及专业职业比例"
+    },
+    "**Education and work · 2021:** Sankey links classify residents aged 15+ by region and highest level attended; they are not education or career transitions. Scatter points compare separate district aggregates: degree-course attendance among residents aged 15+ versus managers, professionals and associate professionals among workers. They do not establish individual outcomes or causation. Industry counts describe employed residents. Labour-participation dots use published district rates; medians and rates are not averaged.": {
+      "zh-Hant": "**教育與工作 · 2021：** 桑基圖按居住地域及最高就讀程度分類15歲及以上居民，並非升學或就業流向。散點比較各區兩個不同總體：15歲及以上人口中最高就讀程度為學位課程的比例，以及工作人口中經理、專業人員及輔助專業人員的比例，不能推論個人結果或因果關係。行業數據指居於該區的工作人口。勞動參與圓點採用已公布地區比率，不平均中位數或比率。",
+      "zh-Hans": "**教育与工作 · 2021：** 桑基图按居住地域及最高就读程度分类15岁及以上居民，并非升学或就业流向。散点比较各区两个不同总体：15岁及以上人口中最高就读程度为学位课程的比例，以及工作人口中经理、专业人员及辅助专业人员的比例，不能推论个人结果或因果关系。行业数据指居于该区的工作人口。劳动参与圆点采用已公布地区比率，不平均中位数或比率。"
+    },
+    "2021 Census residents aged 15+. Links allocate people from their current region of residence to their highest educational level attended. They are classifications of the same population, not movements or transitions through education. Link width represents people; hover shows counts and source/target shares.": {
+      "zh-Hant": "2021年15歲及以上居民，按居住地域及最高就讀程度分類。連線寬度為人數，並非升學或遷移流向；移至連線可查看人數及兩端比例。",
+      "zh-Hans": "2021年15岁及以上居民，按居住地域及最高就读程度分类。连线宽度为人数，并非升学或迁移流向；移至连线可查看人数及两端比例。"
+    },
+    "2021 district association. X: degree course as highest level attended, divided by residents aged 15+. Y: managers, professionals and associate professionals, divided by working population. Equal-size points represent districts. Separate aggregate populations do not establish individual career paths or causation.": {
+      "zh-Hant": "2021年地區總體關聯。橫軸：15歲及以上人口中最高就讀程度為學位課程的比例。縱軸：工作人口中經理、專業及輔助專業人員的比例。各區圓點大小相同；不同總體不能推論個人就業路徑或因果關係。",
+      "zh-Hans": "2021年地区总体关联。横轴：15岁及以上人口中最高就读程度为学位课程的比例。纵轴：工作人口中经理、专业及辅助专业人员的比例。各区圆点大小相同；不同总体不能推论个人就业路径或因果关系。"
+    },
+    "2021 working population by industry. Rectangle area represents persons in the selected districts, not jobs located in those districts. All 11 published industry categories are retained; hover shows counts and share.": {
+      "zh-Hant": "2021年按行業劃分的工作人口。矩形面積為所選地區居民的人數，並非區內職位數目。保留全部11個已公布行業類別；移至矩形可查看人數及比例。",
+      "zh-Hans": "2021年按行业划分的工作人口。矩形面积为所选地区居民的人数，并非区内职位数目。保留全部11个已公布行业类别；移至矩形可查看人数及比例。"
+    },
+    "2021 published labour force participation rate by district: labour force as a percentage of residents aged 15+. Each dot represents one district on a fixed 0-100% scale. District rates are not averaged.": {
+      "zh-Hant": "2021年已公布地區勞動人口參與率：勞動人口佔15歲及以上人口的百分比。每點代表一區，刻度固定為0–100%；不平均地區比率。",
+      "zh-Hans": "2021年已公布地区劳动人口参与率：劳动人口占15岁及以上人口的百分比。每点代表一区，刻度固定为0–100%；不平均地区比率。"
+    },
+    "2021 published labour force participation rate by district: labour force as a percentage of residents aged 15+. Each dot represents one district on a fixed 50-70% detail scale. District rates are not averaged.": {
+      "zh-Hant": "2021年已公布地區勞動人口參與率：勞動人口佔15歲及以上人口的百分比。每點代表一區，細節刻度固定為50–70%；不平均地區比率。",
+      "zh-Hans": "2021年已公布地区劳动人口参与率：劳动人口占15岁及以上人口的百分比。每点代表一区，细节刻度固定为50–70%；不平均地区比率。"
+    },
+    "Local study and work - spread across districts": {
+      "zh-Hant": "同區就讀與工作比例－各區分布",
+      "zh-Hans": "同区就读与工作比例－各区分布"
+    },
+    "Residence change by district - population aged 5+": {
+      "zh-Hant": "各區居所變動－5歲及以上人口",
+      "zh-Hans": "各区居所变动－5岁及以上人口"
+    },
+    "Internal migration - previous area to current region": {
+      "zh-Hant": "內部遷移－五年前居住地區至現居地域",
+      "zh-Hans": "内部迁移－五年前居住地区至现居地域"
+    },
+    "**Mobility · 2021:** The box plot compares district rates, not individuals: boxes show the middle 50% and median, whiskers the full district range. Local work excludes working at home; local study covers full-time study in Hong Kong institutions. Both use the official district/new-town definition. The heatmap shows four residence-change shares within each district on a fixed 0–100% scale. Sankey links use published previous-area counts; filters select current residence. They do not identify exact district-to-district journeys.": {
+      "zh-Hant": "**人口流動 · 2021：** 箱形圖比較各區比率，並非個人：箱體顯示中間50%及中位數，鬚線顯示各區最小至最大值。同區工作不包括在家工作；同區就讀只涵蓋在香港院校修讀全日制課程的學生。兩者均採用官方地區／新市鎮定義。熱圖顯示各區四類居所變動比例，色階固定為0–100%。桑基圖採用已公布的五年前居住地區人數；篩選按現居地區，並非精確的區際通勤或遷移路線。",
+      "zh-Hans": "**人口流动 · 2021：** 箱形图比较各区比率，并非个人：箱体显示中间50%及中位数，须线显示各区最小至最大值。同区工作不包括在家工作；同区就读只涵盖在香港院校修读全日制课程的学生。两者均采用官方地区／新市镇定义。热图显示各区四类居所变动比例，色阶固定为0–100%。桑基图采用已公布的五年前居住地区人数；筛选按现居地区，并非精确的区际通勤或迁移路线。"
+    }
+  },
+  "dictionaries": {
+    "district_name": [
+      {
+        "value": "Central and Western",
+        "values": {
+          "zh-Hant": "中西區",
+          "zh-Hans": "中西区"
+        }
+      },
+      {
+        "value": "Wan Chai",
+        "values": {
+          "zh-Hant": "灣仔區",
+          "zh-Hans": "湾仔区"
+        }
+      },
+      {
+        "value": "Eastern",
+        "values": {
+          "zh-Hant": "東區",
+          "zh-Hans": "东区"
+        }
+      },
+      {
+        "value": "Southern",
+        "values": {
+          "zh-Hant": "南區",
+          "zh-Hans": "南区"
+        }
+      },
+      {
+        "value": "Yau Tsim Mong",
+        "values": {
+          "zh-Hant": "油尖旺區",
+          "zh-Hans": "油尖旺区"
+        }
+      },
+      {
+        "value": "Sham Shui Po",
+        "values": {
+          "zh-Hant": "深水埗區",
+          "zh-Hans": "深水埗区"
+        }
+      },
+      {
+        "value": "Kowloon City",
+        "values": {
+          "zh-Hant": "九龍城區",
+          "zh-Hans": "九龙城区"
+        }
+      },
+      {
+        "value": "Wong Tai Sin",
+        "values": {
+          "zh-Hant": "黃大仙區",
+          "zh-Hans": "黄大仙区"
+        }
+      },
+      {
+        "value": "Kwun Tong",
+        "values": {
+          "zh-Hant": "觀塘區",
+          "zh-Hans": "观塘区"
+        }
+      },
+      {
+        "value": "Kwai Tsing",
+        "values": {
+          "zh-Hant": "葵青區",
+          "zh-Hans": "葵青区"
+        }
+      },
+      {
+        "value": "Tsuen Wan",
+        "values": {
+          "zh-Hant": "荃灣區",
+          "zh-Hans": "荃湾区"
+        }
+      },
+      {
+        "value": "Tuen Mun",
+        "values": {
+          "zh-Hant": "屯門區",
+          "zh-Hans": "屯门区"
+        }
+      },
+      {
+        "value": "Yuen Long",
+        "values": {
+          "zh-Hant": "元朗區",
+          "zh-Hans": "元朗区"
+        }
+      },
+      {
+        "value": "North",
+        "values": {
+          "zh-Hant": "北區",
+          "zh-Hans": "北区"
+        }
+      },
+      {
+        "value": "Tai Po",
+        "values": {
+          "zh-Hant": "大埔區",
+          "zh-Hans": "大埔区"
+        }
+      },
+      {
+        "value": "Sha Tin",
+        "values": {
+          "zh-Hant": "沙田區",
+          "zh-Hans": "沙田区"
+        }
+      },
+      {
+        "value": "Sai Kung",
+        "values": {
+          "zh-Hant": "西貢區",
+          "zh-Hans": "西贡区"
+        }
+      },
+      {
+        "value": "Islands",
+        "values": {
+          "zh-Hant": "離島區",
+          "zh-Hans": "离岛区"
+        }
+      },
+      {
+        "value": "Land total",
+        "values": {
+          "zh-Hant": "陸上總計",
+          "zh-Hans": "陆上总计"
+        }
+      }
+    ],
+    "region": [
+      {
+        "value": "Hong Kong Island",
+        "values": {
+          "zh-Hant": "香港島",
+          "zh-Hans": "香港岛"
+        }
+      },
+      {
+        "value": "Kowloon",
+        "values": {
+          "zh-Hant": "九龍",
+          "zh-Hans": "九龙"
+        }
+      },
+      {
+        "value": "New Territories",
+        "values": {
+          "zh-Hant": "新界",
+          "zh-Hans": "新界"
+        }
+      }
+    ],
+    "sex": [
+      {
+        "value": "Male",
+        "values": {
+          "zh-Hant": "男性",
+          "zh-Hans": "男性"
+        }
+      },
+      {
+        "value": "Female",
+        "values": {
+          "zh-Hant": "女性",
+          "zh-Hans": "女性"
+        }
+      }
+    ],
+    "category_label": [
+      {
+        "value": "Total population",
+        "values": {
+          "zh-Hant": "總人口",
+          "zh-Hans": "总人口"
+        }
+      },
+      {
+        "value": "Male",
+        "values": {
+          "zh-Hant": "男性",
+          "zh-Hans": "男性"
+        }
+      },
+      {
+        "value": "Female",
+        "values": {
+          "zh-Hant": "女性",
+          "zh-Hans": "女性"
+        }
+      },
+      {
+        "value": "Sex ratio (i.e. the number of males per 1 000 females in the respective age group)",
+        "values": {
+          "zh-Hant": "性別比率（即男性數目與每千名女性相對的比率）",
+          "zh-Hans": "性别比率（即男性数目与每千名女性相对的比率）"
+        }
+      },
+      {
+        "value": "< 15",
+        "values": {
+          "zh-Hant": "15歲以下",
+          "zh-Hans": "15岁以下"
+        }
+      },
+      {
+        "value": "15 - 24",
+        "values": {
+          "zh-Hant": "15至24歲",
+          "zh-Hans": "15至24岁"
+        }
+      },
+      {
+        "value": "25 - 44",
+        "values": {
+          "zh-Hant": "25至44歲",
+          "zh-Hans": "25至44岁"
+        }
+      },
+      {
+        "value": "45 - 64",
+        "values": {
+          "zh-Hant": "45至64歲",
+          "zh-Hans": "45至64岁"
+        }
+      },
+      {
+        "value": "65+",
+        "values": {
+          "zh-Hant": "65歲及以上",
+          "zh-Hans": "65岁及以上"
+        }
+      },
+      {
+        "value": "Both sexes",
+        "values": {
+          "zh-Hant": "男女合計",
+          "zh-Hans": "男女合计"
+        }
+      },
+      {
+        "value": "Hong Kong",
+        "values": {
+          "zh-Hant": "香港",
+          "zh-Hans": "香港"
+        }
+      },
+      {
+        "value": "The mainland of China/ Macao/ Taiwan",
+        "values": {
+          "zh-Hant": "中國內地／澳門／台灣",
+          "zh-Hans": "中国内地／澳门／台湾"
+        }
+      },
+      {
+        "value": "Elsewhere",
+        "values": {
+          "zh-Hant": "其他地方",
+          "zh-Hans": "其他地方"
+        }
+      },
+      {
+        "value": "Chinese",
+        "values": {
+          "zh-Hant": "華人",
+          "zh-Hans": "华人"
+        }
+      },
+      {
+        "value": "Filipino",
+        "values": {
+          "zh-Hant": "菲律賓人",
+          "zh-Hans": "菲律宾人"
+        }
+      },
+      {
+        "value": "Indonesian",
+        "values": {
+          "zh-Hant": "印尼人",
+          "zh-Hans": "印尼人"
+        }
+      },
+      {
+        "value": "White",
+        "values": {
+          "zh-Hant": "白人",
+          "zh-Hans": "白人"
+        }
+      },
+      {
+        "value": "Others",
+        "values": {
+          "zh-Hant": "其他",
+          "zh-Hans": "其他"
+        }
+      },
+      {
+        "value": "Never married",
+        "values": {
+          "zh-Hant": "從未結婚",
+          "zh-Hans": "从未结婚"
+        }
+      },
+      {
+        "value": "Married",
+        "values": {
+          "zh-Hant": "已婚",
+          "zh-Hans": "已婚"
+        }
+      },
+      {
+        "value": "Widowed",
+        "values": {
+          "zh-Hant": "喪偶",
+          "zh-Hans": "丧偶"
+        }
+      },
+      {
+        "value": "Divorced",
+        "values": {
+          "zh-Hant": "離婚",
+          "zh-Hans": "离婚"
+        }
+      },
+      {
+        "value": "Separated",
+        "values": {
+          "zh-Hant": "分居",
+          "zh-Hans": "分居"
+        }
+      },
+      {
+        "value": "Cantonese",
+        "values": {
+          "zh-Hant": "廣州話",
+          "zh-Hans": "广州话"
+        }
+      },
+      {
+        "value": "Putonghua",
+        "values": {
+          "zh-Hant": "普通話",
+          "zh-Hans": "普通话"
+        }
+      },
+      {
+        "value": "Other Chinese dialects",
+        "values": {
+          "zh-Hant": "其他中國方言",
+          "zh-Hans": "其他中国方言"
+        }
+      },
+      {
+        "value": "English",
+        "values": {
+          "zh-Hant": "英語",
+          "zh-Hans": "英语"
+        }
+      },
+      {
+        "value": "Other languages",
+        "values": {
+          "zh-Hant": "其他語言",
+          "zh-Hans": "其他语言"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read Chinese",
+        "values": {
+          "zh-Hant": "能閱讀中文的5歲及以上人口比例",
+          "zh-Hans": "能阅读中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read English",
+        "values": {
+          "zh-Hant": "能閱讀英文的5歲及以上人口比例",
+          "zh-Hans": "能阅读英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write Chinese",
+        "values": {
+          "zh-Hant": "能書寫中文的5歲及以上人口比例",
+          "zh-Hans": "能书写中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write English",
+        "values": {
+          "zh-Hant": "能書寫英文的5歲及以上人口比例",
+          "zh-Hans": "能书写英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "No schooling/ Pre-primary",
+        "values": {
+          "zh-Hant": "未受教育／學前教育",
+          "zh-Hans": "未受教育／学前教育"
+        }
+      },
+      {
+        "value": "Primary",
+        "values": {
+          "zh-Hant": "小學",
+          "zh-Hans": "小学"
+        }
+      },
+      {
+        "value": "Lower secondary",
+        "values": {
+          "zh-Hant": "初中",
+          "zh-Hans": "初中"
+        }
+      },
+      {
+        "value": "Upper secondary",
+        "values": {
+          "zh-Hant": "高中",
+          "zh-Hans": "高中"
+        }
+      },
+      {
+        "value": "Post-secondary: Diploma/ Certificate",
+        "values": {
+          "zh-Hant": "專上教育：文憑／證書",
+          "zh-Hans": "专上教育：文凭／证书"
+        }
+      },
+      {
+        "value": "Post-secondary: Sub-degree course",
+        "values": {
+          "zh-Hant": "專上教育：副學位課程",
+          "zh-Hans": "专上教育：副学位课程"
+        }
+      },
+      {
+        "value": "Post-secondary: Degree course",
+        "values": {
+          "zh-Hant": "專上教育：學位課程",
+          "zh-Hans": "专上教育：学位课程"
+        }
+      },
+      {
+        "value": "Study in the same district",
+        "values": {
+          "zh-Hant": "同區就讀",
+          "zh-Hans": "同区就读"
+        }
+      },
+      {
+        "value": "Study in another district on Hong Kong Island",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為香港島）",
+          "zh-Hans": "跨区就读（上课地点为香港岛）"
+        }
+      },
+      {
+        "value": "Study in another district in Kowloon",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為九龍）",
+          "zh-Hans": "跨区就读（上课地点为九龙）"
+        }
+      },
+      {
+        "value": "Study in another district in new towns",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為新市鎮）",
+          "zh-Hans": "跨区就读（上课地点为新市镇）"
+        }
+      },
+      {
+        "value": "Study in another district in other areas in the New Territories",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為新界其他地區）",
+          "zh-Hans": "跨区就读（上课地点为新界其他地区）"
+        }
+      },
+      {
+        "value": "Labour force",
+        "values": {
+          "zh-Hant": "勞動人口",
+          "zh-Hans": "劳动人口"
+        }
+      },
+      {
+        "value": "Working population",
+        "values": {
+          "zh-Hant": "工作人口",
+          "zh-Hans": "工作人口"
+        }
+      },
+      {
+        "value": "Employees (including outworkers)",
+        "values": {
+          "zh-Hant": "僱員（包括外發工）",
+          "zh-Hans": "雇员（包括外发工）"
+        }
+      },
+      {
+        "value": "Employers",
+        "values": {
+          "zh-Hant": "僱主",
+          "zh-Hans": "雇主"
+        }
+      },
+      {
+        "value": "Self-employed",
+        "values": {
+          "zh-Hant": "自營作業者",
+          "zh-Hans": "自营作业者"
+        }
+      },
+      {
+        "value": "Unpaid family workers",
+        "values": {
+          "zh-Hant": "無酬家庭從業員",
+          "zh-Hans": "无酬家庭从业员"
+        }
+      },
+      {
+        "value": "Non-working population",
+        "values": {
+          "zh-Hant": "非工作人口",
+          "zh-Hans": "非工作人口"
+        }
+      },
+      {
+        "value": "Home-makers",
+        "values": {
+          "zh-Hant": "料理家務者",
+          "zh-Hans": "料理家务者"
+        }
+      },
+      {
+        "value": "Students",
+        "values": {
+          "zh-Hant": "學生",
+          "zh-Hans": "学生"
+        }
+      },
+      {
+        "value": "Retired",
+        "values": {
+          "zh-Hant": "退休人士",
+          "zh-Hans": "退休人士"
+        }
+      },
+      {
+        "value": "Unpaid carers",
+        "values": {
+          "zh-Hant": "無酬照顧者",
+          "zh-Hans": "无酬照顾者"
+        }
+      },
+      {
+        "value": "Work in the same district",
+        "values": {
+          "zh-Hant": "同區工作",
+          "zh-Hans": "同区工作"
+        }
+      },
+      {
+        "value": "Work in another district on Hong Kong Island",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為香港島）",
+          "zh-Hans": "跨区工作（工作地点为香港岛）"
+        }
+      },
+      {
+        "value": "Work in another district in Kowloon",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為九龍）",
+          "zh-Hans": "跨区工作（工作地点为九龙）"
+        }
+      },
+      {
+        "value": "Work in another district in new towns",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為新市鎮）",
+          "zh-Hans": "跨区工作（工作地点为新市镇）"
+        }
+      },
+      {
+        "value": "Work in another district in other areas in the New Territories",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為新界其他地區）",
+          "zh-Hans": "跨区工作（工作地点为新界其他地区）"
+        }
+      },
+      {
+        "value": "No fixed place/ Marine",
+        "values": {
+          "zh-Hant": "無固定地點／水上",
+          "zh-Hans": "无固定地点／水上"
+        }
+      },
+      {
+        "value": "Work at home",
+        "values": {
+          "zh-Hant": "於家中工作",
+          "zh-Hans": "于家中工作"
+        }
+      },
+      {
+        "value": "Places outside Hong Kong",
+        "values": {
+          "zh-Hant": "香港以外地方工作",
+          "zh-Hans": "香港以外地方工作"
+        }
+      },
+      {
+        "value": "Less than 6,000",
+        "values": {
+          "zh-Hant": "少於 6,000",
+          "zh-Hans": "少于 6,000"
+        }
+      },
+      {
+        "value": "6,000 - 9,999",
+        "values": {
+          "zh-Hant": "6,000 - 9,999",
+          "zh-Hans": "6,000 - 9,999"
+        }
+      },
+      {
+        "value": "10,000 - 19,999",
+        "values": {
+          "zh-Hant": "10,000 - 19,999",
+          "zh-Hans": "10,000 - 19,999"
+        }
+      },
+      {
+        "value": "20,000 - 29,999",
+        "values": {
+          "zh-Hant": "20,000 - 29,999",
+          "zh-Hans": "20,000 - 29,999"
+        }
+      },
+      {
+        "value": "30,000 - 39,999",
+        "values": {
+          "zh-Hant": "30,000 - 39,999",
+          "zh-Hans": "30,000 - 39,999"
+        }
+      },
+      {
+        "value": "40,000 - 59,999",
+        "values": {
+          "zh-Hant": "40,000 - 59,999",
+          "zh-Hans": "40,000 - 59,999"
+        }
+      },
+      {
+        "value": "60,000 and over",
+        "values": {
+          "zh-Hant": "60,000 及以上",
+          "zh-Hans": "60,000 及以上"
+        }
+      },
+      {
+        "value": "Managers",
+        "values": {
+          "zh-Hant": "經理",
+          "zh-Hans": "经理"
+        }
+      },
+      {
+        "value": "Professionals",
+        "values": {
+          "zh-Hant": "專業人員",
+          "zh-Hans": "专业人员"
+        }
+      },
+      {
+        "value": "Associate professionals",
+        "values": {
+          "zh-Hant": "輔助專業人員",
+          "zh-Hans": "辅助专业人员"
+        }
+      },
+      {
+        "value": "Clerical support workers",
+        "values": {
+          "zh-Hant": "文書支援人員",
+          "zh-Hans": "文书支援人员"
+        }
+      },
+      {
+        "value": "Service and sales workers",
+        "values": {
+          "zh-Hant": "服務及銷售人員",
+          "zh-Hans": "服务及销售人员"
+        }
+      },
+      {
+        "value": "Craft and related workers",
+        "values": {
+          "zh-Hant": "工藝及有關人員",
+          "zh-Hans": "工艺及有关人员"
+        }
+      },
+      {
+        "value": "Plant and machine operators and assemblers",
+        "values": {
+          "zh-Hant": "機台及機器操作員及裝配員",
+          "zh-Hans": "机台及机器操作员及装配员"
+        }
+      },
+      {
+        "value": "Elementary occupations",
+        "values": {
+          "zh-Hant": "非技術工人",
+          "zh-Hans": "非技术工人"
+        }
+      },
+      {
+        "value": "Skilled agricultural and fishery workers; and occupations not classifiable",
+        "values": {
+          "zh-Hant": "漁農業熟練工人及不能分類的職業",
+          "zh-Hans": "渔农业熟練工人及不能分類的职业"
+        }
+      },
+      {
+        "value": "Manufacturing",
+        "values": {
+          "zh-Hant": "製造業",
+          "zh-Hans": "制造业"
+        }
+      },
+      {
+        "value": "Construction",
+        "values": {
+          "zh-Hant": "建造業",
+          "zh-Hans": "建造业"
+        }
+      },
+      {
+        "value": "Import/export, wholesale and retail trades",
+        "values": {
+          "zh-Hant": "進出口、批發及零售業",
+          "zh-Hans": "进出口、批发及零售业"
+        }
+      },
+      {
+        "value": "Transportation, storage, postal and courier services",
+        "values": {
+          "zh-Hant": "運輸、倉庫、郵政及速遞服務業",
+          "zh-Hans": "运输、仓库、邮政及速递服务业"
+        }
+      },
+      {
+        "value": "Accommodation and food services",
+        "values": {
+          "zh-Hant": "住宿及膳食服務業",
+          "zh-Hans": "住宿及膳食服务业"
+        }
+      },
+      {
+        "value": "Information and communications",
+        "values": {
+          "zh-Hant": "資訊及通訊業",
+          "zh-Hans": "资讯及通讯业"
+        }
+      },
+      {
+        "value": "Financing and insurance",
+        "values": {
+          "zh-Hant": "金融及保險業",
+          "zh-Hans": "金融及保险业"
+        }
+      },
+      {
+        "value": "Real estate, professional and business services",
+        "values": {
+          "zh-Hant": "地產、專業及商用服務業",
+          "zh-Hans": "地产、专业及商用服务业"
+        }
+      },
+      {
+        "value": "Public administration, education, human health and social work activities",
+        "values": {
+          "zh-Hant": "公共行政、教育、人類醫療保健及社工活動",
+          "zh-Hans": "公共行政、教育、人类医疗保健及社工活动"
+        }
+      },
+      {
+        "value": "Miscellaneous social and personal services",
+        "values": {
+          "zh-Hant": "雜項社會及個人服務",
+          "zh-Hans": "杂项社会及个人服务"
+        }
+      },
+      {
+        "value": "Less than 18",
+        "values": {
+          "zh-Hant": "少於 18",
+          "zh-Hans": "少于 18"
+        }
+      },
+      {
+        "value": "18-34",
+        "values": {
+          "zh-Hant": "18-34",
+          "zh-Hans": "18-34"
+        }
+      },
+      {
+        "value": "35-44",
+        "values": {
+          "zh-Hant": "35-44",
+          "zh-Hans": "35-44"
+        }
+      },
+      {
+        "value": "45-54",
+        "values": {
+          "zh-Hant": "45-54",
+          "zh-Hans": "45-54"
+        }
+      },
+      {
+        "value": "55-64",
+        "values": {
+          "zh-Hant": "55-64",
+          "zh-Hans": "55-64"
+        }
+      },
+      {
+        "value": "65 and over",
+        "values": {
+          "zh-Hant": "65 及以上",
+          "zh-Hans": "65 及以上"
+        }
+      },
+      {
+        "value": "Domestic households",
+        "values": {
+          "zh-Hant": "家庭住戶數目",
+          "zh-Hans": "家庭住户数目"
+        }
+      },
+      {
+        "value": "1",
+        "values": {
+          "zh-Hant": "1",
+          "zh-Hans": "1"
+        }
+      },
+      {
+        "value": "2",
+        "values": {
+          "zh-Hant": "2",
+          "zh-Hans": "2"
+        }
+      },
+      {
+        "value": "3",
+        "values": {
+          "zh-Hant": "3",
+          "zh-Hans": "3"
+        }
+      },
+      {
+        "value": "4",
+        "values": {
+          "zh-Hant": "4",
+          "zh-Hans": "4"
+        }
+      },
+      {
+        "value": "5",
+        "values": {
+          "zh-Hant": "5",
+          "zh-Hans": "5"
+        }
+      },
+      {
+        "value": "6 and over",
+        "values": {
+          "zh-Hant": "6及以上",
+          "zh-Hans": "6及以上"
+        }
+      },
+      {
+        "value": "Average domestic household size",
+        "values": {
+          "zh-Hant": "家庭住戶平均人數",
+          "zh-Hans": "家庭住户平均人数"
+        }
+      },
+      {
+        "value": "Composed of couple",
+        "values": {
+          "zh-Hant": "由夫婦所組成",
+          "zh-Hans": "由夫妇所组成"
+        }
+      },
+      {
+        "value": "Composed of couple and unmarried children",
+        "values": {
+          "zh-Hant": "由夫婦及未婚子女所組成",
+          "zh-Hans": "由夫妇及未婚子女所组成"
+        }
+      },
+      {
+        "value": "Composed of lone parent and unmarried children",
+        "values": {
+          "zh-Hant": "由父或母親及未婚子女所組成",
+          "zh-Hans": "由父或母亲及未婚子女所组成"
+        }
+      },
+      {
+        "value": "Composed of couple and at least one of their parents",
+        "values": {
+          "zh-Hant": "由夫婦及其中至少一個父或母親所組成",
+          "zh-Hans": "由夫妇及其中至少一个父或母亲所组成"
+        }
+      },
+      {
+        "value": "Composed of couple, at least one of their parents and their unmarried children",
+        "values": {
+          "zh-Hant": "由夫婦、其中至少一個父或母親及其未婚子女所組成",
+          "zh-Hans": "由夫妇、其中至少一个父或母亲及其未婚子女所组成"
+        }
+      },
+      {
+        "value": "Composed of other relationship combinations",
+        "values": {
+          "zh-Hant": "由其他親屬關係組合所組成",
+          "zh-Hans": "由其他亲属关系组合所组成"
+        }
+      },
+      {
+        "value": "One-person households",
+        "values": {
+          "zh-Hant": "單人住戶",
+          "zh-Hans": "单人住户"
+        }
+      },
+      {
+        "value": "Non-relative households",
+        "values": {
+          "zh-Hant": "非親屬關係住戶",
+          "zh-Hans": "非亲属关系住户"
+        }
+      },
+      {
+        "value": "Median monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月收入（港元）中位數",
+          "zh-Hans": "家庭住户每月收入（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly household income (HK$) of economically active domestic households",
+        "values": {
+          "zh-Hant": "從事經濟活動的家庭住戶每月收入中位數（港元）",
+          "zh-Hans": "从事经济活动的家庭住户每月收入中位数（港元）"
+        }
+      },
+      {
+        "value": "Public rental housing",
+        "values": {
+          "zh-Hant": "公營租住房屋",
+          "zh-Hans": "公营租住房屋"
+        }
+      },
+      {
+        "value": "Subsidised home ownership housing",
+        "values": {
+          "zh-Hant": "資助自置居所房屋",
+          "zh-Hans": "资助自置居所房屋"
+        }
+      },
+      {
+        "value": "Private permanent housing",
+        "values": {
+          "zh-Hant": "私人永久性房屋",
+          "zh-Hans": "私人永久性房屋"
+        }
+      },
+      {
+        "value": "Non-domestic housing",
+        "values": {
+          "zh-Hant": "非住宅用房屋",
+          "zh-Hans": "非住宅用房屋"
+        }
+      },
+      {
+        "value": "Temporary housing",
+        "values": {
+          "zh-Hant": "臨時房屋",
+          "zh-Hans": "临时房屋"
+        }
+      },
+      {
+        "value": "Without exclusively used rooms",
+        "values": {
+          "zh-Hant": "沒有自用廳房",
+          "zh-Hans": "没有自用厅房"
+        }
+      },
+      {
+        "value": "Owner-occupier - With mortgage or loan",
+        "values": {
+          "zh-Hant": "自置，有按揭供款或借貸還款",
+          "zh-Hans": "自置，有按揭供款或借贷还款"
+        }
+      },
+      {
+        "value": "Owner-occupier - Without mortgage and loan",
+        "values": {
+          "zh-Hant": "自置，沒有按揭供款及借貸還款",
+          "zh-Hans": "自置，没有按揭供款及借贷还款"
+        }
+      },
+      {
+        "value": "Sole tenant",
+        "values": {
+          "zh-Hant": "全租",
+          "zh-Hans": "全租"
+        }
+      },
+      {
+        "value": "Co-tenant/ Main tenant/ Sub-tenant",
+        "values": {
+          "zh-Hant": "合租／二房東／三房客",
+          "zh-Hans": "合租／二房东／三房客"
+        }
+      },
+      {
+        "value": "Rent free",
+        "values": {
+          "zh-Hant": "免交租金",
+          "zh-Hans": "免交租金"
+        }
+      },
+      {
+        "value": "Provided by employer",
+        "values": {
+          "zh-Hant": "由僱主提供",
+          "zh-Hans": "由雇主提供"
+        }
+      },
+      {
+        "value": "By non-household members only",
+        "values": {
+          "zh-Hant": "由非住戶成員支付",
+          "zh-Hans": "由非住户成员支付"
+        }
+      },
+      {
+        "value": "1 - 3,999",
+        "values": {
+          "zh-Hant": "1 - 3,999",
+          "zh-Hans": "1 - 3,999"
+        }
+      },
+      {
+        "value": "4,000 - 5,999",
+        "values": {
+          "zh-Hant": "4,000 - 5,999",
+          "zh-Hans": "4,000 - 5,999"
+        }
+      },
+      {
+        "value": "6,000 - 7,999",
+        "values": {
+          "zh-Hant": "6,000 - 7,999",
+          "zh-Hans": "6,000 - 7,999"
+        }
+      },
+      {
+        "value": "8,000 - 9,999",
+        "values": {
+          "zh-Hant": "8,000 - 9,999",
+          "zh-Hans": "8,000 - 9,999"
+        }
+      },
+      {
+        "value": "20,000 and over",
+        "values": {
+          "zh-Hant": "20,000 及以上",
+          "zh-Hans": "20,000 及以上"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款（港元）中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款與收入比率中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款与收入比率中位数"
+        }
+      },
+      {
+        "value": "Less than 2,000",
+        "values": {
+          "zh-Hant": "少於 2,000",
+          "zh-Hans": "少于 2,000"
+        }
+      },
+      {
+        "value": "2,000 - 5,999",
+        "values": {
+          "zh-Hant": "2,000 - 5,999",
+          "zh-Hans": "2,000 - 5,999"
+        }
+      },
+      {
+        "value": "10,000 and over",
+        "values": {
+          "zh-Hant": "10,000 及以上",
+          "zh-Hans": "10,000 及以上"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金（港元）中位數",
+          "zh-Hans": "家庭住户每月租金（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金與收入比率中位數",
+          "zh-Hans": "家庭住户每月租金与收入比率中位数"
+        }
+      },
+      {
+        "value": "Median floor area of accommodation of domestic households (square metres)",
+        "values": {
+          "zh-Hant": "家庭住戶的居所樓面面積中位數（平方米）",
+          "zh-Hans": "家庭住户的居所楼面面积中位数（平方米）"
+        }
+      },
+      {
+        "value": "Hong Kong Island",
+        "values": {
+          "zh-Hant": "香港島",
+          "zh-Hans": "香港岛"
+        }
+      },
+      {
+        "value": "Kowloon",
+        "values": {
+          "zh-Hant": "九龍",
+          "zh-Hans": "九龙"
+        }
+      },
+      {
+        "value": "New towns",
+        "values": {
+          "zh-Hant": "新市鎮",
+          "zh-Hans": "新市镇"
+        }
+      },
+      {
+        "value": "Other areas in the New Territories/ Marine",
+        "values": {
+          "zh-Hant": "新界其他地區／水上",
+          "zh-Hans": "新界其他地区／水上"
+        }
+      },
+      {
+        "value": "Moved home within same area of residence",
+        "values": {
+          "zh-Hant": "曾在同區遷居",
+          "zh-Hans": "曾在同区迁居"
+        }
+      },
+      {
+        "value": "Remained in same address",
+        "values": {
+          "zh-Hant": "仍居舊址",
+          "zh-Hans": "仍居旧址"
+        }
+      },
+      {
+        "value": "Place of residence outside Hong Kong",
+        "values": {
+          "zh-Hant": "居於香港以外地方",
+          "zh-Hans": "居于香港以外地方"
+        }
+      },
+      {
+        "value": "1. Total population",
+        "values": {
+          "zh-Hant": "1. 總人口",
+          "zh-Hans": "1. 总人口"
+        }
+      },
+      {
+        "value": "1. Male",
+        "values": {
+          "zh-Hant": "1. 男性",
+          "zh-Hans": "1. 男性"
+        }
+      },
+      {
+        "value": "2. Female",
+        "values": {
+          "zh-Hant": "2. 女性",
+          "zh-Hans": "2. 女性"
+        }
+      },
+      {
+        "value": "1. Sex ratio (i.e. the number of males per 1 000 females in the respective age group)",
+        "values": {
+          "zh-Hant": "1. 性別比率（即男性數目與每千名女性相對的比率）",
+          "zh-Hans": "1. 性别比率（即男性数目与每千名女性相对的比率）"
+        }
+      },
+      {
+        "value": "1. < 15",
+        "values": {
+          "zh-Hant": "1. 15歲以下",
+          "zh-Hans": "1. 15岁以下"
+        }
+      },
+      {
+        "value": "2. 15 - 24",
+        "values": {
+          "zh-Hant": "2. 15至24歲",
+          "zh-Hans": "2. 15至24岁"
+        }
+      },
+      {
+        "value": "3. 25 - 44",
+        "values": {
+          "zh-Hant": "3. 25至44歲",
+          "zh-Hans": "3. 25至44岁"
+        }
+      },
+      {
+        "value": "4. 45 - 64",
+        "values": {
+          "zh-Hant": "4. 45至64歲",
+          "zh-Hans": "4. 45至64岁"
+        }
+      },
+      {
+        "value": "5. 65+",
+        "values": {
+          "zh-Hant": "5. 65歲及以上",
+          "zh-Hans": "5. 65岁及以上"
+        }
+      },
+      {
+        "value": "1. Both sexes",
+        "values": {
+          "zh-Hant": "1. 男女合計",
+          "zh-Hans": "1. 男女合计"
+        }
+      },
+      {
+        "value": "2. Male",
+        "values": {
+          "zh-Hant": "2. 男性",
+          "zh-Hans": "2. 男性"
+        }
+      },
+      {
+        "value": "3. Female",
+        "values": {
+          "zh-Hant": "3. 女性",
+          "zh-Hans": "3. 女性"
+        }
+      },
+      {
+        "value": "1. Hong Kong",
+        "values": {
+          "zh-Hant": "1. 香港",
+          "zh-Hans": "1. 香港"
+        }
+      },
+      {
+        "value": "2. The mainland of China/ Macao/ Taiwan",
+        "values": {
+          "zh-Hant": "2. 中國內地／澳門／台灣",
+          "zh-Hans": "2. 中国内地／澳门／台湾"
+        }
+      },
+      {
+        "value": "3. Elsewhere",
+        "values": {
+          "zh-Hant": "3. 其他地方",
+          "zh-Hans": "3. 其他地方"
+        }
+      },
+      {
+        "value": "1. Chinese",
+        "values": {
+          "zh-Hant": "1. 華人",
+          "zh-Hans": "1. 华人"
+        }
+      },
+      {
+        "value": "2. Filipino",
+        "values": {
+          "zh-Hant": "2. 菲律賓人",
+          "zh-Hans": "2. 菲律宾人"
+        }
+      },
+      {
+        "value": "3. Indonesian",
+        "values": {
+          "zh-Hant": "3. 印尼人",
+          "zh-Hans": "3. 印尼人"
+        }
+      },
+      {
+        "value": "4. White",
+        "values": {
+          "zh-Hant": "4. 白人",
+          "zh-Hans": "4. 白人"
+        }
+      },
+      {
+        "value": "5. Others",
+        "values": {
+          "zh-Hant": "5. 其他",
+          "zh-Hans": "5. 其他"
+        }
+      },
+      {
+        "value": "1. Never married",
+        "values": {
+          "zh-Hant": "1. 從未結婚",
+          "zh-Hans": "1. 从未结婚"
+        }
+      },
+      {
+        "value": "2. Married",
+        "values": {
+          "zh-Hant": "2. 已婚",
+          "zh-Hans": "2. 已婚"
+        }
+      },
+      {
+        "value": "3. Widowed",
+        "values": {
+          "zh-Hant": "3. 喪偶",
+          "zh-Hans": "3. 丧偶"
+        }
+      },
+      {
+        "value": "4. Divorced",
+        "values": {
+          "zh-Hant": "4. 離婚",
+          "zh-Hans": "4. 离婚"
+        }
+      },
+      {
+        "value": "5. Separated",
+        "values": {
+          "zh-Hant": "5. 分居",
+          "zh-Hans": "5. 分居"
+        }
+      },
+      {
+        "value": "1. Cantonese",
+        "values": {
+          "zh-Hant": "1. 廣州話",
+          "zh-Hans": "1. 广州话"
+        }
+      },
+      {
+        "value": "2. Putonghua",
+        "values": {
+          "zh-Hant": "2. 普通話",
+          "zh-Hans": "2. 普通话"
+        }
+      },
+      {
+        "value": "3. Other Chinese dialects",
+        "values": {
+          "zh-Hant": "3. 其他中國方言",
+          "zh-Hans": "3. 其他中国方言"
+        }
+      },
+      {
+        "value": "4. English",
+        "values": {
+          "zh-Hant": "4. 英語",
+          "zh-Hans": "4. 英语"
+        }
+      },
+      {
+        "value": "5. Other languages",
+        "values": {
+          "zh-Hant": "5. 其他語言",
+          "zh-Hans": "5. 其他语言"
+        }
+      },
+      {
+        "value": "1. Proportion of population aged 5 and over able to read Chinese",
+        "values": {
+          "zh-Hant": "1. 能閱讀中文的5歲及以上人口比例",
+          "zh-Hans": "1. 能阅读中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "1. Proportion of population aged 5 and over able to read English",
+        "values": {
+          "zh-Hant": "1. 能閱讀英文的5歲及以上人口比例",
+          "zh-Hans": "1. 能阅读英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "1. Proportion of population aged 5 and over able to write Chinese",
+        "values": {
+          "zh-Hant": "1. 能書寫中文的5歲及以上人口比例",
+          "zh-Hans": "1. 能书写中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "1. Proportion of population aged 5 and over able to write English",
+        "values": {
+          "zh-Hant": "1. 能書寫英文的5歲及以上人口比例",
+          "zh-Hans": "1. 能书写英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "1. No schooling/ Pre-primary",
+        "values": {
+          "zh-Hant": "1. 未受教育／學前教育",
+          "zh-Hans": "1. 未受教育／学前教育"
+        }
+      },
+      {
+        "value": "2. Primary",
+        "values": {
+          "zh-Hant": "2. 小學",
+          "zh-Hans": "2. 小学"
+        }
+      },
+      {
+        "value": "3. Lower secondary",
+        "values": {
+          "zh-Hant": "3. 初中",
+          "zh-Hans": "3. 初中"
+        }
+      },
+      {
+        "value": "4. Upper secondary",
+        "values": {
+          "zh-Hant": "4. 高中",
+          "zh-Hans": "4. 高中"
+        }
+      },
+      {
+        "value": "5. Post-secondary: Diploma/ Certificate",
+        "values": {
+          "zh-Hant": "5. 專上教育：文憑／證書",
+          "zh-Hans": "5. 专上教育：文凭／证书"
+        }
+      },
+      {
+        "value": "6. Post-secondary: Sub-degree course",
+        "values": {
+          "zh-Hant": "6. 專上教育：副學位課程",
+          "zh-Hans": "6. 专上教育：副学位课程"
+        }
+      },
+      {
+        "value": "7. Post-secondary: Degree course",
+        "values": {
+          "zh-Hant": "7. 專上教育：學位課程",
+          "zh-Hans": "7. 专上教育：学位课程"
+        }
+      },
+      {
+        "value": "1. Study in the same district",
+        "values": {
+          "zh-Hant": "1. 同區就讀",
+          "zh-Hans": "1. 同区就读"
+        }
+      },
+      {
+        "value": "2. Study in another district on Hong Kong Island",
+        "values": {
+          "zh-Hant": "2. 跨區就讀（上課地點為香港島）",
+          "zh-Hans": "2. 跨区就读（上课地点为香港岛）"
+        }
+      },
+      {
+        "value": "3. Study in another district in Kowloon",
+        "values": {
+          "zh-Hant": "3. 跨區就讀（上課地點為九龍）",
+          "zh-Hans": "3. 跨区就读（上课地点为九龙）"
+        }
+      },
+      {
+        "value": "4. Study in another district in new towns",
+        "values": {
+          "zh-Hant": "4. 跨區就讀（上課地點為新市鎮）",
+          "zh-Hans": "4. 跨区就读（上课地点为新市镇）"
+        }
+      },
+      {
+        "value": "5. Study in another district in other areas in the New Territories",
+        "values": {
+          "zh-Hant": "5. 跨區就讀（上課地點為新界其他地區）",
+          "zh-Hans": "5. 跨区就读（上课地点为新界其他地区）"
+        }
+      },
+      {
+        "value": "1. Labour force",
+        "values": {
+          "zh-Hant": "1. 勞動人口",
+          "zh-Hans": "1. 劳动人口"
+        }
+      },
+      {
+        "value": "1. Working population",
+        "values": {
+          "zh-Hant": "1. 工作人口",
+          "zh-Hans": "1. 工作人口"
+        }
+      },
+      {
+        "value": "1. Employees (including outworkers)",
+        "values": {
+          "zh-Hant": "1. 僱員（包括外發工）",
+          "zh-Hans": "1. 雇员（包括外发工）"
+        }
+      },
+      {
+        "value": "2. Employers",
+        "values": {
+          "zh-Hant": "2. 僱主",
+          "zh-Hans": "2. 雇主"
+        }
+      },
+      {
+        "value": "3. Self-employed",
+        "values": {
+          "zh-Hant": "3. 自營作業者",
+          "zh-Hans": "3. 自营作业者"
+        }
+      },
+      {
+        "value": "4. Unpaid family workers",
+        "values": {
+          "zh-Hant": "4. 無酬家庭從業員",
+          "zh-Hans": "4. 无酬家庭从业员"
+        }
+      },
+      {
+        "value": "1. Non-working population",
+        "values": {
+          "zh-Hant": "1. 非工作人口",
+          "zh-Hans": "1. 非工作人口"
+        }
+      },
+      {
+        "value": "1. Home-makers",
+        "values": {
+          "zh-Hant": "1. 料理家務者",
+          "zh-Hans": "1. 料理家务者"
+        }
+      },
+      {
+        "value": "2. Students",
+        "values": {
+          "zh-Hant": "2. 學生",
+          "zh-Hans": "2. 学生"
+        }
+      },
+      {
+        "value": "3. Retired",
+        "values": {
+          "zh-Hant": "3. 退休人士",
+          "zh-Hans": "3. 退休人士"
+        }
+      },
+      {
+        "value": "4. Unpaid carers",
+        "values": {
+          "zh-Hant": "4. 無酬照顧者",
+          "zh-Hans": "4. 无酬照顾者"
+        }
+      },
+      {
+        "value": "1. Work in the same district",
+        "values": {
+          "zh-Hant": "1. 同區工作",
+          "zh-Hans": "1. 同区工作"
+        }
+      },
+      {
+        "value": "2. Work in another district on Hong Kong Island",
+        "values": {
+          "zh-Hant": "2. 跨區工作（工作地點為香港島）",
+          "zh-Hans": "2. 跨区工作（工作地点为香港岛）"
+        }
+      },
+      {
+        "value": "3. Work in another district in Kowloon",
+        "values": {
+          "zh-Hant": "3. 跨區工作（工作地點為九龍）",
+          "zh-Hans": "3. 跨区工作（工作地点为九龙）"
+        }
+      },
+      {
+        "value": "4. Work in another district in new towns",
+        "values": {
+          "zh-Hant": "4. 跨區工作（工作地點為新市鎮）",
+          "zh-Hans": "4. 跨区工作（工作地点为新市镇）"
+        }
+      },
+      {
+        "value": "5. Work in another district in other areas in the New Territories",
+        "values": {
+          "zh-Hant": "5. 跨區工作（工作地點為新界其他地區）",
+          "zh-Hans": "5. 跨区工作（工作地点为新界其他地区）"
+        }
+      },
+      {
+        "value": "6. No fixed place/ Marine",
+        "values": {
+          "zh-Hant": "6. 無固定地點／水上",
+          "zh-Hans": "6. 无固定地点／水上"
+        }
+      },
+      {
+        "value": "7. Work at home",
+        "values": {
+          "zh-Hant": "7. 於家中工作",
+          "zh-Hans": "7. 于家中工作"
+        }
+      },
+      {
+        "value": "8. Places outside Hong Kong",
+        "values": {
+          "zh-Hant": "8. 香港以外地方工作",
+          "zh-Hans": "8. 香港以外地方工作"
+        }
+      },
+      {
+        "value": "1. Less than 6,000",
+        "values": {
+          "zh-Hant": "1. 少於 6,000",
+          "zh-Hans": "1. 少于 6,000"
+        }
+      },
+      {
+        "value": "2. 6,000 - 9,999",
+        "values": {
+          "zh-Hant": "2. 6,000 - 9,999",
+          "zh-Hans": "2. 6,000 - 9,999"
+        }
+      },
+      {
+        "value": "3. 10,000 - 19,999",
+        "values": {
+          "zh-Hant": "3. 10,000 - 19,999",
+          "zh-Hans": "3. 10,000 - 19,999"
+        }
+      },
+      {
+        "value": "4. 20,000 - 29,999",
+        "values": {
+          "zh-Hant": "4. 20,000 - 29,999",
+          "zh-Hans": "4. 20,000 - 29,999"
+        }
+      },
+      {
+        "value": "5. 30,000 - 39,999",
+        "values": {
+          "zh-Hant": "5. 30,000 - 39,999",
+          "zh-Hans": "5. 30,000 - 39,999"
+        }
+      },
+      {
+        "value": "6. 40,000 - 59,999",
+        "values": {
+          "zh-Hant": "6. 40,000 - 59,999",
+          "zh-Hans": "6. 40,000 - 59,999"
+        }
+      },
+      {
+        "value": "7. 60,000 and over",
+        "values": {
+          "zh-Hant": "7. 60,000 及以上",
+          "zh-Hans": "7. 60,000 及以上"
+        }
+      },
+      {
+        "value": "1. Managers",
+        "values": {
+          "zh-Hant": "1. 經理",
+          "zh-Hans": "1. 经理"
+        }
+      },
+      {
+        "value": "2. Professionals",
+        "values": {
+          "zh-Hant": "2. 專業人員",
+          "zh-Hans": "2. 专业人员"
+        }
+      },
+      {
+        "value": "3. Associate professionals",
+        "values": {
+          "zh-Hant": "3. 輔助專業人員",
+          "zh-Hans": "3. 辅助专业人员"
+        }
+      },
+      {
+        "value": "4. Clerical support workers",
+        "values": {
+          "zh-Hant": "4. 文書支援人員",
+          "zh-Hans": "4. 文书支援人员"
+        }
+      },
+      {
+        "value": "5. Service and sales workers",
+        "values": {
+          "zh-Hant": "5. 服務及銷售人員",
+          "zh-Hans": "5. 服务及销售人员"
+        }
+      },
+      {
+        "value": "6. Craft and related workers",
+        "values": {
+          "zh-Hant": "6. 工藝及有關人員",
+          "zh-Hans": "6. 工艺及有关人员"
+        }
+      },
+      {
+        "value": "7. Plant and machine operators and assemblers",
+        "values": {
+          "zh-Hant": "7. 機台及機器操作員及裝配員",
+          "zh-Hans": "7. 机台及机器操作员及装配员"
+        }
+      },
+      {
+        "value": "8. Elementary occupations",
+        "values": {
+          "zh-Hant": "8. 非技術工人",
+          "zh-Hans": "8. 非技术工人"
+        }
+      },
+      {
+        "value": "9. Skilled agricultural and fishery workers; and occupations not classifiable",
+        "values": {
+          "zh-Hant": "9. 漁農業熟練工人及不能分類的職業",
+          "zh-Hans": "9. 渔农业熟練工人及不能分類的职业"
+        }
+      },
+      {
+        "value": "1. Manufacturing",
+        "values": {
+          "zh-Hant": "1. 製造業",
+          "zh-Hans": "1. 制造业"
+        }
+      },
+      {
+        "value": "2. Construction",
+        "values": {
+          "zh-Hant": "2. 建造業",
+          "zh-Hans": "2. 建造业"
+        }
+      },
+      {
+        "value": "3. Import/export, wholesale and retail trades",
+        "values": {
+          "zh-Hant": "3. 進出口、批發及零售業",
+          "zh-Hans": "3. 进出口、批发及零售业"
+        }
+      },
+      {
+        "value": "4. Transportation, storage, postal and courier services",
+        "values": {
+          "zh-Hant": "4. 運輸、倉庫、郵政及速遞服務業",
+          "zh-Hans": "4. 运输、仓库、邮政及速递服务业"
+        }
+      },
+      {
+        "value": "5. Accommodation and food services",
+        "values": {
+          "zh-Hant": "5. 住宿及膳食服務業",
+          "zh-Hans": "5. 住宿及膳食服务业"
+        }
+      },
+      {
+        "value": "6. Information and communications",
+        "values": {
+          "zh-Hant": "6. 資訊及通訊業",
+          "zh-Hans": "6. 资讯及通讯业"
+        }
+      },
+      {
+        "value": "7. Financing and insurance",
+        "values": {
+          "zh-Hant": "7. 金融及保險業",
+          "zh-Hans": "7. 金融及保险业"
+        }
+      },
+      {
+        "value": "8. Real estate, professional and business services",
+        "values": {
+          "zh-Hant": "8. 地產、專業及商用服務業",
+          "zh-Hans": "8. 地产、专业及商用服务业"
+        }
+      },
+      {
+        "value": "9. Public administration, education, human health and social work activities",
+        "values": {
+          "zh-Hant": "9. 公共行政、教育、人類醫療保健及社工活動",
+          "zh-Hans": "9. 公共行政、教育、人类医疗保健及社工活动"
+        }
+      },
+      {
+        "value": "10. Miscellaneous social and personal services",
+        "values": {
+          "zh-Hant": "10. 雜項社會及個人服務",
+          "zh-Hans": "10. 杂项社会及个人服务"
+        }
+      },
+      {
+        "value": "11. Others",
+        "values": {
+          "zh-Hant": "11. 其他",
+          "zh-Hans": "11. 其他"
+        }
+      },
+      {
+        "value": "1. Less than 18",
+        "values": {
+          "zh-Hant": "1. 少於 18",
+          "zh-Hans": "1. 少于 18"
+        }
+      },
+      {
+        "value": "2. 18-34",
+        "values": {
+          "zh-Hant": "2. 18-34",
+          "zh-Hans": "2. 18-34"
+        }
+      },
+      {
+        "value": "3. 35-44",
+        "values": {
+          "zh-Hant": "3. 35-44",
+          "zh-Hans": "3. 35-44"
+        }
+      },
+      {
+        "value": "4. 45-54",
+        "values": {
+          "zh-Hant": "4. 45-54",
+          "zh-Hans": "4. 45-54"
+        }
+      },
+      {
+        "value": "5. 55-64",
+        "values": {
+          "zh-Hant": "5. 55-64",
+          "zh-Hans": "5. 55-64"
+        }
+      },
+      {
+        "value": "6. 65 and over",
+        "values": {
+          "zh-Hant": "6. 65 及以上",
+          "zh-Hans": "6. 65 及以上"
+        }
+      },
+      {
+        "value": "1. Domestic households",
+        "values": {
+          "zh-Hant": "1. 家庭住戶數目",
+          "zh-Hans": "1. 家庭住户数目"
+        }
+      },
+      {
+        "value": "1. 1",
+        "values": {
+          "zh-Hant": "1. 1",
+          "zh-Hans": "1. 1"
+        }
+      },
+      {
+        "value": "2. 2",
+        "values": {
+          "zh-Hant": "2. 2",
+          "zh-Hans": "2. 2"
+        }
+      },
+      {
+        "value": "3. 3",
+        "values": {
+          "zh-Hant": "3. 3",
+          "zh-Hans": "3. 3"
+        }
+      },
+      {
+        "value": "4. 4",
+        "values": {
+          "zh-Hant": "4. 4",
+          "zh-Hans": "4. 4"
+        }
+      },
+      {
+        "value": "5. 5",
+        "values": {
+          "zh-Hant": "5. 5",
+          "zh-Hans": "5. 5"
+        }
+      },
+      {
+        "value": "6. 6 and over",
+        "values": {
+          "zh-Hant": "6. 6及以上",
+          "zh-Hans": "6. 6及以上"
+        }
+      },
+      {
+        "value": "1. Average domestic household size",
+        "values": {
+          "zh-Hant": "1. 家庭住戶平均人數",
+          "zh-Hans": "1. 家庭住户平均人数"
+        }
+      },
+      {
+        "value": "1. Composed of couple",
+        "values": {
+          "zh-Hant": "1. 由夫婦所組成",
+          "zh-Hans": "1. 由夫妇所组成"
+        }
+      },
+      {
+        "value": "2. Composed of couple and unmarried children",
+        "values": {
+          "zh-Hant": "2. 由夫婦及未婚子女所組成",
+          "zh-Hans": "2. 由夫妇及未婚子女所组成"
+        }
+      },
+      {
+        "value": "3. Composed of lone parent and unmarried children",
+        "values": {
+          "zh-Hant": "3. 由父或母親及未婚子女所組成",
+          "zh-Hans": "3. 由父或母亲及未婚子女所组成"
+        }
+      },
+      {
+        "value": "4. Composed of couple and at least one of their parents",
+        "values": {
+          "zh-Hant": "4. 由夫婦及其中至少一個父或母親所組成",
+          "zh-Hans": "4. 由夫妇及其中至少一个父或母亲所组成"
+        }
+      },
+      {
+        "value": "5. Composed of couple, at least one of their parents and their unmarried children",
+        "values": {
+          "zh-Hant": "5. 由夫婦、其中至少一個父或母親及其未婚子女所組成",
+          "zh-Hans": "5. 由夫妇、其中至少一个父或母亲及其未婚子女所组成"
+        }
+      },
+      {
+        "value": "6. Composed of other relationship combinations",
+        "values": {
+          "zh-Hant": "6. 由其他親屬關係組合所組成",
+          "zh-Hans": "6. 由其他亲属关系组合所组成"
+        }
+      },
+      {
+        "value": "7. One-person households",
+        "values": {
+          "zh-Hant": "7. 單人住戶",
+          "zh-Hans": "7. 单人住户"
+        }
+      },
+      {
+        "value": "8. Non-relative households",
+        "values": {
+          "zh-Hant": "8. 非親屬關係住戶",
+          "zh-Hans": "8. 非亲属关系住户"
+        }
+      },
+      {
+        "value": "1. Median monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "1. 家庭住戶每月收入（港元）中位數",
+          "zh-Hans": "1. 家庭住户每月收入（港元）中位数"
+        }
+      },
+      {
+        "value": "1. Median monthly household income (HK$) of economically active domestic households",
+        "values": {
+          "zh-Hant": "1. 從事經濟活動的家庭住戶每月收入中位數（港元）",
+          "zh-Hans": "1. 从事经济活动的家庭住户每月收入中位数（港元）"
+        }
+      },
+      {
+        "value": "1. Public rental housing",
+        "values": {
+          "zh-Hant": "1. 公營租住房屋",
+          "zh-Hans": "1. 公营租住房屋"
+        }
+      },
+      {
+        "value": "2. Subsidised home ownership housing",
+        "values": {
+          "zh-Hant": "2. 資助自置居所房屋",
+          "zh-Hans": "2. 资助自置居所房屋"
+        }
+      },
+      {
+        "value": "3. Private permanent housing",
+        "values": {
+          "zh-Hant": "3. 私人永久性房屋",
+          "zh-Hans": "3. 私人永久性房屋"
+        }
+      },
+      {
+        "value": "4. Non-domestic housing",
+        "values": {
+          "zh-Hant": "4. 非住宅用房屋",
+          "zh-Hans": "4. 非住宅用房屋"
+        }
+      },
+      {
+        "value": "5. Temporary housing",
+        "values": {
+          "zh-Hant": "5. 臨時房屋",
+          "zh-Hans": "5. 临时房屋"
+        }
+      },
+      {
+        "value": "0. Without exclusively used rooms",
+        "values": {
+          "zh-Hant": "0. 沒有自用廳房",
+          "zh-Hans": "0. 没有自用厅房"
+        }
+      },
+      {
+        "value": "1. Owner-occupier - With mortgage or loan",
+        "values": {
+          "zh-Hant": "1. 自置，有按揭供款或借貸還款",
+          "zh-Hans": "1. 自置，有按揭供款或借贷还款"
+        }
+      },
+      {
+        "value": "2. Owner-occupier - Without mortgage and loan",
+        "values": {
+          "zh-Hant": "2. 自置，沒有按揭供款及借貸還款",
+          "zh-Hans": "2. 自置，没有按揭供款及借贷还款"
+        }
+      },
+      {
+        "value": "3. Sole tenant",
+        "values": {
+          "zh-Hant": "3. 全租",
+          "zh-Hans": "3. 全租"
+        }
+      },
+      {
+        "value": "4. Co-tenant/ Main tenant/ Sub-tenant",
+        "values": {
+          "zh-Hant": "4. 合租／二房東／三房客",
+          "zh-Hans": "4. 合租／二房东／三房客"
+        }
+      },
+      {
+        "value": "5. Rent free",
+        "values": {
+          "zh-Hant": "5. 免交租金",
+          "zh-Hans": "5. 免交租金"
+        }
+      },
+      {
+        "value": "6. Provided by employer",
+        "values": {
+          "zh-Hant": "6. 由僱主提供",
+          "zh-Hans": "6. 由雇主提供"
+        }
+      },
+      {
+        "value": "1. By non-household members only",
+        "values": {
+          "zh-Hant": "1. 由非住戶成員支付",
+          "zh-Hans": "1. 由非住户成员支付"
+        }
+      },
+      {
+        "value": "2. 1 - 3,999",
+        "values": {
+          "zh-Hant": "2. 1 - 3,999",
+          "zh-Hans": "2. 1 - 3,999"
+        }
+      },
+      {
+        "value": "3. 4,000 - 5,999",
+        "values": {
+          "zh-Hant": "3. 4,000 - 5,999",
+          "zh-Hans": "3. 4,000 - 5,999"
+        }
+      },
+      {
+        "value": "4. 6,000 - 7,999",
+        "values": {
+          "zh-Hant": "4. 6,000 - 7,999",
+          "zh-Hans": "4. 6,000 - 7,999"
+        }
+      },
+      {
+        "value": "5. 8,000 - 9,999",
+        "values": {
+          "zh-Hant": "5. 8,000 - 9,999",
+          "zh-Hans": "5. 8,000 - 9,999"
+        }
+      },
+      {
+        "value": "6. 10,000 - 19,999",
+        "values": {
+          "zh-Hant": "6. 10,000 - 19,999",
+          "zh-Hans": "6. 10,000 - 19,999"
+        }
+      },
+      {
+        "value": "7. 20,000 and over",
+        "values": {
+          "zh-Hant": "7. 20,000 及以上",
+          "zh-Hans": "7. 20,000 及以上"
+        }
+      },
+      {
+        "value": "1. Median monthly domestic household mortgage payment and loan repayment (HK$)",
+        "values": {
+          "zh-Hant": "1. 家庭住戶每月按揭供款及借貸還款（港元）中位數",
+          "zh-Hans": "1. 家庭住户每月按揭供款及借贷还款（港元）中位数"
+        }
+      },
+      {
+        "value": "1. Median monthly domestic household mortgage payment and loan repayment to income ratio",
+        "values": {
+          "zh-Hant": "1. 家庭住戶每月按揭供款及借貸還款與收入比率中位數",
+          "zh-Hans": "1. 家庭住户每月按揭供款及借贷还款与收入比率中位数"
+        }
+      },
+      {
+        "value": "1. Less than 2,000",
+        "values": {
+          "zh-Hant": "1. 少於 2,000",
+          "zh-Hans": "1. 少于 2,000"
+        }
+      },
+      {
+        "value": "2. 2,000 - 5,999",
+        "values": {
+          "zh-Hant": "2. 2,000 - 5,999",
+          "zh-Hans": "2. 2,000 - 5,999"
+        }
+      },
+      {
+        "value": "3. 6,000 - 9,999",
+        "values": {
+          "zh-Hant": "3. 6,000 - 9,999",
+          "zh-Hans": "3. 6,000 - 9,999"
+        }
+      },
+      {
+        "value": "4. 10,000 and over",
+        "values": {
+          "zh-Hant": "4. 10,000 及以上",
+          "zh-Hans": "4. 10,000 及以上"
+        }
+      },
+      {
+        "value": "1. Median monthly domestic household rent (HK$)",
+        "values": {
+          "zh-Hant": "1. 家庭住戶每月租金（港元）中位數",
+          "zh-Hans": "1. 家庭住户每月租金（港元）中位数"
+        }
+      },
+      {
+        "value": "1. Median monthly domestic household rent to income ratio",
+        "values": {
+          "zh-Hant": "1. 家庭住戶每月租金與收入比率中位數",
+          "zh-Hans": "1. 家庭住户每月租金与收入比率中位数"
+        }
+      },
+      {
+        "value": "1. Median floor area of accommodation of domestic households (square metres)",
+        "values": {
+          "zh-Hant": "1. 家庭住戶的居所樓面面積中位數（平方米）",
+          "zh-Hans": "1. 家庭住户的居所楼面面积中位数（平方米）"
+        }
+      },
+      {
+        "value": "1. Hong Kong Island",
+        "values": {
+          "zh-Hant": "1. 香港島",
+          "zh-Hans": "1. 香港岛"
+        }
+      },
+      {
+        "value": "2. Kowloon",
+        "values": {
+          "zh-Hant": "2. 九龍",
+          "zh-Hans": "2. 九龙"
+        }
+      },
+      {
+        "value": "3. New towns",
+        "values": {
+          "zh-Hant": "3. 新市鎮",
+          "zh-Hans": "3. 新市镇"
+        }
+      },
+      {
+        "value": "4. Other areas in the New Territories/ Marine",
+        "values": {
+          "zh-Hant": "4. 新界其他地區／水上",
+          "zh-Hans": "4. 新界其他地区／水上"
+        }
+      },
+      {
+        "value": "1. Moved home within same area of residence",
+        "values": {
+          "zh-Hant": "1. 曾在同區遷居",
+          "zh-Hans": "1. 曾在同区迁居"
+        }
+      },
+      {
+        "value": "2. Remained in same address",
+        "values": {
+          "zh-Hant": "2. 仍居舊址",
+          "zh-Hans": "2. 仍居旧址"
+        }
+      },
+      {
+        "value": "3. Place of residence outside Hong Kong",
+        "values": {
+          "zh-Hant": "3. 居於香港以外地方",
+          "zh-Hans": "3. 居于香港以外地方"
+        }
+      },
+      {
+        "value": "Internally migrated",
+        "values": {
+          "zh-Hant": "曾作內部遷移",
+          "zh-Hans": "曾作内部迁移"
+        }
+      },
+      {
+        "value": "Moved within same area",
+        "values": {
+          "zh-Hant": "在同一地區內遷居",
+          "zh-Hans": "在同一地区内迁居"
+        }
+      },
+      {
+        "value": "Remained at same address",
+        "values": {
+          "zh-Hant": "仍居於同一地址",
+          "zh-Hans": "仍居于同一地址"
+        }
+      },
+      {
+        "value": "Previously outside Hong Kong",
+        "values": {
+          "zh-Hant": "先前居於香港以外地方",
+          "zh-Hans": "先前居于香港以外地方"
+        }
+      }
+    ],
+    "source_category": [
+      {
+        "value": "Total population",
+        "values": {
+          "zh-Hant": "總人口",
+          "zh-Hans": "总人口"
+        }
+      },
+      {
+        "value": "Male",
+        "values": {
+          "zh-Hant": "男性",
+          "zh-Hans": "男性"
+        }
+      },
+      {
+        "value": "Female",
+        "values": {
+          "zh-Hant": "女性",
+          "zh-Hans": "女性"
+        }
+      },
+      {
+        "value": "Sex ratio (i.e. the number of males per 1 000 females in the respective age group)",
+        "values": {
+          "zh-Hant": "性別比率（即男性數目與每千名女性相對的比率）",
+          "zh-Hans": "性别比率（即男性数目与每千名女性相对的比率）"
+        }
+      },
+      {
+        "value": "< 15",
+        "values": {
+          "zh-Hant": "15歲以下",
+          "zh-Hans": "15岁以下"
+        }
+      },
+      {
+        "value": "15 - 24",
+        "values": {
+          "zh-Hant": "15至24歲",
+          "zh-Hans": "15至24岁"
+        }
+      },
+      {
+        "value": "25 - 44",
+        "values": {
+          "zh-Hant": "25至44歲",
+          "zh-Hans": "25至44岁"
+        }
+      },
+      {
+        "value": "45 - 64",
+        "values": {
+          "zh-Hant": "45至64歲",
+          "zh-Hans": "45至64岁"
+        }
+      },
+      {
+        "value": "65+",
+        "values": {
+          "zh-Hant": "65歲及以上",
+          "zh-Hans": "65岁及以上"
+        }
+      },
+      {
+        "value": "Both sexes",
+        "values": {
+          "zh-Hant": "男女合計",
+          "zh-Hans": "男女合计"
+        }
+      },
+      {
+        "value": "Hong Kong",
+        "values": {
+          "zh-Hant": "香港",
+          "zh-Hans": "香港"
+        }
+      },
+      {
+        "value": "The mainland of China/ Macao/ Taiwan",
+        "values": {
+          "zh-Hant": "中國內地／澳門／台灣",
+          "zh-Hans": "中国内地／澳门／台湾"
+        }
+      },
+      {
+        "value": "Elsewhere",
+        "values": {
+          "zh-Hant": "其他地方",
+          "zh-Hans": "其他地方"
+        }
+      },
+      {
+        "value": "Chinese",
+        "values": {
+          "zh-Hant": "華人",
+          "zh-Hans": "华人"
+        }
+      },
+      {
+        "value": "Filipino",
+        "values": {
+          "zh-Hant": "菲律賓人",
+          "zh-Hans": "菲律宾人"
+        }
+      },
+      {
+        "value": "Indonesian",
+        "values": {
+          "zh-Hant": "印尼人",
+          "zh-Hans": "印尼人"
+        }
+      },
+      {
+        "value": "White",
+        "values": {
+          "zh-Hant": "白人",
+          "zh-Hans": "白人"
+        }
+      },
+      {
+        "value": "Others",
+        "values": {
+          "zh-Hant": "其他",
+          "zh-Hans": "其他"
+        }
+      },
+      {
+        "value": "Never married",
+        "values": {
+          "zh-Hant": "從未結婚",
+          "zh-Hans": "从未结婚"
+        }
+      },
+      {
+        "value": "Married",
+        "values": {
+          "zh-Hant": "已婚",
+          "zh-Hans": "已婚"
+        }
+      },
+      {
+        "value": "Widowed",
+        "values": {
+          "zh-Hant": "喪偶",
+          "zh-Hans": "丧偶"
+        }
+      },
+      {
+        "value": "Divorced",
+        "values": {
+          "zh-Hant": "離婚",
+          "zh-Hans": "离婚"
+        }
+      },
+      {
+        "value": "Separated",
+        "values": {
+          "zh-Hant": "分居",
+          "zh-Hans": "分居"
+        }
+      },
+      {
+        "value": "Cantonese",
+        "values": {
+          "zh-Hant": "廣州話",
+          "zh-Hans": "广州话"
+        }
+      },
+      {
+        "value": "Putonghua",
+        "values": {
+          "zh-Hant": "普通話",
+          "zh-Hans": "普通话"
+        }
+      },
+      {
+        "value": "Other Chinese dialects",
+        "values": {
+          "zh-Hant": "其他中國方言",
+          "zh-Hans": "其他中国方言"
+        }
+      },
+      {
+        "value": "English",
+        "values": {
+          "zh-Hant": "英語",
+          "zh-Hans": "英语"
+        }
+      },
+      {
+        "value": "Other languages",
+        "values": {
+          "zh-Hant": "其他語言",
+          "zh-Hans": "其他语言"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read Chinese",
+        "values": {
+          "zh-Hant": "能閱讀中文的5歲及以上人口比例",
+          "zh-Hans": "能阅读中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read English",
+        "values": {
+          "zh-Hant": "能閱讀英文的5歲及以上人口比例",
+          "zh-Hans": "能阅读英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write Chinese",
+        "values": {
+          "zh-Hant": "能書寫中文的5歲及以上人口比例",
+          "zh-Hans": "能书写中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write English",
+        "values": {
+          "zh-Hant": "能書寫英文的5歲及以上人口比例",
+          "zh-Hans": "能书写英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "No schooling/ Pre-primary",
+        "values": {
+          "zh-Hant": "未受教育／學前教育",
+          "zh-Hans": "未受教育／学前教育"
+        }
+      },
+      {
+        "value": "Primary",
+        "values": {
+          "zh-Hant": "小學",
+          "zh-Hans": "小学"
+        }
+      },
+      {
+        "value": "Lower secondary",
+        "values": {
+          "zh-Hant": "初中",
+          "zh-Hans": "初中"
+        }
+      },
+      {
+        "value": "Upper secondary",
+        "values": {
+          "zh-Hant": "高中",
+          "zh-Hans": "高中"
+        }
+      },
+      {
+        "value": "Post-secondary: Diploma/ Certificate",
+        "values": {
+          "zh-Hant": "專上教育：文憑／證書",
+          "zh-Hans": "专上教育：文凭／证书"
+        }
+      },
+      {
+        "value": "Post-secondary: Sub-degree course",
+        "values": {
+          "zh-Hant": "專上教育：副學位課程",
+          "zh-Hans": "专上教育：副学位课程"
+        }
+      },
+      {
+        "value": "Post-secondary: Degree course",
+        "values": {
+          "zh-Hant": "專上教育：學位課程",
+          "zh-Hans": "专上教育：学位课程"
+        }
+      },
+      {
+        "value": "Study in the same district",
+        "values": {
+          "zh-Hant": "同區就讀",
+          "zh-Hans": "同区就读"
+        }
+      },
+      {
+        "value": "Study in another district on Hong Kong Island",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為香港島）",
+          "zh-Hans": "跨区就读（上课地点为香港岛）"
+        }
+      },
+      {
+        "value": "Study in another district in Kowloon",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為九龍）",
+          "zh-Hans": "跨区就读（上课地点为九龙）"
+        }
+      },
+      {
+        "value": "Study in another district in new towns",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為新市鎮）",
+          "zh-Hans": "跨区就读（上课地点为新市镇）"
+        }
+      },
+      {
+        "value": "Study in another district in other areas in the New Territories",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為新界其他地區）",
+          "zh-Hans": "跨区就读（上课地点为新界其他地区）"
+        }
+      },
+      {
+        "value": "Labour force",
+        "values": {
+          "zh-Hant": "勞動人口",
+          "zh-Hans": "劳动人口"
+        }
+      },
+      {
+        "value": "Working population",
+        "values": {
+          "zh-Hant": "工作人口",
+          "zh-Hans": "工作人口"
+        }
+      },
+      {
+        "value": "Employees (including outworkers)",
+        "values": {
+          "zh-Hant": "僱員（包括外發工）",
+          "zh-Hans": "雇员（包括外发工）"
+        }
+      },
+      {
+        "value": "Employers",
+        "values": {
+          "zh-Hant": "僱主",
+          "zh-Hans": "雇主"
+        }
+      },
+      {
+        "value": "Self-employed",
+        "values": {
+          "zh-Hant": "自營作業者",
+          "zh-Hans": "自营作业者"
+        }
+      },
+      {
+        "value": "Unpaid family workers",
+        "values": {
+          "zh-Hant": "無酬家庭從業員",
+          "zh-Hans": "无酬家庭从业员"
+        }
+      },
+      {
+        "value": "Non-working population",
+        "values": {
+          "zh-Hant": "非工作人口",
+          "zh-Hans": "非工作人口"
+        }
+      },
+      {
+        "value": "Home-makers",
+        "values": {
+          "zh-Hant": "料理家務者",
+          "zh-Hans": "料理家务者"
+        }
+      },
+      {
+        "value": "Students",
+        "values": {
+          "zh-Hant": "學生",
+          "zh-Hans": "学生"
+        }
+      },
+      {
+        "value": "Retired",
+        "values": {
+          "zh-Hant": "退休人士",
+          "zh-Hans": "退休人士"
+        }
+      },
+      {
+        "value": "Unpaid carers",
+        "values": {
+          "zh-Hant": "無酬照顧者",
+          "zh-Hans": "无酬照顾者"
+        }
+      },
+      {
+        "value": "Work in the same district",
+        "values": {
+          "zh-Hant": "同區工作",
+          "zh-Hans": "同区工作"
+        }
+      },
+      {
+        "value": "Work in another district on Hong Kong Island",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為香港島）",
+          "zh-Hans": "跨区工作（工作地点为香港岛）"
+        }
+      },
+      {
+        "value": "Work in another district in Kowloon",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為九龍）",
+          "zh-Hans": "跨区工作（工作地点为九龙）"
+        }
+      },
+      {
+        "value": "Work in another district in new towns",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為新市鎮）",
+          "zh-Hans": "跨区工作（工作地点为新市镇）"
+        }
+      },
+      {
+        "value": "Work in another district in other areas in the New Territories",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為新界其他地區）",
+          "zh-Hans": "跨区工作（工作地点为新界其他地区）"
+        }
+      },
+      {
+        "value": "No fixed place/ Marine",
+        "values": {
+          "zh-Hant": "無固定地點／水上",
+          "zh-Hans": "无固定地点／水上"
+        }
+      },
+      {
+        "value": "Work at home",
+        "values": {
+          "zh-Hant": "於家中工作",
+          "zh-Hans": "于家中工作"
+        }
+      },
+      {
+        "value": "Places outside Hong Kong",
+        "values": {
+          "zh-Hant": "香港以外地方工作",
+          "zh-Hans": "香港以外地方工作"
+        }
+      },
+      {
+        "value": "Less than 6,000",
+        "values": {
+          "zh-Hant": "少於 6,000",
+          "zh-Hans": "少于 6,000"
+        }
+      },
+      {
+        "value": "6,000 - 9,999",
+        "values": {
+          "zh-Hant": "6,000 - 9,999",
+          "zh-Hans": "6,000 - 9,999"
+        }
+      },
+      {
+        "value": "10,000 - 19,999",
+        "values": {
+          "zh-Hant": "10,000 - 19,999",
+          "zh-Hans": "10,000 - 19,999"
+        }
+      },
+      {
+        "value": "20,000 - 29,999",
+        "values": {
+          "zh-Hant": "20,000 - 29,999",
+          "zh-Hans": "20,000 - 29,999"
+        }
+      },
+      {
+        "value": "30,000 - 39,999",
+        "values": {
+          "zh-Hant": "30,000 - 39,999",
+          "zh-Hans": "30,000 - 39,999"
+        }
+      },
+      {
+        "value": "40,000 - 59,999",
+        "values": {
+          "zh-Hant": "40,000 - 59,999",
+          "zh-Hans": "40,000 - 59,999"
+        }
+      },
+      {
+        "value": "60,000 and over",
+        "values": {
+          "zh-Hant": "60,000 及以上",
+          "zh-Hans": "60,000 及以上"
+        }
+      },
+      {
+        "value": "Managers",
+        "values": {
+          "zh-Hant": "經理",
+          "zh-Hans": "经理"
+        }
+      },
+      {
+        "value": "Professionals",
+        "values": {
+          "zh-Hant": "專業人員",
+          "zh-Hans": "专业人员"
+        }
+      },
+      {
+        "value": "Associate professionals",
+        "values": {
+          "zh-Hant": "輔助專業人員",
+          "zh-Hans": "辅助专业人员"
+        }
+      },
+      {
+        "value": "Clerical support workers",
+        "values": {
+          "zh-Hant": "文書支援人員",
+          "zh-Hans": "文书支援人员"
+        }
+      },
+      {
+        "value": "Service and sales workers",
+        "values": {
+          "zh-Hant": "服務及銷售人員",
+          "zh-Hans": "服务及销售人员"
+        }
+      },
+      {
+        "value": "Craft and related workers",
+        "values": {
+          "zh-Hant": "工藝及有關人員",
+          "zh-Hans": "工艺及有关人员"
+        }
+      },
+      {
+        "value": "Plant and machine operators and assemblers",
+        "values": {
+          "zh-Hant": "機台及機器操作員及裝配員",
+          "zh-Hans": "机台及机器操作员及装配员"
+        }
+      },
+      {
+        "value": "Elementary occupations",
+        "values": {
+          "zh-Hant": "非技術工人",
+          "zh-Hans": "非技术工人"
+        }
+      },
+      {
+        "value": "Skilled agricultural and fishery workers; and occupations not classifiable",
+        "values": {
+          "zh-Hant": "漁農業熟練工人及不能分類的職業",
+          "zh-Hans": "渔农业熟練工人及不能分類的职业"
+        }
+      },
+      {
+        "value": "Manufacturing",
+        "values": {
+          "zh-Hant": "製造業",
+          "zh-Hans": "制造业"
+        }
+      },
+      {
+        "value": "Construction",
+        "values": {
+          "zh-Hant": "建造業",
+          "zh-Hans": "建造业"
+        }
+      },
+      {
+        "value": "Import/export, wholesale and retail trades",
+        "values": {
+          "zh-Hant": "進出口、批發及零售業",
+          "zh-Hans": "进出口、批发及零售业"
+        }
+      },
+      {
+        "value": "Transportation, storage, postal and courier services",
+        "values": {
+          "zh-Hant": "運輸、倉庫、郵政及速遞服務業",
+          "zh-Hans": "运输、仓库、邮政及速递服务业"
+        }
+      },
+      {
+        "value": "Accommodation and food services",
+        "values": {
+          "zh-Hant": "住宿及膳食服務業",
+          "zh-Hans": "住宿及膳食服务业"
+        }
+      },
+      {
+        "value": "Information and communications",
+        "values": {
+          "zh-Hant": "資訊及通訊業",
+          "zh-Hans": "资讯及通讯业"
+        }
+      },
+      {
+        "value": "Financing and insurance",
+        "values": {
+          "zh-Hant": "金融及保險業",
+          "zh-Hans": "金融及保险业"
+        }
+      },
+      {
+        "value": "Real estate, professional and business services",
+        "values": {
+          "zh-Hant": "地產、專業及商用服務業",
+          "zh-Hans": "地产、专业及商用服务业"
+        }
+      },
+      {
+        "value": "Public administration, education, human health and social work activities",
+        "values": {
+          "zh-Hant": "公共行政、教育、人類醫療保健及社工活動",
+          "zh-Hans": "公共行政、教育、人类医疗保健及社工活动"
+        }
+      },
+      {
+        "value": "Miscellaneous social and personal services",
+        "values": {
+          "zh-Hant": "雜項社會及個人服務",
+          "zh-Hans": "杂项社会及个人服务"
+        }
+      },
+      {
+        "value": "Less than 18",
+        "values": {
+          "zh-Hant": "少於 18",
+          "zh-Hans": "少于 18"
+        }
+      },
+      {
+        "value": "18-34",
+        "values": {
+          "zh-Hant": "18-34",
+          "zh-Hans": "18-34"
+        }
+      },
+      {
+        "value": "35-44",
+        "values": {
+          "zh-Hant": "35-44",
+          "zh-Hans": "35-44"
+        }
+      },
+      {
+        "value": "45-54",
+        "values": {
+          "zh-Hant": "45-54",
+          "zh-Hans": "45-54"
+        }
+      },
+      {
+        "value": "55-64",
+        "values": {
+          "zh-Hant": "55-64",
+          "zh-Hans": "55-64"
+        }
+      },
+      {
+        "value": "65 and over",
+        "values": {
+          "zh-Hant": "65 及以上",
+          "zh-Hans": "65 及以上"
+        }
+      },
+      {
+        "value": "Domestic households",
+        "values": {
+          "zh-Hant": "家庭住戶數目",
+          "zh-Hans": "家庭住户数目"
+        }
+      },
+      {
+        "value": "1",
+        "values": {
+          "zh-Hant": "1",
+          "zh-Hans": "1"
+        }
+      },
+      {
+        "value": "2",
+        "values": {
+          "zh-Hant": "2",
+          "zh-Hans": "2"
+        }
+      },
+      {
+        "value": "3",
+        "values": {
+          "zh-Hant": "3",
+          "zh-Hans": "3"
+        }
+      },
+      {
+        "value": "4",
+        "values": {
+          "zh-Hant": "4",
+          "zh-Hans": "4"
+        }
+      },
+      {
+        "value": "5",
+        "values": {
+          "zh-Hant": "5",
+          "zh-Hans": "5"
+        }
+      },
+      {
+        "value": "6 and over",
+        "values": {
+          "zh-Hant": "6及以上",
+          "zh-Hans": "6及以上"
+        }
+      },
+      {
+        "value": "Average domestic household size",
+        "values": {
+          "zh-Hant": "家庭住戶平均人數",
+          "zh-Hans": "家庭住户平均人数"
+        }
+      },
+      {
+        "value": "Composed of couple",
+        "values": {
+          "zh-Hant": "由夫婦所組成",
+          "zh-Hans": "由夫妇所组成"
+        }
+      },
+      {
+        "value": "Composed of couple and unmarried children",
+        "values": {
+          "zh-Hant": "由夫婦及未婚子女所組成",
+          "zh-Hans": "由夫妇及未婚子女所组成"
+        }
+      },
+      {
+        "value": "Composed of lone parent and unmarried children",
+        "values": {
+          "zh-Hant": "由父或母親及未婚子女所組成",
+          "zh-Hans": "由父或母亲及未婚子女所组成"
+        }
+      },
+      {
+        "value": "Composed of couple and at least one of their parents",
+        "values": {
+          "zh-Hant": "由夫婦及其中至少一個父或母親所組成",
+          "zh-Hans": "由夫妇及其中至少一个父或母亲所组成"
+        }
+      },
+      {
+        "value": "Composed of couple, at least one of their parents and their unmarried children",
+        "values": {
+          "zh-Hant": "由夫婦、其中至少一個父或母親及其未婚子女所組成",
+          "zh-Hans": "由夫妇、其中至少一个父或母亲及其未婚子女所组成"
+        }
+      },
+      {
+        "value": "Composed of other relationship combinations",
+        "values": {
+          "zh-Hant": "由其他親屬關係組合所組成",
+          "zh-Hans": "由其他亲属关系组合所组成"
+        }
+      },
+      {
+        "value": "One-person households",
+        "values": {
+          "zh-Hant": "單人住戶",
+          "zh-Hans": "单人住户"
+        }
+      },
+      {
+        "value": "Non-relative households",
+        "values": {
+          "zh-Hant": "非親屬關係住戶",
+          "zh-Hans": "非亲属关系住户"
+        }
+      },
+      {
+        "value": "Median monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月收入（港元）中位數",
+          "zh-Hans": "家庭住户每月收入（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly household income (HK$) of economically active domestic households",
+        "values": {
+          "zh-Hant": "從事經濟活動的家庭住戶每月收入中位數（港元）",
+          "zh-Hans": "从事经济活动的家庭住户每月收入中位数（港元）"
+        }
+      },
+      {
+        "value": "Public rental housing",
+        "values": {
+          "zh-Hant": "公營租住房屋",
+          "zh-Hans": "公营租住房屋"
+        }
+      },
+      {
+        "value": "Subsidised home ownership housing",
+        "values": {
+          "zh-Hant": "資助自置居所房屋",
+          "zh-Hans": "资助自置居所房屋"
+        }
+      },
+      {
+        "value": "Private permanent housing",
+        "values": {
+          "zh-Hant": "私人永久性房屋",
+          "zh-Hans": "私人永久性房屋"
+        }
+      },
+      {
+        "value": "Non-domestic housing",
+        "values": {
+          "zh-Hant": "非住宅用房屋",
+          "zh-Hans": "非住宅用房屋"
+        }
+      },
+      {
+        "value": "Temporary housing",
+        "values": {
+          "zh-Hant": "臨時房屋",
+          "zh-Hans": "临时房屋"
+        }
+      },
+      {
+        "value": "Without exclusively used rooms",
+        "values": {
+          "zh-Hant": "沒有自用廳房",
+          "zh-Hans": "没有自用厅房"
+        }
+      },
+      {
+        "value": "Owner-occupier - With mortgage or loan",
+        "values": {
+          "zh-Hant": "自置，有按揭供款或借貸還款",
+          "zh-Hans": "自置，有按揭供款或借贷还款"
+        }
+      },
+      {
+        "value": "Owner-occupier - Without mortgage and loan",
+        "values": {
+          "zh-Hant": "自置，沒有按揭供款及借貸還款",
+          "zh-Hans": "自置，没有按揭供款及借贷还款"
+        }
+      },
+      {
+        "value": "Sole tenant",
+        "values": {
+          "zh-Hant": "全租",
+          "zh-Hans": "全租"
+        }
+      },
+      {
+        "value": "Co-tenant/ Main tenant/ Sub-tenant",
+        "values": {
+          "zh-Hant": "合租／二房東／三房客",
+          "zh-Hans": "合租／二房东／三房客"
+        }
+      },
+      {
+        "value": "Rent free",
+        "values": {
+          "zh-Hant": "免交租金",
+          "zh-Hans": "免交租金"
+        }
+      },
+      {
+        "value": "Provided by employer",
+        "values": {
+          "zh-Hant": "由僱主提供",
+          "zh-Hans": "由雇主提供"
+        }
+      },
+      {
+        "value": "By non-household members only",
+        "values": {
+          "zh-Hant": "由非住戶成員支付",
+          "zh-Hans": "由非住户成员支付"
+        }
+      },
+      {
+        "value": "1 - 3,999",
+        "values": {
+          "zh-Hant": "1 - 3,999",
+          "zh-Hans": "1 - 3,999"
+        }
+      },
+      {
+        "value": "4,000 - 5,999",
+        "values": {
+          "zh-Hant": "4,000 - 5,999",
+          "zh-Hans": "4,000 - 5,999"
+        }
+      },
+      {
+        "value": "6,000 - 7,999",
+        "values": {
+          "zh-Hant": "6,000 - 7,999",
+          "zh-Hans": "6,000 - 7,999"
+        }
+      },
+      {
+        "value": "8,000 - 9,999",
+        "values": {
+          "zh-Hant": "8,000 - 9,999",
+          "zh-Hans": "8,000 - 9,999"
+        }
+      },
+      {
+        "value": "20,000 and over",
+        "values": {
+          "zh-Hant": "20,000 及以上",
+          "zh-Hans": "20,000 及以上"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款（港元）中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款與收入比率中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款与收入比率中位数"
+        }
+      },
+      {
+        "value": "Less than 2,000",
+        "values": {
+          "zh-Hant": "少於 2,000",
+          "zh-Hans": "少于 2,000"
+        }
+      },
+      {
+        "value": "2,000 - 5,999",
+        "values": {
+          "zh-Hant": "2,000 - 5,999",
+          "zh-Hans": "2,000 - 5,999"
+        }
+      },
+      {
+        "value": "10,000 and over",
+        "values": {
+          "zh-Hant": "10,000 及以上",
+          "zh-Hans": "10,000 及以上"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金（港元）中位數",
+          "zh-Hans": "家庭住户每月租金（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金與收入比率中位數",
+          "zh-Hans": "家庭住户每月租金与收入比率中位数"
+        }
+      },
+      {
+        "value": "Median floor area of accommodation of domestic households (square metres)",
+        "values": {
+          "zh-Hant": "家庭住戶的居所樓面面積中位數（平方米）",
+          "zh-Hans": "家庭住户的居所楼面面积中位数（平方米）"
+        }
+      },
+      {
+        "value": "Hong Kong Island",
+        "values": {
+          "zh-Hant": "香港島",
+          "zh-Hans": "香港岛"
+        }
+      },
+      {
+        "value": "Kowloon",
+        "values": {
+          "zh-Hant": "九龍",
+          "zh-Hans": "九龙"
+        }
+      },
+      {
+        "value": "New towns",
+        "values": {
+          "zh-Hant": "新市鎮",
+          "zh-Hans": "新市镇"
+        }
+      },
+      {
+        "value": "Other areas in the New Territories/ Marine",
+        "values": {
+          "zh-Hant": "新界其他地區／水上",
+          "zh-Hans": "新界其他地区／水上"
+        }
+      },
+      {
+        "value": "Moved home within same area of residence",
+        "values": {
+          "zh-Hant": "曾在同區遷居",
+          "zh-Hans": "曾在同区迁居"
+        }
+      },
+      {
+        "value": "Remained in same address",
+        "values": {
+          "zh-Hant": "仍居舊址",
+          "zh-Hans": "仍居旧址"
+        }
+      },
+      {
+        "value": "Place of residence outside Hong Kong",
+        "values": {
+          "zh-Hant": "居於香港以外地方",
+          "zh-Hans": "居于香港以外地方"
+        }
+      }
+    ],
+    "category": [
+      {
+        "value": "Total population",
+        "values": {
+          "zh-Hant": "總人口",
+          "zh-Hans": "总人口"
+        }
+      },
+      {
+        "value": "Male",
+        "values": {
+          "zh-Hant": "男性",
+          "zh-Hans": "男性"
+        }
+      },
+      {
+        "value": "Female",
+        "values": {
+          "zh-Hant": "女性",
+          "zh-Hans": "女性"
+        }
+      },
+      {
+        "value": "Sex ratio (i.e. the number of males per 1 000 females in the respective age group)",
+        "values": {
+          "zh-Hant": "性別比率（即男性數目與每千名女性相對的比率）",
+          "zh-Hans": "性别比率（即男性数目与每千名女性相对的比率）"
+        }
+      },
+      {
+        "value": "< 15",
+        "values": {
+          "zh-Hant": "15歲以下",
+          "zh-Hans": "15岁以下"
+        }
+      },
+      {
+        "value": "15 - 24",
+        "values": {
+          "zh-Hant": "15至24歲",
+          "zh-Hans": "15至24岁"
+        }
+      },
+      {
+        "value": "25 - 44",
+        "values": {
+          "zh-Hant": "25至44歲",
+          "zh-Hans": "25至44岁"
+        }
+      },
+      {
+        "value": "45 - 64",
+        "values": {
+          "zh-Hant": "45至64歲",
+          "zh-Hans": "45至64岁"
+        }
+      },
+      {
+        "value": "65+",
+        "values": {
+          "zh-Hant": "65歲及以上",
+          "zh-Hans": "65岁及以上"
+        }
+      },
+      {
+        "value": "Both sexes",
+        "values": {
+          "zh-Hant": "男女合計",
+          "zh-Hans": "男女合计"
+        }
+      },
+      {
+        "value": "Hong Kong",
+        "values": {
+          "zh-Hant": "香港",
+          "zh-Hans": "香港"
+        }
+      },
+      {
+        "value": "The mainland of China/ Macao/ Taiwan",
+        "values": {
+          "zh-Hant": "中國內地／澳門／台灣",
+          "zh-Hans": "中国内地／澳门／台湾"
+        }
+      },
+      {
+        "value": "Elsewhere",
+        "values": {
+          "zh-Hant": "其他地方",
+          "zh-Hans": "其他地方"
+        }
+      },
+      {
+        "value": "Chinese",
+        "values": {
+          "zh-Hant": "華人",
+          "zh-Hans": "华人"
+        }
+      },
+      {
+        "value": "Filipino",
+        "values": {
+          "zh-Hant": "菲律賓人",
+          "zh-Hans": "菲律宾人"
+        }
+      },
+      {
+        "value": "Indonesian",
+        "values": {
+          "zh-Hant": "印尼人",
+          "zh-Hans": "印尼人"
+        }
+      },
+      {
+        "value": "White",
+        "values": {
+          "zh-Hant": "白人",
+          "zh-Hans": "白人"
+        }
+      },
+      {
+        "value": "Others",
+        "values": {
+          "zh-Hant": "其他",
+          "zh-Hans": "其他"
+        }
+      },
+      {
+        "value": "Never married",
+        "values": {
+          "zh-Hant": "從未結婚",
+          "zh-Hans": "从未结婚"
+        }
+      },
+      {
+        "value": "Married",
+        "values": {
+          "zh-Hant": "已婚",
+          "zh-Hans": "已婚"
+        }
+      },
+      {
+        "value": "Widowed",
+        "values": {
+          "zh-Hant": "喪偶",
+          "zh-Hans": "丧偶"
+        }
+      },
+      {
+        "value": "Divorced",
+        "values": {
+          "zh-Hant": "離婚",
+          "zh-Hans": "离婚"
+        }
+      },
+      {
+        "value": "Separated",
+        "values": {
+          "zh-Hant": "分居",
+          "zh-Hans": "分居"
+        }
+      },
+      {
+        "value": "Cantonese",
+        "values": {
+          "zh-Hant": "廣州話",
+          "zh-Hans": "广州话"
+        }
+      },
+      {
+        "value": "Putonghua",
+        "values": {
+          "zh-Hant": "普通話",
+          "zh-Hans": "普通话"
+        }
+      },
+      {
+        "value": "Other Chinese dialects",
+        "values": {
+          "zh-Hant": "其他中國方言",
+          "zh-Hans": "其他中国方言"
+        }
+      },
+      {
+        "value": "English",
+        "values": {
+          "zh-Hant": "英語",
+          "zh-Hans": "英语"
+        }
+      },
+      {
+        "value": "Other languages",
+        "values": {
+          "zh-Hant": "其他語言",
+          "zh-Hans": "其他语言"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read Chinese",
+        "values": {
+          "zh-Hant": "能閱讀中文的5歲及以上人口比例",
+          "zh-Hans": "能阅读中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read English",
+        "values": {
+          "zh-Hant": "能閱讀英文的5歲及以上人口比例",
+          "zh-Hans": "能阅读英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write Chinese",
+        "values": {
+          "zh-Hant": "能書寫中文的5歲及以上人口比例",
+          "zh-Hans": "能书写中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write English",
+        "values": {
+          "zh-Hant": "能書寫英文的5歲及以上人口比例",
+          "zh-Hans": "能书写英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "No schooling/ Pre-primary",
+        "values": {
+          "zh-Hant": "未受教育／學前教育",
+          "zh-Hans": "未受教育／学前教育"
+        }
+      },
+      {
+        "value": "Primary",
+        "values": {
+          "zh-Hant": "小學",
+          "zh-Hans": "小学"
+        }
+      },
+      {
+        "value": "Lower secondary",
+        "values": {
+          "zh-Hant": "初中",
+          "zh-Hans": "初中"
+        }
+      },
+      {
+        "value": "Upper secondary",
+        "values": {
+          "zh-Hant": "高中",
+          "zh-Hans": "高中"
+        }
+      },
+      {
+        "value": "Post-secondary: Diploma/ Certificate",
+        "values": {
+          "zh-Hant": "專上教育：文憑／證書",
+          "zh-Hans": "专上教育：文凭／证书"
+        }
+      },
+      {
+        "value": "Post-secondary: Sub-degree course",
+        "values": {
+          "zh-Hant": "專上教育：副學位課程",
+          "zh-Hans": "专上教育：副学位课程"
+        }
+      },
+      {
+        "value": "Post-secondary: Degree course",
+        "values": {
+          "zh-Hant": "專上教育：學位課程",
+          "zh-Hans": "专上教育：学位课程"
+        }
+      },
+      {
+        "value": "Study in the same district",
+        "values": {
+          "zh-Hant": "同區就讀",
+          "zh-Hans": "同区就读"
+        }
+      },
+      {
+        "value": "Study in another district on Hong Kong Island",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為香港島）",
+          "zh-Hans": "跨区就读（上课地点为香港岛）"
+        }
+      },
+      {
+        "value": "Study in another district in Kowloon",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為九龍）",
+          "zh-Hans": "跨区就读（上课地点为九龙）"
+        }
+      },
+      {
+        "value": "Study in another district in new towns",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為新市鎮）",
+          "zh-Hans": "跨区就读（上课地点为新市镇）"
+        }
+      },
+      {
+        "value": "Study in another district in other areas in the New Territories",
+        "values": {
+          "zh-Hant": "跨區就讀（上課地點為新界其他地區）",
+          "zh-Hans": "跨区就读（上课地点为新界其他地区）"
+        }
+      },
+      {
+        "value": "Labour force",
+        "values": {
+          "zh-Hant": "勞動人口",
+          "zh-Hans": "劳动人口"
+        }
+      },
+      {
+        "value": "Working population",
+        "values": {
+          "zh-Hant": "工作人口",
+          "zh-Hans": "工作人口"
+        }
+      },
+      {
+        "value": "Employees (including outworkers)",
+        "values": {
+          "zh-Hant": "僱員（包括外發工）",
+          "zh-Hans": "雇员（包括外发工）"
+        }
+      },
+      {
+        "value": "Employers",
+        "values": {
+          "zh-Hant": "僱主",
+          "zh-Hans": "雇主"
+        }
+      },
+      {
+        "value": "Self-employed",
+        "values": {
+          "zh-Hant": "自營作業者",
+          "zh-Hans": "自营作业者"
+        }
+      },
+      {
+        "value": "Unpaid family workers",
+        "values": {
+          "zh-Hant": "無酬家庭從業員",
+          "zh-Hans": "无酬家庭从业员"
+        }
+      },
+      {
+        "value": "Non-working population",
+        "values": {
+          "zh-Hant": "非工作人口",
+          "zh-Hans": "非工作人口"
+        }
+      },
+      {
+        "value": "Home-makers",
+        "values": {
+          "zh-Hant": "料理家務者",
+          "zh-Hans": "料理家务者"
+        }
+      },
+      {
+        "value": "Students",
+        "values": {
+          "zh-Hant": "學生",
+          "zh-Hans": "学生"
+        }
+      },
+      {
+        "value": "Retired",
+        "values": {
+          "zh-Hant": "退休人士",
+          "zh-Hans": "退休人士"
+        }
+      },
+      {
+        "value": "Unpaid carers",
+        "values": {
+          "zh-Hant": "無酬照顧者",
+          "zh-Hans": "无酬照顾者"
+        }
+      },
+      {
+        "value": "Work in the same district",
+        "values": {
+          "zh-Hant": "同區工作",
+          "zh-Hans": "同区工作"
+        }
+      },
+      {
+        "value": "Work in another district on Hong Kong Island",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為香港島）",
+          "zh-Hans": "跨区工作（工作地点为香港岛）"
+        }
+      },
+      {
+        "value": "Work in another district in Kowloon",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為九龍）",
+          "zh-Hans": "跨区工作（工作地点为九龙）"
+        }
+      },
+      {
+        "value": "Work in another district in new towns",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為新市鎮）",
+          "zh-Hans": "跨区工作（工作地点为新市镇）"
+        }
+      },
+      {
+        "value": "Work in another district in other areas in the New Territories",
+        "values": {
+          "zh-Hant": "跨區工作（工作地點為新界其他地區）",
+          "zh-Hans": "跨区工作（工作地点为新界其他地区）"
+        }
+      },
+      {
+        "value": "No fixed place/ Marine",
+        "values": {
+          "zh-Hant": "無固定地點／水上",
+          "zh-Hans": "无固定地点／水上"
+        }
+      },
+      {
+        "value": "Work at home",
+        "values": {
+          "zh-Hant": "於家中工作",
+          "zh-Hans": "于家中工作"
+        }
+      },
+      {
+        "value": "Places outside Hong Kong",
+        "values": {
+          "zh-Hant": "香港以外地方工作",
+          "zh-Hans": "香港以外地方工作"
+        }
+      },
+      {
+        "value": "Less than 6,000",
+        "values": {
+          "zh-Hant": "少於 6,000",
+          "zh-Hans": "少于 6,000"
+        }
+      },
+      {
+        "value": "6,000 - 9,999",
+        "values": {
+          "zh-Hant": "6,000 - 9,999",
+          "zh-Hans": "6,000 - 9,999"
+        }
+      },
+      {
+        "value": "10,000 - 19,999",
+        "values": {
+          "zh-Hant": "10,000 - 19,999",
+          "zh-Hans": "10,000 - 19,999"
+        }
+      },
+      {
+        "value": "20,000 - 29,999",
+        "values": {
+          "zh-Hant": "20,000 - 29,999",
+          "zh-Hans": "20,000 - 29,999"
+        }
+      },
+      {
+        "value": "30,000 - 39,999",
+        "values": {
+          "zh-Hant": "30,000 - 39,999",
+          "zh-Hans": "30,000 - 39,999"
+        }
+      },
+      {
+        "value": "40,000 - 59,999",
+        "values": {
+          "zh-Hant": "40,000 - 59,999",
+          "zh-Hans": "40,000 - 59,999"
+        }
+      },
+      {
+        "value": "60,000 and over",
+        "values": {
+          "zh-Hant": "60,000 及以上",
+          "zh-Hans": "60,000 及以上"
+        }
+      },
+      {
+        "value": "Managers",
+        "values": {
+          "zh-Hant": "經理",
+          "zh-Hans": "经理"
+        }
+      },
+      {
+        "value": "Professionals",
+        "values": {
+          "zh-Hant": "專業人員",
+          "zh-Hans": "专业人员"
+        }
+      },
+      {
+        "value": "Associate professionals",
+        "values": {
+          "zh-Hant": "輔助專業人員",
+          "zh-Hans": "辅助专业人员"
+        }
+      },
+      {
+        "value": "Clerical support workers",
+        "values": {
+          "zh-Hant": "文書支援人員",
+          "zh-Hans": "文书支援人员"
+        }
+      },
+      {
+        "value": "Service and sales workers",
+        "values": {
+          "zh-Hant": "服務及銷售人員",
+          "zh-Hans": "服务及销售人员"
+        }
+      },
+      {
+        "value": "Craft and related workers",
+        "values": {
+          "zh-Hant": "工藝及有關人員",
+          "zh-Hans": "工艺及有关人员"
+        }
+      },
+      {
+        "value": "Plant and machine operators and assemblers",
+        "values": {
+          "zh-Hant": "機台及機器操作員及裝配員",
+          "zh-Hans": "机台及机器操作员及装配员"
+        }
+      },
+      {
+        "value": "Elementary occupations",
+        "values": {
+          "zh-Hant": "非技術工人",
+          "zh-Hans": "非技术工人"
+        }
+      },
+      {
+        "value": "Skilled agricultural and fishery workers; and occupations not classifiable",
+        "values": {
+          "zh-Hant": "漁農業熟練工人及不能分類的職業",
+          "zh-Hans": "渔农业熟練工人及不能分類的职业"
+        }
+      },
+      {
+        "value": "Manufacturing",
+        "values": {
+          "zh-Hant": "製造業",
+          "zh-Hans": "制造业"
+        }
+      },
+      {
+        "value": "Construction",
+        "values": {
+          "zh-Hant": "建造業",
+          "zh-Hans": "建造业"
+        }
+      },
+      {
+        "value": "Import/export, wholesale and retail trades",
+        "values": {
+          "zh-Hant": "進出口、批發及零售業",
+          "zh-Hans": "进出口、批发及零售业"
+        }
+      },
+      {
+        "value": "Transportation, storage, postal and courier services",
+        "values": {
+          "zh-Hant": "運輸、倉庫、郵政及速遞服務業",
+          "zh-Hans": "运输、仓库、邮政及速递服务业"
+        }
+      },
+      {
+        "value": "Accommodation and food services",
+        "values": {
+          "zh-Hant": "住宿及膳食服務業",
+          "zh-Hans": "住宿及膳食服务业"
+        }
+      },
+      {
+        "value": "Information and communications",
+        "values": {
+          "zh-Hant": "資訊及通訊業",
+          "zh-Hans": "资讯及通讯业"
+        }
+      },
+      {
+        "value": "Financing and insurance",
+        "values": {
+          "zh-Hant": "金融及保險業",
+          "zh-Hans": "金融及保险业"
+        }
+      },
+      {
+        "value": "Real estate, professional and business services",
+        "values": {
+          "zh-Hant": "地產、專業及商用服務業",
+          "zh-Hans": "地产、专业及商用服务业"
+        }
+      },
+      {
+        "value": "Public administration, education, human health and social work activities",
+        "values": {
+          "zh-Hant": "公共行政、教育、人類醫療保健及社工活動",
+          "zh-Hans": "公共行政、教育、人类医疗保健及社工活动"
+        }
+      },
+      {
+        "value": "Miscellaneous social and personal services",
+        "values": {
+          "zh-Hant": "雜項社會及個人服務",
+          "zh-Hans": "杂项社会及个人服务"
+        }
+      },
+      {
+        "value": "Less than 18",
+        "values": {
+          "zh-Hant": "少於 18",
+          "zh-Hans": "少于 18"
+        }
+      },
+      {
+        "value": "18-34",
+        "values": {
+          "zh-Hant": "18-34",
+          "zh-Hans": "18-34"
+        }
+      },
+      {
+        "value": "35-44",
+        "values": {
+          "zh-Hant": "35-44",
+          "zh-Hans": "35-44"
+        }
+      },
+      {
+        "value": "45-54",
+        "values": {
+          "zh-Hant": "45-54",
+          "zh-Hans": "45-54"
+        }
+      },
+      {
+        "value": "55-64",
+        "values": {
+          "zh-Hant": "55-64",
+          "zh-Hans": "55-64"
+        }
+      },
+      {
+        "value": "65 and over",
+        "values": {
+          "zh-Hant": "65 及以上",
+          "zh-Hans": "65 及以上"
+        }
+      },
+      {
+        "value": "Domestic households",
+        "values": {
+          "zh-Hant": "家庭住戶數目",
+          "zh-Hans": "家庭住户数目"
+        }
+      },
+      {
+        "value": "1",
+        "values": {
+          "zh-Hant": "1",
+          "zh-Hans": "1"
+        }
+      },
+      {
+        "value": "2",
+        "values": {
+          "zh-Hant": "2",
+          "zh-Hans": "2"
+        }
+      },
+      {
+        "value": "3",
+        "values": {
+          "zh-Hant": "3",
+          "zh-Hans": "3"
+        }
+      },
+      {
+        "value": "4",
+        "values": {
+          "zh-Hant": "4",
+          "zh-Hans": "4"
+        }
+      },
+      {
+        "value": "5",
+        "values": {
+          "zh-Hant": "5",
+          "zh-Hans": "5"
+        }
+      },
+      {
+        "value": "6 and over",
+        "values": {
+          "zh-Hant": "6及以上",
+          "zh-Hans": "6及以上"
+        }
+      },
+      {
+        "value": "Average domestic household size",
+        "values": {
+          "zh-Hant": "家庭住戶平均人數",
+          "zh-Hans": "家庭住户平均人数"
+        }
+      },
+      {
+        "value": "Composed of couple",
+        "values": {
+          "zh-Hant": "由夫婦所組成",
+          "zh-Hans": "由夫妇所组成"
+        }
+      },
+      {
+        "value": "Composed of couple and unmarried children",
+        "values": {
+          "zh-Hant": "由夫婦及未婚子女所組成",
+          "zh-Hans": "由夫妇及未婚子女所组成"
+        }
+      },
+      {
+        "value": "Composed of lone parent and unmarried children",
+        "values": {
+          "zh-Hant": "由父或母親及未婚子女所組成",
+          "zh-Hans": "由父或母亲及未婚子女所组成"
+        }
+      },
+      {
+        "value": "Composed of couple and at least one of their parents",
+        "values": {
+          "zh-Hant": "由夫婦及其中至少一個父或母親所組成",
+          "zh-Hans": "由夫妇及其中至少一个父或母亲所组成"
+        }
+      },
+      {
+        "value": "Composed of couple, at least one of their parents and their unmarried children",
+        "values": {
+          "zh-Hant": "由夫婦、其中至少一個父或母親及其未婚子女所組成",
+          "zh-Hans": "由夫妇、其中至少一个父或母亲及其未婚子女所组成"
+        }
+      },
+      {
+        "value": "Composed of other relationship combinations",
+        "values": {
+          "zh-Hant": "由其他親屬關係組合所組成",
+          "zh-Hans": "由其他亲属关系组合所组成"
+        }
+      },
+      {
+        "value": "One-person households",
+        "values": {
+          "zh-Hant": "單人住戶",
+          "zh-Hans": "单人住户"
+        }
+      },
+      {
+        "value": "Non-relative households",
+        "values": {
+          "zh-Hant": "非親屬關係住戶",
+          "zh-Hans": "非亲属关系住户"
+        }
+      },
+      {
+        "value": "Median monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月收入（港元）中位數",
+          "zh-Hans": "家庭住户每月收入（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly household income (HK$) of economically active domestic households",
+        "values": {
+          "zh-Hant": "從事經濟活動的家庭住戶每月收入中位數（港元）",
+          "zh-Hans": "从事经济活动的家庭住户每月收入中位数（港元）"
+        }
+      },
+      {
+        "value": "Public rental housing",
+        "values": {
+          "zh-Hant": "公營租住房屋",
+          "zh-Hans": "公营租住房屋"
+        }
+      },
+      {
+        "value": "Subsidised home ownership housing",
+        "values": {
+          "zh-Hant": "資助自置居所房屋",
+          "zh-Hans": "资助自置居所房屋"
+        }
+      },
+      {
+        "value": "Private permanent housing",
+        "values": {
+          "zh-Hant": "私人永久性房屋",
+          "zh-Hans": "私人永久性房屋"
+        }
+      },
+      {
+        "value": "Non-domestic housing",
+        "values": {
+          "zh-Hant": "非住宅用房屋",
+          "zh-Hans": "非住宅用房屋"
+        }
+      },
+      {
+        "value": "Temporary housing",
+        "values": {
+          "zh-Hant": "臨時房屋",
+          "zh-Hans": "临时房屋"
+        }
+      },
+      {
+        "value": "Without exclusively used rooms",
+        "values": {
+          "zh-Hant": "沒有自用廳房",
+          "zh-Hans": "没有自用厅房"
+        }
+      },
+      {
+        "value": "Owner-occupier - With mortgage or loan",
+        "values": {
+          "zh-Hant": "自置，有按揭供款或借貸還款",
+          "zh-Hans": "自置，有按揭供款或借贷还款"
+        }
+      },
+      {
+        "value": "Owner-occupier - Without mortgage and loan",
+        "values": {
+          "zh-Hant": "自置，沒有按揭供款及借貸還款",
+          "zh-Hans": "自置，没有按揭供款及借贷还款"
+        }
+      },
+      {
+        "value": "Sole tenant",
+        "values": {
+          "zh-Hant": "全租",
+          "zh-Hans": "全租"
+        }
+      },
+      {
+        "value": "Co-tenant/ Main tenant/ Sub-tenant",
+        "values": {
+          "zh-Hant": "合租／二房東／三房客",
+          "zh-Hans": "合租／二房东／三房客"
+        }
+      },
+      {
+        "value": "Rent free",
+        "values": {
+          "zh-Hant": "免交租金",
+          "zh-Hans": "免交租金"
+        }
+      },
+      {
+        "value": "Provided by employer",
+        "values": {
+          "zh-Hant": "由僱主提供",
+          "zh-Hans": "由雇主提供"
+        }
+      },
+      {
+        "value": "By non-household members only",
+        "values": {
+          "zh-Hant": "由非住戶成員支付",
+          "zh-Hans": "由非住户成员支付"
+        }
+      },
+      {
+        "value": "1 - 3,999",
+        "values": {
+          "zh-Hant": "1 - 3,999",
+          "zh-Hans": "1 - 3,999"
+        }
+      },
+      {
+        "value": "4,000 - 5,999",
+        "values": {
+          "zh-Hant": "4,000 - 5,999",
+          "zh-Hans": "4,000 - 5,999"
+        }
+      },
+      {
+        "value": "6,000 - 7,999",
+        "values": {
+          "zh-Hant": "6,000 - 7,999",
+          "zh-Hans": "6,000 - 7,999"
+        }
+      },
+      {
+        "value": "8,000 - 9,999",
+        "values": {
+          "zh-Hant": "8,000 - 9,999",
+          "zh-Hans": "8,000 - 9,999"
+        }
+      },
+      {
+        "value": "20,000 and over",
+        "values": {
+          "zh-Hant": "20,000 及以上",
+          "zh-Hans": "20,000 及以上"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款（港元）中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款與收入比率中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款与收入比率中位数"
+        }
+      },
+      {
+        "value": "Less than 2,000",
+        "values": {
+          "zh-Hant": "少於 2,000",
+          "zh-Hans": "少于 2,000"
+        }
+      },
+      {
+        "value": "2,000 - 5,999",
+        "values": {
+          "zh-Hant": "2,000 - 5,999",
+          "zh-Hans": "2,000 - 5,999"
+        }
+      },
+      {
+        "value": "10,000 and over",
+        "values": {
+          "zh-Hant": "10,000 及以上",
+          "zh-Hans": "10,000 及以上"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金（港元）中位數",
+          "zh-Hans": "家庭住户每月租金（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金與收入比率中位數",
+          "zh-Hans": "家庭住户每月租金与收入比率中位数"
+        }
+      },
+      {
+        "value": "Median floor area of accommodation of domestic households (square metres)",
+        "values": {
+          "zh-Hant": "家庭住戶的居所樓面面積中位數（平方米）",
+          "zh-Hans": "家庭住户的居所楼面面积中位数（平方米）"
+        }
+      },
+      {
+        "value": "Hong Kong Island",
+        "values": {
+          "zh-Hant": "香港島",
+          "zh-Hans": "香港岛"
+        }
+      },
+      {
+        "value": "Kowloon",
+        "values": {
+          "zh-Hant": "九龍",
+          "zh-Hans": "九龙"
+        }
+      },
+      {
+        "value": "New towns",
+        "values": {
+          "zh-Hant": "新市鎮",
+          "zh-Hans": "新市镇"
+        }
+      },
+      {
+        "value": "Other areas in the New Territories/ Marine",
+        "values": {
+          "zh-Hant": "新界其他地區／水上",
+          "zh-Hans": "新界其他地区／水上"
+        }
+      },
+      {
+        "value": "Moved home within same area of residence",
+        "values": {
+          "zh-Hant": "曾在同區遷居",
+          "zh-Hans": "曾在同区迁居"
+        }
+      },
+      {
+        "value": "Remained in same address",
+        "values": {
+          "zh-Hant": "仍居舊址",
+          "zh-Hans": "仍居旧址"
+        }
+      },
+      {
+        "value": "Place of residence outside Hong Kong",
+        "values": {
+          "zh-Hant": "居於香港以外地方",
+          "zh-Hans": "居于香港以外地方"
+        }
+      }
+    ],
+    "source_topic": [
+      {
+        "value": "Total population",
+        "values": {
+          "zh-Hant": "總人口",
+          "zh-Hans": "总人口"
+        }
+      },
+      {
+        "value": "Population by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的人口",
+          "zh-Hans": "按性别划分的人口"
+        }
+      },
+      {
+        "value": "Sex ratio (i.e. the number of males per 1 000 females in the respective age group)",
+        "values": {
+          "zh-Hant": "性別比率（即男性數目與每千名女性相對的比率）",
+          "zh-Hans": "性别比率（即男性数目与每千名女性相对的比率）"
+        }
+      },
+      {
+        "value": "Population by age group",
+        "values": {
+          "zh-Hant": "按年齡組別劃分的人口",
+          "zh-Hans": "按年龄组别划分的人口"
+        }
+      },
+      {
+        "value": "Median age by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的年齡中位數",
+          "zh-Hans": "按性别划分的年龄中位数"
+        }
+      },
+      {
+        "value": "Population by place of birth",
+        "values": {
+          "zh-Hant": "按出生地點劃分的人口",
+          "zh-Hans": "按出生地点划分的人口"
+        }
+      },
+      {
+        "value": "Population by ethnicity",
+        "values": {
+          "zh-Hant": "按種族劃分的人口",
+          "zh-Hans": "按种族划分的人口"
+        }
+      },
+      {
+        "value": "Males aged 15 and over by marital status",
+        "values": {
+          "zh-Hant": "按婚姻狀況劃分的15歲及以上男性人口",
+          "zh-Hans": "按婚姻状况划分的15岁及以上男性人口"
+        }
+      },
+      {
+        "value": "Females aged 15 and over by marital status",
+        "values": {
+          "zh-Hant": "按婚姻狀況劃分的15歲及以上女性人口",
+          "zh-Hans": "按婚姻状况划分的15岁及以上女性人口"
+        }
+      },
+      {
+        "value": "Population aged 5 and over by usual spoken language",
+        "values": {
+          "zh-Hant": "按慣用交談語言劃分的5歲及以上人口",
+          "zh-Hans": "按惯用交谈语言划分的5岁及以上人口"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read Chinese",
+        "values": {
+          "zh-Hant": "能閱讀中文的5歲及以上人口比例",
+          "zh-Hans": "能阅读中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read English",
+        "values": {
+          "zh-Hant": "能閱讀英文的5歲及以上人口比例",
+          "zh-Hans": "能阅读英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write Chinese",
+        "values": {
+          "zh-Hant": "能書寫中文的5歲及以上人口比例",
+          "zh-Hans": "能书写中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write English",
+        "values": {
+          "zh-Hant": "能書寫英文的5歲及以上人口比例",
+          "zh-Hans": "能书写英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Population aged 15 and over by educational attainment (highest level attended)",
+        "values": {
+          "zh-Hant": "按教育程度（最高就讀程度）劃分的15歲及以上人口",
+          "zh-Hans": "按教育程度（最高就读程度）划分的15岁及以上人口"
+        }
+      },
+      {
+        "value": "Persons studying full-time courses in educational institutions in Hong Kong by place of study",
+        "values": {
+          "zh-Hant": "按上課地點劃分的於香港院校就讀全日制課程的人口",
+          "zh-Hans": "按上课地点划分的于香港院校就读全日制课程的人口"
+        }
+      },
+      {
+        "value": "Labour force",
+        "values": {
+          "zh-Hant": "勞動人口",
+          "zh-Hans": "劳动人口"
+        }
+      },
+      {
+        "value": "Labour force by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的勞動人口",
+          "zh-Hans": "按性别划分的劳动人口"
+        }
+      },
+      {
+        "value": "Labour force participation rate by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的勞動人口參與率",
+          "zh-Hans": "按性别划分的劳动人口参与率"
+        }
+      },
+      {
+        "value": "Working population",
+        "values": {
+          "zh-Hant": "工作人口",
+          "zh-Hans": "工作人口"
+        }
+      },
+      {
+        "value": "Working population by employment status",
+        "values": {
+          "zh-Hant": "按就業身分劃分的工作人口",
+          "zh-Hans": "按就业身分划分的工作人口"
+        }
+      },
+      {
+        "value": "Non-working population",
+        "values": {
+          "zh-Hant": "非工作人口",
+          "zh-Hans": "非工作人口"
+        }
+      },
+      {
+        "value": "Non-working population by economic activity status",
+        "values": {
+          "zh-Hant": "按經濟活動身分劃分的非工作人口",
+          "zh-Hans": "按经济活动身分划分的非工作人口"
+        }
+      },
+      {
+        "value": "Working population by place of work",
+        "values": {
+          "zh-Hant": "按工作地點劃分的工作人口",
+          "zh-Hans": "按工作地点划分的工作人口"
+        }
+      },
+      {
+        "value": "Working population (excluding unpaid family workers) by monthly income from main employment (HK$)",
+        "values": {
+          "zh-Hant": "按每月主要職業收入（港元）劃分的工作人口（不包括無酬家庭從業員）",
+          "zh-Hans": "按每月主要职业收入（港元）划分的工作人口（不包括无酬家庭从业员）"
+        }
+      },
+      {
+        "value": "Median monthly income from main employment (HK$) (excluding unpaid family workers) by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的每月主要職業收入（港元）中位數（不包括無酬家庭從業員）",
+          "zh-Hans": "按性别划分的每月主要职业收入（港元）中位数（不包括无酬家庭从业员）"
+        }
+      },
+      {
+        "value": "Working population (excluding foreign domestic helpers and unpaid family workers) by monthly income from main employment (HK$)",
+        "values": {
+          "zh-Hant": "按每月主要職業收入（港元）劃分的工作人口（不包括外籍家庭傭工及無酬家庭從業員）",
+          "zh-Hans": "按每月主要职业收入（港元）划分的工作人口（不包括外籍家庭佣工及无酬家庭从业员）"
+        }
+      },
+      {
+        "value": "Median monthly income from main employment (HK$) (excluding foreign domestic helpers and unpaid family workers) by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的每月主要職業收入（港元）中位數（不包括外籍家庭傭工及無酬家庭從業員）",
+          "zh-Hans": "按性别划分的每月主要职业收入（港元）中位数（不包括外籍家庭佣工及无酬家庭从业员）"
+        }
+      },
+      {
+        "value": "Working population by occupation",
+        "values": {
+          "zh-Hant": "按職業劃分的工作人口",
+          "zh-Hans": "按职业划分的工作人口"
+        }
+      },
+      {
+        "value": "Working population by industry",
+        "values": {
+          "zh-Hant": "按行業劃分的工作人口",
+          "zh-Hans": "按行业划分的工作人口"
+        }
+      },
+      {
+        "value": "Working population by weekly usual hours of work of all employment",
+        "values": {
+          "zh-Hant": "按所有工作的每周通常工作時數劃分的工作人口",
+          "zh-Hans": "按所有工作的每周通常工作时数划分的工作人口"
+        }
+      },
+      {
+        "value": "Domestic households",
+        "values": {
+          "zh-Hant": "家庭住戶數目",
+          "zh-Hans": "家庭住户数目"
+        }
+      },
+      {
+        "value": "Domestic households by household size",
+        "values": {
+          "zh-Hant": "按住戶人數劃分的家庭住戶數目",
+          "zh-Hans": "按住户人数划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Average domestic household size",
+        "values": {
+          "zh-Hant": "家庭住戶平均人數",
+          "zh-Hans": "家庭住户平均人数"
+        }
+      },
+      {
+        "value": "Domestic households by household composition",
+        "values": {
+          "zh-Hant": "按住戶結構劃分的家庭住戶數目",
+          "zh-Hans": "按住户结构划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Domestic households by monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "按家庭住戶每月收入（港元）劃分的家庭住戶數目",
+          "zh-Hans": "按家庭住户每月收入（港元）划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Median monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月收入（港元）中位數",
+          "zh-Hans": "家庭住户每月收入（港元）中位数"
+        }
+      },
+      {
+        "value": "Economically active domestic households by monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "按家庭住戶每月收入（港元）劃分的從事經濟活動的家庭住戶數目",
+          "zh-Hans": "按家庭住户每月收入（港元）划分的从事经济活动的家庭住户数目"
+        }
+      },
+      {
+        "value": "Median monthly household income (HK$) of economically active domestic households",
+        "values": {
+          "zh-Hant": "從事經濟活動的家庭住戶每月收入中位數（港元）",
+          "zh-Hans": "从事经济活动的家庭住户每月收入中位数（港元）"
+        }
+      },
+      {
+        "value": "Occupied quarters by type of housing",
+        "values": {
+          "zh-Hant": "按房屋類型劃分的有人居住的屋宇單位數目",
+          "zh-Hans": "按房屋类型划分的有人居住的屋宇单位数目"
+        }
+      },
+      {
+        "value": "Domestic households by type of housing",
+        "values": {
+          "zh-Hant": "按房屋類型劃分的家庭住戶數目",
+          "zh-Hans": "按房屋类型划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Population by type of housing",
+        "values": {
+          "zh-Hant": "按房屋類型劃分的人口",
+          "zh-Hans": "按房屋类型划分的人口"
+        }
+      },
+      {
+        "value": "Domestic households by number of rooms (excluding kitchens and toilets/ bathrooms)",
+        "values": {
+          "zh-Hant": "按廳房數目﹝不包括廚房及廁所﹞劃分的家庭住戶數目",
+          "zh-Hans": "按厅房数目﹝不包括厨房及厕所﹞划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Domestic households by tenure of accommodation",
+        "values": {
+          "zh-Hant": "按居所租住權劃分的家庭住戶數目",
+          "zh-Hans": "按居所租住权划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Domestic households with mortgage payment or loan repayment by monthly domestic household mortgage payment and loan repayment (HK$)",
+        "values": {
+          "zh-Hant": "按家庭住戶每月按揭供款及借貸還款（港元）劃分的有按揭供款或借貸還款的家庭住戶數目",
+          "zh-Hans": "按家庭住户每月按揭供款及借贷还款（港元）划分的有按揭供款或借贷还款的家庭住户数目"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款（港元）中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款與收入比率中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款与收入比率中位数"
+        }
+      },
+      {
+        "value": "Domestic households renting the accommodation they occupy by monthly domestic household rent (HK$)",
+        "values": {
+          "zh-Hant": "按家庭住戶每月租金（港元）劃分的居於租住居所的家庭住戶數目",
+          "zh-Hans": "按家庭住户每月租金（港元）划分的居于租住居所的家庭住户数目"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金（港元）中位數",
+          "zh-Hans": "家庭住户每月租金（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金與收入比率中位數",
+          "zh-Hans": "家庭住户每月租金与收入比率中位数"
+        }
+      },
+      {
+        "value": "Median floor area of accommodation of domestic households (square metres)",
+        "values": {
+          "zh-Hant": "家庭住戶的居所樓面面積中位數（平方米）",
+          "zh-Hans": "家庭住户的居所楼面面积中位数（平方米）"
+        }
+      },
+      {
+        "value": "Population aged 5 and over having internally migrated by area of residence 5 years ago",
+        "values": {
+          "zh-Hant": "按5年前居住地區劃分的曾作內部遷移的5歲及以上人口",
+          "zh-Hans": "按5年前居住地区划分的曾作内部迁移的5岁及以上人口"
+        }
+      },
+      {
+        "value": "Population aged 5 and over not having internally migrated by area of residence 5 years ago",
+        "values": {
+          "zh-Hant": "按5年前居住地區劃分的並無作內部遷移的5歲及以上人口",
+          "zh-Hans": "按5年前居住地区划分的并无作内部迁移的5岁及以上人口"
+        }
+      }
+    ],
+    "universe": [
+      {
+        "value": "Total population",
+        "values": {
+          "zh-Hant": "總人口",
+          "zh-Hans": "总人口"
+        }
+      },
+      {
+        "value": "Population by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的人口",
+          "zh-Hans": "按性别划分的人口"
+        }
+      },
+      {
+        "value": "Sex ratio (i.e. the number of males per 1 000 females in the respective age group)",
+        "values": {
+          "zh-Hant": "性別比率（即男性數目與每千名女性相對的比率）",
+          "zh-Hans": "性别比率（即男性数目与每千名女性相对的比率）"
+        }
+      },
+      {
+        "value": "Population by age group",
+        "values": {
+          "zh-Hant": "按年齡組別劃分的人口",
+          "zh-Hans": "按年龄组别划分的人口"
+        }
+      },
+      {
+        "value": "Median age by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的年齡中位數",
+          "zh-Hans": "按性别划分的年龄中位数"
+        }
+      },
+      {
+        "value": "Population by place of birth",
+        "values": {
+          "zh-Hant": "按出生地點劃分的人口",
+          "zh-Hans": "按出生地点划分的人口"
+        }
+      },
+      {
+        "value": "Population by ethnicity",
+        "values": {
+          "zh-Hant": "按種族劃分的人口",
+          "zh-Hans": "按种族划分的人口"
+        }
+      },
+      {
+        "value": "Males aged 15 and over by marital status",
+        "values": {
+          "zh-Hant": "按婚姻狀況劃分的15歲及以上男性人口",
+          "zh-Hans": "按婚姻状况划分的15岁及以上男性人口"
+        }
+      },
+      {
+        "value": "Females aged 15 and over by marital status",
+        "values": {
+          "zh-Hant": "按婚姻狀況劃分的15歲及以上女性人口",
+          "zh-Hans": "按婚姻状况划分的15岁及以上女性人口"
+        }
+      },
+      {
+        "value": "Population aged 5 and over by usual spoken language",
+        "values": {
+          "zh-Hant": "按慣用交談語言劃分的5歲及以上人口",
+          "zh-Hans": "按惯用交谈语言划分的5岁及以上人口"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read Chinese",
+        "values": {
+          "zh-Hant": "能閱讀中文的5歲及以上人口比例",
+          "zh-Hans": "能阅读中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to read English",
+        "values": {
+          "zh-Hant": "能閱讀英文的5歲及以上人口比例",
+          "zh-Hans": "能阅读英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write Chinese",
+        "values": {
+          "zh-Hant": "能書寫中文的5歲及以上人口比例",
+          "zh-Hans": "能书写中文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Proportion of population aged 5 and over able to write English",
+        "values": {
+          "zh-Hant": "能書寫英文的5歲及以上人口比例",
+          "zh-Hans": "能书写英文的5岁及以上人口比例"
+        }
+      },
+      {
+        "value": "Population aged 15 and over by educational attainment (highest level attended)",
+        "values": {
+          "zh-Hant": "按教育程度（最高就讀程度）劃分的15歲及以上人口",
+          "zh-Hans": "按教育程度（最高就读程度）划分的15岁及以上人口"
+        }
+      },
+      {
+        "value": "Persons studying full-time courses in educational institutions in Hong Kong by place of study",
+        "values": {
+          "zh-Hant": "按上課地點劃分的於香港院校就讀全日制課程的人口",
+          "zh-Hans": "按上课地点划分的于香港院校就读全日制课程的人口"
+        }
+      },
+      {
+        "value": "Labour force",
+        "values": {
+          "zh-Hant": "勞動人口",
+          "zh-Hans": "劳动人口"
+        }
+      },
+      {
+        "value": "Labour force by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的勞動人口",
+          "zh-Hans": "按性别划分的劳动人口"
+        }
+      },
+      {
+        "value": "Labour force participation rate by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的勞動人口參與率",
+          "zh-Hans": "按性别划分的劳动人口参与率"
+        }
+      },
+      {
+        "value": "Working population",
+        "values": {
+          "zh-Hant": "工作人口",
+          "zh-Hans": "工作人口"
+        }
+      },
+      {
+        "value": "Working population by employment status",
+        "values": {
+          "zh-Hant": "按就業身分劃分的工作人口",
+          "zh-Hans": "按就业身分划分的工作人口"
+        }
+      },
+      {
+        "value": "Non-working population",
+        "values": {
+          "zh-Hant": "非工作人口",
+          "zh-Hans": "非工作人口"
+        }
+      },
+      {
+        "value": "Non-working population by economic activity status",
+        "values": {
+          "zh-Hant": "按經濟活動身分劃分的非工作人口",
+          "zh-Hans": "按经济活动身分划分的非工作人口"
+        }
+      },
+      {
+        "value": "Working population by place of work",
+        "values": {
+          "zh-Hant": "按工作地點劃分的工作人口",
+          "zh-Hans": "按工作地点划分的工作人口"
+        }
+      },
+      {
+        "value": "Working population (excluding unpaid family workers) by monthly income from main employment (HK$)",
+        "values": {
+          "zh-Hant": "按每月主要職業收入（港元）劃分的工作人口（不包括無酬家庭從業員）",
+          "zh-Hans": "按每月主要职业收入（港元）划分的工作人口（不包括无酬家庭从业员）"
+        }
+      },
+      {
+        "value": "Median monthly income from main employment (HK$) (excluding unpaid family workers) by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的每月主要職業收入（港元）中位數（不包括無酬家庭從業員）",
+          "zh-Hans": "按性别划分的每月主要职业收入（港元）中位数（不包括无酬家庭从业员）"
+        }
+      },
+      {
+        "value": "Working population (excluding foreign domestic helpers and unpaid family workers) by monthly income from main employment (HK$)",
+        "values": {
+          "zh-Hant": "按每月主要職業收入（港元）劃分的工作人口（不包括外籍家庭傭工及無酬家庭從業員）",
+          "zh-Hans": "按每月主要职业收入（港元）划分的工作人口（不包括外籍家庭佣工及无酬家庭从业员）"
+        }
+      },
+      {
+        "value": "Median monthly income from main employment (HK$) (excluding foreign domestic helpers and unpaid family workers) by sex",
+        "values": {
+          "zh-Hant": "按性別劃分的每月主要職業收入（港元）中位數（不包括外籍家庭傭工及無酬家庭從業員）",
+          "zh-Hans": "按性别划分的每月主要职业收入（港元）中位数（不包括外籍家庭佣工及无酬家庭从业员）"
+        }
+      },
+      {
+        "value": "Working population by occupation",
+        "values": {
+          "zh-Hant": "按職業劃分的工作人口",
+          "zh-Hans": "按职业划分的工作人口"
+        }
+      },
+      {
+        "value": "Working population by industry",
+        "values": {
+          "zh-Hant": "按行業劃分的工作人口",
+          "zh-Hans": "按行业划分的工作人口"
+        }
+      },
+      {
+        "value": "Working population by weekly usual hours of work of all employment",
+        "values": {
+          "zh-Hant": "按所有工作的每周通常工作時數劃分的工作人口",
+          "zh-Hans": "按所有工作的每周通常工作时数划分的工作人口"
+        }
+      },
+      {
+        "value": "Domestic households",
+        "values": {
+          "zh-Hant": "家庭住戶數目",
+          "zh-Hans": "家庭住户数目"
+        }
+      },
+      {
+        "value": "Domestic households by household size",
+        "values": {
+          "zh-Hant": "按住戶人數劃分的家庭住戶數目",
+          "zh-Hans": "按住户人数划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Average domestic household size",
+        "values": {
+          "zh-Hant": "家庭住戶平均人數",
+          "zh-Hans": "家庭住户平均人数"
+        }
+      },
+      {
+        "value": "Domestic households by household composition",
+        "values": {
+          "zh-Hant": "按住戶結構劃分的家庭住戶數目",
+          "zh-Hans": "按住户结构划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Domestic households by monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "按家庭住戶每月收入（港元）劃分的家庭住戶數目",
+          "zh-Hans": "按家庭住户每月收入（港元）划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Median monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月收入（港元）中位數",
+          "zh-Hans": "家庭住户每月收入（港元）中位数"
+        }
+      },
+      {
+        "value": "Economically active domestic households by monthly domestic household income (HK$)",
+        "values": {
+          "zh-Hant": "按家庭住戶每月收入（港元）劃分的從事經濟活動的家庭住戶數目",
+          "zh-Hans": "按家庭住户每月收入（港元）划分的从事经济活动的家庭住户数目"
+        }
+      },
+      {
+        "value": "Median monthly household income (HK$) of economically active domestic households",
+        "values": {
+          "zh-Hant": "從事經濟活動的家庭住戶每月收入中位數（港元）",
+          "zh-Hans": "从事经济活动的家庭住户每月收入中位数（港元）"
+        }
+      },
+      {
+        "value": "Occupied quarters by type of housing",
+        "values": {
+          "zh-Hant": "按房屋類型劃分的有人居住的屋宇單位數目",
+          "zh-Hans": "按房屋类型划分的有人居住的屋宇单位数目"
+        }
+      },
+      {
+        "value": "Domestic households by type of housing",
+        "values": {
+          "zh-Hant": "按房屋類型劃分的家庭住戶數目",
+          "zh-Hans": "按房屋类型划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Population by type of housing",
+        "values": {
+          "zh-Hant": "按房屋類型劃分的人口",
+          "zh-Hans": "按房屋类型划分的人口"
+        }
+      },
+      {
+        "value": "Domestic households by number of rooms (excluding kitchens and toilets/ bathrooms)",
+        "values": {
+          "zh-Hant": "按廳房數目﹝不包括廚房及廁所﹞劃分的家庭住戶數目",
+          "zh-Hans": "按厅房数目﹝不包括厨房及厕所﹞划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Domestic households by tenure of accommodation",
+        "values": {
+          "zh-Hant": "按居所租住權劃分的家庭住戶數目",
+          "zh-Hans": "按居所租住权划分的家庭住户数目"
+        }
+      },
+      {
+        "value": "Domestic households with mortgage payment or loan repayment by monthly domestic household mortgage payment and loan repayment (HK$)",
+        "values": {
+          "zh-Hant": "按家庭住戶每月按揭供款及借貸還款（港元）劃分的有按揭供款或借貸還款的家庭住戶數目",
+          "zh-Hans": "按家庭住户每月按揭供款及借贷还款（港元）划分的有按揭供款或借贷还款的家庭住户数目"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款（港元）中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household mortgage payment and loan repayment to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月按揭供款及借貸還款與收入比率中位數",
+          "zh-Hans": "家庭住户每月按揭供款及借贷还款与收入比率中位数"
+        }
+      },
+      {
+        "value": "Domestic households renting the accommodation they occupy by monthly domestic household rent (HK$)",
+        "values": {
+          "zh-Hant": "按家庭住戶每月租金（港元）劃分的居於租住居所的家庭住戶數目",
+          "zh-Hans": "按家庭住户每月租金（港元）划分的居于租住居所的家庭住户数目"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent (HK$)",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金（港元）中位數",
+          "zh-Hans": "家庭住户每月租金（港元）中位数"
+        }
+      },
+      {
+        "value": "Median monthly domestic household rent to income ratio",
+        "values": {
+          "zh-Hant": "家庭住戶每月租金與收入比率中位數",
+          "zh-Hans": "家庭住户每月租金与收入比率中位数"
+        }
+      },
+      {
+        "value": "Median floor area of accommodation of domestic households (square metres)",
+        "values": {
+          "zh-Hant": "家庭住戶的居所樓面面積中位數（平方米）",
+          "zh-Hans": "家庭住户的居所楼面面积中位数（平方米）"
+        }
+      },
+      {
+        "value": "Population aged 5 and over having internally migrated by area of residence 5 years ago",
+        "values": {
+          "zh-Hant": "按5年前居住地區劃分的曾作內部遷移的5歲及以上人口",
+          "zh-Hans": "按5年前居住地区划分的曾作内部迁移的5岁及以上人口"
+        }
+      },
+      {
+        "value": "Population aged 5 and over not having internally migrated by area of residence 5 years ago",
+        "values": {
+          "zh-Hant": "按5年前居住地區劃分的並無作內部遷移的5歲及以上人口",
+          "zh-Hans": "按5年前居住地区划分的并无作内部迁移的5岁及以上人口"
+        }
+      }
+    ],
+    "value_status": [
+      {
+        "value": "published",
+        "values": {
+          "zh-Hant": "已公布",
+          "zh-Hans": "已公布"
+        }
+      },
+      {
+        "value": "published_nil",
+        "values": {
+          "zh-Hant": "公布為零",
+          "zh-Hans": "公布为零"
+        }
+      },
+      {
+        "value": "not_applicable",
+        "values": {
+          "zh-Hant": "不適用",
+          "zh-Hans": "不适用"
+        }
+      },
+      {
+        "value": "not_available",
+        "values": {
+          "zh-Hant": "未能提供",
+          "zh-Hans": "未能提供"
+        }
+      }
+    ],
+    "measure_kind": [
+      {
+        "value": "count",
+        "values": {
+          "zh-Hant": "數目",
+          "zh-Hans": "数目"
+        }
+      },
+      {
+        "value": "rate",
+        "values": {
+          "zh-Hant": "比率",
+          "zh-Hans": "比率"
+        }
+      },
+      {
+        "value": "median",
+        "values": {
+          "zh-Hant": "中位數",
+          "zh-Hans": "中位数"
+        }
+      },
+      {
+        "value": "average",
+        "values": {
+          "zh-Hant": "平均數",
+          "zh-Hans": "平均数"
+        }
+      }
+    ],
+    "unit": [
+      {
+        "value": "persons",
+        "values": {
+          "zh-Hant": "人",
+          "zh-Hans": "人"
+        }
+      },
+      {
+        "value": "households",
+        "values": {
+          "zh-Hant": "戶",
+          "zh-Hans": "户"
+        }
+      },
+      {
+        "value": "quarters",
+        "values": {
+          "zh-Hant": "屋宇單位",
+          "zh-Hans": "屋宇单位"
+        }
+      },
+      {
+        "value": "HKD",
+        "values": {
+          "zh-Hant": "港元",
+          "zh-Hans": "港元"
+        }
+      },
+      {
+        "value": "years",
+        "values": {
+          "zh-Hant": "歲",
+          "zh-Hans": "岁"
+        }
+      },
+      {
+        "value": "percent",
+        "values": {
+          "zh-Hant": "百分比",
+          "zh-Hans": "百分比"
+        }
+      },
+      {
+        "value": "persons per household",
+        "values": {
+          "zh-Hant": "每戶人數",
+          "zh-Hans": "每户人数"
+        }
+      },
+      {
+        "value": "square metres",
+        "values": {
+          "zh-Hant": "平方米",
+          "zh-Hans": "平方米"
+        }
+      },
+      {
+        "value": "males per 1,000 females",
+        "values": {
+          "zh-Hant": "每千名女性的男性數目",
+          "zh-Hans": "每千名女性的男性数目"
+        }
+      }
+    ],
+    "footnotes": [
+      {
+        "value": "(1) Figures include persons who reported more than one ethnicity.",
+        "values": {
+          "zh-Hant": "(1) 數字包括報稱有多於一個種族的人士。",
+          "zh-Hans": "(1) 数字包括报称有多于一个种族的人士。"
+        }
+      },
+      {
+        "value": "(11) A household comprising a married couple without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).",
+        "values": {
+          "zh-Hant": "(11) 由一對已婚夫婦而並無其他親屬所組成的住戶。這類住戶可包括或不包括其他無親屬關係的同住人士，例如家庭傭工。",
+          "zh-Hans": "(11) 由一对已婚夫妇而并无其他亲属所组成的住户。这类住户可包括或不包括其他无亲属关系的同住人士，例如家庭佣工。"
+        }
+      },
+      {
+        "value": "(12) A household comprising a couple and their unmarried child(ren) without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).",
+        "values": {
+          "zh-Hant": "(12) 由一對夫婦及其未婚子女而並無其他親屬所組成的住戶。這類住戶可包括或不包括其他無親屬關係的同住人士，例如家庭傭工。",
+          "zh-Hans": "(12) 由一对夫妇及其未婚子女而并无其他亲属所组成的住户。这类住户可包括或不包括其他无亲属关系的同住人士，例如家庭佣工。"
+        }
+      },
+      {
+        "value": "(13) A household comprising a father or mother and his/ her unmarried child(ren) without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).",
+        "values": {
+          "zh-Hant": "(13) 由父／母一方及其未婚子女而並無其他親屬所組成的住戶。這類住戶可包括或不包括其他無親屬關係的同住人士，例如家庭傭工。",
+          "zh-Hans": "(13) 由父／母一方及其未婚子女而并无其他亲属所组成的住户。这类住户可包括或不包括其他无亲属关系的同住人士，例如家庭佣工。"
+        }
+      },
+      {
+        "value": "(14) A household comprising a couple and at least one of their parents (including the parent(s) of the wife and/ or husband) without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).",
+        "values": {
+          "zh-Hant": "(14) 由一對夫婦及其至少一個父或母親（包括夫婦雙方的父母親）而並無其他親屬所組成的住戶。這類住戶可包括或不包括其他無親屬關係的同住人士，例如家庭傭工。",
+          "zh-Hans": "(14) 由一对夫妇及其至少一个父或母亲（包括夫妇双方的父母亲）而并无其他亲属所组成的住户。这类住户可包括或不包括其他无亲属关系的同住人士，例如家庭佣工。"
+        }
+      },
+      {
+        "value": "(15) A household comprising a couple, at least one of their parents (including the parent(s) of the wife and/ or husband) and their unmarried children without any other related persons. It may or may not include other unrelated persons (e.g. domestic helpers).",
+        "values": {
+          "zh-Hant": "(15) 由一對夫婦、至少一個父或母親（包括夫婦雙方的父母親）及其未婚子女而並無其他親屬所組成的住戶。這類住戶可包括或不包括其他無親屬關係的同住人士，例如家庭傭工。",
+          "zh-Hans": "(15) 由一对夫妇、至少一个父或母亲（包括夫妇双方的父母亲）及其未婚子女而并无其他亲属所组成的住户。这类住户可包括或不包括其他无亲属关系的同住人士，例如家庭佣工。"
+        }
+      },
+      {
+        "value": "(16) A household comprising a group of related persons but not being classified in the other categories. It may or may not include other unrelated persons (e.g. domestic helpers).",
+        "values": {
+          "zh-Hant": "(16) 由一羣有親屬關係人士所組成但未能歸入其他類別的住戶。這類住戶可包括或不包括其他無親屬關係的同住人士，例如家庭傭工。",
+          "zh-Hans": "(16) 由一群有亲属关系人士所组成但未能归入其他类别的住户。这类住户可包括或不包括其他无亲属关系的同住人士，例如家庭佣工。"
+        }
+      },
+      {
+        "value": "(17) A household with only one person.",
+        "values": {
+          "zh-Hant": "(17) 只有一個人的住戶。",
+          "zh-Hans": "(17) 只有一个人的住户。"
+        }
+      },
+      {
+        "value": "(18) A household comprising unrelated person(s).",
+        "values": {
+          "zh-Hant": "(18) 由一羣無親屬關係人士所組成的住戶。",
+          "zh-Hans": "(18) 由一群无亲属关系人士所组成的住户。"
+        }
+      },
+      {
+        "value": "(19) Economically active household refers to a domestic household with at least one member (excluding foreign domestic helpers) being economically active.",
+        "values": {
+          "zh-Hant": "(19) 從事經濟活動的家庭住戶是指家庭住戶內除外籍家庭傭工外至少有一名其他成員從事經濟活動。",
+          "zh-Hans": "(19) 从事经济活动的家庭住户是指家庭住户内除外籍家庭佣工外至少有一名其他成员从事经济活动。"
+        }
+      },
+      {
+        "value": "(2) Figures exclude mute persons.",
+        "values": {
+          "zh-Hant": "(2) 數字不包括失去語言能力的人士。",
+          "zh-Hans": "(2) 数字不包括失去语言能力的人士。"
+        }
+      },
+      {
+        "value": "(20) Zero rent households include households living in accommodation of friends or relatives without paying any rent with or without permission, main tenant households with total rental receipts from sub-tenant(s) greater than or equal to rent paid, and those households whose quarters were provided free by employers.",
+        "values": {
+          "zh-Hant": "(20) 租金金額是 0 的住戶包括居住在親友家中無論是否得到許可而沒有繳付租金的住戶、向三房客收取的租金總值超過或相等於大租的二房東住戶及由僱主免費提供住所的住戶。",
+          "zh-Hans": "(20) 租金金额是 0 的住户包括居住在亲友家中无论是否得到许可而没有缴付租金的住户、向三房客收取的租金总值超过或相等于大租的二房东住户及由雇主免费提供住所的住户。"
+        }
+      },
+      {
+        "value": "(21) Figures exclude domestic households living in unsheltered accommodation or on board vessels. Floor area of common area shared among households is excluded.",
+        "values": {
+          "zh-Hant": "(21) 數字不包括居於非屋宇單位或船艇的家庭住戶。與其他住戶共同佔用的樓面面積不包括在內。",
+          "zh-Hans": "(21) 数字不包括居于非屋宇单位或船艇的家庭住户。与其他住户共同占用的楼面面积不包括在内。"
+        }
+      },
+      {
+        "value": "(22) Persons having internally migrated were those whose area of current residence was different from the area of residence 5 years ago. In defining internal migration, a change in the area of residence refers to a move (a) from a District Council district to another District Council district; or (b) within a District Council district in the New Territories, from a new town to another new town, or from a new town to other areas in the district or vice versa.",
+        "values": {
+          "zh-Hant": "(22) 曾作內部遷移的人士指該人士的現住地區與其5年前的居住地區不同。在分析內部遷移時，居住地區的轉變是指（a）一區議會分區與另一區議會分區之間的遷移，或（b）在新界同一區議會分區內，一新市鎮與另一新市鎮之間的遷移，或一新市鎮與該區其他地方之間的遷移。",
+          "zh-Hans": "(22) 曾作内部迁移的人士指该人士的现住地区与其5年前的居住地区不同。在分析内部迁移时，居住地区的转变是指（a）一区议会分区与另一区议会分区之间的迁移，或（b）在新界同一区议会分区内，一新市镇与另一新市镇之间的迁移，或一新市镇与该区其他地方之间的迁移。"
+        }
+      },
+      {
+        "value": "(22) Persons having internally migrated were those whose area of current residence was different from the area of residence 5 years ago. In defining internal migration, a change in the area of residence refers to a move (a) from a District Council district to another District Council district; or (b) within a District Council district in the New Territories, from a new town to another new town, or from a new town to other areas in the district or vice versa. (23) Figures include persons who currently live in the same address as 5 years ago but had moved elsewhere during the 5 years and then moved back.",
+        "values": {
+          "zh-Hant": "(22) 曾作內部遷移的人士指該人士的現住地區與其5年前的居住地區不同。在分析內部遷移時，居住地區的轉變是指（a）一區議會分區與另一區議會分區之間的遷移，或（b）在新界同一區議會分區內，一新市鎮與另一新市鎮之間的遷移，或一新市鎮與該區其他地方之間的遷移。 (23) 數字包括現住於 5 年前住址，但在 5 年期間曾遷往其他地方，並稍後遷回的人士。",
+          "zh-Hans": "(22) 曾作内部迁移的人士指该人士的现住地区与其5年前的居住地区不同。在分析内部迁移时，居住地区的转变是指（a）一区议会分区与另一区议会分区之间的迁移，或（b）在新界同一区议会分区内，一新市镇与另一新市镇之间的迁移，或一新市镇与该区其他地方之间的迁移。 (23) 数字包括现住于 5 年前住址，但在 5 年期间曾迁往其他地方，并稍后迁回的人士。"
+        }
+      },
+      {
+        "value": "(3) Persons who study in the same district include: (a) those who live on Hong Kong Island or in Kowloon and study in the same District Council district; (b) those who live in a new town and study in the same new town; and (c) those who live in other areas in the New Territories and study in areas other than new town areas of the same District Council district.",
+        "values": {
+          "zh-Hant": "(3) 同區就讀的人士包括（a）在香港島或九龍居住並在同一區議會分區內上課的人士，（b）在新市鎮居住並在同一新市鎮上課的人士，及（c）在新界其他地方居住並在同一區議會分區非新市鎮地區內上課的人士。",
+          "zh-Hans": "(3) 同区就读的人士包括（a）在香港岛或九龙居住并在同一区议会分区内上课的人士，（b）在新市镇居住并在同一新市镇上课的人士，及（c）在新界其他地方居住并在同一区议会分区非新市镇地区内上课的人士。"
+        }
+      },
+      {
+        "value": "(4) The proportion of labour force in the total population aged 15 and over.",
+        "values": {
+          "zh-Hant": "(4) 勞動人口佔所有 15 歲及以上人口的百分比。",
+          "zh-Hans": "(4) 劳动人口占所有 15 岁及以上人口的百分比。"
+        }
+      },
+      {
+        "value": "(5) The classification of economic activity status for economically inactive population adopted in the 2021 Population Census (i.e. “Home-makers”, “Students”, “Retired persons”, “Unpaid carers” and “Others”) slightly differs from that adopted in the 2011 Population Census and 2016 Population By-census (i.e. “Home-makers”, “Students”, “Retired persons” and “Others”). Therefore, caution should be taken when comparing figures for 2021 with those for 2011 and/or 2016.",
+        "values": {
+          "zh-Hant": "(5) 2021年人口普查所採用非從事經濟活動人口的經濟活動身分分類（即「料理家務者」、「學生」、「退休人士」、「無酬照顧者」及「其他」），跟2011年人口普查及2016年中期人口統計所採用的分類（即「料理家務者」、「學生」、「退休人士」及「其他」）稍有分別，因此2021年統計數字與2011年及／或2016年統計數字作比較時須加以留意。",
+          "zh-Hans": "(5) 2021年人口普查所采用非从事经济活动人口的经济活动身分分类（即「料理家务者」、「学生」、「退休人士」、「无酬照顾者」及「其他」），跟2011年人口普查及2016年中期人口统计所采用的分类（即「料理家务者」、「学生」、「退休人士」及「其他」）稍有分别，因此2021年统计数字与2011年及／或2016年统计数字作比较时须加以留意。"
+        }
+      },
+      {
+        "value": "(5) The classification of economic activity status for economically inactive population adopted in the 2021 Population Census (i.e. “Home-makers”, “Students”, “Retired persons”, “Unpaid carers” and “Others”) slightly differs from that adopted in the 2011 Population Census and 2016 Population By-census (i.e. “Home-makers”, “Students”, “Retired persons” and “Others”). Therefore, caution should be taken when comparing figures for 2021 with those for 2011 and/or 2016. (6) Unpaid carers refer to persons who are engaged in unpaid care to family members or other persons (including persons with chronic diseases/disability and old/young persons).",
+        "values": {
+          "zh-Hant": "(5) 2021年人口普查所採用非從事經濟活動人口的經濟活動身分分類（即「料理家務者」、「學生」、「退休人士」、「無酬照顧者」及「其他」），跟2011年人口普查及2016年中期人口統計所採用的分類（即「料理家務者」、「學生」、「退休人士」及「其他」）稍有分別，因此2021年統計數字與2011年及／或2016年統計數字作比較時須加以留意。 (6) 無酬照顧者指須無酬照顧親人或其他人士（包括長期病患、殘疾或年長／年幼的人士）的人。",
+          "zh-Hans": "(5) 2021年人口普查所采用非从事经济活动人口的经济活动身分分类（即「料理家务者」、「学生」、「退休人士」、「无酬照顾者」及「其他」），跟2011年人口普查及2016年中期人口统计所采用的分类（即「料理家务者」、「学生」、「退休人士」及「其他」）稍有分别，因此2021年统计数字与2011年及／或2016年统计数字作比较时须加以留意。 (6) 无酬照顾者指须无酬照顾亲人或其他人士（包括长期病患、残疾或年长／年幼的人士）的人。"
+        }
+      },
+      {
+        "value": "(7) Persons who work in the same district include: (a) those who live on Hong Kong Island or in Kowloon and work in the same District Council district; (b) those who live in a new town and work in the same new town; and (c) those who live in other areas in the New Territories and work in areas other than new town areas of the same District Council district. Persons who work at home are excluded.",
+        "values": {
+          "zh-Hant": "(7) 同區工作的人士包括（a）在香港島或九龍居住並在同一區議會分區內工作的人士，（b）在新市鎮居住並在同一新市鎮工作的人士，及（c）在新界其他地方居住並在同一區議會分區非新市鎮地區內工作的人士。於家中工作的人士並不包括在內。",
+          "zh-Hans": "(7) 同区工作的人士包括（a）在香港岛或九龙居住并在同一区议会分区内工作的人士，（b）在新市镇居住并在同一新市镇工作的人士，及（c）在新界其他地方居住并在同一区议会分区非新市镇地区内工作的人士。于家中工作的人士并不包括在内。"
+        }
+      },
+      {
+        "value": "(8) A new occupation classification scheme which follows “International Standard Classification Occupations 2008 (ISCO-08)” more closely was adopted in the 2021 Population Census.",
+        "values": {
+          "zh-Hant": "(8) 2021 年人口普查採用了新的職業分類方法，此職業分類方法更為貼近「國際標準職業分類法2008 年版」。",
+          "zh-Hans": "(8) 2021 年人口普查采用了新的职业分类方法，此职业分类方法更为贴近「国际标准职业分类法2008 年版」。"
+        }
+      },
+      {
+        "value": "(9) Figures are compiled based on the industry classification modelled on the Hong Kong Standard Industrial Classification Version 2.0.",
+        "values": {
+          "zh-Hant": "(9) 數字是按「香港標準行業分類2.0 版」為藍本的行業分類而編製。",
+          "zh-Hans": "(9) 数字是按「香港标准行业分类2.0 版」为蓝本的行业分类而编制。"
+        }
+      },
+      {
+        "value": "(9) Figures are compiled based on the industry classification modelled on the Hong Kong Standard Industrial Classification Version 2.0. (10) \"Others\" include \"Agriculture, forestry and fishing\"; \"Mining and quarrying\"; \"Electricity and gas supply\"; \"Water supply; sewerage, waste management and remediation activities\" and industrial activities unidentifiable or inadequately described.",
+        "values": {
+          "zh-Hant": "(9) 數字是按「香港標準行業分類2.0 版」為藍本的行業分類而編製。 (10) 「其他」包括「農業、林業及漁業」、「採礦及採石」、「電力及燃氣供應」、「自來水供應；污水處理、廢棄物管理及污染防治活動」等行業，及報稱的行業不能辨別或描述不足。",
+          "zh-Hans": "(9) 数字是按「香港标准行业分类2.0 版」为蓝本的行业分类而编制。 (10) 「其他」包括「农业、林业及渔业」、「采矿及采石」、「电力及燃气供应」、「自来水供应；污水处理、废弃物管理及污染防治活动」等行业，及报称的行业不能辨别或描述不足。"
+        }
+      }
+    ],
+    "age_band": [
+      {
+        "value": "00-04",
+        "values": {
+          "zh-Hant": "0至4歲",
+          "zh-Hans": "0至4岁"
+        }
+      },
+      {
+        "value": "05-09",
+        "values": {
+          "zh-Hant": "5至9歲",
+          "zh-Hans": "5至9岁"
+        }
+      },
+      {
+        "value": "10-14",
+        "values": {
+          "zh-Hant": "10至14歲",
+          "zh-Hans": "10至14岁"
+        }
+      },
+      {
+        "value": "15-19",
+        "values": {
+          "zh-Hant": "15至19歲",
+          "zh-Hans": "15至19岁"
+        }
+      },
+      {
+        "value": "20-24",
+        "values": {
+          "zh-Hant": "20至24歲",
+          "zh-Hans": "20至24岁"
+        }
+      },
+      {
+        "value": "25-29",
+        "values": {
+          "zh-Hant": "25至29歲",
+          "zh-Hans": "25至29岁"
+        }
+      },
+      {
+        "value": "30-34",
+        "values": {
+          "zh-Hant": "30至34歲",
+          "zh-Hans": "30至34岁"
+        }
+      },
+      {
+        "value": "35-39",
+        "values": {
+          "zh-Hant": "35至39歲",
+          "zh-Hans": "35至39岁"
+        }
+      },
+      {
+        "value": "40-44",
+        "values": {
+          "zh-Hant": "40至44歲",
+          "zh-Hans": "40至44岁"
+        }
+      },
+      {
+        "value": "45-49",
+        "values": {
+          "zh-Hant": "45至49歲",
+          "zh-Hans": "45至49岁"
+        }
+      },
+      {
+        "value": "50-54",
+        "values": {
+          "zh-Hant": "50至54歲",
+          "zh-Hans": "50至54岁"
+        }
+      },
+      {
+        "value": "55-59",
+        "values": {
+          "zh-Hant": "55至59歲",
+          "zh-Hans": "55至59岁"
+        }
+      },
+      {
+        "value": "60-64",
+        "values": {
+          "zh-Hant": "60至64歲",
+          "zh-Hans": "60至64岁"
+        }
+      },
+      {
+        "value": "65-69",
+        "values": {
+          "zh-Hant": "65至69歲",
+          "zh-Hans": "65至69岁"
+        }
+      },
+      {
+        "value": "70-74",
+        "values": {
+          "zh-Hant": "70至74歲",
+          "zh-Hans": "70至74岁"
+        }
+      },
+      {
+        "value": "75-79",
+        "values": {
+          "zh-Hant": "75至79歲",
+          "zh-Hans": "75至79岁"
+        }
+      },
+      {
+        "value": "80-84",
+        "values": {
+          "zh-Hant": "80至84歲",
+          "zh-Hans": "80至84岁"
+        }
+      },
+      {
+        "value": "85+",
+        "values": {
+          "zh-Hant": "85歲及以上",
+          "zh-Hans": "85岁及以上"
+        }
+      }
+    ]
+  }
+}

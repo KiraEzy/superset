@@ -1,0 +1,2 @@
+# Chat worker/client dependency pin. Do not install into or upgrade the MCP server.
+fastmcp==3.1.0

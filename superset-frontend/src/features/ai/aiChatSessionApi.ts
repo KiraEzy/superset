@@ -37,20 +37,27 @@ function toTimestamp(value: string | undefined): number {
   return Number.isNaN(parsed) ? Date.now() : parsed;
 }
 
-function mapChartsFromExtra(extra: Record<string, unknown>): AiChatChartPayload[] {
+function mapChartsFromExtra(
+  extra: Record<string, unknown>,
+): AiChatChartPayload[] {
   const raw = extra.charts;
   if (!Array.isArray(raw)) {
     return [];
   }
   return raw
-    .filter((item): item is Record<string, unknown> => Boolean(item && typeof item === 'object'))
+    .filter((item): item is Record<string, unknown> =>
+      Boolean(item && typeof item === 'object'),
+    )
     .map((item, index) => {
       const formData = item.form_data;
       const vizType = item.viz_type;
       if (typeof vizType !== 'string' || !vizType.trim()) {
         return null;
       }
-      if ((!formData || typeof formData !== 'object') && typeof item.slice_id !== 'number') {
+      if (
+        (!formData || typeof formData !== 'object') &&
+        typeof item.slice_id !== 'number'
+      ) {
         return null;
       }
       const chart: AiChatChartPayload = {
@@ -79,6 +86,19 @@ export function mapApiMessage(message: ApiChatMessage): ChatMessage {
   const extra = message.extra ?? {};
   return {
     id: String(message.id),
+    attachments: Array.isArray(extra.attachments)
+      ? (extra.attachments as import('./runtime').ImageReference[])
+      : [],
+    activity: extra.activity as
+      | import('./runtime').WorkActivityData
+      | undefined,
+    runtimeTurnId:
+      typeof extra.runtime_turn_id === 'string'
+        ? extra.runtime_turn_id
+        : undefined,
+    artifacts: Array.isArray(extra.artifacts)
+      ? (extra.artifacts as import('./runtime').Artifact[])
+      : [],
     role: message.role,
     content: message.content,
     timestamp: toTimestamp(message.created_on),
@@ -98,6 +118,7 @@ export function mapApiSessionSummary(
     id: session.uuid,
     dbId: session.id,
     title: session.title,
+    isPinned: Boolean(session.is_pinned),
     createdAt: toTimestamp(session.created_on),
     updatedAt: toTimestamp(session.changed_on),
   };
@@ -106,11 +127,23 @@ export function mapApiSessionSummary(
 export function mapApiSession(session: ApiChatSession): ChatSession {
   return {
     ...mapApiSessionSummary(session),
+    modelId: session.model_id,
+    activeTurn: session.active_turn,
+    latestTurn: session.latest_turn,
     messages: (session.messages ?? []).map(mapApiMessage),
   };
 }
 
 type ClientErrorInput = Parameters<typeof getClientErrorObject>[0];
+
+export class ChatSessionRequestError extends Error {
+  constructor(
+    message: string,
+    readonly status?: number,
+  ) {
+    super(message);
+  }
+}
 
 function risonEncode(value: Record<string, unknown>): string {
   const entries = Object.entries(value).map(([key, val]) => {
@@ -127,10 +160,13 @@ function risonEncode(value: Record<string, unknown>): string {
 
 async function throwFormattedClientError(error: unknown): Promise<never> {
   const clientError = await getClientErrorObject(error as ClientErrorInput);
-  throw new Error(
+  throw new ChatSessionRequestError(
     formatAiChatError(
       clientError.message || clientError.error || error || 'Request failed',
     ),
+    'status' in clientError && typeof clientError.status === 'number'
+      ? clientError.status
+      : undefined,
   );
 }
 
@@ -201,6 +237,21 @@ export async function deleteChatSession(sessionUuid: string): Promise<void> {
     });
   } catch (error) {
     await throwFormattedClientError(error);
+  }
+}
+
+export async function updateChatSessionPin(
+  sessionUuid: string,
+  isPinned: boolean,
+): Promise<ChatSessionSummary> {
+  try {
+    const { json } = await SupersetClient.put({
+      endpoint: `/api/v1/ai_chat_session/${sessionUuid}`,
+      jsonPayload: { is_pinned: isPinned },
+    });
+    return mapApiSessionSummary(json.result as ApiChatSessionSummary);
+  } catch (error) {
+    return throwFormattedClientError(error);
   }
 }
 

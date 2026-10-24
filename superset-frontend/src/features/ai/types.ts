@@ -34,6 +34,10 @@ export interface GenerationActivityEntry {
 }
 
 export interface ChatMessage {
+  attachments?: import('./runtime').ImageReference[];
+  activity?: import('./runtime').WorkActivityData;
+  runtimeTurnId?: string;
+  artifacts?: import('./runtime').Artifact[];
   id: string;
   role: 'user' | 'assistant';
   content: string;
@@ -47,6 +51,7 @@ export interface ChatMessage {
 }
 
 export interface ChatSessionSummary {
+  isPinned?: boolean;
   id: string;
   dbId: number;
   title: string;
@@ -55,6 +60,9 @@ export interface ChatSessionSummary {
 }
 
 export interface ChatSession extends ChatSessionSummary {
+  modelId?: string;
+  activeTurn?: { id: string; status: string } | null;
+  latestTurn?: { id: string; status: string } | null;
   messages: ChatMessage[];
 }
 
@@ -67,6 +75,7 @@ export interface ApiChatMessage {
 }
 
 export interface ApiChatSessionSummary {
+  is_pinned?: boolean;
   id: number;
   uuid: string;
   title: string;
@@ -75,5 +84,8 @@ export interface ApiChatSessionSummary {
 }
 
 export interface ApiChatSession extends ApiChatSessionSummary {
+  model_id?: string;
+  active_turn?: { id: string; status: string } | null;
+  latest_turn?: { id: string; status: string } | null;
   messages?: ApiChatMessage[];
 }

@@ -1,0 +1,227 @@
+/* Keep native chart canvases readable; narrow screens can scroll across rows. */
+@media (max-width: 767px) {
+  .dashboard-content {
+    overflow-x: auto;
+  }
+
+  .dashboard-content .grid-container {
+    min-width: 1040px;
+  }
+}
+
+/* Census ethnicity heatmap: chart 155 only. */
+#chart-id-155 { color:#0b1f33; font:14px/1.35 Arial,sans-serif; }
+#chart-id-155 p { margin:0 0 8px; }
+#chart-id-155 p:nth-of-type(2),#chart-id-155 p:last-child { font-size:12px; color:#40566b; }
+#chart-id-155 div:has(>span:nth-child(4)) { display:flex; align-items:center; gap:10px; margin:12px 0; font-size:12px; }
+#chart-id-155 div:has(>span:nth-child(4))>span:nth-child(2) { display:inline-block; width:180px; height:12px; background:linear-gradient(to right,#f7fbff,#4c92c3); }
+#chart-id-155 table { width:100%; border-collapse:separate; border-spacing:2px; table-layout:fixed; }
+#chart-id-155 th { font-weight:500; text-align:center; background:#fff; padding:5px 8px; }
+#chart-id-155 thead th:first-child,#chart-id-155 tbody th { width:27%; text-align:left; }
+#chart-id-155 tbody th span { font-size:11px; color:#526777; }
+#chart-id-155 td { text-align:center; padding:7px; position:relative; color:#0b1f33; font-variant-numeric:tabular-nums; }
+#chart-id-155 td>span:nth-child(2) { display:none; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); background:#fff; color:#0b1f33; border:1px solid #8299ab; border-radius:4px; padding:8px 12px; min-width:175px; box-shadow:0 2px 8px #0002; pointer-events:none; z-index:8; font-size:12px; }
+#chart-id-155 td:hover>span:nth-child(2),#chart-id-155 td:focus>span:nth-child(2) { display:block; }
+#chart-id-155 td:focus { outline:2px solid #142d59; outline-offset:-2px; }
+#chart-id-155 table+p { margin-top:12px; }
+#chart-id-155 td[title^="Central and Western /"][title*="— Filipino /"] { background-color:rgb(135,182,216); }
+#chart-id-155 td[title^="Central and Western /"][title*="— Indonesian /"] { background-color:rgb(211,229,242); }
+#chart-id-155 td[title^="Central and Western /"][title*="— White /"] { background-color:rgb(166,201,227); }
+#chart-id-155 td[title^="Central and Western /"][title*="— Others /"] { background-color:rgb(159,197,224); }
+#chart-id-155 td[title^="Eastern /"][title*="— Filipino /"] { background-color:rgb(198,221,238); }
+#chart-id-155 td[title^="Eastern /"][title*="— Indonesian /"] { background-color:rgb(210,228,242); }
+#chart-id-155 td[title^="Eastern /"][title*="— White /"] { background-color:rgb(241,247,253); }
+#chart-id-155 td[title^="Eastern /"][title*="— Others /"] { background-color:rgb(208,227,241); }
+#chart-id-155 td[title^="Islands /"][title*="— Filipino /"] { background-color:rgb(172,205,229); }
+#chart-id-155 td[title^="Islands /"][title*="— Indonesian /"] { background-color:rgb(226,238,248); }
+#chart-id-155 td[title^="Islands /"][title*="— White /"] { background-color:rgb(163,199,226); }
+#chart-id-155 td[title^="Islands /"][title*="— Others /"] { background-color:rgb(115,170,209); }
+#chart-id-155 td[title^="Kowloon City /"][title*="— Filipino /"] { background-color:rgb(185,213,233); }
+#chart-id-155 td[title^="Kowloon City /"][title*="— Indonesian /"] { background-color:rgb(211,229,242); }
+#chart-id-155 td[title^="Kowloon City /"][title*="— White /"] { background-color:rgb(244,249,254); }
+#chart-id-155 td[title^="Kowloon City /"][title*="— Others /"] { background-color:rgb(196,219,237); }
+#chart-id-155 td[title^="Kwai Tsing /"][title*="— Filipino /"] { background-color:rgb(233,242,250); }
+#chart-id-155 td[title^="Kwai Tsing /"][title*="— Indonesian /"] { background-color:rgb(228,239,248); }
+#chart-id-155 td[title^="Kwai Tsing /"][title*="— White /"] { background-color:rgb(246,250,255); }
+#chart-id-155 td[title^="Kwai Tsing /"][title*="— Others /"] { background-color:rgb(217,232,244); }
+#chart-id-155 td[title^="Kwun Tong /"][title*="— Filipino /"] { background-color:rgb(232,242,250); }
+#chart-id-155 td[title^="Kwun Tong /"][title*="— Indonesian /"] { background-color:rgb(227,238,248); }
+#chart-id-155 td[title^="Kwun Tong /"][title*="— White /"] { background-color:rgb(246,250,255); }
+#chart-id-155 td[title^="Kwun Tong /"][title*="— Others /"] { background-color:rgb(226,238,248); }
+#chart-id-155 td[title^="North /"][title*="— Filipino /"] { background-color:rgb(233,242,250); }
+#chart-id-155 td[title^="North /"][title*="— Indonesian /"] { background-color:rgb(223,237,247); }
+#chart-id-155 td[title^="North /"][title*="— White /"] { background-color:rgb(245,250,254); }
+#chart-id-155 td[title^="North /"][title*="— Others /"] { background-color:rgb(233,242,250); }
+#chart-id-155 td[title^="Sai Kung /"][title*="— Filipino /"] { background-color:rgb(199,221,238); }
+#chart-id-155 td[title^="Sai Kung /"][title*="— Indonesian /"] { background-color:rgb(218,233,245); }
+#chart-id-155 td[title^="Sai Kung /"][title*="— White /"] { background-color:rgb(226,238,247); }
+#chart-id-155 td[title^="Sai Kung /"][title*="— Others /"] { background-color:rgb(210,228,242); }
+#chart-id-155 td[title^="Sham Shui Po /"][title*="— Filipino /"] { background-color:rgb(220,234,245); }
+#chart-id-155 td[title^="Sham Shui Po /"][title*="— Indonesian /"] { background-color:rgb(224,237,247); }
+#chart-id-155 td[title^="Sham Shui Po /"][title*="— White /"] { background-color:rgb(244,249,254); }
+#chart-id-155 td[title^="Sham Shui Po /"][title*="— Others /"] { background-color:rgb(211,229,242); }
+#chart-id-155 td[title^="Sha Tin /"][title*="— Filipino /"] { background-color:rgb(217,232,244); }
+#chart-id-155 td[title^="Sha Tin /"][title*="— Indonesian /"] { background-color:rgb(220,234,246); }
+#chart-id-155 td[title^="Sha Tin /"][title*="— White /"] { background-color:rgb(244,249,254); }
+#chart-id-155 td[title^="Sha Tin /"][title*="— Others /"] { background-color:rgb(226,238,248); }
+#chart-id-155 td[title^="Southern /"][title*="— Filipino /"] { background-color:rgb(171,204,228); }
+#chart-id-155 td[title^="Southern /"][title*="— Indonesian /"] { background-color:rgb(216,232,244); }
+#chart-id-155 td[title^="Southern /"][title*="— White /"] { background-color:rgb(208,227,241); }
+#chart-id-155 td[title^="Southern /"][title*="— Others /"] { background-color:rgb(194,219,236); }
+#chart-id-155 td[title^="Tai Po /"][title*="— Filipino /"] { background-color:rgb(210,228,242); }
+#chart-id-155 td[title^="Tai Po /"][title*="— Indonesian /"] { background-color:rgb(217,232,244); }
+#chart-id-155 td[title^="Tai Po /"][title*="— White /"] { background-color:rgb(239,246,252); }
+#chart-id-155 td[title^="Tai Po /"][title*="— Others /"] { background-color:rgb(226,238,248); }
+#chart-id-155 td[title^="Tsuen Wan /"][title*="— Filipino /"] { background-color:rgb(209,227,242); }
+#chart-id-155 td[title^="Tsuen Wan /"][title*="— Indonesian /"] { background-color:rgb(217,232,244); }
+#chart-id-155 td[title^="Tsuen Wan /"][title*="— White /"] { background-color:rgb(243,249,254); }
+#chart-id-155 td[title^="Tsuen Wan /"][title*="— Others /"] { background-color:rgb(220,235,246); }
+#chart-id-155 td[title^="Tuen Mun /"][title*="— Filipino /"] { background-color:rgb(228,239,248); }
+#chart-id-155 td[title^="Tuen Mun /"][title*="— Indonesian /"] { background-color:rgb(227,239,248); }
+#chart-id-155 td[title^="Tuen Mun /"][title*="— White /"] { background-color:rgb(243,248,254); }
+#chart-id-155 td[title^="Tuen Mun /"][title*="— Others /"] { background-color:rgb(223,236,247); }
+#chart-id-155 td[title^="Wan Chai /"][title*="— Filipino /"] { background-color:rgb(112,168,207); }
+#chart-id-155 td[title^="Wan Chai /"][title*="— Indonesian /"] { background-color:rgb(200,222,239); }
+#chart-id-155 td[title^="Wan Chai /"][title*="— White /"] { background-color:rgb(184,212,233); }
+#chart-id-155 td[title^="Wan Chai /"][title*="— Others /"] { background-color:rgb(146,189,220); }
+#chart-id-155 td[title^="Wong Tai Sin /"][title*="— Filipino /"] { background-color:rgb(233,242,250); }
+#chart-id-155 td[title^="Wong Tai Sin /"][title*="— Indonesian /"] { background-color:rgb(225,238,247); }
+#chart-id-155 td[title^="Wong Tai Sin /"][title*="— White /"] { background-color:rgb(246,250,255); }
+#chart-id-155 td[title^="Wong Tai Sin /"][title*="— Others /"] { background-color:rgb(228,239,248); }
+#chart-id-155 td[title^="Yau Tsim Mong /"][title*="— Filipino /"] { background-color:rgb(192,217,236); }
+#chart-id-155 td[title^="Yau Tsim Mong /"][title*="— Indonesian /"] { background-color:rgb(214,231,243); }
+#chart-id-155 td[title^="Yau Tsim Mong /"][title*="— White /"] { background-color:rgb(234,243,250); }
+#chart-id-155 td[title^="Yau Tsim Mong /"][title*="— Others /"] { background-color:rgb(103,163,205); }
+#chart-id-155 td[title^="Yuen Long /"][title*="— Filipino /"] { background-color:rgb(220,235,246); }
+#chart-id-155 td[title^="Yuen Long /"][title*="— Indonesian /"] { background-color:rgb(220,234,245); }
+#chart-id-155 td[title^="Yuen Long /"][title*="— White /"] { background-color:rgb(245,250,254); }
+#chart-id-155 td[title^="Yuen Long /"][title*="— Others /"] { background-color:rgb(206,226,241); }
+
+/* BEGIN CENSUS INCOME COMPARISON */
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
+[id^="user-content-ci-census-income--"]{min-width:940px;color:#233745;font:13px/1.4 Arial,"Noto Sans",sans-serif;padding:2px 10px 18px 2px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-tc--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-sc--"]{display:none}
+body:has([id$="ci-income-locale"][lang="zh-Hant"]) [id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-en--"],body:has([id$="ci-income-locale"][lang="zh-Hans"]) [id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-en--"]{display:none}
+body:has([id$="ci-income-locale"][lang="zh-Hant"]) [id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-tc--"],body:has([id$="ci-income-locale"][lang="zh-Hans"]) [id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-sc--"]{display:inline}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-summary--"]{color:#536773;margin-bottom:16px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-legend--"]{display:flex;align-items:center;gap:9px 18px;flex-wrap:wrap;margin-bottom:24px;font-size:12px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-legend--"]>span{white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-swatch--"]{display:inline-block;width:17px;height:12px;border:1px solid #aebfca}
+[id^="user-content-ci-census-income--"] :is([id^="user-content-ci-inc-heading--"],[id^="user-content-ci-inc-axes--"],[id^="user-content-ci-inc-bottom-axes--"],[id^="user-content-ci-inc-row--"]){display:grid;grid-template-columns:155px minmax(600px,1fr) 110px;column-gap:20px;align-items:center}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-heading--"]{margin-bottom:12px;font-size:14px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-axes--"]{font-size:11px;color:#566a77;margin-bottom:7px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-percent-ticks--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-money-ticks--"]{display:flex;justify-content:space-between}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-rows--"]{display:flex;flex-direction:column}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-row--"]{height:34px;border-bottom:1px solid #eff2f5}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-district--"]{grid-column:1;grid-row:1;white-space:nowrap;font-size:12px}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-stack--"]{grid-column:2;grid-row:1;display:flex;height:24px;width:100%;position:relative}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]{display:block;position:relative;height:24px;box-shadow:inset -1px 0 rgba(255,255,255,.65);cursor:help;flex-shrink:0}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:focus,[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:focus{outline:2px solid #182f40;outline-offset:2px;z-index:4}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot-track--"]{grid-column:2;grid-row:1;height:24px;position:relative;pointer-events:none;z-index:21}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]{position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;background:#ffca55;border:2px solid #162f45;box-shadow:0 0 0 2px white;border-radius:50%;cursor:help;pointer-events:auto}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-value--"]{grid-column:3;grid-row:1;font-variant-numeric:tabular-nums;font-size:12px;text-align:right;white-space:nowrap}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-tip--"]{display:none;position:absolute;bottom:calc(100% + 7px);left:0;background:#173447;color:white;border-radius:4px;padding:8px 11px;white-space:nowrap;z-index:20;font-size:12px;font-weight:400;box-shadow:0 3px 12px #0003}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:hover,[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:focus,[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:hover,[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:focus{z-index:20}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:hover>[id^="user-content-ci-inc-tip--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-segment--"]:focus>[id^="user-content-ci-inc-tip--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:hover>[id^="user-content-ci-inc-tip--"],[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-dot--"]:focus>[id^="user-content-ci-inc-tip--"]{display:block}
+[id^="user-content-ci-census-income--"] [id^="user-content-ci-inc-foot--"]{margin-top:18px;color:#536773;font-size:12px}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-1"]{background:#e1edf7}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-2"]{background:#bed8ec}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-3"]{background:#91bddb}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-4"]{background:#64a0c8}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-5"]{background:#3c80b0}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-6"]{background:#205e91}
+[id^="user-content-ci-census-income--"] [id$="--inc-band-7"]{background:#123c65}
+
+[id^="user-content-ci-inc-segment--"]{width:attr(title type(<percentage>),0%)}
+[id^="user-content-ci-inc-dot--"]{left:attr(title type(<percentage>),0%)}
+[id^="user-content-ci-inc-bottom-axes--"]{font-size:11px;color:#566a77;margin-top:7px;row-gap:10px}
+[id^="user-content-ci-inc-money-title--"]{text-align:center;font-size:14px;font-weight:600;color:#233745}
+[id^="user-content-ci-inc-dot-key--"]{display:inline-block;width:12px;height:12px;background:#ffca55;border:2px solid #162f45;border-radius:50%}
+[id^="user-content-ci-inc-segment--"][id$="--inc-band-7"]>[id^="user-content-ci-inc-tip--"]{left:auto;right:0}
+[id^="user-content-ci-inc-row--"]:has([id^="user-content-ci-inc-segment--"]:hover),[id^="user-content-ci-inc-row--"]:focus-within,[id^="user-content-ci-inc-row--"]:has([id^="user-content-ci-inc-dot--"]:hover){position:relative;z-index:25}
+
+/* END CENSUS INCOME COMPARISON */
+
+/* BEGIN CENSUS HOUSEHOLD DUMBBELL */
+[id="user-content-hhdb-root"] { min-width:850px; color:#233745; font:13px/1.4 Arial,sans-serif; padding:8px 18px; }
+[id="user-content-hhdb-root"] p { margin:0 0 12px; }
+[id^="user-content-hhdb-tc--"],[id^="user-content-hhdb-sc--"] { display:none; }
+body:has([id$="hh-income-locale"][lang="zh-Hant"]) [id^="user-content-hhdb-en--"],body:has([id$="hh-income-locale"][lang="zh-Hans"]) [id^="user-content-hhdb-en--"] { display:none; }
+body:has([id$="hh-income-locale"][lang="zh-Hant"]) [id^="user-content-hhdb-tc--"],body:has([id$="hh-income-locale"][lang="zh-Hans"]) [id^="user-content-hhdb-sc--"] { display:inline; }
+[id="user-content-hhdb-axis"],[id^="user-content-hhdb-row--"] { display:grid; grid-template-columns:170px minmax(480px,1fr) 115px; gap:24px; align-items:center; }
+[id="user-content-hhdb-axis"] { font-size:11px; margin:25px 0 9px; }
+[id="user-content-hhdb-ticks"] { display:flex; justify-content:space-between; }
+[id^="user-content-hhdb-row--"] { height:35px; border-bottom:1px solid #eef2f5; }
+[id^="user-content-hhdb-track--"] { position:relative; height:35px; border-left:1px solid #dce4e9; border-right:1px solid #dce4e9; background:repeating-linear-gradient(to right,transparent 0%,transparent 14.15%,#edf1f5 14.15%,#edf1f5 14.2857%); }
+[id^="user-content-hhdb-start--"] { position:absolute; left:attr(title type(<percentage>),0%); top:50%; width:100%; height:0; }
+[id^="user-content-hhdb-link--"] { display:block; height:3px; background:#7395af; width:attr(title type(<percentage>),0%); transform:translateY(-50%); }
+[id^="user-content-hhdb-dot-"] { position:absolute; left:attr(title type(<percentage>),0%); top:50%; transform:translate(-50%,-50%); width:12px; height:12px; border-radius:50%; border:1px solid white; cursor:help; }
+[id^="user-content-hhdb-dot-all--"] { background:#70b5df; }
+[id^="user-content-hhdb-dot-active--"] { background:#173f66; }
+[id^="user-content-hhdb-tip-"] { display:none; position:absolute; bottom:18px; left:50%; transform:translateX(-50%); white-space:nowrap; padding:8px 11px; border-radius:4px; background:#173447; color:white; z-index:20; font-size:12px; }
+[id^="user-content-hhdb-dot-"]:hover,[id^="user-content-hhdb-dot-"]:focus { z-index:20; outline:2px solid #355d7d; outline-offset:2px; }
+[id^="user-content-hhdb-dot-"]:hover>[id^="user-content-hhdb-tip-"],[id^="user-content-hhdb-dot-"]:focus>[id^="user-content-hhdb-tip-"] { display:block; }
+[id^="user-content-hhdb-gap--"] { text-align:right; font-variant-numeric:tabular-nums; }
+[id="user-content-hhdb-foot"] { margin-top:18px!important; color:#536773; font-size:12px; }
+/* END CENSUS HOUSEHOLD DUMBBELL */
+
+/* BEGIN CENSUS HOUSING WAFFLE */
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
+#chart-id-161 #user-content-housing-waffle{font:13px/1.45 Arial,"Noto Sans",sans-serif;color:#233745;padding:6px 12px;min-width:360px}
+#chart-id-161 [id^="user-content-hw-tc-"],#chart-id-161 [id^="user-content-hw-sc-"]{display:none}
+body:has([id$="housing-waffle-locale"][lang="zh-Hant"]) #chart-id-161 [id^="user-content-hw-en-"],body:has([id$="housing-waffle-locale"][lang="zh-Hans"]) #chart-id-161 [id^="user-content-hw-en-"]{display:none}
+body:has([id$="housing-waffle-locale"][lang="zh-Hant"]) #chart-id-161 [id^="user-content-hw-tc-"],body:has([id$="housing-waffle-locale"][lang="zh-Hans"]) #chart-id-161 [id^="user-content-hw-sc-"]{display:inline}
+#chart-id-161 #user-content-hw-total{font-size:16px;margin-bottom:5px}
+#chart-id-161 #user-content-hw-caption{color:#526774;font-size:12px;margin-bottom:16px}
+#chart-id-161 #user-content-hw-grid{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px;width:100%;max-width:430px;margin-bottom:18px}
+#chart-id-161 [id^="user-content-hw-cell-"]{aspect-ratio:1;position:relative;cursor:help}
+#chart-id-161 [id^="user-content-hw-tip-"]{display:none;position:absolute;bottom:calc(100% + 6px);left:0;background:#173447;color:white;padding:8px 10px;border-radius:3px;min-width:180px;width:max-content;max-width:240px;font-size:12px;z-index:20;box-shadow:0 3px 10px #0003}
+#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+11)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+12)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+13)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+14)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+15)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+16)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+17)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+18)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+19)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n)>span{left:auto;right:0}
+#chart-id-161 [id^="user-content-hw-cell-"]:hover,#chart-id-161 [id^="user-content-hw-cell-"]:focus{z-index:20;outline:2px solid #142f41;outline-offset:1px}
+#chart-id-161 [id^="user-content-hw-cell-"]:hover>span,#chart-id-161 [id^="user-content-hw-cell-"]:focus>span{display:block}
+#chart-id-161 [id^="user-content-hw-legend-row-"]{display:grid;grid-template-columns:13px minmax(0,1fr) 86px;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid #edf1f4}
+#chart-id-161 [id^="user-content-hw-swatch-"]{width:12px;height:12px;display:inline-block}
+#chart-id-161 [id^="user-content-hw-number-"]{text-align:right;font-size:12px;font-variant-numeric:tabular-nums}
+#chart-id-161 [id^="user-content-hw-cell-1-"],#chart-id-161 #user-content-hw-swatch-1{background:#2b6fa3}
+#chart-id-161 [id^="user-content-hw-cell-2-"],#chart-id-161 #user-content-hw-swatch-2{background:#469b92}
+#chart-id-161 [id^="user-content-hw-cell-3-"],#chart-id-161 #user-content-hw-swatch-3{background:#153e5c}
+#chart-id-161 [id^="user-content-hw-cell-4-"],#chart-id-161 #user-content-hw-swatch-4{background:#bc7b30}
+#chart-id-161 [id^="user-content-hw-cell-5-"],#chart-id-161 #user-content-hw-swatch-5{background:#8765a5}
+
+/* END CENSUS HOUSING WAFFLE */

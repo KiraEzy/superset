@@ -23,6 +23,8 @@ import {
 } from "@superset-ui/core";
 import { RendererContext } from "./context";
 import { registry, renderKey } from "./registry";
+import { MapInteractionContext } from "./MapInteraction";
+import { colorTreemapGroups } from "./treemap-colors";
 export type { Props } from "focalbi-native/SuperChartCore";
 
 /** Dispatch only after native query results arrive; Explore retains native rendering. */
@@ -38,16 +40,29 @@ const SuperChartCore = forwardRef<NativeCore, Props>((props, ref) => {
     (value: { raw: ChartProps }) => ({ ...value, post: props.postTransformProps }),
     [props.postTransformProps],
   );
+  const treemapColors = props.chartProps?.rawFormData?.focalbi_treemap_group_colors;
+  const nativePresentation = useCallback(
+    (transformed: Record<string, unknown>) => {
+      const colored = props.chartType === "treemap_v2"
+        ? colorTreemapGroups(transformed, treemapColors)
+        : transformed;
+      return props.postTransformProps ? props.postTransformProps(colored) : colored;
+    },
+    [props.chartType, props.postTransformProps, treemapColors],
+  );
   if (!engine || !registry[props.chartType] || props.overrideTransformProps) {
     return (
-      <>
-        {engine === "fork" && !registry[props.chartType] && !nativeFilter && (
+      <MapInteractionContext.Provider value={{
+        disableDrag: props.chartProps?.rawFormData?.focalbi_disable_map_drag === true,
+        disableZoom: props.chartProps?.rawFormData?.focalbi_disable_map_zoom === true,
+      }}>
+        {engine === "fork" && !registry[props.chartType] && !nativeFilter && props.chartProps?.rawFormData?.focalbi_hide_native_renderer_label !== true && (
           <span data-test="focalbi-native-fallback">
             Native renderer: {props.chartType}
           </span>
         )}
-        <NativeCore {...props} ref={ref} />
-      </>
+        <NativeCore {...props} ref={ref} postTransformProps={nativePresentation} />
+      </MapInteractionContext.Provider>
     );
   }
   return (

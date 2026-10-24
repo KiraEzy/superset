@@ -108,12 +108,19 @@ export async function testMcpConnection(
 }
 
 export async function testLlmConnection(
-  config: Pick<AiConnectionConfig, 'llmApiBaseUrl' | 'llmApiKey' | 'llmModel'>,
+  config: Pick<AiConnectionConfig, 'llmApiBaseUrl' | 'llmApiKey' | 'llmModel'> &
+    Partial<Pick<AiConnectionConfig, 'llmProvider'>> & {
+      llmConnectionId?: string;
+    },
 ): Promise<{ ok: boolean; message: string }> {
   return postAi<ProxyResponse>('test_llm/', {
     llmApiBaseUrl: config.llmApiBaseUrl,
     llmApiKey: config.llmApiKey,
     llmModel: config.llmModel,
+    ...(config.llmProvider ? { llmProvider: config.llmProvider } : {}),
+    ...(config.llmConnectionId
+      ? { llmConnectionId: config.llmConnectionId }
+      : {}),
   });
 }
 

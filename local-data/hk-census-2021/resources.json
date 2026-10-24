@@ -4,13 +4,15 @@
     "public.hk_census_2021_release",
     "public.hk_census_2021_geography",
     "public.hk_census_2021_indicator",
-    "public.hk_census_2021_cell"
+    "public.hk_census_2021_cell",
+    "public.hk_census_2021_age_sex"
   ],
   "physical_dataset_ids": [
     27,
     28,
     29,
-    30
+    30,
+    57
   ],
   "dashboard": {
     "id": 18,
@@ -20,6 +22,12 @@
     "published": true,
     "lan_url": "http://192.168.10.27:8088/superset/dashboard/18/",
     "anonymous_access": false,
+    "embedding_uuid": "1574273e-62ca-4082-94dd-fd7b013831a8",
+    "embedding_allowed_origins": [
+      "http://192.168.10.27:3040"
+    ],
+    "embedding_data_policy": "All published census rows; no guest row restrictions",
+    "query_cache_timeout_seconds": 2592000,
     "existing_website_embed_unchanged": true
   },
   "datasets": [
@@ -183,6 +191,95 @@
       "name": "HK Census 2021 - Published source cells",
       "url": "http://localhost:8088/explore/?datasource_type=table&datasource_id=53",
       "uuid": "f19c9183-1c30-429d-b282-00b4dbfaf525"
+    },
+    {
+      "key": "district_map",
+      "id": 55,
+      "uuid": "e20da594-7cba-4a2e-9edb-cf90a08ae7f8",
+      "name": "HK Census 2021 - District population map"
+    },
+    {
+      "key": "language_birthplace",
+      "id": 56,
+      "uuid": "09c38948-b6ee-48e7-93a6-fd5feac4b6ff",
+      "name": "HK Census 2021 - District language and birthplace",
+      "url": "http://localhost:8088/explore/?datasource_type=table&datasource_id=56",
+      "sql_file": "language-birthplace.sql",
+      "cache_timeout": 2592000
+    },
+    {
+      "key": "age_sex_pyramid",
+      "id": 58,
+      "uuid": "3a7b94fd-c9e2-454f-98ae-116f1450fb84",
+      "name": "HK Census 2021 - Age and sex by district",
+      "url": "http://localhost:8088/explore/?datasource_type=table&datasource_id=58"
+    },
+    {
+      "key": "ethnicity_heatmap",
+      "id": 59,
+      "uuid": "99a2cb72-79fa-447a-b18f-c6e25445fafe",
+      "name": "HK Census 2021 - District ethnicity heatmap",
+      "url": "http://localhost:8088/explore/?datasource_type=table&datasource_id=59",
+      "sql_file": "ethnicity-heatmap.sql",
+      "cache_timeout": 2592000
+    },
+    {
+      "key": "income_comparison",
+      "id": 60,
+      "uuid": "ab459e63-18c7-4a60-93d6-a1dbc6dbd786",
+      "name": "HK Census 2021 - District household income comparison",
+      "sql_file": "income-comparison.sql",
+      "cache_timeout": 2592000
+    },
+    {
+      "key": "household_income_dumbbell",
+      "id": 61,
+      "uuid": "c599d12e-0f3c-4d82-b1a0-b579ff529aeb",
+      "name": "HK Census 2021 - Household median income comparison",
+      "url": "http://localhost:8088/explore/?datasource_type=table&datasource_id=61",
+      "sql_file": "household-income-dumbbell.sql",
+      "cache_timeout": 2592000
+    },
+    {
+      "key": "household_income_cumulative",
+      "id": 62,
+      "uuid": "c66a1279-b198-496c-96ef-3a5a211aef5f",
+      "name": "HK Census 2021 - Cumulative household income",
+      "url": "http://localhost:8088/explore/?datasource_type=table&datasource_id=62",
+      "sql_file": "household-income-cumulative.sql",
+      "cache_timeout": 2592000
+    },
+    {
+      "key": "tenure_hierarchy",
+      "id": 63,
+      "uuid": "d410820d-1d40-4a1f-8f02-600cffad9568",
+      "name": "HK Census 2021 - Household tenure hierarchy",
+      "sql_file": "tenure-sunburst.sql",
+      "cache_timeout": 2592000
+    },
+    {
+      "key": "education_occupation",
+      "id": 64,
+      "uuid": "fd553379-9e42-4b07-93fe-a8b7217ec8f9",
+      "name": "HK Census 2021 - District education and occupations",
+      "sql_file": "education-occupation.sql",
+      "cache_timeout": 2592000
+    },
+    {
+      "key": "mobility_local_rates",
+      "id": 65,
+      "uuid": "23e57c9c-4fd8-4909-8f8c-f381b89bfd21",
+      "name": "HK Census 2021 - Mobility local-rates",
+      "sql_file": "mobility-local-rates.sql",
+      "cache_timeout": 2592000
+    },
+    {
+      "key": "mobility_residence",
+      "id": 66,
+      "uuid": "35a2928f-3581-4f0c-8488-daf719ab3b96",
+      "name": "HK Census 2021 - Mobility residence",
+      "sql_file": "mobility-residence.sql",
+      "cache_timeout": 2592000
     }
   ],
   "charts": [
@@ -228,13 +325,14 @@
     },
     {
       "key": "population_district",
-      "tab": "Overview",
-      "name": "Population by district",
+      "tab": "People and diversity",
+      "name": "Elderly dependency ratio by district",
       "dataset": "summary",
       "id": 149,
       "uuid": "c9bde77f-2dd9-4207-844a-1a7a805f41fa",
       "url": "http://localhost:8088/explore/?slice_id=149",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "echarts_timeseries_bar",
+      "metric": "elderly_dependency_per_1000"
     },
     {
       "key": "district_table",
@@ -248,9 +346,9 @@
     },
     {
       "key": "age",
-      "tab": "People and diversity",
-      "name": "Population by age band",
-      "dataset": "age",
+      "tab": "Overview",
+      "name": "Population pyramid by age and sex",
+      "dataset": "age_sex_pyramid",
       "id": 151,
       "uuid": "0823466b-7879-499a-b65e-2c1a54a278a8",
       "url": "http://localhost:8088/explore/?slice_id=151",
@@ -284,27 +382,27 @@
       "id": 154,
       "uuid": "f34a7e17-299e-40e6-bd8a-2657a1353344",
       "url": "http://localhost:8088/explore/?slice_id=154",
-      "viz_type": "pie"
+      "viz_type": "treemap_v2"
     },
     {
       "key": "ethnicity",
       "tab": "People and diversity",
-      "name": "Population by ethnicity",
-      "dataset": "ethnicity",
+      "name": "Ethnicity by district - non-Chinese groups",
+      "dataset": "ethnicity_heatmap",
       "id": 155,
       "uuid": "8abd3666-f264-4022-85af-e3eda03c7de3",
       "url": "http://localhost:8088/explore/?slice_id=155",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "handlebars"
     },
     {
       "key": "language",
       "tab": "People and diversity",
-      "name": "Usual spoken language - population aged 5+",
-      "dataset": "language",
+      "name": "English use and birthplace by district",
+      "dataset": "language_birthplace",
       "id": 156,
       "uuid": "edf53d73-f030-4bf5-9e17-bef16bf27e91",
       "url": "http://localhost:8088/explore/?slice_id=156",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "bubble_v2"
     },
     {
       "key": "household_size",
@@ -319,7 +417,7 @@
     {
       "key": "household_composition",
       "tab": "Households and income",
-      "name": "Domestic household composition",
+      "name": "Domestic household composition by district",
       "dataset": "household_composition",
       "id": 158,
       "uuid": "30a5ff54-27d6-4726-a80f-ea0881411364",
@@ -327,24 +425,14 @@
       "viz_type": "echarts_timeseries_bar"
     },
     {
-      "key": "household_income",
+      "key": "income_comparison",
       "tab": "Households and income",
-      "name": "Monthly domestic household income bands (HKD)",
-      "dataset": "household_income",
+      "name": "Household income distribution and median by district",
+      "dataset": "income_comparison",
       "id": 159,
       "uuid": "aa58289a-f102-4c73-9c12-e4a8fe7ff508",
       "url": "http://localhost:8088/explore/?slice_id=159",
-      "viz_type": "echarts_timeseries_bar"
-    },
-    {
-      "key": "median_household_income",
-      "tab": "Households and income",
-      "name": "Median monthly household income by district (HKD)",
-      "dataset": "summary",
-      "id": 160,
-      "uuid": "f0128c66-a69d-43e4-90fa-dc175a3bf0ab",
-      "url": "http://localhost:8088/explore/?slice_id=160",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "handlebars"
     },
     {
       "key": "housing",
@@ -354,17 +442,17 @@
       "id": 161,
       "uuid": "5a61fb7a-309a-4086-87ea-f9a5859830e4",
       "url": "http://localhost:8088/explore/?slice_id=161",
-      "viz_type": "pie"
+      "viz_type": "handlebars"
     },
     {
       "key": "tenure",
       "tab": "Housing",
       "name": "Domestic households by tenure",
-      "dataset": "tenure",
+      "dataset": "tenure_hierarchy",
       "id": 162,
       "uuid": "4b6a32e1-2c5a-461b-b918-cacbb5f3fa5d",
       "url": "http://localhost:8088/explore/?slice_id=162",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "sunburst_v2"
     },
     {
       "key": "rooms",
@@ -389,12 +477,12 @@
     {
       "key": "education",
       "tab": "Education and work",
-      "name": "Highest level attended - population aged 15+",
+      "name": "Educational attainment by region - population aged 15+",
       "dataset": "education",
       "id": 165,
       "uuid": "c0ff9bcd-d034-43c4-9159-56a755b00b74",
       "url": "http://localhost:8088/explore/?slice_id=165",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "sankey_v2"
     },
     {
       "key": "employment",
@@ -409,12 +497,12 @@
     {
       "key": "occupation",
       "tab": "Education and work",
-      "name": "Working population by occupation",
-      "dataset": "occupation",
+      "name": "Degree-level attendance and professional occupations by district",
+      "dataset": "education_occupation",
       "id": 167,
       "uuid": "b7ac6032-7401-45c4-87bb-4a29920c13e2",
       "url": "http://localhost:8088/explore/?slice_id=167",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "bubble_v2"
     },
     {
       "key": "industry",
@@ -424,7 +512,7 @@
       "id": 168,
       "uuid": "e1d925f6-4a6b-4d23-aad2-0853e271d5c5",
       "url": "http://localhost:8088/explore/?slice_id=168",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "treemap_v2"
     },
     {
       "key": "employment_income",
@@ -444,7 +532,7 @@
       "id": 170,
       "uuid": "a8d5e0f2-be4f-4d83-acf2-96b589903045",
       "url": "http://localhost:8088/explore/?slice_id=170",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "echarts_timeseries_scatter"
     },
     {
       "key": "workplace",
@@ -454,37 +542,37 @@
       "id": 171,
       "uuid": "2fe63463-5375-4fa0-a02b-b685643c6263",
       "url": "http://localhost:8088/explore/?slice_id=171",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "treemap_v2"
     },
     {
       "key": "studyplace",
       "tab": "Mobility and sources",
-      "name": "Full-time students by place of study",
-      "dataset": "studyplace",
+      "name": "Local study and work - spread across districts",
+      "dataset": "mobility_local_rates",
       "id": 172,
       "uuid": "74ae2961-025e-4484-8eca-b9946740edf1",
       "url": "http://localhost:8088/explore/?slice_id=172",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "box_plot"
     },
     {
       "key": "migration_status",
       "tab": "Mobility and sources",
-      "name": "Residence change over preceding five years - population aged 5+",
-      "dataset": "migration_status",
+      "name": "Residence change by district - population aged 5+",
+      "dataset": "mobility_residence",
       "id": 173,
       "uuid": "2635a92f-82f4-41f0-b8d3-482fb34e0093",
       "url": "http://localhost:8088/explore/?slice_id=173",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "heatmap_v2"
     },
     {
       "key": "migration_origin",
       "tab": "Mobility and sources",
-      "name": "Previous area of residence - internal migrants aged 5+",
+      "name": "Internal migration - previous area to current region",
       "dataset": "migration_origin",
       "id": 174,
       "uuid": "e4ab460a-0ae6-475b-ac26-d9e02a29989a",
       "url": "http://localhost:8088/explore/?slice_id=174",
-      "viz_type": "echarts_timeseries_bar"
+      "viz_type": "sankey_v2"
     },
     {
       "key": "source",
@@ -495,6 +583,36 @@
       "uuid": "9b80242e-c52b-4bac-9c9e-f07e1e511539",
       "url": "http://localhost:8088/explore/?slice_id=175",
       "viz_type": "table"
+    },
+    {
+      "key": "district_map",
+      "tab": "Overview",
+      "name": "Hong Kong district population map",
+      "dataset": "district_map",
+      "id": 181,
+      "uuid": "7c04c566-f6aa-432b-9d99-0b4d2c92a051",
+      "url": "http://localhost:8088/explore/?slice_id=181",
+      "viz_type": "deck_geojson"
+    },
+    {
+      "key": "household_income_dumbbell",
+      "tab": "Households and income",
+      "name": "Household income - all and economically active households",
+      "dataset": "household_income_dumbbell",
+      "id": 182,
+      "uuid": "b47f0b5d-dd63-4d9f-863f-c9c19b684b2c",
+      "url": "http://localhost:8088/explore/?slice_id=182",
+      "viz_type": "handlebars"
+    },
+    {
+      "key": "household_income_cumulative",
+      "tab": "Households and income",
+      "name": "Cumulative household income by region",
+      "dataset": "household_income_cumulative",
+      "id": 183,
+      "uuid": "423a7e39-d358-4e5b-b093-4c80cc8901fc",
+      "url": "http://localhost:8088/explore/?slice_id=183",
+      "viz_type": "echarts_timeseries_line"
     }
   ],
   "tabs": [
@@ -529,6 +647,13 @@
       "uuid": "027d0d33-b490-4ddf-8feb-58645c5764a6",
       "table": "hk_census_2021_cell",
       "schema": "public"
+    },
+    {
+      "key": "age_sex",
+      "id": 57,
+      "uuid": "57be21ac-79c4-4fc2-af46-e85a5d4785ae",
+      "name": "hk_census_2021_age_sex",
+      "url": "http://localhost:8088/explore/?datasource_type=table&datasource_id=57"
     }
   ],
   "native_filters": [
@@ -629,7 +754,8 @@
           171,
           172,
           173,
-          174
+          174,
+          181
         ],
         "rootPath": [
           "ROOT_ID"
@@ -764,7 +890,13 @@
         "page_length": 20,
         "include_search": true
       }
-    }
+    },
+    "layout_specification": "presentation.json",
+    "map_sql": "map.sql",
+    "dashboard_css": "dashboard.css",
+    "language_birthplace_sql": "language-birthplace.sql",
+    "pyramid_source": "pyramid-provenance.json",
+    "income_comparison_sql": "income-comparison.sql"
   },
   "local_exports": {
     "source_cells_csv": {
@@ -775,7 +907,21 @@
     "dashboard_yaml": {
       "path": "snapshot/dashboard-export.zip",
       "sha256": "c4f69fcfc0094f170623c0d887684e0cdcfae9419ef43f61bc4c1da688d846e4",
-      "contains_source_data": false
+      "contains_source_data": false,
+      "configuration_stage": "Archived original 31-chart layout, before the map and localization changes"
     }
-  }
+  },
+  "retained_charts": [
+    {
+      "key": "median_household_income",
+      "tab": "Households and income",
+      "name": "Median monthly household income by district (HKD)",
+      "dataset": "summary",
+      "id": 160,
+      "uuid": "f0128c66-a69d-43e4-90fa-dc175a3bf0ab",
+      "url": "http://localhost:8088/explore/?slice_id=160",
+      "viz_type": "echarts_timeseries_bar",
+      "retained_reason": "Saved definition retained; replaced on dashboard 18 by combined chart 159."
+    }
+  ]
 }

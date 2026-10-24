@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any
+from typing import Any, Iterator
 
 from flask import current_app, request, stream_with_context
 from flask_appbuilder.api import BaseApi, expose, protect, safe
@@ -113,11 +113,15 @@ class AIRestApi(BaseApi):
     @protect()
     @safe
     def test_llm(self) -> Response:
+        from superset import security_manager
+
+        if not security_manager.is_admin():
+            return self._json_response(403, {"message": "Administrator access required"})
         data = self._config_from_request()
         try:
             result = test_llm_connection(
                 llm_api_base_url=data.get("llmApiBaseUrl", ""),
-                llm_api_key=data.get("llmApiKey"),
+                llm_api_key=config_store.resolve_test_key(data),
                 llm_model=data.get("llmModel"),
             )
             return self._json_response(200, result)
@@ -132,6 +136,10 @@ class AIRestApi(BaseApi):
     @protect()
     @safe
     def test_mcp(self) -> Response:
+        from superset import security_manager
+
+        if not security_manager.is_admin():
+            return self._json_response(403, {"message": "Administrator access required"})
         from superset.views.ai.mcp_jwt import McpJwtError
 
         data = self._config_from_request()
@@ -158,6 +166,9 @@ class AIRestApi(BaseApi):
     @protect()
     @safe
     def chat(self) -> Response:
+        from superset.ai_runtime.settings import enabled
+        if enabled():
+            return self._json_response(409, {"message": "Submit a durable conversation turn", "code": "runtime_required"})
         from superset.views.ai.mcp_jwt import McpJwtError
 
         data = self._config_from_request()
@@ -199,6 +210,9 @@ class AIRestApi(BaseApi):
     @protect()
     @safe
     def chat_stream(self) -> Response:
+        from superset.ai_runtime.settings import enabled
+        if enabled():
+            return self._json_response(409, {"message": "Submit a durable conversation turn", "code": "runtime_required"})
         from superset.views.ai.mcp_jwt import McpJwtError
 
         data = self._config_from_request()
@@ -218,7 +232,7 @@ class AIRestApi(BaseApi):
             mcp_bearer_token=mcp_bearer_token,
         )
 
-        def generate():
+        def generate() -> Iterator[str]:
             try:
                 for event in iter_chat_completion_events(
                     llm_api_base_url=config["llmApiBaseUrl"],

@@ -5,8 +5,42 @@ sidebar_position: 9
 
 # FocalBI MCP and SOA-QPS dashboard
 
+## Built-in Chat runtime
+
+The built-in durable Chat uses the existing MCP service through its own FastMCP
+client. It does not require server changes or a new server endpoint. Install
+Chat dependencies only in the Chat web/AI worker environment; keep the MCP
+server image, settings and dependency environment unchanged. Existing external
+clients continue using the same endpoint and authentication.
+
+See [runtime architecture and action policy](../../developer_docs/extensions/ai-chat-runtime.md)
+and the [Chat deployment commands](../../../README.md#durable-ai-chat). The
+dedicated AI queue requires its own worker and dispatcher. Database events and
+checkpoints remain authoritative when a browser or Redis connection is lost.
+Model connections and shared MCP configuration are administrator-owned in AI
+Connection. Administrators verify and publish model choices; users select those
+models and may attach images with image-verified models. Chat users have no
+connection credential, token or OAuth controls. See the
+[Chat runtime architecture](../../developer_docs/extensions/ai-chat-runtime.md). That
+page also owns role/user Chat tool restrictions; native post-scoped MCP RBAC
+remains authoritative. Administrators repair shared services when needed.
+
+Chat-only model budgets can be configured per model with
+`AI_RUNTIME_MODEL_CONTEXT_LIMITS`. See the canonical
+[context budgeting and compaction contract](../../developer_docs/extensions/ai-chat-runtime.md#context-budgeting-and-compaction)
+for defaults, estimation limits and recovery behavior. Do not change MCP server
+configuration to adjust Chat context limits.
+
 For the separate population dashboard, see the
 [Hong Kong Census 2021 guide](./hk-census-2021.mdx) and its native MCP data workflow.
+
+Model reasoning display is a Chat-only, administrator-controlled preference for
+named self-hosted compatible model connections. See the
+[visibility and timing contract](../../developer_docs/extensions/ai-chat-runtime.md#evidence-contracts-and-latency-diagnostics)
+and the [user guide](../../docs/using-superset/using-ai-with-superset.mdx#watch-work-in-progress).
+Use per-request model_timing events and tool start/completion times to distinguish
+model-service time from tool time. Enabling this display does not enable thinking
+or change any Superset MCP behavior.
 
 ## Local Codex connection
 

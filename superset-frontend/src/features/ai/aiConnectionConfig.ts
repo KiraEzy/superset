@@ -35,7 +35,21 @@ export interface ProviderLlmSettings {
   llmApiKey: string;
 }
 
+export interface McpToolAccess {
+  roles: Record<string, string[]>;
+  users: Record<string, string[]>;
+}
+
+export interface McpAccessOptions {
+  roles: string[];
+  users: string[];
+  tools: string[];
+}
+
 export interface AiConnectionConfig extends ProviderLlmSettings {
+  showModelReasoning?: boolean;
+  llmAdapter?: 'chat_completions' | 'responses';
+  mcpToolAccess?: McpToolAccess;
   llmProvider: LlmProvider;
   mcpEnabled: boolean;
   mcpServerUrl: string;
@@ -45,6 +59,8 @@ export interface AiConnectionConfig extends ProviderLlmSettings {
 }
 
 export interface StoredAiConnectionState {
+  llmAdapter?: 'chat_completions' | 'responses';
+  mcpToolAccess?: McpToolAccess;
   llmProvider: LlmProvider;
   providerSettings: Partial<Record<LlmProvider, ProviderLlmSettings>>;
   mcpEnabled: boolean;
@@ -186,6 +202,12 @@ function normalizeStoredState(
         : DEFAULT_MCP.mcpBearerToken,
     agentMaxIterations: parseAgentMaxIterations(parsed.agentMaxIterations),
     systemPrompt: parseSystemPrompt(parsed.systemPrompt),
+    mcpToolAccess: (parsed.mcpToolAccess as McpToolAccess | undefined) ?? {
+      roles: {},
+      users: {},
+    },
+    llmAdapter:
+      parsed.llmAdapter === 'responses' ? 'responses' : 'chat_completions',
   };
 }
 
@@ -203,6 +225,8 @@ export function buildConfigFromState(
     mcpBearerToken: state.mcpBearerToken,
     agentMaxIterations: state.agentMaxIterations,
     systemPrompt: state.systemPrompt,
+    mcpToolAccess: state.mcpToolAccess ?? { roles: {}, users: {} },
+    llmAdapter: state.llmAdapter ?? 'chat_completions',
   };
 }
 
@@ -223,7 +247,17 @@ export function mergeConfigIntoState(
     mcpBearerToken: config.mcpBearerToken,
     agentMaxIterations: parseAgentMaxIterations(config.agentMaxIterations),
     systemPrompt: parseSystemPrompt(config.systemPrompt),
+    mcpToolAccess: config.mcpToolAccess ??
+      state.mcpToolAccess ?? { roles: {}, users: {} },
+    llmAdapter: config.llmAdapter ?? state.llmAdapter ?? 'chat_completions',
   };
+}
+
+export async function fetchMcpAccessOptions(): Promise<McpAccessOptions> {
+  const { json } = await SupersetClient.get({
+    endpoint: `${AI_CONNECTION_ENDPOINT}access-options/`,
+  });
+  return (json as { result: McpAccessOptions }).result;
 }
 
 /** Load the global AI connection config from the backend. */

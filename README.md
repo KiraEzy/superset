@@ -251,6 +251,65 @@ Understanding the Superset Points of View
 
 - [Superset API](https://superset.apache.org/docs/rest-api)
 
+## Durable AI Chat
+
+Use a Chat-only Python environment based on the application's normal requirements.
+Do not install these additional dependencies into the Superset MCP server image.
+Set `AI_CHAT_RUNTIME_ENABLED=true` in the Chat web and AI worker environments.
+Existing model keys and MCP settings remain encrypted in the shared configuration.
+Administrators manage named model connections, API protocols, the shared MCP server
+and role/user tool restrictions in **Settings > AI Connection**. Verify connections,
+then publish an ordered model list and default in the right-side model panel.
+Users select published models in the composer; credentials and connection settings
+remain administrator-only. Image-verified models accept private image attachments.
+See the [AI user guide](docs/docs/using-superset/using-ai-with-superset.mdx) and
+[runtime architecture](docs/developer_docs/extensions/ai-chat-runtime.md).
+
+```bash
+pip install -r requirements/ai-chat.txt
+superset db upgrade
+celery -A superset.ai_runtime.worker:app worker --beat --queues=ai --concurrency=4 --loglevel=INFO --schedule=/tmp/focal-ai-beat
+```
+
+Run one beat scheduler for this queue. Run additional workers without `--beat`.
+Keep the existing general-purpose Celery workers and MCP server unchanged.
+Start the Chat web application with the repository's normal web command.
+For Docker, append `docker/ai-chat/compose.yml` after **all existing web overlays**
+and start only `superset ai-worker` with `up -d --no-deps`. The dedicated worker
+inherits the base application environment and source mounts, and has no published
+web ports. If your deployment changes metadata, encryption or identity settings
+outside the base environment, apply those same settings to `ai-worker` as well.
+`FOCALBI_CHAT_IMAGE` can select a separately built Chat image with the pinned client
+dependency; it never changes the MCP server image.
+The override requires Compose 2.24 or newer for `!reset`. For the existing
+combined Focal BI installation, preserve both localization overlays:
+
+```powershell
+docker compose -f docker-compose-image-tag.yml -f local-modules/focalbi-localization/deployment/compose.yml -f local-modules/focalbi-localization/.runtime/assets.yml -f docker/ai-chat/compose.yml up -d --no-deps superset ai-worker
+```
+
+For rollback, append `docker/ai-chat/rollback.yml` and recreate only `superset`;
+keep the AI worker available for accepted turns. No MCP service is recreated.
+Retain the Chat override during future web recreations. If a localization or
+rendering activation command omits it, reapply the combined command above.
+For internal rollout, enable the flag only on the internal Chat web deployment.
+Turning it off disables new runtime submissions; it retains records and must not
+replay them through legacy Chat. See [runtime architecture and policy](docs/developer_docs/extensions/ai-chat-runtime.md).
+
+Legacy test cleanup is separate from schema migration. Capture the exact IDs
+before refactoring; inspect the manifest and dry run before applying it:
+
+```bash
+superset ai-runtime capture-legacy --output /secure/path/legacy-chat.json
+superset ai-runtime purge-legacy --manifest /secure/path/legacy-chat.json
+superset ai-runtime purge-legacy --manifest /secure/path/legacy-chat.json --apply
+pytest --confcutdir=tests/ai_runtime tests/ai_runtime -q
+```
+
+The purge checks captured IDs, UUIDs and legacy runtime versions, reports counts,
+and never deletes BI resources or connection settings. Run live provider and
+browser evaluations against staging before expanding rollout.
+
 ## Repo Activity
 
 <a href="https://next.ossinsight.io/widgets/official/compose-last-28-days-stats?repo_id=39464018" target="_blank" align="center">

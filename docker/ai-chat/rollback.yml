@@ -1,0 +1,10 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements. See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# Licensed under the Apache License, Version 2.0 (the "License").
+# Append after compose.yml and recreate only superset. Keep the worker available
+# for already accepted turns; do not replay them through the legacy runtime.
+services:
+  superset:
+    environment:
+      AI_CHAT_RUNTIME_ENABLED: 'false'

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Optional FocalBI saved chart presentation flags",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "focalbi_treemap_group_colors": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+      "description": "Opt-in treemap parent colours keyed by exact first grouping values. Descendants receive stable lighter shades of the parent's colour; unconfigured groups retain native colours."
+    },
+    "focalbi_disable_map_drag": {
+      "type": "boolean",
+      "default": false,
+      "description": "Disable deck.gl pan/rotation drag gestures while retaining hover, picking and zoom."
+    },
+    "focalbi_disable_map_zoom": {
+      "type": "boolean",
+      "default": false,
+      "description": "Disable wheel, double-click, pinch and keyboard camera controls. Combined with disable_map_drag locks the camera while native autozoom still fits chart dimensions."
+    },
+    "focalbi_hide_native_renderer_label": {
+      "type": "boolean",
+      "default": false,
+      "description": "Omit the diagnostic native-renderer fallback label for this chart."
+    }
+  }
+}

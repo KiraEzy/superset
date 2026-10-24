@@ -1,0 +1,1793 @@
+{
+  "chart_overrides": {
+    "151": {
+      "chart_type": "xy",
+      "kind": "bar",
+      "orientation": "horizontal",
+      "stacked": true,
+      "x": {
+        "name": "age_band"
+      },
+      "y": [
+        {
+          "name": "signed_count",
+          "aggregate": "SUM",
+          "ratio_denominator": "district_population",
+          "label": "Population share"
+        }
+      ],
+      "group_by": [
+        {
+          "name": "sex"
+        }
+      ],
+      "x_axis": {
+        "title": "Age group"
+      },
+      "y_axis": {
+        "title": "Share of selected population",
+        "format": ".1%"
+      },
+      "legend": {
+        "show": true,
+        "position": "top"
+      },
+      "row_limit": 100,
+      "show_value_sort_control": false
+    },
+    "153": {
+      "chart_type": "xy",
+      "kind": "bar",
+      "orientation": "horizontal",
+      "x": {
+        "name": "category_label"
+      },
+      "y": [
+        {
+          "name": "count_value",
+          "aggregate": "SUM",
+          "label": "Persons"
+        }
+      ],
+      "legend": {
+        "show": true,
+        "position": "top"
+      },
+      "y_axis": {
+        "format": ",.0f"
+      },
+      "row_limit": 50,
+      "sort_by_value": "desc",
+      "group_by": [
+        {
+          "name": "sex"
+        }
+      ],
+      "stacked": true
+    },
+    "157": {
+      "chart_type": "xy",
+      "kind": "bar",
+      "orientation": "vertical",
+      "x": {
+        "name": "category_label"
+      },
+      "y": [
+        {
+          "name": "count_value",
+          "aggregate": "SUM",
+          "label": "Households"
+        }
+      ],
+      "legend": {
+        "show": false,
+        "position": "top"
+      },
+      "y_axis": {
+        "format": ",.0f"
+      },
+      "row_limit": 50,
+      "show_value_sort_control": false
+    },
+    "158": {
+      "chart_type": "xy",
+      "kind": "bar",
+      "orientation": "horizontal",
+      "stacked": true,
+      "x": {
+        "name": "district_name"
+      },
+      "y": [
+        {
+          "name": "count_value",
+          "aggregate": "SUM",
+          "label": "Households"
+        }
+      ],
+      "group_by": [
+        {
+          "name": "category_label"
+        }
+      ],
+      "y_axis": {
+        "title": "Share of district households",
+        "format": ".0%"
+      },
+      "legend": {
+        "show": true,
+        "position": "top"
+      },
+      "row_limit": 1000,
+      "show_value_sort_control": false
+    },
+    "159": {
+      "chart_type": "handlebars",
+      "query_mode": "raw",
+      "columns": [
+        {
+          "name": "district_code"
+        },
+        {
+          "name": "district_name"
+        },
+        {
+          "name": "district_name_zh"
+        },
+        {
+          "name": "region"
+        },
+        {
+          "name": "household_count"
+        },
+        {
+          "name": "median_income_hkd"
+        },
+        {
+          "name": "income_1"
+        },
+        {
+          "name": "income_2"
+        },
+        {
+          "name": "income_3"
+        },
+        {
+          "name": "income_4"
+        },
+        {
+          "name": "income_5"
+        },
+        {
+          "name": "income_6"
+        },
+        {
+          "name": "income_7"
+        },
+        {
+          "name": "display_order"
+        },
+        {
+          "name": "share_1"
+        },
+        {
+          "name": "share_2"
+        },
+        {
+          "name": "share_3"
+        },
+        {
+          "name": "share_4"
+        },
+        {
+          "name": "share_5"
+        },
+        {
+          "name": "share_6"
+        },
+        {
+          "name": "share_7"
+        },
+        {
+          "name": "median_position"
+        }
+      ],
+      "row_limit": 100,
+      "order_desc": false
+    },
+    "163": {
+      "chart_type": "xy",
+      "kind": "bar",
+      "orientation": "vertical",
+      "x": {
+        "name": "category_label"
+      },
+      "y": [
+        {
+          "name": "count_value",
+          "aggregate": "SUM",
+          "label": "Households"
+        }
+      ],
+      "legend": {
+        "show": false,
+        "position": "top"
+      },
+      "y_axis": {
+        "format": ",.0f"
+      },
+      "row_limit": 50,
+      "show_value_sort_control": false
+    },
+    "169": {
+      "chart_type": "xy",
+      "kind": "bar",
+      "orientation": "vertical",
+      "x": {
+        "name": "category_label"
+      },
+      "y": [
+        {
+          "name": "count_value",
+          "aggregate": "SUM",
+          "label": "Persons"
+        }
+      ],
+      "legend": {
+        "show": false,
+        "position": "top"
+      },
+      "y_axis": {
+        "format": ",.0f"
+      },
+      "row_limit": 50,
+      "show_value_sort_control": false
+    },
+    "152": {
+      "chart_type": "pie",
+      "dimension": {
+        "name": "category_label"
+      },
+      "metric": {
+        "name": "count_value",
+        "aggregate": "SUM",
+        "label": "Count"
+      },
+      "donut": false,
+      "show_total": false,
+      "show_labels": true,
+      "label_color": "#FFFFFF",
+      "show_legend": true,
+      "label_type": "percent",
+      "number_format": ",.0f",
+      "sort_by_metric": true,
+      "row_limit": 30,
+      "labels_outside": false,
+      "outer_radius": 75,
+      "inner_radius": 45
+    },
+    "156": {
+      "chart_type": "xy",
+      "kind": "scatter",
+      "x": {
+        "name": "born_elsewhere_share"
+      },
+      "y": [
+        {
+          "name": "english_share",
+          "aggregate": "MAX",
+          "label": "English as usual language"
+        }
+      ],
+      "group_by": [
+        {
+          "name": "region_label"
+        },
+        {
+          "name": "district_label"
+        }
+      ],
+      "x_axis": {
+        "title": "Born elsewhere share",
+        "format": ".1%"
+      },
+      "y_axis": {
+        "title": "English as usual language",
+        "format": ".1%"
+      },
+      "legend": {
+        "show": false,
+        "position": "top"
+      },
+      "row_limit": 100
+    },
+    "149": {
+      "chart_type": "xy",
+      "kind": "bar",
+      "orientation": "horizontal",
+      "x": {
+        "name": "district_name"
+      },
+      "y": [
+        {
+          "name": "elderly_dependency_per_1000",
+          "saved_metric": true
+        }
+      ],
+      "y_axis": {
+        "format": ".1f",
+        "title": "65+ per 1,000 aged 15-64"
+      },
+      "legend": {
+        "show": false,
+        "position": "top"
+      },
+      "row_limit": 18,
+      "sort_by_value": "desc",
+      "show_value_sort_control": true
+    },
+    "161": {
+      "chart_type": "handlebars",
+      "query_mode": "aggregate",
+      "groupby": [
+        {
+          "name": "category_order"
+        },
+        {
+          "name": "category_label"
+        }
+      ],
+      "metrics": [
+        {
+          "name": "housing_sort_order",
+          "saved_metric": true
+        },
+        {
+          "name": "housing_households",
+          "saved_metric": true
+        },
+        {
+          "name": "housing_share_pct",
+          "saved_metric": true
+        },
+        {
+          "name": "housing_total",
+          "saved_metric": true
+        },
+        {
+          "name": "housing_cells_json",
+          "saved_metric": true
+        }
+      ],
+      "row_limit": 10,
+      "order_desc": false
+    },
+    "167": {
+      "chart_type": "xy",
+      "kind": "scatter",
+      "x": {
+        "name": "degree_course_share"
+      },
+      "y": [
+        {
+          "name": "managerial_professional_share",
+          "aggregate": "MAX",
+          "label": "Managerial and professional share"
+        }
+      ],
+      "group_by": [
+        {
+          "name": "district_label"
+        }
+      ],
+      "x_axis": {
+        "format": ".0%"
+      },
+      "y_axis": {
+        "format": ".0%"
+      },
+      "row_limit": 100
+    },
+    "170": {
+      "chart_type": "xy",
+      "kind": "scatter",
+      "x": {
+        "name": "district_name"
+      },
+      "y": [
+        {
+          "name": "labour_force_participation_percent",
+          "aggregate": "MAX",
+          "label": "Labour force participation (%)"
+        }
+      ],
+      "legend": {
+        "show": false
+      },
+      "y_axis": {
+        "format": ".1f"
+      },
+      "row_limit": 100
+    }
+  },
+  "layout_rows": {
+    "Overview": [
+      [
+        [
+          145,
+          3,
+          16
+        ],
+        [
+          146,
+          3,
+          16
+        ],
+        [
+          147,
+          3,
+          16
+        ],
+        [
+          148,
+          3,
+          16
+        ]
+      ],
+      [
+        [
+          "map",
+          8,
+          60
+        ],
+        [
+          151,
+          4,
+          60
+        ]
+      ],
+      [
+        [
+          150,
+          12,
+          44
+        ]
+      ]
+    ],
+    "People and diversity": [
+      [
+        [
+          154,
+          12,
+          66
+        ]
+      ],
+      [
+        [
+          152,
+          6,
+          62
+        ],
+        [
+          156,
+          6,
+          62
+        ]
+      ],
+      [
+        [
+          149,
+          12,
+          72
+        ]
+      ],
+      [
+        [
+          153,
+          12,
+          42
+        ]
+      ],
+      [
+        [
+          155,
+          12,
+          116
+        ]
+      ]
+    ],
+    "Households and income": [
+      [
+        [
+          157,
+          12,
+          42
+        ]
+      ],
+      [
+        [
+          159,
+          12,
+          120
+        ]
+      ],
+      [
+        [
+          159,
+          12,
+          112
+        ]
+      ],
+      [
+        [
+          182,
+          12,
+          116
+        ]
+      ],
+      [
+        [
+          183,
+          12,
+          66
+        ]
+      ]
+    ],
+    "Housing": [
+      [
+        [
+          161,
+          5,
+          76
+        ],
+        [
+          162,
+          7,
+          78
+        ]
+      ],
+      [
+        [
+          163,
+          5,
+          48
+        ],
+        [
+          164,
+          7,
+          48
+        ]
+      ]
+    ],
+    "Education and work": [
+      [
+        [
+          165,
+          12,
+          68
+        ]
+      ],
+      [
+        [
+          167,
+          8,
+          68
+        ],
+        [
+          166,
+          4,
+          68
+        ]
+      ],
+      [
+        [
+          168,
+          12,
+          65
+        ]
+      ],
+      [
+        [
+          169,
+          6,
+          68
+        ],
+        [
+          170,
+          6,
+          68
+        ]
+      ]
+    ],
+    "Mobility and sources": [
+      [
+        [
+          171,
+          7,
+          68
+        ],
+        [
+          172,
+          5,
+          68
+        ]
+      ],
+      [
+        [
+          173,
+          12,
+          90
+        ]
+      ],
+      [
+        [
+          174,
+          12,
+          75
+        ]
+      ],
+      [
+        [
+          175,
+          12,
+          55
+        ]
+      ]
+    ]
+  },
+  "map_form_data": {
+    "viz_type": "deck_geojson",
+    "geojson": "geojson",
+    "js_columns": [],
+    "row_limit": 100,
+    "adhoc_filters": [],
+    "time_range": "No filter",
+    "filled": true,
+    "stroked": true,
+    "extruded": false,
+    "fill_color_picker": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "stroke_color_picker": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "viewport": {
+      "longitude": 114.12,
+      "latitude": 22.36,
+      "zoom": 9.4,
+      "pitch": 0,
+      "bearing": 0
+    },
+    "autozoom": true,
+    "line_width": 1,
+    "mapbox_style": "",
+    "tooltip_contents": [],
+    "filter_nulls": true,
+    "global_opacity": 0.88,
+    "line_width_unit": "pixels",
+    "focalbi_disable_map_drag": true,
+    "focalbi_hide_native_renderer_label": true,
+    "focalbi_disable_map_zoom": true
+  },
+  "map_provenance": {
+    "provider": "Census and Statistics Department / CSDI",
+    "boundary_year": 2021,
+    "source": "https://data.gov.hk/en-data/dataset/hk-censtatd-census_geo-2021-population-census-by-dcd",
+    "endpoint": "https://portal.csdi.gov.hk/server/rest/services/common/censtatd_rcd_1635932856094_19982/FeatureServer/0/query",
+    "query": {
+      "where": "1=1",
+      "outFields": "dc,dc_class,dc_eng,dc_chi,t_pop",
+      "outSR": 4326,
+      "f": "geojson",
+      "maxAllowableOffset": 0.0003
+    },
+    "source_sha256": "c3f2e705a906e2e8befa3d1035b957e791d6e3e092e3a76b1074416031e93dd4",
+    "coordinate_decimal_places": 5,
+    "district_count": 18,
+    "population_total": 7411945,
+    "fill_bins": [
+      {
+        "less_than": 200000,
+        "color": "#c6dbef"
+      },
+      {
+        "less_than": 350000,
+        "color": "#9ecae1"
+      },
+      {
+        "less_than": 500000,
+        "color": "#6baed6"
+      },
+      {
+        "less_than": 650000,
+        "color": "#3182bd"
+      },
+      {
+        "at_least": 650000,
+        "color": "#08519c"
+      }
+    ]
+  },
+  "native_chart_overrides": {
+    "149": {
+      "show_value": true,
+      "y_axis_bounds": [
+        0,
+        400
+      ],
+      "y_axis_title_margin": 35,
+      "y_axis_format": ".1f"
+    },
+    "151": {
+      "viz_type": "echarts_timeseries_bar",
+      "metrics": [
+        {
+          "expressionType": "SQL",
+          "sqlExpression": "1.0 * SUM(\"signed_count\") / NULLIF(SUM(\"district_population\"), 0)",
+          "label": "Population share",
+          "optionName": "ratio_signed_count_district_population",
+          "hasCustomLabel": true
+        }
+      ],
+      "x_axis": "age_band",
+      "x_axis_sort": "name",
+      "x_axis_sort_asc": true,
+      "time_grain_sqla": null,
+      "granularity_sqla": null,
+      "groupby": [
+        "sex"
+      ],
+      "row_limit": 100,
+      "stack": "Stack",
+      "x_axis_title": "",
+      "y_axis_title": "Share of selected population",
+      "y_axis_format": ".1%",
+      "legend_orientation": "top",
+      "orientation": "horizontal",
+      "y_axis_bounds": [
+        -0.07,
+        0.07
+      ],
+      "truncate_yaxis": true,
+      "show_value_sort_control": false,
+      "show_value": false,
+      "show_legend": true,
+      "legendOrientation": "top",
+      "legendType": "plain",
+      "x_axis_title_margin": 10,
+      "y_axis_title_margin": 40,
+      "x_axis_label_interval": 0,
+      "rich_tooltip": true
+    },
+    "153": {
+      "y_axis_format": "SMART_NUMBER"
+    },
+    "155": {
+      "focalbi_hide_native_renderer_label": true,
+      "order_by_cols": [
+        "[\"district_name\", true]"
+      ]
+    },
+    "156": {
+      "viz_type": "bubble_v2",
+      "datasource": "56__table",
+      "slice_id": 156,
+      "entity": "district_label",
+      "series": "region_label",
+      "x": {
+        "aggregate": "MAX",
+        "column": {
+          "column_name": "born_elsewhere_share"
+        },
+        "expressionType": "SIMPLE",
+        "label": "Born elsewhere / 其他地方出生",
+        "optionName": "metric_born_elsewhere_share",
+        "sqlExpression": null,
+        "hasCustomLabel": true
+      },
+      "y": {
+        "aggregate": "MAX",
+        "column": {
+          "column_name": "english_share"
+        },
+        "expressionType": "SIMPLE",
+        "label": "Usual English / 慣用英語",
+        "optionName": "metric_english_share",
+        "sqlExpression": null,
+        "hasCustomLabel": true
+      },
+      "size": {
+        "aggregate": "MAX",
+        "column": {
+          "column_name": "population"
+        },
+        "expressionType": "SIMPLE",
+        "label": "Population / 人口",
+        "optionName": "metric_population",
+        "sqlExpression": null,
+        "hasCustomLabel": true
+      },
+      "max_bubble_size": 0,
+      "opacity": 1,
+      "row_limit": 100,
+      "adhoc_filters": [],
+      "x_axis_label": "Born elsewhere / 其他地方出生 (%)",
+      "y_axis_label": "Usual English / 慣用英語 (%)",
+      "xAxisFormat": ".1%",
+      "yAxisFormat": ".1%",
+      "tooltipSizeFormat": ",.0f",
+      "x_axis_bounds": [
+        0,
+        0.25
+      ],
+      "y_axis_bounds": [
+        0,
+        0.2
+      ],
+      "truncate_x_axis": true,
+      "truncate_y_axis": true,
+      "logXAxis": false,
+      "logYAxis": false,
+      "x_axis_title_margin": 35,
+      "y_axis_title_margin": 50,
+      "show_legend": true,
+      "legendOrientation": "top",
+      "legendType": "plain",
+      "legendMargin": 35,
+      "color_scheme": "supersetColors",
+      "emit_filter": false,
+      "focalbi_hide_native_renderer_label": true,
+      "x_axis_label_interval": 0.05
+    },
+    "157": {
+      "y_axis_format": "SMART_NUMBER",
+      "x_axis_label_interval": 0,
+      "x_axis_label_rotation": 0
+    },
+    "159": {
+      "focalbi_hide_native_renderer_label": true,
+      "order_by_cols": [
+        "[\"display_order\", true]"
+      ]
+    },
+    "160": {
+      "y_axis_format": "SMART_NUMBER"
+    },
+    "163": {
+      "y_axis_format": "SMART_NUMBER",
+      "x_axis_label_interval": 0,
+      "x_axis_label_rotation": 0
+    },
+    "165": {
+      "viz_type": "sankey_v2",
+      "source": "region",
+      "target": "source_category",
+      "metric": {
+        "expressionType": "SIMPLE",
+        "column": {
+          "column_name": "count_value"
+        },
+        "aggregate": "SUM",
+        "label": "Persons aged 15+",
+        "optionName": "metric_count_value",
+        "hasCustomLabel": true
+      },
+      "row_limit": 100,
+      "sort_by_metric": false,
+      "color_scheme": "supersetColors",
+      "adhoc_filters": [],
+      "datasource": "44__table",
+      "slice_id": 165,
+      "focalbi_hide_native_renderer_label": true
+    },
+    "167": {
+      "viz_type": "bubble_v2",
+      "entity": "district_label",
+      "series": "region_label",
+      "x": {
+        "expressionType": "SIMPLE",
+        "column": {
+          "column_name": "degree_course_share"
+        },
+        "aggregate": "MAX",
+        "label": "Degree course / 學位課程",
+        "optionName": "metric_degree_course_share",
+        "hasCustomLabel": true
+      },
+      "y": {
+        "expressionType": "SIMPLE",
+        "column": {
+          "column_name": "managerial_professional_share"
+        },
+        "aggregate": "MAX",
+        "label": "Managerial/professional / 管理及專業",
+        "optionName": "metric_managerial_professional_share",
+        "hasCustomLabel": true
+      },
+      "size": {
+        "expressionType": "SIMPLE",
+        "column": {
+          "column_name": "working_population"
+        },
+        "aggregate": "MAX",
+        "label": "Working population / 工作人口",
+        "optionName": "metric_working_population",
+        "hasCustomLabel": true
+      },
+      "max_bubble_size": 0,
+      "opacity": 1,
+      "row_limit": 100,
+      "adhoc_filters": [],
+      "x_axis_label": "Degree course, age 15+ / 學位課程 (%)",
+      "y_axis_label": "Managerial/professional / 管理及專業 (%)",
+      "xAxisFormat": ".1%",
+      "yAxisFormat": ".1%",
+      "tooltipSizeFormat": ",.0f",
+      "x_axis_bounds": [
+        0,
+        0.5
+      ],
+      "y_axis_bounds": [
+        0,
+        0.65
+      ],
+      "truncate_x_axis": true,
+      "truncate_y_axis": true,
+      "logXAxis": false,
+      "logYAxis": false,
+      "x_axis_title_margin": 35,
+      "y_axis_title_margin": 50,
+      "show_legend": true,
+      "legendOrientation": "top",
+      "legendType": "plain",
+      "legendMargin": 35,
+      "color_scheme": "supersetColors",
+      "emit_filter": false,
+      "datasource": "64__table",
+      "slice_id": 167,
+      "focalbi_hide_native_renderer_label": true,
+      "x_axis_label_interval": 0.1
+    },
+    "168": {
+      "viz_type": "treemap_v2",
+      "groupby": [
+        "source_category"
+      ],
+      "metric": {
+        "expressionType": "SIMPLE",
+        "column": {
+          "column_name": "count_value"
+        },
+        "aggregate": "SUM",
+        "label": "Working population",
+        "optionName": "metric_count_value",
+        "hasCustomLabel": true
+      },
+      "row_limit": 100,
+      "sort_by_metric": true,
+      "color_scheme": "supersetColors",
+      "show_labels": true,
+      "label_type": "key",
+      "number_format": ",.0f",
+      "date_format": "smart_date",
+      "adhoc_filters": [],
+      "rebase_on_filter": false,
+      "datasource": "47__table",
+      "slice_id": 168,
+      "focalbi_hide_native_renderer_label": true
+    },
+    "169": {
+      "y_axis_format": "SMART_NUMBER",
+      "x_axis_label_interval": 0,
+      "x_axis_label_rotation": 30
+    },
+    "170": {
+      "viz_type": "echarts_timeseries_scatter",
+      "metrics": [
+        {
+          "aggregate": "MAX",
+          "column": {
+            "column_name": "labour_force_participation_percent"
+          },
+          "expressionType": "SIMPLE",
+          "label": "Labour force participation (%)",
+          "optionName": "metric_labour_force_participation_percent",
+          "sqlExpression": null,
+          "hasCustomLabel": true,
+          "datasourceWarning": false
+        }
+      ],
+      "x_axis": "district_name",
+      "x_axis_sort": "Labour force participation (%)",
+      "x_axis_sort_asc": false,
+      "time_grain_sqla": null,
+      "granularity_sqla": null,
+      "row_limit": 100,
+      "y_axis_format": ".1f",
+      "show_legend": false,
+      "legend_orientation": "right",
+      "orientation": "horizontal",
+      "marker_enabled": true,
+      "marker_size": 9,
+      "show_markers": true,
+      "show_value": false,
+      "y_axis_bounds": [
+        50,
+        70
+      ],
+      "truncateYAxis": true,
+      "y_axis_title": "Labour force participation (%)",
+      "x_axis_title": "",
+      "show_value_sort_control": false,
+      "datasource": "31__table",
+      "slice_id": 170,
+      "focalbi_hide_native_renderer_label": true,
+      "order_desc": true,
+      "y_axis_title_margin": 28
+    },
+    "171": {
+      "viz_type": "treemap_v2",
+      "groupby": [
+        "source_category"
+      ],
+      "metric": {
+        "expressionType": "SIMPLE",
+        "column": {
+          "column_name": "count_value"
+        },
+        "aggregate": "SUM",
+        "label": "Workers",
+        "optionName": "metric_count_value",
+        "hasCustomLabel": true
+      },
+      "row_limit": 100,
+      "sort_by_metric": true,
+      "color_scheme": "supersetColors",
+      "show_labels": true,
+      "label_type": "key_value",
+      "number_format": ",.0f",
+      "date_format": "smart_date",
+      "rebase_on_filter": false,
+      "datasource": "49__table",
+      "slice_id": 171,
+      "adhoc_filters": [],
+      "focalbi_hide_native_renderer_label": true
+    },
+    "172": {
+      "viz_type": "box_plot",
+      "columns": [
+        "district_name"
+      ],
+      "groupby": [],
+      "metrics": [
+        {
+          "expressionType": "SIMPLE",
+          "column": {
+            "column_name": "local_work_share"
+          },
+          "aggregate": "MAX",
+          "label": "Local work / 同區工作",
+          "optionName": "metric_local_work_share",
+          "hasCustomLabel": true
+        },
+        {
+          "expressionType": "SIMPLE",
+          "column": {
+            "column_name": "local_study_share"
+          },
+          "aggregate": "MAX",
+          "label": "Local study / 同區就讀",
+          "optionName": "metric_local_study_share",
+          "hasCustomLabel": true
+        }
+      ],
+      "whiskerOptions": "Min/max (no outliers)",
+      "row_limit": 100,
+      "number_format": ".1%",
+      "color_scheme": "supersetColors",
+      "x_ticks_layout": "flat",
+      "show_legend": false,
+      "y_axis_title": "Share of respective population / 各自人口比例",
+      "y_axis_title_margin": 45,
+      "y_axis_title_position": "Left",
+      "datasource": "65__table",
+      "slice_id": 172,
+      "adhoc_filters": [],
+      "focalbi_hide_native_renderer_label": true
+    },
+    "154": {
+      "metric": {
+        "aggregate": "SUM",
+        "column": {
+          "column_name": "count_value"
+        },
+        "expressionType": "SIMPLE",
+        "label": "Count",
+        "optionName": "metric_count_value",
+        "sqlExpression": null,
+        "hasCustomLabel": true,
+        "datasourceWarning": false
+      },
+      "color_scheme": "supersetColors",
+      "number_format": ",.0f",
+      "sort_by_metric": true,
+      "date_format": "smart_date",
+      "viz_type": "treemap_v2",
+      "groupby": [
+        "category_label",
+        "district_name"
+      ],
+      "row_limit": 1000,
+      "show_labels": true,
+      "show_upper_labels": true,
+      "label_type": "key_value",
+      "focalbi_hide_native_renderer_label": true,
+      "focalbi_treemap_group_colors": {
+        "Hong Kong": "#1677A8",
+        "The mainland of China/ Macao/ Taiwan": "#218C6F",
+        "Elsewhere": "#CB811F"
+      }
+    },
+    "158": {
+      "contributionMode": "row",
+      "y_axis_bounds": [
+        0,
+        1
+      ],
+      "truncate_yaxis": true,
+      "y_axis_format": ".0%",
+      "x_axis_sort": "name",
+      "x_axis_sort_asc": false,
+      "show_value": false,
+      "legendType": "plain",
+      "legendOrientation": "top",
+      "legendMargin": 20,
+      "y_axis_title_margin": 35,
+      "x_axis_label_interval": 0,
+      "rich_tooltip": true,
+      "tooltipTimeFormat": "smart_date",
+      "show_value_sort_control": false
+    },
+    "182": {
+      "order_by_cols": [
+        "[\"display_order\", true]"
+      ],
+      "focalbi_hide_native_renderer_label": true
+    },
+    "183": {
+      "show_legend": true,
+      "show_markers": true,
+      "marker_enabled": true,
+      "marker_size": 7,
+      "rich_tooltip": true,
+      "tooltipTimeFormat": ",.0f",
+      "y_axis_bounds": [
+        0,
+        1
+      ],
+      "truncateYAxis": false,
+      "x_axis_sort": "name",
+      "x_axis_sort_asc": true,
+      "x_axis_title_margin": 30,
+      "y_axis_title_margin": 50,
+      "zoomable": false,
+      "focalbi_hide_native_renderer_label": true
+    },
+    "161": {
+      "focalbi_hide_native_renderer_label": true
+    },
+    "162": {
+      "viz_type": "sunburst_v2",
+      "datasource": "63__table",
+      "slice_id": 162,
+      "columns": [
+        "tenure_group",
+        "tenure_type"
+      ],
+      "groupby": [
+        "tenure_group",
+        "tenure_type"
+      ],
+      "metric": {
+        "expressionType": "SIMPLE",
+        "column": {
+          "column_name": "household_count"
+        },
+        "aggregate": "SUM",
+        "label": "Households",
+        "optionName": "metric_households",
+        "hasCustomLabel": true
+      },
+      "secondary_metric": null,
+      "row_limit": 100,
+      "sort_by_metric": true,
+      "color_scheme": "supersetColors",
+      "number_format": ",.0f",
+      "date_format": "smart_date",
+      "label_type": "key",
+      "show_labels": true,
+      "show_labels_threshold": 2,
+      "show_total": false,
+      "focalbi_hide_native_renderer_label": true,
+      "adhoc_filters": []
+    },
+    "173": {
+      "viz_type": "heatmap_v2",
+      "x_axis": "residence_status",
+      "groupby": [
+        "district_name"
+      ],
+      "metric": {
+        "expressionType": "SIMPLE",
+        "column": {
+          "column_name": "residence_share"
+        },
+        "aggregate": "MAX",
+        "label": "Share of residents aged 5+",
+        "optionName": "metric_residence_share",
+        "hasCustomLabel": true
+      },
+      "row_limit": 100,
+      "sort_x_axis": "alpha_asc",
+      "sort_y_axis": "alpha_desc",
+      "normalize_across": "heatmap",
+      "normalized": false,
+      "value_bounds": [
+        0,
+        1
+      ],
+      "linear_color_scheme": "schemeBlues",
+      "show_legend": true,
+      "legend_type": "continuous",
+      "show_values": true,
+      "value_format": ".1%",
+      "xscale_interval": 1,
+      "yscale_interval": 1,
+      "border_width": 1,
+      "border_color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "datasource": "66__table",
+      "slice_id": 173,
+      "adhoc_filters": [],
+      "focalbi_hide_native_renderer_label": true,
+      "y_axis_format": ".1%"
+    },
+    "174": {
+      "viz_type": "sankey_v2",
+      "source": {
+        "expressionType": "SQL",
+        "sqlExpression": "'Previous: ' || source_category",
+        "label": "Previous area"
+      },
+      "target": {
+        "expressionType": "SQL",
+        "sqlExpression": "'Current: ' || region",
+        "label": "Current region"
+      },
+      "metric": {
+        "expressionType": "SIMPLE",
+        "column": {
+          "column_name": "count_value"
+        },
+        "aggregate": "SUM",
+        "label": "Internal migrants aged 5+",
+        "optionName": "metric_count_value",
+        "hasCustomLabel": true
+      },
+      "row_limit": 100,
+      "sort_by_metric": false,
+      "color_scheme": "supersetColors",
+      "datasource": "52__table",
+      "slice_id": 174,
+      "adhoc_filters": [],
+      "focalbi_hide_native_renderer_label": true
+    }
+  },
+  "language_birthplace": {
+    "dataset_key": "language_birthplace",
+    "dataset_id": 56,
+    "sql_file": "language-birthplace.sql",
+    "chart_id": 156,
+    "point_grain": "2021 district of residence",
+    "equal_point_sizes": true,
+    "region_colors": {
+      "Hong Kong Island / 香港島": "#1976A3",
+      "Kowloon / 九龍": "#B26B26",
+      "New Territories / 新界": "#27826A"
+    },
+    "note_component_id": "MARKDOWN-CENSUS-LANGUAGE-SCATTER",
+    "note_height": 15,
+    "note": "**Reading this chart:** Each dot is one district; colours identify regions. Born elsewhere means outside Hong Kong, Mainland China, Macao and Taiwan (all ages). English usage covers residents aged 5+ and excludes mute persons.\n\nThese separate district totals show an association, not individual language use or causation. Hover for district percentages and population; use Region and District to focus the view.",
+    "native_query_context": "Save the unfiltered Bubble buildQuery result so MCP get_chart_data includes both metrics.",
+    "localization": "Chart title, description and note follow locale; native axes, region legend and tooltips use English / Traditional Chinese labels."
+  },
+  "population_pyramid": {
+    "chart_id": 151,
+    "physical_dataset_id": 57,
+    "dataset_id": 58,
+    "source": "pyramid-provenance.json",
+    "row_grain": "district x sex x five-year age band; 85+ top code",
+    "metric": "SUM(signed_count) / SUM(district_population) grouped by age_band and sex",
+    "axis_bounds": [
+      -0.07,
+      0.07
+    ],
+    "note_component_id": "MARKDOWN-CENSUS-PYRAMID-NOTE",
+    "note": "**Population pyramid:** Male on the left, female on the right; youngest ages at the bottom. Bars show each age-sex group as a share of the selected districts' total population. Minus signs indicate the male side only. Five-year bands, with ages 85+ combined. Source: 2021 Census A204; includes foreign domestic helpers and excludes Marine.",
+    "note_height": 12,
+    "count_rows": 648,
+    "population": 7411945,
+    "tab": "Overview",
+    "note_after_row": "ROW-CENSUS-0-1"
+  },
+  "ethnicity_heatmap": {
+    "chart_id": 155,
+    "dataset_id": 59,
+    "sql_file": "ethnicity-heatmap.sql",
+    "template_file": "ethnicity-heatmap.html",
+    "dashboard_css_file": "ethnicity-heatmap.css",
+    "mcp_config": {
+      "chart_type": "handlebars",
+      "query_mode": "raw",
+      "columns": [
+        {
+          "name": "district_code"
+        },
+        {
+          "name": "district_name"
+        },
+        {
+          "name": "district_name_zh"
+        },
+        {
+          "name": "region"
+        },
+        {
+          "name": "population"
+        },
+        {
+          "name": "chinese_count"
+        },
+        {
+          "name": "non_chinese_share"
+        },
+        {
+          "name": "filipino_count"
+        },
+        {
+          "name": "filipino_share"
+        },
+        {
+          "name": "filipino_count_label"
+        },
+        {
+          "name": "filipino_share_label"
+        },
+        {
+          "name": "filipino_color"
+        },
+        {
+          "name": "indonesian_count"
+        },
+        {
+          "name": "indonesian_share"
+        },
+        {
+          "name": "indonesian_count_label"
+        },
+        {
+          "name": "indonesian_share_label"
+        },
+        {
+          "name": "indonesian_color"
+        },
+        {
+          "name": "white_count"
+        },
+        {
+          "name": "white_share"
+        },
+        {
+          "name": "white_count_label"
+        },
+        {
+          "name": "white_share_label"
+        },
+        {
+          "name": "white_color"
+        },
+        {
+          "name": "others_count"
+        },
+        {
+          "name": "others_share"
+        },
+        {
+          "name": "others_count_label"
+        },
+        {
+          "name": "others_share_label"
+        },
+        {
+          "name": "others_color"
+        }
+      ],
+      "row_limit": 100,
+      "order_desc": false
+    },
+    "template_binding": "Load template_file as config.handlebars_template; append dashboard_css_file to dashboard 18 native CSS, preserving other rules. Native sanitizer strips template CSS.",
+    "share_denominator": "Each district total population",
+    "colour_bounds": [
+      0,
+      0.12
+    ],
+    "baseline_population": 7411945,
+    "baseline_chinese_count": 6792393,
+    "baseline_non_chinese_count": 619552,
+    "baseline_scope": "Always all 18 land districts, irrespective of filters",
+    "height": 116,
+    "width": 12
+  },
+  "dataset_metric_overrides": {
+    "summary": {
+      "elderly_dependency_per_1000": {
+        "metric_name": "elderly_dependency_per_1000",
+        "verbose_name": "65+ per 1,000 aged 15-64",
+        "expression": "1000.0 * SUM(elderly_population) / NULLIF(SUM(population) - SUM(children_population) - SUM(elderly_population), 0)",
+        "description": "Residents aged 65+ per 1,000 residents aged 15-64. Derived from 2021 district census age counts; not a measure of employment or financial dependence.",
+        "d3format": ".1f"
+      }
+    },
+    "housing": {
+      "housing_sort_order": {
+        "expression": "MIN(category_order)",
+        "verbose_name": "Housing display order",
+        "metric_name": "housing_sort_order"
+      },
+      "housing_households": {
+        "expression": "SUM(count_value)",
+        "verbose_name": "Domestic households",
+        "d3format": ",.0f",
+        "metric_name": "housing_households"
+      },
+      "housing_share_pct": {
+        "expression": "100.0 * SUM(count_value) / NULLIF(SUM(SUM(count_value)) OVER (), 0)",
+        "verbose_name": "Household share (%)",
+        "d3format": ".2f",
+        "metric_name": "housing_share_pct"
+      },
+      "housing_total": {
+        "expression": "SUM(SUM(count_value)) OVER ()",
+        "verbose_name": "Selected domestic households",
+        "d3format": ",.0f",
+        "metric_name": "housing_total"
+      },
+      "housing_cells_json": {
+        "expression": "'[' || REPEAT('1,', ((ROUND(200.0 * SUM(SUM(count_value)) OVER (ORDER BY category_order, category_label ROWS UNBOUNDED PRECEDING) / NULLIF(SUM(SUM(count_value)) OVER (), 0)) - ROUND(200.0 * (SUM(SUM(count_value)) OVER (ORDER BY category_order, category_label ROWS UNBOUNDED PRECEDING) - SUM(count_value)) / NULLIF(SUM(SUM(count_value)) OVER (), 0))))::integer) || 'null]'",
+        "verbose_name": "Waffle display cells",
+        "description": "200 cells allocated by differences of rounded cumulative shares; exact counts remain separate. The trailing null is ignored by the template.",
+        "metric_name": "housing_cells_json"
+      }
+    }
+  },
+  "elderly_dependency": {
+    "chart_id": 149,
+    "dataset_id": 31,
+    "definition_url": "https://www.census2021.gov.hk/doc/pub/21c-main-results.pdf",
+    "denominator": "population - children_population - elderly_population; aged 15-64, not employed persons",
+    "unit": "65+ residents per 1,000 residents aged 15-64",
+    "description": "2021 Census: residents aged 65+ per 1,000 residents aged 15-64. Calculated from published district age counts. This describes age structure, not actual employment, care needs or financial dependence. Source: Census and Statistics Department, 2021 district profiles; definition: https://www.census2021.gov.hk/doc/pub/21c-main-results.pdf",
+    "tab": "People and diversity"
+  },
+  "household_composition": {
+    "chart_id": 158,
+    "dataset_id": 39,
+    "normalization": "contributionMode=row; eight category counts divided by their sum within each district",
+    "description": "2021 Census: each district bar represents 100% of its domestic households. Eight mutually exclusive household-composition categories; denominator is all domestic households in that district, not population. Geography filters select districts without changing their shares. Includes all 18 land districts; excludes Marine.",
+    "label_colors": {
+      "One-person households": "#218C6F",
+      "Composed of couple": "#9BC9E2",
+      "Composed of couple and unmarried children": "#1677A8",
+      "Composed of lone parent and unmarried children": "#CB811F",
+      "Composed of couple and at least one of their parents": "#C8E2F0",
+      "Composed of couple, at least one of their parents and their unmarried children": "#144B78",
+      "Composed of other relationship combinations": "#8B6AAF",
+      "Non-relative households": "#7B8794"
+    },
+    "width": 12,
+    "height": 94
+  },
+  "income_comparison": {
+    "chart_id": 159,
+    "dataset_id": 60,
+    "dataset_key": "income_comparison",
+    "sql_file": "income-comparison.sql",
+    "template_file": "income-comparison.hbs",
+    "dashboard_css_file": "income-comparison.css",
+    "template_binding": "Load template_file as chart_overrides[159].handlebars_template before MCP update_chart; the marked CSS block is also included in dashboard.css. Preserve unrelated dashboard CSS.",
+    "native_query_context": "Save the unfiltered browser-generated raw Handlebars query context.",
+    "row_grain": "2021 district of residence; all domestic households",
+    "share_denominator": "Published dh count in the same district",
+    "band_indicators": [
+      "dhi_1",
+      "dhi_2",
+      "dhi_3",
+      "dhi_4",
+      "dhi_5",
+      "dhi_6",
+      "dhi_7"
+    ],
+    "median_indicator": "ma_hh; published median, not derived from grouped income counts",
+    "sort": "median_income_hkd DESC, district_code ASC",
+    "median_axis_hkd": [
+      0,
+      60000
+    ],
+    "income_band_colors": [
+      "#e1edf7",
+      "#bed8ec",
+      "#91bddb",
+      "#64a0c8",
+      "#3c80b0",
+      "#205e91",
+      "#123c65"
+    ],
+    "width": 12,
+    "height": 120,
+    "note_component_id": "MARKDOWN-CENSUS-INCOME-NOTE",
+    "note_row_id": "ROW-CENSUS-INCOME-NOTE",
+    "note_height": 11,
+    "note": "<span id=\"ci-income-locale\" lang=\"en\">2021 Census · Domestic households. Income bands sum to each district’s household count. Median values are the published district figures; they are not calculated from band midpoints. Region and District filters select rows.</span>",
+    "localization": "Explicit en/zh-Hant/zh-Hans template spans selected by dashboard CSS using the translated note marker ci-income-locale and its lang attribute. Title/description/note use localization.json.",
+    "browser_requirement": "Typed CSS attr() for numeric percentages; verified in Chromium. Dashboard CSS is required; standalone Explore is not styled.",
+    "retained_chart_id": 160,
+    "retained_chart_policy": "Keep saved chart; detach from dashboard 18 membership/layout and remove 160 from dashboard chart/filter metadata.",
+    "cache_timeout": 2592000,
+    "layout": "Median dots overlaid on 100% stacked bars; top percentage axis and bottom HKD axis",
+    "percentage_axis_position": "top",
+    "median_axis_position": "bottom",
+    "median_dot_color": "#ffca55",
+    "tooltip": "Each income-band hover/focus shows district, income band, household count, share and published median income; dots use a separate HKD scale, not band position"
+  },
+  "household_income_dumbbell": {
+    "chart_id": 182,
+    "dataset_id": 61,
+    "sql_file": "household-income-dumbbell.sql",
+    "mcp_config": {
+      "chart_type": "handlebars",
+      "query_mode": "raw",
+      "columns": [
+        {
+          "name": "district_code"
+        },
+        {
+          "name": "district_name"
+        },
+        {
+          "name": "district_name_zh"
+        },
+        {
+          "name": "region"
+        },
+        {
+          "name": "all_households_median"
+        },
+        {
+          "name": "active_households_median"
+        },
+        {
+          "name": "median_difference"
+        },
+        {
+          "name": "all_position"
+        },
+        {
+          "name": "active_position"
+        },
+        {
+          "name": "gap_width"
+        },
+        {
+          "name": "display_order"
+        }
+      ],
+      "row_limit": 100,
+      "order_desc": false
+    },
+    "cache_timeout": 2592000,
+    "template_file": "household-income-dumbbell.hbs",
+    "dashboard_css_file": "household-income-dumbbell.css",
+    "axis_bounds_hkd": [
+      0,
+      70000
+    ],
+    "template_binding": "Read template_file into config.handlebars_template; append scoped CSS to native dashboard CSS. CSS attr() percentage positioning requires a supporting browser. Locale visibility uses the localized hh-income-locale note marker."
+  },
+  "household_income_cumulative": {
+    "chart_id": 183,
+    "dataset_id": 62,
+    "sql_file": "household-income-cumulative.sql",
+    "mcp_config": {
+      "chart_type": "xy",
+      "kind": "line",
+      "x": {
+        "name": "income_threshold"
+      },
+      "y": [
+        {
+          "name": "households_below_threshold",
+          "aggregate": "SUM",
+          "ratio_denominator": "household_count",
+          "label": "Households below threshold"
+        }
+      ],
+      "group_by": [
+        {
+          "name": "region"
+        }
+      ],
+      "x_axis": {
+        "title": "Monthly household income threshold (HK$)",
+        "format": ",.0f"
+      },
+      "y_axis": {
+        "title": "Households below threshold",
+        "format": ".0%"
+      },
+      "legend": {
+        "show": true,
+        "position": "top"
+      },
+      "row_limit": 1000
+    },
+    "cache_timeout": 2592000,
+    "grain": "district x published threshold; six thresholds, 108 source rows",
+    "aggregation": "SUM(households_below_threshold)/SUM(household_count) grouped by region and income_threshold after filters",
+    "thresholds_hkd": [
+      6000,
+      10000,
+      20000,
+      30000,
+      40000,
+      60000
+    ],
+    "axis_bounds_share": [
+      0,
+      1
+    ]
+  },
+  "household_income_additions_note": {
+    "component_id": "MARKDOWN-HOUSEHOLD-ADDITIONS-NOTE",
+    "code": "<span id=\"hh-income-locale\" lang=\"en\">2021 Census · The dumbbell compares published medians for overlapping household populations. Regional curves show the share below each income threshold, using household-weighted counts from the selected districts. Lines between markers are visual guides, not estimates within income bands.</span>",
+    "height": 12
+  },
+  "housing_waffle": {
+    "chart_id": 161,
+    "dataset_id": 41,
+    "template_file": "housing-waffle.hbs",
+    "dashboard_css_file": "housing-waffle.css",
+    "template_binding": "Load template_file as chart_overrides[161].handlebars_template; provision dataset_metric_overrides.housing through the native dataset API first. Preserve existing metrics and unrelated dashboard CSS.",
+    "square_count": 200,
+    "square_share_pct": 0.5,
+    "square_allocation": "Difference of adjacent rounded cumulative proportions, ordered by category_order/category_label; recalculated after native geography filters. Exact legend values are independent of square rounding.",
+    "category_colors": {
+      "1": "#2b6fa3",
+      "2": "#469b92",
+      "3": "#153e5c",
+      "4": "#bc7b30",
+      "5": "#8765a5"
+    },
+    "note_component_id": "MARKDOWN-CENSUS-HOUSING-WAFFLE-NOTE",
+    "note_row_id": "ROW-CENSUS-HOUSING-WAFFLE-NOTE",
+    "note": "<span id=\"housing-waffle-locale\" lang=\"en\">2021 Census · Domestic households in the selected districts. Each square represents approximately 0.5%; square allocations are rounded. Counts and percentages in the legend and tooltips use the exact source totals. Very small shares may have no square but remain in the legend.</span>",
+    "note_height": 10,
+    "height": 76,
+    "width": 5,
+    "localization": "Explicit English/Traditional/Simplified template labels follow translated housing-waffle-locale note marker.",
+    "native_query_context": "Save the unfiltered browser-generated query context for MCP chart-data reads.",
+    "cache_timeout": 2592000
+  },
+  "tenure_sunburst": {
+    "chart_id": 162,
+    "dataset_id": 63,
+    "sql_file": "tenure-sunburst.sql",
+    "source_dataset_retained": 42,
+    "note_component_id": "MARKDOWN-CENSUS-TENURE-NOTE",
+    "note": "**Tenure sunburst:** Inner ring = owner-occupied / rented / other arrangements. Outer ring = six published tenure categories. Shared tenancy includes co-tenants, main tenants and sub-tenants. Tiny categories remain in the chart; hover to see their household counts and shares. Geography filters recalculate the selected household total.",
+    "note_height": 12,
+    "colors": {
+      "Owner-occupied": "#245A91",
+      "With mortgage or loan": "#3F7EB8",
+      "Without mortgage or loan": "#86B4D9",
+      "Rented": "#197C73",
+      "Sole tenant": "#3B9D91",
+      "Shared tenancy": "#94CFC3",
+      "Other arrangements": "#B18132",
+      "Rent free": "#D7AA59",
+      "Employer provided": "#EFD299"
+    },
+    "mcp_limitation": "MCP chart schema does not expose sunburst; create hierarchy dataset through MCP and apply native_chart_overrides.162 through native Explore/API."
+  },
+  "education_work_variety": {
+    "chart_ids": [
+      165,
+      166,
+      167,
+      168,
+      169,
+      170
+    ],
+    "changed_chart_ids": [
+      165,
+      167,
+      168,
+      170
+    ],
+    "correlation_dataset_id": 64,
+    "sql_file": "education-occupation.sql",
+    "retained_occupation_dataset_id": 46,
+    "note_component_id": "MARKDOWN-CENSUS-EDUCATION-VARIETY-NOTE",
+    "note": "**Education and work · 2021:** Sankey links classify residents aged 15+ by region and highest level attended; they are not education or career transitions. Scatter points compare separate district aggregates: degree-course attendance among residents aged 15+ versus managers, professionals and associate professionals among workers. They do not establish individual outcomes or causation. Industry counts describe employed residents. Labour-participation dots use published district rates; medians and rates are not averaged.",
+    "note_height": 15,
+    "correlation_definition": "Unweighted Pearson correlation across 18 districts: degree-course highest-level-attended share (15+) vs managers/professionals/associate-professionals share (workers). Different populations; no individual paths or causal inference.",
+    "pearson_r": 0.9838098559085425,
+    "dot_axis_bounds_percent": [
+      50,
+      70
+    ],
+    "mcp_limitation": "MCP saves supported scatter configurations and chart metadata. Sankey, treemap, native bubble point identity and horizontal scatter orientation use native_chart_overrides through Explore/API."
+  },
+  "mobility_variety": {
+    "chart_ids": [
+      171,
+      172,
+      173,
+      174
+    ],
+    "dataset_ids": [
+      65,
+      66
+    ],
+    "retained_dataset_ids": [
+      50,
+      51
+    ],
+    "sql_files": [
+      "mobility-local-rates.sql",
+      "mobility-residence.sql"
+    ],
+    "note_component_id": "MARKDOWN-CENSUS-MOBILITY-VARIETY-NOTE",
+    "note": "**Mobility · 2021:** The box plot compares district rates, not individuals: boxes show the middle 50% and median, whiskers the full district range. Local work excludes working at home; local study covers full-time study in Hong Kong institutions. Both use the official district/new-town definition. The heatmap shows four residence-change shares within each district on a fixed 0–100% scale. Sankey links use published previous-area counts; filters select current residence. They do not identify exact district-to-district journeys.",
+    "note_height": 16,
+    "boxplot_contract": "One equally weighted observation per district, separate worker/student denominators; min/max whiskers. A one-district selection collapses each box to one rate.",
+    "heatmap_contract": "Four status counts divided by sum of seven published residence person counts within each district. Fixed 0-100% colour scale.",
+    "migration_contract": "Previous broad area to current region counts, not exact district-to-district flows; current-residence filters.",
+    "mcp_limitation": "Datasets, chart names and dashboard colors saved through MCP. Native chart definitions saved through Superset API because MCP does not author treemap, box plot, heatmap or Sankey configs.",
+    "label_colors": {
+      "Work in another district in Kowloon": "#1d4e89",
+      "Work in another district on Hong Kong Island": "#3275ad",
+      "Work in another district in new towns": "#559bc4",
+      "Work in another district in other areas in the New Territories": "#86bdd8",
+      "Work in the same district": "#12385d",
+      "Work at home": "#27877e",
+      "No fixed place/ Marine": "#899aaa",
+      "Places outside Hong Kong": "#cf9639",
+      "Previous: Hong Kong Island": "#3275ad",
+      "Current: Hong Kong Island": "#3275ad",
+      "Previous: Kowloon": "#27877e",
+      "Current: Kowloon": "#27877e",
+      "Previous: New towns": "#7465a7",
+      "Previous: Other areas in the New Territories/ Marine": "#a99bcb",
+      "Current: New Territories": "#7465a7"
+    }
+  }
+}

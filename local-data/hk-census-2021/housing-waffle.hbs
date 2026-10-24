@@ -1,0 +1,20 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<div id="housing-waffle"><div id="hw-total"><span id="hw-en-1-{{category_order}}-{{@index}}">Domestic households</span><span id="hw-tc-1-{{category_order}}-{{@index}}">家庭住戶</span><span id="hw-sc-1-{{category_order}}-{{@index}}">家庭住户</span>: <b>{{formatNumber data.[0].housing_total "en-HK"}}</b></div><div id="hw-caption"><span id="hw-en-2-{{category_order}}-{{@index}}">200 squares · each ≈0.5% of households</span><span id="hw-tc-2-{{category_order}}-{{@index}}">200個方格 · 每格約佔住戶的0.5%</span><span id="hw-sc-2-{{category_order}}-{{@index}}">200个方格 · 每格约占住户的0.5%</span></div>{{#if data}}<div id="hw-grid">{{#each data}}{{#each (parseJson housing_cells_json)}}{{#if this}}<span id="hw-cell-{{../category_order}}-{{@index}}" tabindex="0"><span id="hw-tip-{{../category_order}}-{{@index}}"><span id="hw-en-3-{{../category_order}}-{{@index}}">{{../category_label}}</span><span id="hw-tc-3-{{../category_order}}-{{@index}}">{{lookup (parseJson '{"Public rental housing": "公營租住房屋", "Subsidised home ownership housing": "資助自置居所房屋", "Private permanent housing": "私人永久性房屋", "Non-domestic housing": "非住宅用房屋", "Temporary housing": "臨時房屋"}') ../category_label}}</span><span id="hw-sc-3-{{../category_order}}-{{@index}}">{{lookup (parseJson '{"Public rental housing": "公营租住房屋", "Subsidised home ownership housing": "资助自置居所房屋", "Private permanent housing": "私人永久性房屋", "Non-domestic housing": "非住宅用房屋", "Temporary housing": "临时房屋"}') ../category_label}}</span><br><b>{{formatNumber ../housing_households "en-HK"}}</b> · {{formatNumber ../housing_share_pct "en-HK"}}%</span></span>{{/if}}{{/each}}{{/each}}</div><div id="hw-legend">{{#each data}}<div id="hw-legend-row-{{category_order}}"><i id="hw-swatch-{{category_order}}"></i><span><span id="hw-en-4-{{category_order}}-{{@index}}">{{category_label}}</span><span id="hw-tc-4-{{category_order}}-{{@index}}">{{lookup (parseJson '{"Public rental housing": "公營租住房屋", "Subsidised home ownership housing": "資助自置居所房屋", "Private permanent housing": "私人永久性房屋", "Non-domestic housing": "非住宅用房屋", "Temporary housing": "臨時房屋"}') category_label}}</span><span id="hw-sc-4-{{category_order}}-{{@index}}">{{lookup (parseJson '{"Public rental housing": "公营租住房屋", "Subsidised home ownership housing": "资助自置居所房屋", "Private permanent housing": "私人永久性房屋", "Non-domestic housing": "非住宅用房屋", "Temporary housing": "临时房屋"}') category_label}}</span></span><span id="hw-number-{{category_order}}">{{formatNumber housing_households "en-HK"}}<br><b>{{formatNumber housing_share_pct "en-HK"}}%</b></span></div>{{/each}}</div>{{else}}<p><span id="hw-en-5-{{category_order}}-{{@index}}">No households match these filters.</span><span id="hw-tc-5-{{category_order}}-{{@index}}">沒有符合篩選條件的住戶。</span><span id="hw-sc-5-{{category_order}}-{{@index}}">没有符合筛选条件的住户。</span></p>{{/if}}</div>

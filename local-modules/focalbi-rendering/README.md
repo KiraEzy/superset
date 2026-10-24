@@ -1,14 +1,30 @@
 # FocalBI native rendering overlay
 
-The module adds a renderer dropdown and optional presentation enhancements to
+The module adds optional renderer controls and presentation enhancements to
 native Superset dashboards. Create/edit dashboards normally: adding, removing or
 arranging charts needs no separate viewer definition. Filters, queries and access
 controls remain native. [ARCHITECTURE.md](ARCHITECTURE.md) defines the boundary.
 
 Copied renderers cover KPI, pie/donut, horizontal bar, mixed timeseries and table.
 Other types retain native rendering with a fallback label. **FocalBI fork** is the
-default; **Superset baseline** selects immutable copied renderers inside the same
-native dashboard. The choice persists in the browser.
+default. The renderer toolbar is hidden, and dashboards use the fork regardless
+of an older saved renderer choice. Both implementations and the selector remain
+available for testing.
+
+Saved charts can opt into `focalbi_disable_map_drag`, `focalbi_disable_map_zoom` and
+`focalbi_hide_native_renderer_label` (boolean flags in native chart params).
+See [chart-options.schema.json](chart-options.schema.json) and the architecture
+contract. Save flags through native chart authoring/API; the MCP chart converter
+does not expose deck.gl settings. Rebuild the active combined localization bundle
+after adapter changes; removing the flags restores defaults without a rebuild.
+
+To show the selector again, open the browser console on the FocalBI origin (or
+select its embedded frame as the console context), run
+`localStorage.setItem("focalbi.rendererSelector", "true")`, and reload the page.
+**Superset baseline** selects immutable copied renderers inside the same native
+dashboard; this choice persists while the selector is enabled. To hide it again,
+run `localStorage.removeItem("focalbi.rendererSelector")` and reload. This setting
+is per browser and FocalBI origin; no rebuild or service restart is needed.
 
 ## Install and activate
 
@@ -48,6 +64,14 @@ production bundle deliberately before production deployment.
 
 ## Editing and native business settings
 
+For native treemaps, save `focalbi_treemap_group_colors` in chart form data as a
+mapping from exact first-level group names to six-digit hex colours, for example
+`{"Hardware":"#1677a8","Services":"#218c6f"}`. Each group's descendants use
+stable lighter shades of its colour. Names, values, queries and filter semantics
+remain native. Both engines use this optional presentation setting; deleting it
+restores native colours. Unconfigured groups retain native colours. The
+[chart options schema](chart-options.schema.json) defines the saved contract.
+
 Native dashboard edit/Save and Explore own charts, layout, filters, data sources,
 metrics, formatting, exports and dates. The optional **Presentation** button in
 dashboard edit mode binds dynamic titles, applicable colors and series layering.
@@ -81,6 +105,7 @@ rollback commands; analytical data is independent of renderer installation/remov
 python -m unittest discover -s tests -v
 node --experimental-strip-types tests/settings.test.ts
 node --experimental-strip-types tests/category-sort.test.ts
+node --experimental-strip-types tests/treemap-colors.test.ts
 node --experimental-strip-types scripts/typecheck.ts
 node --experimental-strip-types scripts/build.ts
 python scripts/snapshot.py --verify

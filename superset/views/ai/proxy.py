@@ -168,7 +168,7 @@ Rules:
 
 - Share explore/preview URLs returned by chart tools.
 
-- When creating charts for the user, use save_chart: true so charts persist and appear inline in chat.
+- Preview charts with save_chart: false during exploration. Save only when the user explicitly requests persistence; inline previews do not require a saved chart.
 
 - Be concise in your final reply to the user."""
 
@@ -446,7 +446,6 @@ def mcp_jsonrpc(
         "Accept": MCP_ACCEPT,
 
         **_auth_headers(bearer_token),
-        **_forward_request_auth_headers(),
 
     }
 
@@ -563,32 +562,10 @@ def mcp_call_tool(
 
 
 def _simplify_json_schema(schema: Any) -> dict[str, Any]:
-
-    """Strip unsupported JSON Schema features for OpenAI-compatible tool calling."""
-
+    """Preserve original definitions, references and constraints losslessly."""
     if not isinstance(schema, dict):
-
         return {"type": "object", "properties": {}}
-
-
-
-    simplified: dict[str, Any] = {
-
-        "type": schema.get("type", "object"),
-
-        "properties": schema.get("properties", {}),
-
-    }
-
-    if required := schema.get("required"):
-
-        simplified["required"] = required
-
-    if description := schema.get("description"):
-
-        simplified["description"] = description
-
-    return simplified
+    return json.loads(json.dumps(schema))
 
 
 
@@ -678,7 +655,9 @@ def _extract_chart_payload(tool_name: str, raw_result: Any) -> dict[str, Any] | 
     form_data = structured.get("form_data")
     if not isinstance(form_data, dict) or not form_data:
         return None
-    chart_info = structured.get("chart") if isinstance(structured.get("chart"), dict) else {}
+    chart_info = structured.get("chart")
+    if not isinstance(chart_info, dict):
+        chart_info = {}
     slice_id = chart_info.get("id")
     title = chart_info.get("slice_name") or chart_info.get("title")
     viz_type = (
@@ -711,6 +690,11 @@ def _serialize_tool_result(result: Any) -> str:
         return "null"
 
     if isinstance(result, dict):
+        if result.get("isError") or result.get("is_error"):
+            safe_result = dict(result)
+            safe_result.pop("isError", None)
+            safe_result.pop("is_error", None)
+            return "Error: " + _serialize_tool_result(safe_result)
 
         content = result.get("content")
 
@@ -1025,6 +1009,13 @@ def iter_chat_completion_events(
         yield {"type": "status", "message": "Loading Superset MCP tools..."}
         mcp_tools = mcp_list_tools(mcp_server_url, bearer_token=mcp_bearer_token)
         mcp_tools = _filter_tools_for_roles(mcp_tools, role_names)
+        from superset.ai_runtime.tool_access import current_tool_allowed
+
+        mcp_tools = [
+            tool for tool in mcp_tools
+            if tool.get("name") in SYNTHETIC_MCP_TOOLS
+            or current_tool_allowed(str(tool.get("name", "")))
+        ]
         uses_tool_proxy = _uses_tool_search_proxy(mcp_tools)
         if uses_tool_proxy:
             openai_tools = mcp_tools_to_openai(mcp_tools)
@@ -1102,6 +1093,8 @@ def iter_chat_completion_events(
                         raise ValueError(
                             f"Tool {target_tool_name} is not available for read-only roles."
                         )
+                    if target_tool_name != "search_tools" and not current_tool_allowed(str(target_tool_name)):
+                        raise ValueError("This tool is unavailable under the administrator's Chat policy")
                     yield {"type": "tool_start", "tool": display_tool}
                     args_key = _tool_args_key(display_tool, mcp_arguments)
                     try:
@@ -1157,17 +1150,10 @@ def iter_chat_completion_events(
             continue
 
         yield {"type": "status", "message": "Writing response..."}
-        content_parts: list[str] = []
-        for token in _iter_llm_chat_completion_stream(
-            base_url=base_url,
-            headers=headers,
-            model=model,
-            messages=payload_messages,
-        ):
-            content_parts.append(token)
-            yield {"type": "token", "content": token}
+        content = _extract_text_content(message.get("content")).strip()
+        if content:
+            yield {"type": "token", "content": content}
 
-        content = "".join(content_parts).strip()
         if not content:
             raise ValueError("LLM returned an empty response")
 
@@ -1244,9 +1230,9 @@ def test_llm_connection(
 
     data = response.json()
     models = [
-        item.get("id")
+        item["id"]
         for item in data.get("data", [])
-        if isinstance(item, dict) and item.get("id")
+        if isinstance(item, dict) and isinstance(item.get("id"), str) and item["id"]
     ]
 
     if llm_model and llm_model.strip():

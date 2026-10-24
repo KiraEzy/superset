@@ -1,0 +1,39 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
+#chart-id-161 #user-content-housing-waffle{font:13px/1.45 Arial,"Noto Sans",sans-serif;color:#233745;padding:6px 12px;min-width:360px}
+#chart-id-161 [id^="user-content-hw-tc-"],#chart-id-161 [id^="user-content-hw-sc-"]{display:none}
+body:has([id$="housing-waffle-locale"][lang="zh-Hant"]) #chart-id-161 [id^="user-content-hw-en-"],body:has([id$="housing-waffle-locale"][lang="zh-Hans"]) #chart-id-161 [id^="user-content-hw-en-"]{display:none}
+body:has([id$="housing-waffle-locale"][lang="zh-Hant"]) #chart-id-161 [id^="user-content-hw-tc-"],body:has([id$="housing-waffle-locale"][lang="zh-Hans"]) #chart-id-161 [id^="user-content-hw-sc-"]{display:inline}
+#chart-id-161 #user-content-hw-total{font-size:16px;margin-bottom:5px}
+#chart-id-161 #user-content-hw-caption{color:#526774;font-size:12px;margin-bottom:16px}
+#chart-id-161 #user-content-hw-grid{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px;width:100%;max-width:430px;margin-bottom:18px}
+#chart-id-161 [id^="user-content-hw-cell-"]{aspect-ratio:1;position:relative;cursor:help}
+#chart-id-161 [id^="user-content-hw-tip-"]{display:none;position:absolute;bottom:calc(100% + 6px);left:0;background:#173447;color:white;padding:8px 10px;border-radius:3px;min-width:180px;width:max-content;max-width:240px;font-size:12px;z-index:20;box-shadow:0 3px 10px #0003}
+#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+11)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+12)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+13)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+14)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+15)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+16)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+17)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+18)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n+19)>span,#chart-id-161 [id^="user-content-hw-cell-"]:nth-child(20n)>span{left:auto;right:0}
+#chart-id-161 [id^="user-content-hw-cell-"]:hover,#chart-id-161 [id^="user-content-hw-cell-"]:focus{z-index:20;outline:2px solid #142f41;outline-offset:1px}
+#chart-id-161 [id^="user-content-hw-cell-"]:hover>span,#chart-id-161 [id^="user-content-hw-cell-"]:focus>span{display:block}
+#chart-id-161 [id^="user-content-hw-legend-row-"]{display:grid;grid-template-columns:13px minmax(0,1fr) 86px;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid #edf1f4}
+#chart-id-161 [id^="user-content-hw-swatch-"]{width:12px;height:12px;display:inline-block}
+#chart-id-161 [id^="user-content-hw-number-"]{text-align:right;font-size:12px;font-variant-numeric:tabular-nums}
+#chart-id-161 [id^="user-content-hw-cell-1-"],#chart-id-161 #user-content-hw-swatch-1{background:#2b6fa3}
+#chart-id-161 [id^="user-content-hw-cell-2-"],#chart-id-161 #user-content-hw-swatch-2{background:#469b92}
+#chart-id-161 [id^="user-content-hw-cell-3-"],#chart-id-161 #user-content-hw-swatch-3{background:#153e5c}
+#chart-id-161 [id^="user-content-hw-cell-4-"],#chart-id-161 #user-content-hw-swatch-4{background:#bc7b30}
+#chart-id-161 [id^="user-content-hw-cell-5-"],#chart-id-161 #user-content-hw-swatch-5{background:#8765a5}

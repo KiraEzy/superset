@@ -1,5 +1,10 @@
 # Universal content localization contracts
 
+Combined builds include the rendering module's optional deck.gl interaction
+adapter. Native-only builds retain the native import. Chart flags and their
+defaults belong to [the rendering contract](../focalbi-rendering/ARCHITECTURE.md);
+localization passes saved form data through unchanged.
+
 ## Boundary
 
 This module decorates display output. Resource UUIDs locate catalogs; resource names,

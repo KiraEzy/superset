@@ -362,7 +362,7 @@ const authRegistrationEnabled =
   getBootstrapData()?.common.conf.AUTH_USER_REGISTRATION;
 const isAdmin = isUserAdmin(user);
 
-if (findPermission('can_write', 'AIConnectionConfig', user?.roles)) {
+if (isAdmin && findPermission('can_write', 'AIConnectionConfig', user?.roles)) {
   routes.push({
     path: '/ai/connection/',
     Component: AIConnection,
