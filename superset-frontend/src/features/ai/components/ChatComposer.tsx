@@ -24,7 +24,8 @@ import { t } from '@apache-superset/core/translation';
 import { Button, Dropdown, Input } from '@superset-ui/core/components';
 import { Icons } from '@superset-ui/core/components/Icons';
 import { PublicModel } from '../modelCatalog';
-import { ImageReference } from '../runtime';
+import { ApprovalMode, ContextUsage, ImageReference } from '../runtime';
+import ContextUsageRing from './ContextUsageRing';
 
 export interface ImageDraft {
   key: string;
@@ -42,30 +43,44 @@ const Shell = styled.div`
   border-radius: 28px;
   background: ${({ theme }) => theme.colorBgContainer};
   box-shadow: 0 2px 8px ${({ theme }) => theme.colorFillTertiary};
-  .input-line {
+  .composer-controls {
     display: flex;
-    align-items: flex-end;
-    gap: 4px;
+    align-items: center;
+    gap: 8px;
     min-width: 0;
+  }
+  .composer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    min-width: 0;
+    max-width: calc(100% - 44px);
+  }
+  .composer-controls .composer-actions > .superset-button {
+    margin: 0;
   }
   .message-input {
-    flex: 1;
+    width: 100%;
     min-width: 0;
+    margin-bottom: 4px;
   }
   textarea.ant-input {
-    padding: 8px;
+    min-height: 44px;
+    padding: 8px 10px;
     border: 0;
     box-shadow: none;
     background: transparent;
     resize: none;
   }
-  .model-select {
+  .model-select,
+  .approval-mode {
     display: flex;
     align-items: center;
     gap: 6px;
     width: auto;
     min-width: 0;
-    max-width: min(180px, 34%);
+    flex-shrink: 1;
     cursor: pointer;
     user-select: none;
     caret-color: transparent;
@@ -78,14 +93,22 @@ const Shell = styled.div`
     box-shadow: none;
     font-weight: normal;
   }
-  .model-select .model-name {
+  .model-select {
+    max-width: 180px;
+  }
+  .approval-mode {
+    max-width: 160px;
+  }
+  .model-name,
+  .approval-label {
     display: block;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .model-select svg {
+  .model-select svg,
+  .approval-mode svg {
     flex-shrink: 0;
     width: 12px;
     height: 12px;
@@ -132,20 +155,6 @@ const Shell = styled.div`
     margin: 4px 8px;
     color: ${({ theme }) => theme.colorTextSecondary};
   }
-  @media (max-width: 600px) {
-    .input-line {
-      flex-wrap: wrap;
-    }
-    .message-input {
-      flex-basis: calc(100% - 44px);
-    }
-    .model-select {
-      margin-left: 40px;
-      width: calc(100% - 130px);
-      max-width: none;
-      flex: 1;
-    }
-  }
 `;
 const ModelMenu = styled.div`
   .ant-dropdown-menu {
@@ -182,6 +191,9 @@ export default function ChatComposer({
   onChange,
   models,
   modelId,
+  contextUsage,
+  approvalMode = 'ask',
+  onApprovalModeChange,
   onModelChange,
   images,
   onImagesChange,
@@ -197,6 +209,9 @@ export default function ChatComposer({
   onChange: (value: string) => void;
   models: PublicModel[];
   modelId: string;
+  contextUsage?: ContextUsage | null;
+  approvalMode?: ApprovalMode;
+  onApprovalModeChange?: (mode: ApprovalMode) => void;
   onModelChange: (id: string) => void;
   images: ImageDraft[];
   onImagesChange: (
@@ -389,7 +404,31 @@ export default function ChatComposer({
           {t('Choose an available model to continue.')}
         </p>
       )}
-      <div className="input-line">
+      <div className="message-input">
+        <Input.TextArea
+          aria-label={t('Message')}
+          value={value}
+          maxLength={64000}
+          onChange={e => onChange(e.target.value)}
+          placeholder={
+            running
+              ? t('Add guidance while work continues?')
+              : t('Ask about your data')
+          }
+          autoSize={{ minRows: 1, maxRows: 8 }}
+          onKeyDown={e => {
+            if (
+              e.key === 'Enter' &&
+              !e.shiftKey &&
+              !e.nativeEvent.isComposing
+            ) {
+              e.preventDefault();
+              if (canSend) onSend();
+            }
+          }}
+        />
+      </div>
+      <div className="composer-controls">
         <Dropdown
           open={menuOpen}
           onOpenChange={setMenuOpen}
@@ -424,75 +463,124 @@ export default function ChatComposer({
             <Icons.PlusOutlined />
           </Button>
         </Dropdown>
-        <div className="message-input">
-          <Input.TextArea
-            aria-label={t('Message')}
-            value={value}
-            maxLength={64000}
-            onChange={e => onChange(e.target.value)}
-            placeholder={
-              running
-                ? t('Add guidance while work continues?')
-                : t('Ask about your data')
-            }
-            autoSize={{ minRows: 1, maxRows: 8 }}
-            onKeyDown={e => {
-              if (
-                e.key === 'Enter' &&
-                !e.shiftKey &&
-                !e.nativeEvent.isComposing
-              ) {
-                e.preventDefault();
-                if (canSend) onSend();
-              }
-            }}
-          />
-        </div>
-        <Dropdown
-          trigger={['click']}
-          placement="topRight"
-          disabled={running || busy || !models.length}
-          dropdownRender={menu => <ModelMenu>{menu}</ModelMenu>}
-          menu={{
-            items: modelItems,
-            selectable: true,
-            selectedKeys: selectedModel ? [modelId] : [],
-            onClick: ({ key }) => onModelChange(key),
-          }}
-        >
-          <Button
-            className="model-select"
-            buttonStyle="tertiary"
-            aria-label={t('Chat model')}
-            title={selectedModel?.name || t('Choose model')}
+        <div className="composer-actions">
+          {onApprovalModeChange && (
+            <Dropdown
+              trigger={['click']}
+              placement="topLeft"
+              disabled={busy}
+              menu={{
+                selectedKeys: [approvalMode],
+                selectable: true,
+                onClick: ({ key }) => {
+                  if (key === 'ask' || key === 'full_access')
+                    onApprovalModeChange(key);
+                },
+                items: [
+                  {
+                    key: 'ask',
+                    label: (
+                      <div>
+                        <strong>{t('Ask for approval')}</strong>
+                        <div>
+                          {t('Confirm actions when required by Chat policy.')}
+                        </div>
+                      </div>
+                    ),
+                  },
+                  {
+                    key: 'full_access',
+                    label: (
+                      <div>
+                        <strong>{t('Full access')}</strong>
+                        <div>
+                          {t('Run tools within your Superset permissions.')}
+                        </div>
+                      </div>
+                    ),
+                  },
+                ],
+              }}
+            >
+              <Button
+                className="approval-mode"
+                buttonStyle="tertiary"
+                showMarginRight={false}
+                disabled={busy}
+                aria-label={t(
+                  'Action approval mode: %s',
+                  approvalMode === 'full_access'
+                    ? t('Full access')
+                    : t('Ask for approval'),
+                )}
+              >
+                <span className="approval-label">
+                  {approvalMode === 'full_access'
+                    ? t('Full access')
+                    : t('Ask for approval')}
+                </span>
+                <Icons.DownOutlined aria-hidden />
+              </Button>
+            </Dropdown>
+          )}
+          <Dropdown
+            trigger={['click']}
+            placement="topRight"
             disabled={running || busy || !models.length}
+            dropdownRender={menu => <ModelMenu>{menu}</ModelMenu>}
+            menu={{
+              items: modelItems,
+              selectable: true,
+              selectedKeys: selectedModel ? [modelId] : [],
+              onClick: ({ key }) => onModelChange(key),
+            }}
           >
-            <span className="model-name">
-              {selectedModel?.name || t('Choose model')}
-            </span>
-            <Icons.DownOutlined aria-hidden />
-          </Button>
-        </Dropdown>
-        {running && (
+            <Button
+              className="model-select"
+              buttonStyle="tertiary"
+              showMarginRight={false}
+              aria-label={t('Chat model')}
+              title={selectedModel?.name || t('Choose model')}
+              disabled={running || busy || !models.length}
+            >
+              <span className="model-name">
+                {selectedModel?.name || t('Choose model')}
+              </span>
+              <Icons.DownOutlined aria-hidden />
+            </Button>
+          </Dropdown>
+          <ContextUsageRing
+            usage={
+              (
+                contextUsage?.model_id
+                  ? contextUsage.model_id === modelId
+                  : contextUsage?.model === selectedModel?.name
+              )
+                ? contextUsage
+                : null
+            }
+          />
+          {running && (
+            <Button
+              className="composer-icon"
+              aria-label={t('Stop')}
+              title={t('Stop')}
+              onClick={onStop}
+            >
+              <Icons.StopOutlined />
+            </Button>
+          )}
           <Button
             className="composer-icon"
-            aria-label={t('Stop')}
-            title={t('Stop')}
-            onClick={onStop}
+            type="primary"
+            aria-label={running ? t('Send guidance') : t('Send')}
+            title={running ? t('Send guidance') : t('Send')}
+            disabled={!canSend}
+            onClick={onSend}
           >
-            <Icons.StopOutlined />
+            <Icons.UpOutlined />
           </Button>
-        )}
-        <Button
-          className="composer-icon"
-          type="primary"
-          aria-label={running ? t('Send guidance') : t('Send')}
-          title={running ? t('Send guidance') : t('Send')}
-          disabled={!canSend}
-          onClick={onSend}
-        >
-          <Icons.UpOutlined />
-        </Button>
+        </div>
       </div>
     </Shell>
   );

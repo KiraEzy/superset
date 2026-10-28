@@ -39,7 +39,8 @@ export function shouldRewriteSupersetUrl(url: string): boolean {
     const parsed = new URL(trimmed);
     return (
       LOCAL_HOSTS.has(parsed.hostname) ||
-      (parsed.pathname.includes('/explore/') && LOCAL_HOSTS.has(parsed.hostname))
+      (parsed.pathname.includes('/explore/') &&
+        LOCAL_HOSTS.has(parsed.hostname))
     );
   } catch {
     return false;

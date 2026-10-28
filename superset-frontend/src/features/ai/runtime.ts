@@ -17,7 +17,9 @@
  * under the License.
  */
 
-import { SupersetClient } from '@superset-ui/core';
+import { SupersetClient, getClientErrorObject } from '@superset-ui/core';
+
+export type ApprovalMode = 'ask' | 'full_access';
 
 export interface RuntimeMetadata {
   enabled: boolean;
@@ -51,7 +53,20 @@ export interface PendingRequest {
   arguments?: Record<string, unknown>;
   schema?: Record<string, unknown>;
 }
+export interface ContextUsage {
+  model: string;
+  model_id?: string | null;
+  context_window_tokens: number;
+  input_tokens: number;
+  output_tokens: number;
+  output_limit_tokens: number;
+  input_allowance_tokens: number;
+  tool_result_reserve_tokens: number;
+  estimated: boolean;
+}
 export interface Turn {
+  approval_mode?: ApprovalMode;
+  context_usage?: ContextUsage | null;
   activity?: WorkActivityData;
   id: string;
   thread_id: string;
@@ -102,10 +117,19 @@ export function reduceTurn(state: Turn | null, event: TurnEvent): Turn | null {
     };
   }
   const next = { ...state, last_sequence: event.sequence };
+  if (event.type === 'usage')
+    next.context_usage = event.payload.usage as ContextUsage;
   if (event.type === 'message_delta')
     next.content += String(event.payload.content ?? '');
+  if (event.type === 'message_reset')
+    next.content = String(event.payload.content ?? '');
   if (event.type === 'status' && typeof event.payload.status === 'string')
     next.status = event.payload.status;
+  if (
+    event.payload.approval_mode === 'ask' ||
+    event.payload.approval_mode === 'full_access'
+  )
+    next.approval_mode = event.payload.approval_mode;
   if (event.type === 'activity_updated') {
     const item = event.payload.item as Turn['items'][number] | undefined;
     if (
@@ -151,11 +175,20 @@ export async function runtimeGet<T>(path: string): Promise<T> {
   return (json.result ?? json) as T;
 }
 export async function runtimePost<T>(path: string, body: object): Promise<T> {
-  const { json } = await SupersetClient.post({
-    endpoint: `/api/v1/ai/${path}`,
-    jsonPayload: body,
-  });
-  return (json.result ?? json) as T;
+  try {
+    const { json } = await SupersetClient.post({
+      endpoint: `/api/v1/ai/${path}`,
+      jsonPayload: body,
+    });
+    return (json.result ?? json) as T;
+  } catch (error) {
+    const parsed = await getClientErrorObject(
+      error as Parameters<typeof getClientErrorObject>[0],
+    );
+    throw new Error(
+      parsed.message || parsed.error || 'Request failed. Try again.',
+    );
+  }
 }
 
 export interface ImageReference {

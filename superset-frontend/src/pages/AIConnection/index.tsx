@@ -571,7 +571,7 @@ export default function AIConnection() {
               }
             >
               {({ getFieldValue }) =>
-                ['custom', 'lmstudio'].includes(
+                ['custom', 'lmstudio', 'deepseek'].includes(
                   getFieldValue('llmProvider'),
                 ) ? (
                   <>

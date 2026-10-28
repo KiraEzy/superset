@@ -266,7 +266,7 @@ See the [AI user guide](docs/docs/using-superset/using-ai-with-superset.mdx) and
 [runtime architecture](docs/developer_docs/extensions/ai-chat-runtime.md).
 
 ```bash
-pip install -r requirements/ai-chat.txt
+pip install -r requirements/ai-chat.txt -r requirements/ai-agents.txt
 superset db upgrade
 celery -A superset.ai_runtime.worker:app worker --beat --queues=ai --concurrency=4 --loglevel=INFO --schedule=/tmp/focal-ai-beat
 ```
@@ -296,19 +296,89 @@ For internal rollout, enable the flag only on the internal Chat web deployment.
 Turning it off disables new runtime submissions; it retains records and must not
 replay them through legacy Chat. See [runtime architecture and policy](docs/developer_docs/extensions/ai-chat-runtime.md).
 
-Legacy test cleanup is separate from schema migration. Capture the exact IDs
-before refactoring; inspect the manifest and dry run before applying it:
+### SDK-native runtime and conversation reset
+
+#### Model context settings
+
+Before upgrading an existing deployment, retain its
+`AI_RUNTIME_MODEL_CONTEXT_LIMITS` configuration and run `superset db upgrade` in
+that application's environment. Migration `f7a8b9c0d1e2` copies matching profiles
+to existing connection/model identities. Confirm the values in **AI Connection →
+Available in Chat → Settings**, then remove the migrated Python overrides and
+restart the Chat web and worker processes for the code rollout. Connections,
+model verification, conversations and saved BI resources are retained.
+
+Subsequent model budget edits use the centered Settings dialog and need no
+restart. Context, response and tool-result reservations are independent for each
+connection/model; new turns use the saved values. Restore defaults clears the
+model overrides on Save rather than restoring an imported Python profile.
+Configure the inference server separately and keep Focal BI's context limit within
+its actual capacity. See the [runtime budget policy](docs/developer_docs/extensions/ai-chat-runtime.md#context-budgeting-and-compaction).
+
+Validate the settings path with:
 
 ```bash
-superset ai-runtime capture-legacy --output /secure/path/legacy-chat.json
-superset ai-runtime purge-legacy --manifest /secure/path/legacy-chat.json
-superset ai-runtime purge-legacy --manifest /secure/path/legacy-chat.json --apply
-pytest --confcutdir=tests/ai_runtime tests/ai_runtime -q
+pytest --confcutdir=tests/ai_runtime tests/ai_runtime/test_model_settings.py tests/ai_runtime/test_model_catalog.py tests/ai_runtime/test_native_context.py -q
+cd superset-frontend
+npm test -- --runInBand src/features/ai/components/ModelSettingsModal.test.tsx src/features/ai/components/ModelCatalogue.test.tsx
 ```
 
-The purge checks captured IDs, UUIDs and legacy runtime versions, reports counts,
-and never deletes BI resources or connection settings. Run live provider and
-browser evaluations against staging before expanding rollout.
+Durable context summaries require the additive `e6f7a8b9c0d1` migration. Run
+`superset db upgrade` before restarting the Chat web and AI worker processes.
+Existing history and connections are preserved; no conversation reset is required.
+See the [context policy](docs/developer_docs/extensions/ai-chat-runtime.md#context-budgeting-and-compaction)
+for thresholds, fallback behavior and validation.
+
+The Agents SDK is the only Chat execution engine. Native contract 3 is accepted
+server-side; `AI_RUNTIME_EXECUTION_ENGINE` no longer selects an engine. Existing
+conversation history is disposable and must be reset before cutover, not imported.
+Keep saved BI resources, model/MCP connections, private accounts and policies.
+
+Build the Chat-only image before applying the combined Compose command above:
+
+```bash
+docker build -f docker/ai-chat/Dockerfile -t focalbi-ai-sdk:20261025 .
+pytest --confcutdir=tests/ai_runtime tests/ai_runtime -q
+AI_SDK_EVAL_CONNECTION=deepseek AI_SDK_EVAL_WORKER=1 python tests/ai_runtime/live_sdk_evaluation.py
+AI_SDK_EVAL_CONNECTION=deepseek AI_SDK_EVAL_COMPACTION=1 python tests/ai_runtime/live_sdk_evaluation.py
+```
+
+The image provides `/opt/focal-ai/bin/python` for the dedicated Celery worker.
+The base Superset and external MCP images are not modified. If package-network
+access is unavailable during this local cutover, `Dockerfile.offline` copies only
+validated Python environments from the local `focalbi-ai-precutover:20261025`
+dependency snapshot. It copies neither runtime environment settings nor temporary
+conversation artifacts. Rebuild from pinned requirements for a fresh installation.
+
+For a conversation reset, stop the web and AI worker, settle leased/unknown writes,
+and take a full metadata database backup plus the current code/image snapshot.
+Use PostgreSQL `pg_dump -Fc` and verify readability with `pg_restore --file=/dev/null`
+inside the database container. Keep the backup outside Git. Capture and review the
+exact table counts before applying the reset with the same application environment:
+
+```bash
+superset ai-runtime capture-reset --output /secure/path/chat-reset.json
+superset ai-runtime reset-conversations --manifest /secure/path/chat-reset.json
+superset ai-runtime reset-conversations --manifest /secure/path/chat-reset.json --apply
+```
+
+Only conversation tables, SDK items and private chat images are deleted. An
+inventory mismatch or unexpected inbound foreign key aborts; protected BI and
+connection fingerprints must stay unchanged. Restart only `superset ai-worker`.
+Use a fresh conversation to verify both providers, chart creation/modification,
+browser reload, approvals, edit/retry/fork and connection preservation.
+`AI_SDK_EVAL_WORKER=1` waits for the real queue worker; without it the evaluation
+executes the worker function directly. `AI_SDK_EVAL_CONNECTION=gpustack` selects
+the other provider. `AI_SDK_EVAL_REPORT` chooses the report file;
+`AI_SDK_EVAL_THINKING=off` checks DeepSeek without thinking.
+`AI_SDK_EVAL_COMPACTION=1` seeds completed synthetic SDK exchanges in the tagged
+evaluation chat before chart modification and checks encrypted summary publication.
+It changes only that test turn's context budget, not provider settings.
+
+Disabling Chat stops submissions and shows an unavailable state; it does not open
+the retired composer. Rollback requires restoring the saved code/image and metadata
+backup after reconciling remote effects, not switching an engine flag. See the
+[architecture](docs/developer_docs/extensions/ai-sdk-architecture.md).
 
 ## Repo Activity
 

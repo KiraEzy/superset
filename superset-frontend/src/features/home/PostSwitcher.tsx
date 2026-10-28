@@ -107,9 +107,7 @@ export default function PostSwitcher({
     align-items: baseline;
   `;
 
-  const postLabelNode = (
-    <span data-test="post-switcher-label">{label}</span>
-  );
+  const postLabelNode = <span data-test="post-switcher-label">{label}</span>;
 
   return (
     <div css={rowCss} data-test="post-switcher-root">

@@ -87,6 +87,14 @@ function ThinkingPhase({
         : item.status === 'cancelled'
           ? t('Thinking cancelled')
           : t('Thinking interrupted');
+  const reason =
+    item.status === 'interrupted'
+      ? item.payload.interruption_reason === 'worker_lease_expired'
+        ? t('The worker lease expired; execution was recovered.')
+        : t('This generation ended before its completion was recorded.')
+      : item.status === 'cancelled'
+        ? t('The run was cancelled.')
+        : undefined;
   const hasModelReasoning = summaries.some(
     summary => summary.kind === 'model_reasoning',
   );
@@ -96,6 +104,7 @@ function ThinkingPhase({
         <span role="status" aria-live="polite">
           {label}
         </span>
+        {reason && <small> {reason}</small>}
       </div>
     );
   return (
@@ -112,6 +121,7 @@ function ThinkingPhase({
             : label}
         </span>
       </summary>
+      {reason && <p>{reason}</p>}
       {summaries.map(summary => (
         <ChatMarkdown
           key={summary.id}

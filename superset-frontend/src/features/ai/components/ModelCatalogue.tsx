@@ -45,11 +45,13 @@ import { Alert } from '@apache-superset/core/components';
 import { Button, Input, Select } from '@superset-ui/core/components';
 
 import { Icons } from '@superset-ui/core/components/Icons';
+import ModelSettingsModal from './ModelSettingsModal';
 
 import {
   catalogRequest,
   waitVerification,
   ModelCatalogue as Catalogue,
+  CatalogModel,
 } from '../modelCatalog';
 
 const Panel = styled.section`
@@ -118,8 +120,22 @@ const Panel = styled.section`
   }
 
   .model-row > span {
+    flex: 1;
     min-width: 0;
 
+    overflow-wrap: anywhere;
+  }
+
+  .model-choice {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  .model-choice > span {
+    min-width: 0;
     overflow-wrap: anywhere;
   }
 
@@ -199,6 +215,7 @@ export default function ModelCatalogue({
   const [status, setStatus] = useState('');
 
   const [error, setError] = useState('');
+  const [settingsModel, setSettingsModel] = useState<CatalogModel | null>(null);
 
   const ids = draftIds.filter(id => data.models.some(m => m.id === id));
   const selected = data.models
@@ -349,28 +366,60 @@ export default function ModelCatalogue({
             aria-label={t('Available in Chat')}
           >
             {selected.map(m => (
-              <label className="model-row" key={m.id}>
-                <input
-                  type="checkbox"
-                  disabled={busy}
-                  checked={right.includes(m.id)}
-                  onChange={() => setRight(toggle(right, m.id))}
-                />
+              <div className="model-row" key={m.id}>
+                <label className="model-choice">
+                  <input
+                    type="checkbox"
+                    aria-label={`${m.name} / ${m.connection}`}
+                    disabled={busy}
+                    checked={right.includes(m.id)}
+                    onChange={() => setRight(toggle(right, m.id))}
+                  />
 
-                <span>
-                  {m.name}
+                  <span>
+                    {m.name}
 
-                  <small>
-                    {m.connection} /{' '}
-                    {m.ready ? m.status : t('Needs verification')}
-                    {m.vision ? ` / ${t('Images')}` : ''}
-                  </small>
-                </span>
-              </label>
+                    <small>
+                      {m.connection} /{' '}
+                      {m.ready ? m.status : t('Needs verification')}
+                      {m.vision ? ` / ${t('Images')}` : ''}
+                    </small>
+                    {m.runtime_settings && (
+                      <small>
+                        {t(
+                          'Context %s · Response %s',
+                          m.runtime_settings.values.context_window_tokens.toLocaleString(),
+                          m.runtime_settings.values.response_tokens.toLocaleString(),
+                        )}
+                      </small>
+                    )}
+                  </span>
+                </label>
+                <Button
+                  buttonStyle="secondary"
+                  buttonSize="small"
+                  disabled={busy || !m.runtime_settings}
+                  aria-label={t('Settings for %s / %s', m.name, m.connection)}
+                  onClick={() => setSettingsModel(m)}
+                >
+                  {t('Settings')}
+                </Button>
+              </div>
             ))}
           </div>
         </div>
       </div>
+      {settingsModel && (
+        <ModelSettingsModal
+          key={settingsModel.id}
+          model={settingsModel}
+          onHide={() => setSettingsModel(null)}
+          onSaved={async () => {
+            await reload();
+            setStatus(t('Model settings saved. Applies to new turns.'));
+          }}
+        />
+      )}
 
       <label>{t('Default model')}</label>
 

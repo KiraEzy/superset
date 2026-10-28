@@ -33,6 +33,18 @@ export interface CatalogModel extends PublicModel {
   ready: boolean;
   published: boolean;
   position: number | null;
+  runtime_settings?: ModelRuntimeSettings;
+}
+export interface ModelTokenLimits {
+  context_window_tokens: number;
+  response_tokens: number;
+  tool_result_tokens: number;
+}
+export interface ModelRuntimeSettings {
+  values: ModelTokenLimits;
+  defaults: ModelTokenLimits;
+  revision: number;
+  input_allowance_tokens: number;
 }
 export interface ModelConnection {
   id: string;

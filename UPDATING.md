@@ -24,6 +24,15 @@ assists people when migrating to a new version.
 
 ## Next
 
+### Focal BI SDK-native Chat cutover
+
+AI Chat uses the pinned Python Agents SDK as its sole execution loop. Legacy
+conversation transcripts/checkpoints are not imported. Back up and reset disposable
+chat history with the manifest-bound CLI before enabling the cutover image; see
+[operator instructions](README.md#sdk-native-runtime-and-conversation-reset).
+Model/MCP connections, accounts, policies and saved BI resources are preserved.
+The old engine selector and legacy-composer fallback are retired.
+
 ## 6.1.0
 
 ### ClickHouse minimum driver version bump

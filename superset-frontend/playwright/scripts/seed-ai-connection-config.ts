@@ -44,7 +44,9 @@ async function main() {
   const adminUsername = process.env.PLAYWRIGHT_ADMIN_USERNAME || 'admin';
   const adminPassword = process.env.PLAYWRIGHT_ADMIN_PASSWORD || 'general';
 
-  console.log('[seed-ai-connection] Logging in and seeding AI connection config...');
+  console.log(
+    '[seed-ai-connection] Logging in and seeding AI connection config...',
+  );
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ baseURL });

@@ -62,9 +62,7 @@ describe('aiChatApi SSE parsing', () => {
     expect(first.events).toHaveLength(0);
     expect(first.remainder).toBe('data: {"type": "error", "message": "Insuff');
 
-    const second = splitSseBuffer(
-      `${first.remainder}icient Balance"}\n\n`,
-    );
+    const second = splitSseBuffer(`${first.remainder}icient Balance"}\n\n`);
     expect(second.events).toHaveLength(1);
     expect(second.events[0]).toEqual({
       type: 'error',
@@ -104,12 +102,14 @@ describe('streamChatMessage', () => {
   });
 
   test('surfaces provider error from the final SSE chunk', async () => {
-    global.fetch = jest.fn().mockResolvedValue(
-      createSseResponse([
-        'data: {"type": "status", "message": "Thinking..."}\n\n',
-        'data: {"type": "error", "message": "Insufficient Balance", "source": "llm"}',
-      ]),
-    );
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue(
+        createSseResponse([
+          'data: {"type": "status", "message": "Thinking..."}\n\n',
+          'data: {"type": "error", "message": "Insufficient Balance", "source": "llm"}',
+        ]),
+      );
 
     await expect(
       streamChatMessage([{ role: 'user', content: 'hello' }]),
@@ -117,11 +117,13 @@ describe('streamChatMessage', () => {
   });
 
   test('does not mask provider errors with the generic fallback', async () => {
-    global.fetch = jest.fn().mockResolvedValue(
-      createSseResponse([
-        'data: {"type": "error", "message": "Insufficient Balance"}\n\n',
-      ]),
-    );
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue(
+        createSseResponse([
+          'data: {"type": "error", "message": "Insufficient Balance"}\n\n',
+        ]),
+      );
 
     await expect(
       streamChatMessage([{ role: 'user', content: 'hello' }]),
@@ -132,9 +134,9 @@ describe('streamChatMessage', () => {
     const controller = new AbortController();
     controller.abort();
 
-    global.fetch = jest.fn().mockRejectedValue(
-      new DOMException('Aborted', 'AbortError'),
-    );
+    global.fetch = jest
+      .fn()
+      .mockRejectedValue(new DOMException('Aborted', 'AbortError'));
 
     await expect(
       streamChatMessage(

@@ -34,6 +34,7 @@ import {
 } from '../aiChatSessionApi';
 import { ChatSession, ChatSessionSummary, AiChatChartPayload } from '../types';
 import {
+  ApprovalMode,
   Artifact,
   RuntimeContext,
   RuntimeMetadata,
@@ -473,6 +474,10 @@ export default function RuntimeWorkspace({
   const [context, setContext] = useState<RuntimeContext[]>([]);
   const [contextType, setContextType] =
     useState<RuntimeContext['type']>('dataset');
+  const [approvalMode, setApprovalMode] = useState<ApprovalMode>('ask');
+  useEffect(() => {
+    if (turn?.approval_mode) setApprovalMode(turn.approval_mode);
+  }, [turn?.id, turn?.approval_mode]);
   const [contextId, setContextId] = useState('');
   const [filters, setFilters] = useState('{}');
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -495,6 +500,7 @@ export default function RuntimeWorkspace({
   useEffect(() => {
     let disposed = false;
     setTurn(null);
+    setApprovalMode('ask');
     setSession(null);
     setError('');
     setImages([]);
@@ -511,7 +517,10 @@ export default function RuntimeWorkspace({
           const current = value.activeTurn ?? value.latestTurn;
           if (current) {
             const active = await runtimeGet<Turn>(`turns/${current.id}`);
-            if (!disposed) setTurn(active);
+            if (!disposed) {
+              setTurn(active);
+              setApprovalMode(active.approval_mode ?? 'ask');
+            }
           }
         })
         .catch(reason => {
@@ -584,6 +593,7 @@ export default function RuntimeWorkspace({
     [
       'status',
       'message_delta',
+      'message_reset',
       'tool_started',
       'tool_completed',
       'activity_updated',
@@ -625,6 +635,7 @@ export default function RuntimeWorkspace({
         const value = await runtimePost<Turn>(`threads/${target.id}/turns`, {
           input: input.trim() || t('Describe the attached image.'),
           model_id: modelId,
+          approval_mode: approvalMode,
           attachment_ids: images.flatMap(image =>
             image.image ? [image.image.id] : [],
           ),
@@ -1016,6 +1027,15 @@ export default function RuntimeWorkspace({
                     {request.expires_at && (
                       <p>{t('Expires: %s', request.expires_at)}</p>
                     )}
+                    {request.kind === 'approval' &&
+                      request.expires_at &&
+                      Date.parse(request.expires_at) < Date.now() && (
+                        <p role="status">
+                          {t(
+                            'This approval expired. Refresh it to review the current operation, or choose Full access.',
+                          )}
+                        </p>
+                      )}
                     {request.kind === 'clarification' && (
                       <Input
                         aria-label={request.message}
@@ -1029,7 +1049,10 @@ export default function RuntimeWorkspace({
                       />
                     )}
                     {(request.kind === 'approval'
-                      ? ['accept', 'decline']
+                      ? request.expires_at &&
+                        Date.parse(request.expires_at) < Date.now()
+                        ? ['refresh']
+                        : ['accept', 'decline']
                       : request.kind === 'review'
                         ? []
                         : request.kind === 'connection'
@@ -1059,9 +1082,11 @@ export default function RuntimeWorkspace({
                         }
                       >
                         {request.kind === 'approval'
-                          ? decision === 'accept'
-                            ? t('Approve')
-                            : t('Decline')
+                          ? decision === 'refresh'
+                            ? t('Refresh approval')
+                            : decision === 'accept'
+                              ? t('Approve')
+                              : t('Decline')
                           : request.kind === 'connection'
                             ? t('Resume after administrator repair')
                             : t('Submit answer')}
@@ -1178,6 +1203,20 @@ export default function RuntimeWorkspace({
           onChange={setInput}
           models={metadata.models ?? []}
           modelId={modelId}
+          contextUsage={turn?.context_usage}
+          approvalMode={approvalMode}
+          onApprovalModeChange={mode => {
+            if (turn && !isTerminal(turn)) {
+              perform(async () => {
+                const updated = await runtimePost<Turn>(
+                  `turns/${turn.id}/approval-mode`,
+                  { approval_mode: mode },
+                );
+                setTurn(updated);
+                setApprovalMode(updated.approval_mode ?? mode);
+              });
+            } else setApprovalMode(mode);
+          }}
           onModelChange={setModelId}
           images={images}
           onImagesChange={setImages}

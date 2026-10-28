@@ -62,7 +62,12 @@ const MarkdownWrapper = styled.div`
       }
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       margin: ${theme.sizeUnit * 3}px 0 ${theme.sizeUnit * 1.5}px;
       font-weight: 600;
       line-height: 1.3;
@@ -70,12 +75,23 @@ const MarkdownWrapper = styled.div`
         margin-top: 0;
       }
     }
-    h1 { font-size: 1.4em; }
-    h2 { font-size: 1.25em; }
-    h3 { font-size: 1.1em; }
-    h4, h5, h6 { font-size: 1em; }
+    h1 {
+      font-size: 1.4em;
+    }
+    h2 {
+      font-size: 1.25em;
+    }
+    h3 {
+      font-size: 1.1em;
+    }
+    h4,
+    h5,
+    h6 {
+      font-size: 1em;
+    }
 
-    ul, ol {
+    ul,
+    ol {
       margin: 0 0 ${theme.sizeUnit * 2}px;
       padding-left: ${theme.sizeUnit * 5}px;
     }
@@ -186,7 +202,8 @@ const CodeContent = styled.pre`
     margin: 0;
     padding: ${theme.sizeUnit * 2.5}px;
     overflow-x: auto;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-family:
+      'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-size: ${theme.fontSizeSM}px;
     line-height: 1.5;
     color: ${theme.colorText};
@@ -202,7 +219,8 @@ const CodeContent = styled.pre`
 
 const InlineCode = styled.code`
   ${({ theme }) => css`
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-family:
+      'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-size: 0.88em;
     padding: 1px 5px;
     background: ${theme.colorBgTextHover};
@@ -258,7 +276,8 @@ const ToolBadge = styled.span`
   `}
 `;
 
-const CHART_LINK_RE = /\[([^\]]*)\]\((https?:\/\/[^\s)]*\/explore\/\?slice_id=(\d+)[^\s)]*)\)/g;
+const CHART_LINK_RE =
+  /\[([^\]]*)\]\((https?:\/\/[^\s)]*\/explore\/\?slice_id=(\d+)[^\s)]*)\)/g;
 const TOOLS_USED_RE = /\n\n—\n_Tools used: (.+)_$/;
 
 function CodeBlockRenderer({
@@ -313,7 +332,10 @@ export default function ChatMarkdown({ content }: ChatMarkdownProps) {
     if (match) {
       return {
         body: content.slice(0, match.index),
-        toolsUsed: match[1].split(', ').map(s => s.trim()).filter(Boolean),
+        toolsUsed: match[1]
+          .split(', ')
+          .map(s => s.trim())
+          .filter(Boolean),
       };
     }
     return { body: content, toolsUsed: [] as string[] };
@@ -348,7 +370,9 @@ export default function ChatMarkdown({ content }: ChatMarkdownProps) {
         if (inline) {
           return <InlineCode {...props}>{codeChildren}</InlineCode>;
         }
-        return <CodeBlockRenderer language={lang}>{codeText}</CodeBlockRenderer>;
+        return (
+          <CodeBlockRenderer language={lang}>{codeText}</CodeBlockRenderer>
+        );
       },
       a({
         href,

@@ -1,0 +1,12 @@
+# Optional Chat worker dependency. Never install into the external MCP server.
+# The execution snapshot requires this exact SDK version for resumable turns.
+openai-agents==0.10.5
+openai==2.19.0
+pydantic==2.12.3
+# Preserve the deployed MCP client/HTTP dependency contract during SDK adoption.
+mcp==1.24.0
+httpx==0.28.1
+starlette==0.49.1
+# Match Superset's base constraints when installing the optional SDK environment.
+cryptography==46.0.5
+referencing==0.36.2

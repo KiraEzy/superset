@@ -127,31 +127,6 @@ def recover_stale() -> int:
             call.get("status") == "in_progress" and call.get("effect") != "read"
             for call in checkpoint.get("calls", {}).values()
         )
-        activity = (
-            db.session.query(AiRuntimeItem)
-            .filter(
-                AiRuntimeItem.turn_id == turn.id,
-                AiRuntimeItem.kind.in_(
-                    ["reasoning_status", "reasoning_summary", "model_reasoning"]
-                ),
-            )
-            .all()
-        )
-        active_generations = {
-            store.loads(item.payload_json).get("generation_id")
-            for item in activity
-            if item.kind == "reasoning_status" and item.status == "running"
-        }
-        visible_reasoning = any(
-            item.kind in {"reasoning_summary", "model_reasoning"}
-            and bool(store.loads(item.payload_json).get("message"))
-            and (
-                item.status == "running"
-                or store.loads(item.payload_json).get("generation_id")
-                in active_generations
-            )
-            for item in activity
-        )
         if turn.status == "cancelling":
             turn.status = "needs_review" if uncertain else "cancelled"
             if not uncertain:
@@ -162,20 +137,12 @@ def recover_stale() -> int:
                 {"status": turn.status},
                 commit=False,
             )
-        elif not uncertain and (
-            turn.content != checkpoint.get("content", "") or visible_reasoning
-        ):
-            # Do not silently regenerate a model request whose partial answer
-            # was already displayed before the worker disappeared.
-            turn.status, turn.active_key = "failed", None
-            turn.error_json = store.dumps(
-                {
-                    "code": "interrupted_generation",
-                    "message": "Model output was interrupted. Retry in a new branch.",
-                }
-            )
-            store.append_event(turn, "turn_failed", {"status": "failed"}, commit=False)
         else:
+            if store.loads(turn.state_json).get("execution_engine") == "sdk_native":
+                turn.content = checkpoint.get("content", "")
+                store.append_event(
+                    turn, "message_reset", {"content": turn.content}, commit=False
+                )
             turn.status = "queued"
             db.session.add(AiRuntimeOutbox(turn_id=turn.id))
             store.append_event(
@@ -196,6 +163,14 @@ def recover_stale() -> int:
             .all()
         ):
             item.status = "cancelled" if turn.status == "cancelled" else "interrupted"
+            item.payload_json = store.dumps(
+                {
+                    **store.loads(item.payload_json),
+                    "interruption_reason": "cancelled"
+                    if turn.status == "cancelled"
+                    else "worker_lease_expired",
+                }
+            )
             store.append_event(
                 turn,
                 "activity_updated",
@@ -271,12 +246,19 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
     )
     deltas: list[str] = []
     last_delta_flush = time.monotonic()
+    last_lease_renewal = time.monotonic()
 
     def live() -> AiRuntimeTurn:
+        nonlocal last_lease_renewal
         db.session.expire(turn)
         db.session.refresh(turn)
         if turn.lease_owner != owner:
             raise LostLeaseError("AI worker lease was replaced")
+        # Streaming callbacks also renew the lease if the timer task is delayed.
+        if time.monotonic() - last_lease_renewal >= 10:
+            turn.lease_expires = store.now() + timedelta(seconds=LEASE_SECONDS)
+            db.session.commit()
+            last_lease_renewal = time.monotonic()
         return turn
 
     def refresh_auth() -> str | None:
@@ -308,10 +290,24 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
         inputs = []
         for row in rows:
             value = store.loads(row.payload_json)
-            inputs.append(value)
-            row.status = "completed"
+            if state.get("execution_engine") == "sdk_native":
+                inputs.append({**value, "_native_input_id": row.id})
+            else:
+                inputs.append(value)
+                row.status = "completed"
         db.session.commit()
         return inputs
+
+    def ack_native_inputs(identifiers: list[str]) -> None:
+        live()
+        db.session.query(AiRuntimeItem).filter(
+            AiRuntimeItem.turn_id == turn.id,
+            AiRuntimeItem.kind == "user_input",
+            AiRuntimeItem.id.in_(identifiers),
+        ).update({"status": "completed"}, synchronize_session=False)
+        db.session.commit()
+
+    state["_ack_native_inputs"] = ack_native_inputs
 
     def flush_deltas() -> None:
         nonlocal last_delta_flush
@@ -358,6 +354,8 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
         flush_deltas()
         live()
         item_id = None
+        if kind == "message_reset":
+            turn.content = str(payload.get("content", ""))
         if kind in {"tool_started", "tool_completed"}:
             external = str(payload.get("call_id", payload.get("id", "")))
             row = (
@@ -592,6 +590,64 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
 
         state["_artifact_index"] = artifact_index
         state["_read_artifact"] = read_artifact
+
+        def read_record(call_id: str) -> dict[str, Any] | None:
+            refresh_auth()
+            source = (
+                db.session.query(AiRuntimeTurn)
+                .join(AiRuntimeItem, AiRuntimeItem.turn_id == AiRuntimeTurn.id)
+                .filter(
+                    AiRuntimeTurn.session_id == turn.session_id,
+                    AiRuntimeTurn.user_id == turn.user_id,
+                    AiRuntimeTurn.post_id == turn.post_id,
+                    AiRuntimeItem.kind == "tool",
+                    AiRuntimeItem.external_id == call_id,
+                )
+                .first()
+            )
+            return (
+                store.loads(source.state_json)
+                .get("checkpoint", {})
+                .get("calls", {})
+                .get(call_id)
+                if source
+                else None
+            )
+
+        state["_read_record"] = read_record
+        state["_authorize_refs"] = store.validate_context
+        state["_validate_preview"] = artifact_memory.validate_preview
+        if state.get("execution_engine") == "sdk_native":
+            from superset.ai_runtime.context import digest
+            from superset.ai_runtime.native_session import (
+                application_models,
+                FocalSession,
+            )
+
+            state["_native_session"] = FocalSession(
+                str(state["thread_id"]),
+                database=db.session,
+                models=application_models(),
+                owner_id=turn.user_id,
+                post_id=turn.post_id,
+                turn_id=turn.id,
+                binding=digest(
+                    {
+                        key: state["config"].get(key)
+                        for key in (
+                            "llmApiBaseUrl",
+                            "llmModel",
+                            "model_connection_id",
+                            "model_revision",
+                        )
+                    }
+                ),
+                guard=refresh_auth,
+                offset=int(state.get("checkpoint", {}).get("session_offset", 0)),
+                allow_rebind=not bool(
+                    state.get("checkpoint", {}).get("native_started")
+                ),
+            )
         validate_refs = state.get("context", [])
         store.validate_context(validate_refs)
 
@@ -635,6 +691,8 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
         turn.state_json = store.dumps(final_state)
         turn.content = result.get("content", turn.content) or ""
         turn.status = result["status"]
+        if turn.status == "queued":
+            db.session.add(AiRuntimeOutbox(turn_id=turn.id))
         request = result.get("pending_request")
         if request:
             pending = AiRuntimeItem(
@@ -752,6 +810,15 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
             for v in cp.get("calls", {}).values()
         )
         turn.status = "needs_review" if uncertain else "failed"
+        if code := getattr(ex, "code", None):
+            if code == "cancelled" and not uncertain:
+                turn.status = "cancelled"
+        accepted = store.loads(turn.state_json)
+        if accepted.get("execution_engine") == "sdk_native" and not uncertain:
+            from superset.ai_runtime.native_history import seal_terminal
+            from superset.ai_runtime.native_session import application_models
+
+            seal_terminal(db.session, application_models(), turn, cp)
         if not uncertain:
             turn.active_key = None
         turn.lease_owner, turn.lease_expires = None, None

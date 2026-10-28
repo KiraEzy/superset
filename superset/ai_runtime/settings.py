@@ -31,13 +31,28 @@ def enabled() -> bool:
     return value is True or str(value).lower() in {"1", "true", "yes"}
 
 
+def execution_snapshot() -> dict[str, Any]:
+    """Select new turns only; queued and interrupted turns keep their snapshot."""
+    from .execution import SDK_VERSION
+
+    return {
+        "execution_engine": "sdk_native",
+        "execution_version": 3,
+        "execution_sdk_version": SDK_VERSION,
+    }
+
+
 def limits(
     model: str | None = None, provider: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     """Return bounded operational defaults configurable on Chat processes."""
-    profiles = current_app.config.get("AI_RUNTIME_MODEL_CONTEXT_LIMITS", {})
-    profile = profiles.get(model, {}) if model else {}
     config = provider or {}
+    # Resolved catalogue identities carry a database-owned snapshot. The Python
+    # profiles are only a migration source for pre-existing model identities.
+    profiles = current_app.config.get("AI_RUNTIME_MODEL_CONTEXT_LIMITS", {})
+    profile = config.get("model_runtime_settings")
+    if profile is None:
+        profile = profiles.get(model, {}) if model else {}
     endpoint = urlsplit(str(config.get("llmApiBaseUrl", "")))
     # Chat operational cap below the official V4 1M context window:
     # https://api-docs.deepseek.com/quick_start/pricing/

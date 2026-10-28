@@ -135,8 +135,9 @@ describe('useAiChatSessions stopGeneration', () => {
   });
 
   test('persists partial assistant content when stream is aborted', async () => {
-    jest.spyOn(aiChatSessionApi, 'appendChatMessage').mockImplementation(
-      async (_sessionId, message) => ({
+    jest
+      .spyOn(aiChatSessionApi, 'appendChatMessage')
+      .mockImplementation(async (_sessionId, message) => ({
         message: {
           id: message.role === 'user' ? 'user-1' : 'assistant-1',
           role: message.role,
@@ -144,8 +145,7 @@ describe('useAiChatSessions stopGeneration', () => {
           timestamp: Date.now(),
         },
         session: sessionSummary,
-      }),
-    );
+      }));
 
     jest
       .spyOn(aiChatApi, 'streamChatMessage')
@@ -183,8 +183,9 @@ describe('useAiChatSessions stopGeneration', () => {
   });
 
   test('removes assistant placeholder when aborted before tokens arrive', async () => {
-    jest.spyOn(aiChatSessionApi, 'appendChatMessage').mockImplementation(
-      async (_sessionId, message) => ({
+    jest
+      .spyOn(aiChatSessionApi, 'appendChatMessage')
+      .mockImplementation(async (_sessionId, message) => ({
         message: {
           id: 'user-1',
           role: message.role,
@@ -192,8 +193,7 @@ describe('useAiChatSessions stopGeneration', () => {
           timestamp: Date.now(),
         },
         session: sessionSummary,
-      }),
-    );
+      }));
 
     jest
       .spyOn(aiChatApi, 'streamChatMessage')
@@ -232,18 +232,19 @@ describe('useAiChatSessions stopGeneration', () => {
       slice_id: 42,
     };
 
-    jest.spyOn(aiChatSessionApi, 'appendChatMessage').mockImplementation(
-      async (_sessionId, message) => ({
+    jest
+      .spyOn(aiChatSessionApi, 'appendChatMessage')
+      .mockImplementation(async (_sessionId, message) => ({
         message: {
           id: message.role === 'user' ? 'user-1' : 'assistant-1',
           role: message.role,
           content: message.content,
           timestamp: Date.now(),
-          charts: (message.extra?.charts as typeof chartPayload[]) ?? undefined,
+          charts:
+            (message.extra?.charts as (typeof chartPayload)[]) ?? undefined,
         },
         session: sessionSummary,
-      }),
-    );
+      }));
 
     jest
       .spyOn(aiChatApi, 'streamChatMessage')
@@ -302,13 +303,16 @@ describe('useAiChatSessions send from /ai/', () => {
       messages: [],
     };
 
-    jest.spyOn(aiChatSessionApi, 'createChatSession').mockResolvedValue(newSession);
+    jest
+      .spyOn(aiChatSessionApi, 'createChatSession')
+      .mockResolvedValue(newSession);
     jest.spyOn(aiChatSessionApi, 'getChatSessionByUuid').mockResolvedValue({
       ...newSession,
       messages: [],
     });
-    jest.spyOn(aiChatSessionApi, 'appendChatMessage').mockImplementation(
-      async (_sessionId, message) => ({
+    jest
+      .spyOn(aiChatSessionApi, 'appendChatMessage')
+      .mockImplementation(async (_sessionId, message) => ({
         message: {
           id: message.role === 'user' ? 'user-new' : 'assistant-new',
           role: message.role,
@@ -316,25 +320,25 @@ describe('useAiChatSessions send from /ai/', () => {
           timestamp: Date.now(),
         },
         session: { ...newSession, title: 'hello' },
-      }),
-    );
+      }));
 
     let resolveStream: (value: {
       content: string;
       tools_used?: string[];
     }) => void = () => {};
-    const streamPromise = new Promise<{ content: string; tools_used?: string[] }>(
-      resolve => {
-        resolveStream = resolve;
-      },
-    );
+    const streamPromise = new Promise<{
+      content: string;
+      tools_used?: string[];
+    }>(resolve => {
+      resolveStream = resolve;
+    });
 
-    jest.spyOn(aiChatApi, 'streamChatMessage').mockImplementation(
-      async (_history, handlers = {}) => {
+    jest
+      .spyOn(aiChatApi, 'streamChatMessage')
+      .mockImplementation(async (_history, handlers = {}) => {
         handlers.onToken?.('Hi');
         return streamPromise;
-      },
-    );
+      });
 
     const { result } = renderHook(() => useAiChatSessions(), {
       wrapper: createWrapper('/ai/'),
@@ -434,8 +438,9 @@ describe('useAiChatSessions history ordering', () => {
       ...activeSummary,
       messages: [],
     });
-    jest.spyOn(aiChatSessionApi, 'appendChatMessage').mockImplementation(
-      async (_sessionId, message) => ({
+    jest
+      .spyOn(aiChatSessionApi, 'appendChatMessage')
+      .mockImplementation(async (_sessionId, message) => ({
         message: {
           id: message.role === 'user' ? 'user-1' : 'assistant-1',
           role: message.role,
@@ -446,8 +451,7 @@ describe('useAiChatSessions history ordering', () => {
           message.role === 'user'
             ? { ...activeSummary, updatedAt: 200 }
             : activeSummary,
-      }),
-    );
+      }));
     jest.spyOn(aiChatApi, 'streamChatMessage').mockResolvedValue({
       content: 'Reply',
     });

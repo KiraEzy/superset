@@ -59,6 +59,8 @@ class AiModel(Model):
     available = Column(Boolean, nullable=False, default=True)
     position = Column(Integer, nullable=True)
     is_default = Column(Boolean, nullable=False, default=False)
+    runtime_settings_json = Column(Text, nullable=True, default="{}")
+    settings_revision = Column(Integer, nullable=False, default=0)
 
 
 class AiModelVerification(Model):

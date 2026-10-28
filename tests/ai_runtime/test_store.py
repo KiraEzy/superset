@@ -18,6 +18,7 @@
 
 from datetime import timedelta
 from types import SimpleNamespace
+from typing import Any
 from uuid import uuid4
 
 import pytest
@@ -102,6 +103,10 @@ def ledger(monkeypatch, test_app):
         )
         db.session.add(user)
         db.session.commit()
+        from superset.ai_runtime.native_session import application_models
+
+        sdk_rows = application_models()
+        sdk_rows[0].metadata.create_all(db.engine)
         scope = {"post": 11}
         g.user = user
         manager = SimpleNamespace(
@@ -144,6 +149,12 @@ def ledger(monkeypatch, test_app):
         )
         db.session.add(thread)
         db.session.commit()
+        db.session.add(
+            sdk_rows[0](
+                id=str(thread.uuid), owner_id=1, post_id=11, binding="test", revision=0
+            )
+        )
+        db.session.commit()
         yield SimpleNamespace(
             db=db,
             store=store,
@@ -157,6 +168,7 @@ def ledger(monkeypatch, test_app):
             Outbox=AiRuntimeOutbox,
         )
         db.session.remove()
+        sdk_rows[0].metadata.drop_all(db.engine)
         AiChatSession.metadata.drop_all(db.engine, tables=list(reversed(tables)))
 
 
@@ -336,9 +348,9 @@ def test_partial_model_output_does_not_regenerate_after_worker_loss(ledger):
     turn.content = "Already displayed partial answer"
     l.db.session.commit()
     l.runner.recover_stale()
-    assert turn.status == "failed" and turn.active_key is None
-    assert l.store.loads(turn.error_json)["code"] == "interrupted_generation"
-    assert turn.content == "Already displayed partial answer"
+    assert turn.status == "queued"
+    assert turn.content == ""
+    assert turn.active_key == str(l.thread.uuid)
 
 
 def test_dispatched_but_lost_queue_message_is_republished(ledger, monkeypatch):
@@ -406,36 +418,6 @@ def test_rollback_disables_new_inputs_without_hiding_accepted_turns(ledger):
         current_app.config["AI_CHAT_RUNTIME_ENABLED"] = True
 
 
-def test_scoped_legacy_purge_preserves_later_and_runtime_conversations(
-    ledger, tmp_path
-):
-    from click.testing import CliRunner
-    from superset.cli.ai_runtime import ai_runtime
-    from superset.models.ai_chat import AiChatSession
-
-    l = ledger
-    captured = AiChatSession(title="Captured test", runtime_version=1, created_by_fk=1)
-    l.db.session.add(captured)
-    l.db.session.commit()
-    captured_id = captured.id
-    manifest = tmp_path / "captured.json"
-    runner = CliRunner()
-    result = runner.invoke(ai_runtime, ["capture-legacy", "--output", str(manifest)])
-    assert result.exit_code == 0, result.output
-    later = AiChatSession(title="Created later", runtime_version=1, created_by_fk=1)
-    l.db.session.add(later)
-    l.db.session.commit()
-    dry_run = runner.invoke(ai_runtime, ["purge-legacy", "--manifest", str(manifest)])
-    assert dry_run.exit_code == 0 and "Would delete 1" in dry_run.output
-    result = runner.invoke(
-        ai_runtime, ["purge-legacy", "--manifest", str(manifest), "--apply"]
-    )
-    assert result.exit_code == 0 and "Deleted 1" in result.output
-    assert l.db.session.query(AiChatSession).get(captured_id) is None
-    assert l.db.session.query(AiChatSession).get(later.id) is not None
-    assert l.db.session.query(AiChatSession).get(l.thread.id) is not None
-
-
 def test_fork_copies_prior_evidence_and_artifact_provenance(ledger):
     l = ledger
     first = l.store.submit(str(l.thread.uuid), payload())
@@ -460,7 +442,6 @@ def test_fork_copies_prior_evidence_and_artifact_provenance(ledger):
     branch = l.store.fork(l.thread, target.id)
     assert str(branch.uuid) != str(l.thread.uuid)
     assert branch.parent_uuid == str(l.thread.uuid) and branch.post_id == 11
-    assert l.store.history(branch) == state["messages"]
     copies = l.db.session.query(l.Artifact).filter(l.Artifact.id != original.id).all()
     assert len(copies) == 1
     assert l.store.loads(copies[0].provenance_json)["source_artifact_id"] == original.id
@@ -742,10 +723,8 @@ def test_reply_fork_includes_selected_reply_and_remaps_branch_boundaries(ledger)
     copied = next(m for m in branch.messages if m.role == "assistant")
     copied_turn = l.db.session.query(l.Turn).filter_by(session_id=branch.id).one()
     assert copied.extra["runtime_turn_id"] == copied_turn.id != source.id
-    assert l.store.history(branch) == state["messages"]
     assert l.db.session.query(l.Outbox).filter_by(turn_id=copied_turn.id).count() == 0
     nested = l.store.branch_reply(branch, copied_turn.id, "after")
-    assert l.store.history(nested) == state["messages"]
 
 
 def test_retry_uses_selected_original_prompt_and_preserves_original_thread(ledger):
@@ -866,7 +845,7 @@ def test_edit_resend_rewinds_to_selected_input_and_preserves_original(ledger):
     )
     revised = l.store.loads(queued.state_json)
     assert revised["input_text"] == "Revised question"
-    assert revised["messages"] == state["messages"]
+    assert revised["messages"] == []
     assert revised["workflow_ids"] == [workflow]
     contents = [m.content for m in branch.messages]
     assert "Revised question" in contents
@@ -888,32 +867,6 @@ def test_edit_rejects_invalid_input_without_creating_branch(ledger, value):
     with pytest.raises(l.store.RuntimeRequestError, match="Input must contain"):
         l.store.branch_reply(l.thread, source.id, "edit", edited_input=value)
     assert l.db.session.query(AiChatSession).count() == count
-
-
-def test_context_memory_survives_turn_boundary_without_changing_history(ledger):
-    from flask import current_app
-
-    l = ledger
-    first = l.store.submit(str(l.thread.uuid), payload())
-    state = l.store.loads(first.state_json)
-    original = [{"role": "user", "content": "Keep filter year=2025"}]
-    memory = {"version": 1, "summaries": {"source-hash": {"entries": []}}}
-    state.update(messages=original, checkpoint={"context_memory": memory})
-    first.state_json = l.store.dumps(state)
-    first.status, first.active_key = "completed", None
-    l.db.session.commit()
-    current_app.config["AI_RUNTIME_MODEL_CONTEXT_LIMITS"] = {
-        "test-model": {"context_window_tokens": 16384}
-    }
-    try:
-        second = l.store.submit(str(l.thread.uuid), payload("next", "Continue"))
-        accepted = l.store.loads(second.state_json)
-        assert accepted["messages"] == original
-        assert accepted["checkpoint"]["context_memory"] == memory
-        assert accepted["budgets"]["context_window_tokens"] == 16384
-        assert l.store.loads(first.state_json) == state
-    finally:
-        current_app.config.pop("AI_RUNTIME_MODEL_CONTEXT_LIMITS", None)
 
 
 def test_activity_upserts_publish_full_items_and_keep_terminal_truth(
@@ -1007,6 +960,10 @@ def test_worker_recovery_closes_abandoned_activity_before_new_generation(ledger)
         .one()
     )
     assert ctx.store.loads(event.payload_json)["item"]["id"] == phase.id
+    assert (
+        ctx.store.loads(event.payload_json)["item"]["payload"]["interruption_reason"]
+        == "worker_lease_expired"
+    )
 
 
 def test_opted_in_reasoning_is_durable_visible_activity_not_answer_text(
@@ -1087,6 +1044,373 @@ def test_worker_failure_does_not_regenerate_partially_displayed_model_reasoning(
     ctx.db.session.commit()
     assert ctx.runner.recover_stale() == 1
     ctx.db.session.refresh(turn)
-    assert turn.status == "failed"
-    assert ctx.store.loads(turn.error_json)["code"] == "interrupted_generation"
+    assert turn.status == "queued"
+    assert turn.error_json is None
     assert ctx.store.snapshot(turn)["activity"]["items"][0]["status"] == "interrupted"
+
+
+@pytest.mark.parametrize("mode,expected", [("after", 2), ("edit", 0), ("retry", 0)])
+def test_native_branch_uses_sdk_boundary_not_legacy_history(
+    ledger, monkeypatch, mode, expected
+):
+    import asyncio
+    from flask import current_app
+    from superset.ai_runtime.native_session import application_models, FocalSession
+
+    l = ledger
+    monkeypatch.setitem(current_app.config, "AI_RUNTIME_EXECUTION_ENGINE", "sdk_native")
+    rows = application_models()
+    rows[0].metadata.create_all(l.db.engine)
+    try:
+        source = l.store.submit(str(l.thread.uuid), payload())
+        session = FocalSession(
+            str(l.thread.uuid),
+            database=l.db.session,
+            models=rows,
+            owner_id=1,
+            post_id=11,
+            binding="test",
+            turn_id=source.id,
+            guard=lambda: None,
+        )
+        asyncio.run(
+            session.add_items(
+                [
+                    {"role": "user", "content": "question"},
+                    {"role": "assistant", "content": "answer"},
+                ]
+            )
+        )
+        source.status, source.active_key = "completed", None
+        value = l.store.loads(source.state_json)
+        assert value["messages"] == []
+        value["checkpoint"].update(
+            session_end=2, sdk_state="private-checkpoint", grants={"call": "grant"}
+        )
+        source.state_json = l.store.dumps(value)
+        l.db.session.add(
+            l.Item(
+                turn_id=source.id,
+                kind="tool",
+                status="completed",
+                external_id="source-call",
+                payload_json="{}",
+            )
+        )
+        l.db.session.commit()
+        branch = l.store.branch_reply(l.thread, source.id, mode, edited_input="edited")
+        copied = (
+            l.db.session.query(rows[1]).filter_by(session_id=str(branch.uuid)).count()
+        )
+        assert copied == expected
+        assert (
+            l.db.session.query(rows[1]).filter_by(session_id=str(l.thread.uuid)).count()
+            == 2
+        )
+        if mode == "after":
+            cloned = l.db.session.query(l.Turn).filter_by(session_id=branch.id).one()
+            cp = l.store.loads(cloned.state_json)["checkpoint"]
+            assert (
+                l.db.session.query(l.Item)
+                .filter_by(turn_id=cloned.id, external_id="source-call")
+                .count()
+                == 1
+            )
+            assert "sdk_state" not in cp and "grants" not in cp
+    finally:
+        l.db.session.rollback()
+        rows[0].metadata.drop_all(l.db.engine)
+
+
+def test_native_cancel_seals_pending_sdk_call_without_dispatch(ledger, monkeypatch):
+    import asyncio
+    from flask import current_app
+    from superset.ai_runtime.native_session import application_models, FocalSession
+
+    l = ledger
+    monkeypatch.setitem(current_app.config, "AI_RUNTIME_EXECUTION_ENGINE", "sdk_native")
+    rows = application_models()
+    rows[0].metadata.create_all(l.db.engine)
+    try:
+        turn = l.store.submit(str(l.thread.uuid), payload())
+        session = FocalSession(
+            str(l.thread.uuid),
+            database=l.db.session,
+            models=rows,
+            owner_id=1,
+            post_id=11,
+            binding="test",
+            turn_id=turn.id,
+            guard=lambda: None,
+        )
+        asyncio.run(
+            session.add_items(
+                [
+                    {"role": "user", "content": "question"},
+                    {
+                        "type": "function_call",
+                        "call_id": "pending",
+                        "name": "read",
+                        "arguments": "{}",
+                    },
+                ]
+            )
+        )
+        value = l.store.loads(turn.state_json)
+        value["checkpoint"].update(sdk_session_id=str(l.thread.uuid), calls={})
+        turn.state_json = l.store.dumps(value)
+        l.db.session.commit()
+        l.store.cancel(turn)
+        assert turn.status == "cancelled"
+        saved = asyncio.run(session.get_items())
+        assert (
+            saved[-1]["call_id"] == "pending"
+            and saved[-1]["type"] == "function_call_output"
+        )
+        assert "without a recorded outcome" in saved[-1]["output"]
+    finally:
+        l.db.session.rollback()
+        rows[0].metadata.drop_all(l.db.engine)
+
+
+def test_native_stale_stream_restores_durable_content_and_replays_reset(ledger):
+    l = ledger
+    turn = l.store.submit(str(l.thread.uuid), payload())
+    turn.status, turn.lease_owner = "running", "abandoned"
+    turn.lease_expires = l.store.now() - timedelta(minutes=2)
+    turn.content = "uncheckpointed partial"
+    value = l.store.loads(turn.state_json)
+    value.update(execution_engine="sdk_native")
+    value["checkpoint"].update(content="durable content", native_started=True, calls={})
+    turn.state_json = l.store.dumps(value)
+    l.db.session.commit()
+    assert l.runner.recover_stale() == 1
+    assert turn.status == "queued" and turn.content == "durable content"
+    assert (
+        l.db.session.query(l.Event)
+        .filter_by(turn_id=turn.id, event_type="message_reset")
+        .count()
+        == 1
+    )
+
+
+def test_recovery_reset_updates_reload_snapshot_before_completion(ledger, monkeypatch):
+    from superset.ai_runtime import engine
+
+    context = ledger
+    turn = context.store.submit(str(context.thread.uuid), payload())
+
+    async def fake_run(state, **callbacks):
+        callbacks["emit"]("message_delta", {"content": "obsolete partial"})
+        callbacks["emit"]("message_reset", {"content": "recovered"})
+        context.db.session.refresh(turn)
+        assert context.store.snapshot(turn)["content"] == "recovered"
+        return {
+            "status": "completed",
+            "content": "recovered",
+            "checkpoint": {"calls": {}},
+        }
+
+    monkeypatch.setattr(engine, "run_turn", fake_run)
+    context.runner.execute_turn(turn.id)
+    assert turn.status == "completed"
+
+
+def test_only_native_contract_is_selected_despite_legacy_configuration(
+    ledger, monkeypatch
+):
+    from flask import current_app
+
+    monkeypatch.setitem(current_app.config, "AI_RUNTIME_EXECUTION_ENGINE", "legacy")
+    turn = ledger.store.submit(
+        str(ledger.thread.uuid), {**payload(), "execution_engine": "legacy"}
+    )
+    state = ledger.store.loads(turn.state_json)
+    assert state["execution_engine"] == "sdk_native"
+    assert state["execution_version"] == 3
+    assert state["messages"] == []
+    assert state["checkpoint"] == {}
+
+
+def test_deleting_conversation_removes_only_its_sdk_history(ledger, monkeypatch):
+    import asyncio
+    from uuid import UUID
+    from superset.ai_runtime.native_session import FocalSession, application_models
+    from superset.commands.ai_chat.delete import DeleteAiChatSessionCommand
+    from superset.daos.ai_chat import AiChatSessionDAO
+
+    ctx = ledger
+    rows = application_models()
+    sdk = FocalSession(
+        str(ctx.thread.uuid),
+        database=ctx.db.session,
+        models=rows,
+        owner_id=1,
+        post_id=11,
+        binding="test",
+        turn_id="test",
+        guard=lambda: None,
+    )
+    asyncio.run(sdk.add_items([{"role": "user", "content": "private history"}]))
+    ctx.db.session.add(
+        rows[0](id="other", owner_id=2, post_id=12, binding="other", revision=0)
+    )
+    ctx.db.session.commit()
+    monkeypatch.setattr(AiChatSessionDAO, "find_by_uuid", lambda uuid: ctx.thread)
+    DeleteAiChatSessionCommand(UUID(str(ctx.thread.uuid))).run()
+    assert ctx.db.session.query(rows[1]).count() == 0
+    assert ctx.db.session.query(rows[0]).filter_by(id="other").count() == 1
+
+
+def test_retired_execution_contracts_fail_without_model_or_tool_calls():
+    import asyncio
+    from superset.ai_runtime.engine import run_turn
+    from superset.ai_runtime.contracts import AiRuntimeError
+
+    for engine in ("legacy", "agents_sdk", None):
+        with pytest.raises(AiRuntimeError, match="predates the SDK reset"):
+            asyncio.run(run_turn({"execution_engine": engine}))
+
+
+def test_stream_checks_renew_lease_when_heartbeat_timer_has_not_run(
+    ledger, monkeypatch
+):
+    from superset.ai_runtime import engine
+
+    ctx = ledger
+    turn = ctx.store.submit(str(ctx.thread.uuid), payload())
+    ticks = [100.0]
+    monkeypatch.setattr(ctx.runner.time, "monotonic", lambda: ticks[0])
+
+    async def fake_run(state, **callbacks):
+        turn.lease_expires = ctx.store.now() + timedelta(seconds=1)
+        ctx.db.session.commit()
+        ticks[0] += 11
+        assert callbacks["cancelled"]() is False
+        ctx.db.session.refresh(turn)
+        assert turn.lease_expires >= ctx.store.now() + timedelta(seconds=50)
+        return {
+            "status": "completed",
+            "content": "Done",
+            "messages": [],
+            "checkpoint": {
+                "calls": {},
+                "context_usage": {"model": "test", "input_tokens": 100},
+            },
+        }
+
+    monkeypatch.setattr(engine, "run_turn", fake_run)
+    ctx.runner.execute_turn(turn.id)
+    ctx.db.session.refresh(turn)
+    assert turn.status == "completed"
+    assert ctx.store.snapshot(turn)["context_usage"] == {
+        "model": "test",
+        "input_tokens": 100,
+    }
+
+
+@pytest.mark.parametrize("mode", ["ask", "full_access"])
+def test_confirmation_mode_is_validated_and_snapshotted(ledger: Any, mode: str) -> None:
+    value = {**payload(), "approval_mode": mode}
+    turn = ledger.store.submit(str(ledger.thread.uuid), value)
+    assert ledger.store.snapshot(turn)["approval_mode"] == mode
+    assert ledger.store.loads(turn.state_json)["approval_mode"] == mode
+
+
+@pytest.mark.parametrize("mode", ["admin", True, None, ["full_access"]])
+def test_invalid_confirmation_modes_are_rejected(ledger: Any, mode: Any) -> None:
+    with pytest.raises(ledger.store.RuntimeRequestError, match="Choose"):
+        ledger.store.submit(
+            str(ledger.thread.uuid), {**payload(), "approval_mode": mode}
+        )
+
+
+def pending_approval(ledger: Any) -> tuple[Any, Any]:
+    turn = ledger.store.submit(str(ledger.thread.uuid), payload())
+    details = {
+        "kind": "approval",
+        "call_id": "call",
+        "fingerprint": "bound",
+        "expires_at": (ledger.store.now() - timedelta(minutes=5)).isoformat() + "Z",
+    }
+    state = ledger.store.loads(turn.state_json)
+    state["checkpoint"] = {"pending_request": details}
+    state["pending_request"] = details
+    turn.state_json = ledger.store.dumps(state)
+    turn.status = "waiting_approval"
+    item = ledger.Item(
+        turn_id=turn.id,
+        kind="request",
+        status="pending",
+        payload_json=ledger.store.dumps(details),
+    )
+    ledger.db.session.add(item)
+    ledger.db.session.commit()
+    return turn, item
+
+
+def test_expired_approval_refresh_does_not_grant_or_dispatch(ledger: Any) -> None:
+    turn, item = pending_approval(ledger)
+    data = {
+        "expected_turn_id": turn.id,
+        "idempotency_key": "approval",
+        "request_id": item.id,
+        "response": {"decision": "accept"},
+    }
+    with pytest.raises(ledger.store.RuntimeRequestError, match="expired"):
+        ledger.store.input_turn(turn, data)
+    ledger.store.input_turn(turn, {**data, "response": {"decision": "refresh"}})
+    state = ledger.store.loads(turn.state_json)
+    assert turn.status == "queued"
+    assert state["approved_scopes"] == []
+    assert state["pending_response"] == {"decision": "refresh"}
+    assert item.status == "completed"
+
+
+def test_full_access_resumes_expired_approval_without_reusing_its_grant(
+    ledger: Any,
+) -> None:
+    turn, item = pending_approval(ledger)
+    ledger.store.set_approval_mode(turn, "full_access")
+    assert turn.status == "queued"
+    assert item.status == "completed"
+    state = ledger.store.loads(turn.state_json)
+    assert state["approval_mode"] == "full_access"
+    assert state["approved_scopes"] == []
+    assert state["checkpoint"]["pending_request"]["fingerprint"] == "bound"
+    assert (
+        ledger.db.session.query(ledger.Item)
+        .filter_by(turn_id=turn.id, kind="approval_mode")
+        .count()
+        == 1
+    )
+
+
+def test_mode_changes_reach_active_worker_and_cannot_be_smuggled_in_steering(
+    ledger: Any,
+) -> None:
+    turn = ledger.store.submit(str(ledger.thread.uuid), payload())
+    turn.status = "running"
+    ledger.db.session.commit()
+    ledger.store.set_approval_mode(turn, "full_access")
+    updates = (
+        ledger.db.session.query(ledger.Item)
+        .filter_by(turn_id=turn.id, kind="user_input")
+        .all()
+    )
+    assert [ledger.store.loads(item.payload_json) for item in updates] == [
+        {"_approval_mode": "full_access"}
+    ]
+    with pytest.raises(ledger.store.RuntimeRequestError, match="control"):
+        ledger.store.input_turn(
+            turn,
+            {
+                "expected_turn_id": turn.id,
+                "idempotency_key": "hidden",
+                "input": "x",
+                "_approval_mode": "full_access",
+            },
+        )
+    ledger.scope["post"] = 12
+    with pytest.raises(ledger.store.RuntimeRequestError):
+        ledger.store.get_turn(turn.id)

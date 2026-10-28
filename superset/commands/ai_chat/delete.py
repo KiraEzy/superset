@@ -40,6 +40,27 @@ class DeleteAiChatSessionCommand(BaseCommand):
     def run(self) -> None:
         self.validate()
         assert self._model is not None
+        if self._model.runtime_version == 2:
+            from superset.ai_runtime.native_session import application_models
+            from superset.extensions import db
+
+            session, item = application_models()
+            identifier = str(self._model.uuid)
+            row = (
+                db.session.query(session)
+                .filter_by(
+                    id=identifier,
+                    owner_id=self._model.created_by_fk,
+                    post_id=self._model.post_id,
+                )
+                .one_or_none()
+            )
+            if row is not None:
+                db.session.query(session.summary_model).filter_by(
+                    session_id=identifier
+                ).delete()
+                db.session.query(item).filter_by(session_id=identifier).delete()
+                db.session.delete(row)
         AiChatSessionDAO.delete([self._model])
 
     def validate(self) -> None:

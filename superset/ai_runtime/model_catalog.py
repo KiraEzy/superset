@@ -108,7 +108,10 @@ def catalogue(*, admin: bool = False) -> dict[str, Any]:
             "default": model.is_default,
         }
         if admin:
+            from superset.ai_runtime.model_settings import describe
+
             value.update(
+                runtime_settings=describe(model, json.loads(conn.config_json)),
                 connection_id=conn.id,
                 status=model.status if model.available else "unavailable",
                 ready=ready,
@@ -163,6 +166,8 @@ def resolve(model_id: str | None, base: dict[str, Any]) -> dict[str, Any]:
     return {
         **base,
         **json.loads(conn.config_json),
+        "model_runtime_settings": json.loads(selected.runtime_settings_json or "{}"),
+        "model_settings_revision": selected.settings_revision,
         "llmModel": selected.model_name,
         "model_id": selected.id,
         "model_connection_id": conn.id,
@@ -195,10 +200,10 @@ def save_reasoning_visibility(connection_id: str, enabled: Any) -> None:
             "Wait for connection verification before changing reasoning display"
         )
     config = json.loads(conn.config_json)
-    if enabled and config.get("llmProvider") not in {"custom", "lmstudio"}:
+    if enabled and config.get("llmProvider") not in {"custom", "lmstudio", "deepseek"}:
         raise ValueError(
             "Model reasoning display is supported only for "
-            "self-hosted compatible connections"
+            "self-hosted compatible or DeepSeek connections"
         )
     config["showModelReasoning"] = enabled
     conn.config_json = json.dumps(config)
@@ -254,10 +259,10 @@ def queue_connection(data: dict[str, Any]) -> str:  # noqa: C901 - validated con
     )
     if not isinstance(display, bool):
         raise ValueError("showModelReasoning must be a boolean")
-    if display and provider not in {"custom", "lmstudio"}:
+    if display and provider not in {"custom", "lmstudio", "deepseek"}:
         raise ValueError(
             "Model reasoning display is supported only for "
-            "self-hosted compatible connections"
+            "self-hosted compatible or DeepSeek connections"
         )
     candidate = {
         "label": label,

@@ -79,6 +79,7 @@ class AIRuntimeRestApi(BaseApi):
             "cancel",
             "input",
             "fork",
+            "approval_mode",
             "upload_image",
             "preview_image",
             "remove_image",
@@ -147,6 +148,22 @@ class AIRuntimeRestApi(BaseApi):
             {
                 "result": store.snapshot(
                     store.input_turn(store.get_turn(turn_id, lock=True), body())
+                )
+            }
+        )
+
+    @expose("/turns/<turn_id>/approval-mode", methods=("POST",))
+    @protect()
+    @safe
+    @runtime_errors
+    def approval_mode(self, turn_id: str) -> Response:
+        """Change confirmations within the authenticated user's current turn scope."""
+        return jsonify(
+            {
+                "result": store.snapshot(
+                    store.set_approval_mode(
+                        store.get_turn(turn_id, lock=True), body().get("approval_mode")
+                    )
                 )
             }
         )

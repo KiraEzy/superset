@@ -157,17 +157,11 @@ def validate_context(context: Any) -> list[dict[str, Any]]:
     return resolved
 
 
-def history(thread: AiChatSession) -> list[dict[str, Any]]:
-    """Reuse the last successful canonical transcript, including tool evidence."""
-    prior = (
-        db.session.query(AiRuntimeTurn)
-        .filter_by(session_id=thread.id, status="completed")
-        .order_by(AiRuntimeTurn.created_on.desc())
-        .first()
-    )
-    if prior:
-        return loads(prior.state_json).get("messages", [])
-    return []
+def approval_mode(value: Any) -> str:
+    """Validate a user-selected confirmation mode; tools cannot change this policy."""
+    if not isinstance(value, str) or value not in {"ask", "full_access"}:
+        raise RuntimeRequestError("Choose Ask for approval or Full access")
+    return value
 
 
 def submit(thread_id: str, data: dict[str, Any]) -> AiRuntimeTurn:  # noqa: C901 - explicit execution state machine
@@ -240,42 +234,16 @@ def submit(thread_id: str, data: dict[str, Any]) -> AiRuntimeTurn:  # noqa: C901
         "responses",
     }:
         raise RuntimeRequestError("Unsupported model adapter")
-    messages = history(thread)
-    continuation = {}
-    context_memory = {}
-    previous_turn = (
-        db.session.query(AiRuntimeTurn)
-        .filter_by(session_id=thread.id, status="completed")
-        .order_by(AiRuntimeTurn.created_on.desc())
-        .first()
+    selected_approval_mode = approval_mode(data.get("approval_mode", "ask"))
+    execution = settings.execution_snapshot()
+    from .native_history import image_reference_projection
+    from .native_session import application_models
+
+    image_history = image_reference_projection(
+        db.session, application_models(), str(thread.uuid), user_id, post_id
     )
-    if previous_turn:
-        previous_state = loads(previous_turn.state_json)
-        context_memory = previous_state.get("checkpoint", {}).get("context_memory", {})
-        prior_config = previous_state.get("config", {})
-        if all(
-            prior_config.get(field) == config.get(field)
-            for field in (
-                "llmModel",
-                "llmApiBaseUrl",
-                "adapter",
-                "model_connection_id",
-                "model_revision",
-            )
-        ):
-            continuation = previous_state.get("checkpoint", {}).get("continuation", {})
-        else:
-            # Opaque provider fields cannot be forwarded to a different model.
-            messages = [
-                {
-                    key: value
-                    for key, value in message.items()
-                    if key != "reasoning_content"
-                }
-                for message in messages
-            ]
     attachment_refs = images.references(
-        data.get("attachment_ids", []), messages, vision=bool(config.get("vision"))
+        data.get("attachment_ids", []), image_history, vision=bool(config.get("vision"))
     )
     for ref in attachment_refs:
         images.get(ref["id"]).bound = True
@@ -290,8 +258,9 @@ def submit(thread_id: str, data: dict[str, Any]) -> AiRuntimeTurn:  # noqa: C901
         status="queued",
         state_json=dumps(
             {
+                **execution,
                 "config": config,
-                "messages": messages,
+                "messages": [],
                 "input_text": text.strip(),
                 "attachment_ids": [r["id"] for r in attachment_refs],
                 "context": context,
@@ -304,11 +273,9 @@ def submit(thread_id: str, data: dict[str, Any]) -> AiRuntimeTurn:  # noqa: C901
                 },
                 "workflow_instructions": workflow_instructions(workflows),
                 "budgets": settings.limits(config.get("llmModel"), config),
+                "approval_mode": selected_approval_mode,
                 "approved_scopes": [],
-                "checkpoint": {
-                    "continuation": continuation,
-                    "context_memory": context_memory,
-                },
+                "checkpoint": {},
             }
         ),
     )
@@ -449,7 +416,11 @@ def snapshot(turn: AiRuntimeTurn) -> dict[str, Any]:
         "id": turn.id,
         "thread_id": str(thread.uuid),
         "status": turn.status,
+        "approval_mode": loads(turn.state_json).get("approval_mode", "ask"),
         "content": turn.content or "",
+        "context_usage": loads(turn.state_json)
+        .get("checkpoint", {})
+        .get("context_usage"),
         "items": public_items,
         "activity": work_activity(turn, items),
         "artifacts": [artifact_dict(a) for a in artifacts],
@@ -487,6 +458,15 @@ def cancel(turn: AiRuntimeTurn) -> AiRuntimeTurn:
             },
             commit=False,
         )
+    if turn.status == "cancelled":
+        accepted = loads(turn.state_json)
+        if accepted.get("execution_engine") == "sdk_native":
+            from .native_history import seal_terminal
+            from .native_session import application_models
+
+            seal_terminal(
+                db.session, application_models(), turn, accepted.get("checkpoint", {})
+            )
     db.session.commit()
     notifications.publish(turn.id)
     return turn
@@ -494,6 +474,8 @@ def cancel(turn: AiRuntimeTurn) -> AiRuntimeTurn:
 
 def input_turn(turn: AiRuntimeTurn, data: dict[str, Any]) -> AiRuntimeTurn:  # noqa: C901 - explicit execution state machine
     """Persist deduplicated interaction input and bind approvals to one request."""
+    if "_approval_mode" in data:
+        raise RuntimeRequestError("Use the confirmation mode control to change access")
     if data.get("expected_turn_id") != turn.id:
         raise RuntimeRequestError("Active turn changed", 409, "turn_changed")
     key = data.get("idempotency_key")
@@ -527,9 +509,16 @@ def input_turn(turn: AiRuntimeTurn, data: dict[str, Any]) -> AiRuntimeTurn:  # n
                 "Request is no longer pending", 409, "request_expired"
             )
         details = loads(pending.payload_json)
-        if details.get("expires_at") and now().isoformat() > details[
-            "expires_at"
-        ].rstrip("Z"):
+        refreshing = (
+            details.get("kind") == "approval"
+            and isinstance(response, dict)
+            and response.get("decision") == "refresh"
+        )
+        if (
+            not refreshing
+            and details.get("expires_at")
+            and now().isoformat() > details["expires_at"].rstrip("Z")
+        ):
             raise RuntimeRequestError("Request expired", 409, "request_expired")
         if not isinstance(response, dict):
             raise RuntimeRequestError("Invalid response")
@@ -542,8 +531,8 @@ def input_turn(turn: AiRuntimeTurn, data: dict[str, Any]) -> AiRuntimeTurn:  # n
                     "approval_changed",
                 )
             decision = response.get("decision")
-            if decision not in {"accept", "decline"}:
-                raise RuntimeRequestError("Choose accept or decline")
+            if decision not in {"accept", "decline", "refresh"}:
+                raise RuntimeRequestError("Choose accept, decline or refresh")
             if decision == "accept":
                 fingerprint = details.get("fingerprint")
                 if not fingerprint:
@@ -589,6 +578,66 @@ def input_turn(turn: AiRuntimeTurn, data: dict[str, Any]) -> AiRuntimeTurn:  # n
         turn,
         "status",
         {"status": turn.status, "message": "Input received"},
+        commit=False,
+    )
+    db.session.commit()
+    notifications.publish(turn.id)
+    return turn
+
+
+def set_approval_mode(turn: AiRuntimeTurn, value: Any) -> AiRuntimeTurn:
+    """Record explicit confirmation policy and resume a paused approval checkpoint."""
+    mode = approval_mode(value)
+    if turn.status in TERMINAL or turn.status in {"cancelling", "needs_review"}:
+        raise RuntimeRequestError(
+            "Turn cannot change access mode", 409, "turn_inactive"
+        )
+    state = loads(turn.state_json)
+    state["approval_mode"] = mode
+    if mode == "full_access" and turn.status == "waiting_approval":
+        for row in (
+            db.session.query(AiRuntimeItem)
+            .filter_by(turn_id=turn.id, kind="request", status="pending")
+            .all()
+        ):
+            details = loads(row.payload_json)
+            if details.get("kind") == "approval":
+                row.status = "completed"
+                row.payload_json = dumps(
+                    {**details, "response": {"decision": "mode_changed"}}
+                )
+        state["pending_request"] = None
+        state.pop("pending_response", None)
+        turn.status = "queued"
+        db.session.add(AiRuntimeOutbox(turn_id=turn.id))
+    if turn.status == "running":
+        db.session.add(
+            AiRuntimeItem(
+                turn_id=turn.id,
+                kind="user_input",
+                status="pending",
+                payload_json=dumps({"_approval_mode": mode}),
+            )
+        )
+    turn.state_json = dumps(state)
+    db.session.add(
+        AiRuntimeItem(
+            turn_id=turn.id,
+            kind="approval_mode",
+            status="completed",
+            payload_json=dumps(
+                {"mode": mode, "user_id": turn.user_id, "post_id": turn.post_id}
+            ),
+        )
+    )
+    append_event(
+        turn,
+        "status",
+        {
+            "status": turn.status,
+            "approval_mode": mode,
+            "message": "Confirmation mode changed",
+        },
         commit=False,
     )
     db.session.commit()
@@ -661,7 +710,7 @@ def branch_reply(
     return branch
 
 
-def fork(
+def fork(  # noqa: C901 - one atomic scoped branch transaction
     thread: AiChatSession, turn_id: str, *, include_turn: bool = False
 ) -> AiChatSession:
     """Copy completed context at a turn boundary without executing operations."""
@@ -705,6 +754,20 @@ def fork(
     turn_ids: dict[str, str] = {}
     artifact_ids: dict[str, dict[str, Any]] = {}
     for previous in eligible:
+        copied_state = loads(previous.state_json)
+        if copied_state.get("execution_engine") == "sdk_native":
+            copied_state["approval_mode"] = "ask"
+            copied_state["approved_scopes"] = []
+            copied_state.pop("pending_response", None)
+            copied_state["pending_request"] = None
+            for key in (
+                "sdk_state",
+                "bindings",
+                "grants",
+                "answers",
+                "pending_request",
+            ):
+                copied_state.get("checkpoint", {}).pop(key, None)
         checkpoint = AiRuntimeTurn(
             session_id=branch.id,
             user_id=user_id,
@@ -713,7 +776,7 @@ def fork(
             input_hash=previous.input_hash,
             status="completed",
             content=previous.content,
-            state_json=previous.state_json,
+            state_json=dumps(copied_state),
             created_on=previous.created_on,
         )
         db.session.add(checkpoint)
@@ -732,6 +795,7 @@ def fork(
                     AiRuntimeItem(
                         turn_id=checkpoint.id,
                         kind=item.kind,
+                        external_id=item.external_id,
                         status=item.status,
                         payload_json=item.payload_json,
                         created_on=item.created_on,
@@ -778,5 +842,24 @@ def fork(
                 ],
             }
             db.session.add(copy)
+    if loads(target.state_json).get("execution_engine") == "sdk_native":
+        from .native_history import clone_prefix
+        from .native_session import application_models
+
+        boundary = (
+            loads(eligible[-1].state_json).get("checkpoint", {}).get("session_end", 0)
+            if eligible
+            else 0
+        )
+        clone_prefix(
+            db.session,
+            application_models(),
+            str(thread.uuid),
+            str(branch.uuid),
+            user_id,
+            post_id,
+            int(boundary),
+            artifact_ids,
+        )
     db.session.commit()
     return branch

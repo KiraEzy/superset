@@ -256,7 +256,9 @@ export default function GlobalConfiguration() {
         <SectionTitle level={5}>{t('Known settings')}</SectionTitle>
 
         <FieldRow>
-          <Typography.Text>{t('Navbar display name max width (px)')}</Typography.Text>
+          <Typography.Text>
+            {t('Navbar display name max width (px)')}
+          </Typography.Text>
           <InputNumber
             min={MIN_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX}
             max={MAX_NAVBAR_DISPLAY_NAME_MAX_WIDTH_PX}
@@ -326,7 +328,11 @@ export default function GlobalConfiguration() {
         </FieldRow>
 
         <ButtonRow>
-          <Button onClick={handleAddEntry} loading={addingEntry} disabled={loading}>
+          <Button
+            onClick={handleAddEntry}
+            loading={addingEntry}
+            disabled={loading}
+          >
             {t('Add')}
           </Button>
         </ButtonRow>

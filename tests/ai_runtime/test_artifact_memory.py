@@ -140,45 +140,6 @@ def test_preview_update_result_produces_a_chart_artifact_without_server_changes(
     assert chart["data"]["previous_form_data_key"] == "old"
 
 
-def test_read_artifact_is_visible_and_does_not_dispatch_mcp():
-    checkpoints = []
-    baseline = {
-        "id": "chart-artifact",
-        "version": 2,
-        "payload": {"form_data": {"datasource": "31__table"}},
-        "source_request": {
-            "dataset_id": 31,
-            "config": {"orientation": "vertical", "filters": []},
-        },
-    }
-    provider = test_engine.Provider(
-        [
-            test_engine.contracts.Generation(
-                calls=[
-                    test_engine.call(
-                        "read_artifact", args={"artifact_id": "chart-artifact"}
-                    )
-                ]
-            ),
-            test_engine.contracts.Generation(content="Ready to change the preview"),
-        ]
-    )
-    pool = test_engine.Pool([], checkpoints)
-    result = test_engine.run(
-        {
-            "_provider": provider,
-            "_mcp_pool": pool,
-            "_read_artifact": lambda identifier: baseline,
-            "_artifact_index": lambda: [{"id": "chart-artifact", "version": 2}],
-        },
-        checkpoints,
-    )
-    assert result["checkpoint"]["reference_artifact"] == baseline
-    assert not pool.invocations
-    assert result["checkpoint"]["calls"]["call-1"]["effect"] == "read"
-    assert any("chart-artifact" in m.get("content", "") for m in provider.requests[0])
-
-
 def test_native_preview_cache_hydration_preserves_exact_form_data(ledger, monkeypatch):
     from superset.ai_runtime import artifact_memory
     from superset.commands.explore.form_data.get import GetFormDataCommand
@@ -249,3 +210,23 @@ def test_later_metadata_artifact_recovers_originating_config(ledger, monkeypatch
     ledger.db.session.add(row)
     ledger.db.session.commit()
     assert memory.read(second, row.id)["source_request"]["config"] == config
+
+
+def test_preview_schema_validation_rejects_hallucinated_metric():
+    from superset.ai_runtime.artifact_memory import validate_form_columns
+    from superset.ai_runtime.contracts import AiRuntimeError
+
+    form = {
+        "x_axis": "region",
+        "metrics": [
+            {
+                "expressionType": "SIMPLE",
+                "column": {"column_name": "count"},
+                "aggregate": "SUM",
+            }
+        ],
+    }
+    with pytest.raises(AiRuntimeError, match="Invalid chart references: count"):
+        validate_form_columns(form, {"region"}, set())
+    form["metrics"] = [{"expressionType": "SQL", "sqlExpression": "COUNT(*)"}]
+    validate_form_columns(form, {"region"}, set())

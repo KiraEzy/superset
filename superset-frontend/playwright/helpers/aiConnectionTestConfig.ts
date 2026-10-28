@@ -30,12 +30,7 @@ const DEFAULT_CONFIG_PATH = join(
   'ai-connection.test.local.json',
 );
 
-type LlmProvider =
-  | 'lmstudio'
-  | 'openai'
-  | 'gemini'
-  | 'deepseek'
-  | 'custom';
+type LlmProvider = 'lmstudio' | 'openai' | 'gemini' | 'deepseek' | 'custom';
 
 export interface AiConnectionTestConfig {
   llmProvider: LlmProvider;
@@ -156,7 +151,9 @@ export function toStoredAiConnectionState(
  * session cookie (the user must hold the AIConnectionConfig write permission,
  * e.g. admin).
  */
-export async function applyAiConnectionTestConfig(page: Page): Promise<boolean> {
+export async function applyAiConnectionTestConfig(
+  page: Page,
+): Promise<boolean> {
   const config = loadAiConnectionTestConfig();
   if (!config) {
     return false;

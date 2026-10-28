@@ -173,3 +173,56 @@ def hydrate_preview(payload: dict[str, Any]) -> dict[str, Any]:
             "viz_type": payload.get("viz_type") or form_data.get("viz_type"),
         }
     return payload
+
+
+def validate_form_columns(
+    form_data: dict[str, Any], columns: set[str], metrics: set[str]
+) -> None:
+    """Reject missing structured column/metric references without rewriting intent."""
+    from .contracts import AiRuntimeError
+
+    referenced = set()
+    for key in ("x_axis", "series", "granularity_sqla"):
+        if isinstance(form_data.get(key), str) and form_data[key]:
+            referenced.add(form_data[key])
+    for key in ("groupby", "columns"):
+        referenced.update(
+            value for value in form_data.get(key, []) if isinstance(value, str)
+        )
+    unknown_metrics = set()
+    for metric in form_data.get("metrics", []):
+        if isinstance(metric, str) and metric not in metrics:
+            unknown_metrics.add(metric)
+        elif isinstance(metric, dict) and metric.get("expressionType") == "SIMPLE":
+            column = metric.get("column") or {}
+            name = column.get("column_name") if isinstance(column, dict) else column
+            if name and name != "*":
+                referenced.add(name)
+    if missing := sorted((referenced - columns) | unknown_metrics):
+        raise AiRuntimeError(
+            "Invalid chart references: "
+            + ", ".join(missing)[:400]
+            + ". Inspect the dataset schema and use an existing metric "
+            "or an explicit SQL aggregate such as COUNT(*).",
+            code="invalid_preview",
+        )
+
+
+def validate_preview(payload: dict[str, Any]) -> dict[str, Any]:
+    """Check a local preview against its currently authorized datasource schema."""
+    from superset.connectors.sqla.models import SqlaTable
+
+    payload = hydrate_preview(payload)
+    _authorize({"payload": payload})
+    form_data = payload.get("form_data") or {}
+    datasource = form_data.get("datasource", "")
+    if isinstance(datasource, str) and datasource.endswith("__table"):
+        dataset = db.session.query(SqlaTable).get(int(datasource.split("__", 1)[0]))
+        if dataset is None:
+            raise store.RuntimeRequestError("Dataset is unavailable", 403)
+        validate_form_columns(
+            form_data,
+            {c.column_name for c in dataset.columns},
+            {m.metric_name for m in dataset.metrics},
+        )
+    return payload

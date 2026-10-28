@@ -15,6 +15,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from 'spec/helpers/testing-library';
 import ModelCatalogue from './ModelCatalogue';
 import * as api from '../modelCatalog';
@@ -82,4 +83,45 @@ test('failed verification leaves the model in the discovered list', async () => 
   expect(
     screen.getByRole('group', { name: 'Available in Chat' }),
   ).not.toHaveTextContent('Two');
+});
+
+test('model settings opens without changing the publication selection', async () => {
+  const values = {
+    context_window_tokens: 32768,
+    response_tokens: 4096,
+    tool_result_tokens: 4096,
+  };
+  render(
+    <ModelCatalogue
+      data={{
+        ...data,
+        models: [
+          {
+            ...data.models[0],
+            runtime_settings: {
+              values,
+              defaults: values,
+              revision: 0,
+              input_allowance_tokens: 24576,
+            },
+          },
+        ],
+      }}
+      reload={jest.fn()}
+    />,
+  );
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Settings for One / Local' }),
+  );
+  const dialog = await screen.findByRole('dialog', { name: 'Model settings' });
+  expect(
+    within(dialog).getByRole('spinbutton', { name: 'Context window (tokens)' }),
+  ).toHaveValue('32768');
+  expect(
+    screen.getByRole('checkbox', { name: 'One / Local' }),
+  ).not.toBeChecked();
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Cancel' }));
+  expect(
+    screen.getByRole('checkbox', { name: 'One / Local' }),
+  ).not.toBeChecked();
 });

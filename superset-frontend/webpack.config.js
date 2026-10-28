@@ -665,7 +665,7 @@ if (isDevMode) {
     liveReload: false,
     host: devserverHost,
     port: devserverPort,
-  // Allow any Host header so intranet IPs (192.168.x.x) are not rejected.
+    // Allow any Host header so intranet IPs (192.168.x.x) are not rejected.
     allowedHosts: 'all',
     proxy: [() => proxyConfig],
     client: {

@@ -112,8 +112,8 @@ def test_model_routing_and_revision_invalidate_continuation(ledger):
         str(ledger.thread.uuid), {**payload("next"), "model_id": model.id}
     )
     next_state = ledger.store.loads(second.state_json)
-    assert next_state["checkpoint"]["continuation"] == {}
-    assert next_state["messages"] == [{"role": "assistant", "content": "answer"}]
+    assert next_state["checkpoint"] == {}
+    assert next_state["messages"] == []
     assert ledger.store.loads(first.state_json)["config"]["model_revision"] == 1
     conn.revision = 3
     ledger.db.session.commit()
@@ -408,10 +408,47 @@ def test_fork_retry_edit_preserve_private_image_references(ledger):
     state["messages"] = [
         {"role": "user", "content": [{"type": "image_ref", "image_id": image["id"]}]}
     ]
+    import asyncio
+
+    from superset.ai_runtime.native_history import image_reference_projection
+    from superset.ai_runtime.native_session import application_models, FocalSession
+
+    sdk = FocalSession(
+        str(ledger.thread.uuid),
+        database=ledger.db.session,
+        models=application_models(),
+        owner_id=1,
+        post_id=11,
+        binding="test",
+        turn_id=source.id,
+        guard=lambda: None,
+    )
+    asyncio.run(
+        sdk.add_items(
+            [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "input_image",
+                            "image_url": "focal-image:" + image["id"],
+                        }
+                    ],
+                }
+            ]
+        )
+    )
+    state["messages"] = []
+    state["checkpoint"]["session_end"] = 1
     source.state_json = ledger.store.dumps(state)
     ledger.db.session.commit()
     copied = ledger.store.fork(ledger.thread, source.id, include_turn=True)
-    assert ledger.store.history(copied)[0]["content"][0]["image_id"] == image["id"]
+    assert (
+        image_reference_projection(
+            ledger.db.session, application_models(), str(copied.uuid), 1, 11
+        )[0]["content"][0]["image_id"]
+        == image["id"]
+    )
     for mode in ("retry", "edit"):
         branch = ledger.store.branch_reply(
             ledger.thread, source.id, mode, edited_input="Revised", model_id=model.id
@@ -470,6 +507,11 @@ def test_reasoning_preference_pins_new_turns_without_invalidating_models(ledger)
     ledger.db.session.commit()
     with pytest.raises(ValueError, match="self-hosted"):
         model_catalog.save_reasoning_visibility(conn.id, True)
+    config["llmProvider"] = "deepseek"
+    conn.config_json = ledger.store.dumps(config)
+    ledger.db.session.commit()
+    model_catalog.save_reasoning_visibility(conn.id, True)
+    assert ledger.store.loads(conn.config_json)["showModelReasoning"] is True
 
 
 def test_reasoning_display_does_not_race_pending_verification(ledger):

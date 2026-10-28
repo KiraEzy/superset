@@ -53,6 +53,7 @@ module.exports = {
         'extensions/deployment',
         'extensions/mcp',
         'extensions/ai-chat-runtime',
+        'extensions/ai-sdk-architecture',
         'extensions/security',
         'extensions/tasks',
         'extensions/registry',

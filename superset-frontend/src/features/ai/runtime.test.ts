@@ -17,7 +17,8 @@
  * under the License.
  */
 
-import { reduceTurn, Turn, TurnEvent } from './runtime';
+import { reduceTurn, runtimePost, Turn, TurnEvent } from './runtime';
+import { SupersetClient } from '@superset-ui/core';
 
 const turn: Turn = {
   id: 'turn',
@@ -88,4 +89,44 @@ test('activity snapshots upsert in place and reject stale replay', () => {
     payload: { status: 'waiting_approval' },
   });
   expect(completed?.activity?.status).toBe('waiting_approval');
+});
+
+test('recovery reset replaces partial text and replay does not append it twice', () => {
+  const partial = reduceTurn(turn, event);
+  const reset = {
+    ...event,
+    sequence: 2,
+    type: 'message_reset',
+    payload: { content: 'Recovered' },
+  };
+  const recovered = reduceTurn(partial, reset);
+  expect(recovered?.content).toBe('Recovered');
+  expect(reduceTurn(recovered, reset)).toBe(recovered);
+  expect(reduceTurn(recovered, event)).toBe(recovered);
+  expect(
+    reduceTurn(recovered, {
+      ...event,
+      sequence: 3,
+      payload: { content: ' final' },
+    })?.content,
+  ).toBe('Recovered final');
+});
+
+test('runtime posts expose server validation messages instead of a generic failure', async () => {
+  const post = jest.spyOn(SupersetClient, 'post').mockRejectedValueOnce({
+    response: new Response(
+      JSON.stringify({ message: 'Request expired', code: 'request_expired' }),
+      {
+        status: 409,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    ),
+  });
+  try {
+    await expect(runtimePost('turns/test/input', {})).rejects.toThrow(
+      'Request expired',
+    );
+  } finally {
+    post.mockRestore();
+  }
 });

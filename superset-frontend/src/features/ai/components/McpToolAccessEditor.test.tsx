@@ -22,13 +22,11 @@ import McpToolAccessEditor from './McpToolAccessEditor';
 afterEach(() => jest.restoreAllMocks());
 
 test('admin editing preserves existing role restrictions and new user rules grant no tools by default', async () => {
-  jest
-    .spyOn(config, 'fetchMcpAccessOptions')
-    .mockResolvedValue({
-      roles: ['Alpha'],
-      users: ['alice'],
-      tools: ['health_check', 'list_datasets'],
-    });
+  jest.spyOn(config, 'fetchMcpAccessOptions').mockResolvedValue({
+    roles: ['Alpha'],
+    users: ['alice'],
+    tools: ['health_check', 'list_datasets'],
+  });
   const onChange = jest.fn();
   render(
     <McpToolAccessEditor

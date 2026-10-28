@@ -113,3 +113,24 @@ test('model menu blocks text-only models when the conversation contains images',
     await screen.findByRole('menuitem', { name: 'Text model' }),
   ).toHaveAttribute('aria-disabled', 'true');
 });
+
+test('confirmation menu offers ask and full access during a running turn', async () => {
+  const change = jest.fn();
+  render(
+    <ChatComposer
+      {...props}
+      running
+      approvalMode="ask"
+      onApprovalModeChange={change}
+    />,
+  );
+  fireEvent.click(
+    screen.getByRole('button', {
+      name: 'Action approval mode: Ask for approval',
+    }),
+  );
+  fireEvent.click(
+    await screen.findByText('Full access', { selector: 'strong' }),
+  );
+  expect(change).toHaveBeenCalledWith('full_access');
+});

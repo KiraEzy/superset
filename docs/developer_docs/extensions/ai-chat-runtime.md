@@ -6,6 +6,12 @@ sidebar_position: 9
 
 # Durable AI Chat runtime
 
+For the planned replacement, see the
+[SDK-native architecture and migration gates](ai-sdk-architecture.md). That design
+permits resetting disposable AI history and removes the legacy execution path at
+cutover; the implementation described below remains the deployed baseline until
+the replacement passes its validation gates.
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements. See the NOTICE file
@@ -66,6 +72,65 @@ repair in AI Connection. Users choose Resume after administrator repair. Waiting
 input does not consume the active execution budget. Tool argument errors are
 returned to the model for at most two corrections without dispatching an action.
 
+## Execution adapters
+
+The `sdk_native` path uses Runner streaming, public SDK approval state and
+Session storage directly. Its execution contract is version 3. Encrypted
+`ai_sdk_session` and `ai_sdk_item` tables hold the sole model history; legacy UI
+messages are not inference input. Model and MCP connection settings are preserved.
+The SDK is the sole supported engine. Pre-cutover chat history is reset rather
+than imported; old conversation URLs return not found.
+
+Native tools pause at a durable SDK approval checkpoint before dispatch. Reads
+are authorized automatically, with up to four concurrent reads; writes are
+exclusive and require existing application policy/approval. Exact call IDs,
+arguments, schema hashes and scoped bindings are rechecked on resume. Completed
+outcomes are reused. Unknown write outcomes require review, never automatic replay.
+Clarification and connection repair resume the checkpoint. Accepted steering
+rejects undispatched proposals and queues a focused continuation. Cancellation
+stops future dispatch but cannot undo remote effects.
+
+The native model view omits old complete exchanges/tool batches while retaining
+pending call/result structure and required instructions. Storage stays intact;
+bounded evidence references support retrieval. Oversized irreducible input pauses
+for a shorter focused request. One recognized context-length rejection may retry
+before visible output; unrelated provider errors do not. Estimates are conservative
+heuristics, not exact provider token counts. Durable semantic summaries supplement
+this filtering; neither mechanism enlarges a provider's physical context window.
+
+Private image IDs are scoped at submission and hydrated only at the wire boundary
+for image-verified models. Provider reasoning remains encrypted; gradual display
+requires the existing explicit custom/LM Studio opt-in. Fork/edit/retry copy only
+complete SDK prefixes and clear inherited approvals. Recovery replaces partial
+browser text using ordered `message_reset` events. Local chart previews validate
+structured column/metric references against the authorized datasource and return
+correctable tool errors for missing references; SQL expressions still require
+normal Superset query validation. See the [architecture and gates](ai-sdk-architecture.md).
+
+`settings.execution_snapshot()` always accepts native contract 3 with the pinned
+SDK version. The former execution-engine selector is ignored; client payloads
+cannot select another engine. `engine.run_turn` rejects old contracts instead of
+falling back. The legacy loop, bridge adapter and canonical transcript reader have
+been removed. SDK Session items are the only model history. Turn/message rows
+remain delivery, activity and UI projections, not another model transcript.
+
+SDK callbacks dispatch only checkpointed call IDs through the domain policy
+boundary. Original server schemas remain unchanged. Provider reasoning fields stay
+in encrypted SDK items; external SDK tracing is disabled. The retained HTTP
+provider utility supports connection verification, not the agent execution loop.
+
+The AI page uses RuntimeWorkspace exclusively. Disabling Chat displays an
+unavailable state and rejects submissions; it never opens the legacy composer.
+Deleting a conversation also deletes its scoped SDK items. The offline reset
+command deletes only an exact captured inventory of conversation tables, rejects
+unexpected inbound foreign keys, and compares protected connection/BI fingerprints
+before commit. Images are stored in the private image table, not external files.
+
+Use the [README](../../../README.md#sdk-native-runtime-and-conversation-reset)
+for installation, evaluation, reset and rollback commands. Rollback requires the
+pre-cutover code/image and database backup with remote-effect reconciliation;
+there is no runtime switch back to the retired engine.
+
 ## Canonical action policy
 
 Application security and execution policy have highest priority, followed by
@@ -75,12 +140,33 @@ results cannot grant permissions or approve actions.
 
 Exploration previews charts. Direct, bounded save/edit instructions can execute
 within their target scope; ambiguous targets require a question or confirmation.
-Destructive, access-changing and unclassified operations require approval.
+In the default Ask for approval mode, destructive, access-changing and
+unclassified operations require approval.
 Approvals bind the connection/version, user/post, schema, tool and normalized
-arguments. Changing any bound value invalidates approval. Existing Superset
-permissions still authorize the actual tool invocation. Third-party annotations
+arguments. Batched calls retain each exact approval or decline across sequential
+user responses before the SDK dispatches the batch; answering a later call does
+not reopen an unchanged earlier decision. Changing any bound value invalidates
+approval. Existing Superset permissions still authorize the actual tool invocation.
+Third-party annotations
 are preserved metadata; administrators classify tools independently. SQL execution
 is unclassified because even apparently read-only SQL can have effects.
+
+The composer also offers Full access: an explicit user choice to skip routine
+Chat confirmations for tools within the user's existing Superset and MCP scope.
+It never grants resource access, changes credentials, bypasses argument validation,
+or retries unknown write outcomes. Identical completed writes with new call IDs
+still require review; cached outcomes for the same call ID remain reusable.
+The mode is stored per turn, defaults to Ask for approval, and survives recovery.
+The selector can change an active turn through authenticated, scoped
+`POST /api/v1/ai/turns/{id}/approval-mode`; changes are audited and reach the worker
+through trusted input. Changes apply at the next approval boundary and do not
+undo an operation already dispatched. Full access resumes a paused approval checkpoint, including
+an expired one, by revalidating tools under the new explicit policy rather than
+reusing an expired grant. Forked history resets to Ask for approval.
+
+Expired approval buttons become Refresh approval. Refreshing grants nothing: it
+queues the SDK checkpoint to validate the proposal and issue a fresh request.
+Server rejection messages, including expiration, are displayed in Chat.
 
 `policy.py` is the canonical implementation. Extend its argument-aware rules and
 tests together. Never infer permission from an annotation, model-generated text
@@ -96,110 +182,106 @@ These restrictions never grant native MCP permissions or change server schemas.
 
 ## Context budgeting and compaction
 
-`context.py` builds a disposable model view; canonical messages, tool outcomes,
-operation records, approvals and artifacts remain unchanged in encrypted storage.
-Connection guidance is injected once per request, ahead of history. Historical
-copies from older turns are excluded from the view, not deleted from the ledger.
+`native_context.py` filters SDK input without rewriting stored Session items.
+Whole earlier user exchanges are omitted first, then complete assistant/tool-result
+batches within the active exchange. Pending call/result groups and required system
+instructions stay paired and intact. Bounded omission notes retain source-request
+excerpts and exact call IDs for scoped `read_evidence` retrieval; chart references
+remain available through `read_artifact`. Filtering remains the fallback when
+semantic summarization cannot complete; the retired canonical-message
+`context_memory` pipeline is not restored.
 
-Identical tool results with the same tool/normalized arguments share an evidence
-reference in the view. This never skips tool execution or reuses a stale read.
-Changed results remain distinct. Native structured content replaces duplicated
-raw/text representations in large previews. Large arrays, fields and nested
-results have explicitly marked previews with paths/pages available through
-`read_evidence`. Call IDs address tool results; `message:N` addresses an exact
-canonical historical message. Retrieval refreshes the current actor's authorization
-and remains confined to that turn's user/post-scoped conversation. It cannot grant
-permission or authorize a write.
+`native_summarization.py` adapts the [OpenAI session-memory cookbook](https://developers.openai.com/cookbook/examples/agents_sdk/session_memory)
+at the public asynchronous SDK model-input filter. At 70% of the available input
+allowance it summarizes older completed exchanges, aiming below 50%, preferably
+retaining two recent exchanges and always retaining the current request and
+unresolved protocol suffix. Completed batches within a long turn can also be
+summarized. Recent retained items keep original provider fields. Full SDK items,
+positions, UI messages and chart artifacts are never rewritten.
 
-When needed, complete assistant-call/result groups are replaced with deterministic
-structured excerpts, resource/filter facts and evidence references, including groups
-inside the active turn. Summaries are versioned and source-hashed in checkpoint
-`context_memory`, reused after recovery and carried to subsequent completed turns.
-Rolling memory retains the initial/recent request excerpts and recent resource facts;
-older ranges stay retrievable. These are bounded extracts, not model-generated semantic
-summaries: the agent must retrieve exact evidence when decisions or effects are unclear.
-The latest request, attached images and incomplete call groups are never silently cut.
-Private reasoning is excluded from summaries and historical-message retrieval.
+The selected chat connection generates tools-disabled JSON summaries of goals,
+constraints, decisions, work status, uncertainties and exact resource/evidence
+references. Output is capped at 1024 tokens and reduced for smaller allowances.
+Historical strings are excerpted at 6000 characters before ordered, bounded
+summary requests; reasoning and image bytes are excluded. Summaries are lossy
+historical data, not instructions, permissions, proof of success or write arguments.
+Retrieve exact authorized evidence/configuration before acting.
 
-Dataset discovery previews retain IDs/names across the returned page. Dataset
-schema previews keep actionable column names/types and metric expressions rather
-than verbose SQL/audit metadata. The newest complete tool-result group stays in
-context so the agent can act on it instead of repeatedly rediscovering resources.
-Its bodies are progressively projected if a recent parallel batch alone exceeds
-the allowance; assistant call IDs and matching result messages remain paired.
+The additive `e6f7a8b9c0d1` migration creates encrypted `ai_sdk_summary` checkpoints.
+A checkpoint binds the covered prefix fingerprint, boundary, model binding,
+owner/post and policy version. Publication checks the worker lease and session
+revision. Restarts reuse valid summaries; branches regenerate from their own SDK
+history. Prefix edits/truncation and binding changes invalidate reuse. Session
+removal deletes its summary. No history reset or connection change is needed.
 
-`evidence.py` resolves structured or single text-backed JSON results to a common
-data root. Model previews expose `evidence_ref`, `available_paths`, `result` and
-the original error status without repeating raw transport payloads. `read_evidence`
-paths start at this data root (for example `datasets`), not at the preview's
-`result` wrapper. Explicit legacy envelope paths remain supported. Invalid paths
-advertise root keys. Reads bound strings, nesting and serialized size as well as
-item count, mark excerpts and provide cursors; deeper paths retrieve excerpted
-fields. `next_read` carries the original evidence ID/path and actual next offset;
-out-of-range reads of an already returned page point back to that cursor.
-Original encrypted evidence is unchanged.
+Each preparation allows at most 30 seconds, bounded by remaining turn time, with
+one request per chunk and no automatic retry. A compaction failure suppresses
+further compaction attempts in that run, avoiding repeated waits in tool rounds;
+a new user turn can try again. Invalid JSON, timeout or provider
+failure retains the last valid checkpoint and falls back to safe trimming.
+Irreducible input still pauses for focused input. Diagnostics record outcome,
+boundary, estimates, duration and reported token usage, never summary/history text.
+This is an application adapter around the SDK, not a built-in summarization switch
+or an implementation of OpenAI Responses compaction or hardened KV-cache reuse.
 
-Overlapping discovery records are collapsed in the disposable view only within
-the same namespaced tool, filters and sorting. Changed projected records remain
-visible, with earlier evidence references for unchanged overlaps. This does not
-prove complete catalogue coverage or skip an external read. Within a turn, three
-consecutive successful `list_*` reads without new/changed records (or payloads
-without IDs) in the same connection/query scope, three repeated successful evidence
-pages without new content, or three consecutive failed evidence lookups,
-switch the next model request to an answer-only pass. The agent must answer from
-collected evidence and explain gaps. Further tool requests fail explicitly rather
-than continuing an unbounded loop. Writes never participate in this safeguard.
-If at least six evidence reads keep a compacted view at 95% or more of its input
-allowance, the runtime also reserves an answer-only pass. Removing schemas frees
-room to restore recorded evidence for that answer. The checkpoint records
-`finish_reason=context_pressure`; the answer must identify unfinished work or
-partial coverage. Steering resets these turn-local progress guards. This does
-not increase the inference server's context size or authorize another operation.
+Tool outputs have bounded visible bodies and exact encrypted records. Evidence
+retrieval rechecks current tool/schema permissions and dataset scope. Replaying a
+completed call ID reuses its recorded outcome; a new read call refreshes evidence.
+Every model request advertises all currently authorized external tool schemas plus
+internal helpers, without a tool-count cap or discovery prerequisite.
+`find_bi_tools` is an optional search aid and does not change tool availability.
+Resumed runs rebuild availability from the authorized catalog instead of reusing
+older selection checkpoints. All advertised schemas count toward context budgets;
+authorization, exact-proposal approvals and final request-budget guards still apply.
+List argument policy still caps Focal catalogue pages and reports effective args.
 
-Before dispatch, the Chat-side policy limits Focal dataset/chart/dashboard list
-pages to at most 25 items. A divisor of the requested size preserves the starting
-offset when changing a 1-based page number. Dataset lists default to ID/name,
-schema, database and description; explicitly selected fields remain unchanged.
-The original schema validates effective arguments, and result `request_policy`
-reports those arguments so subsequent pages use the effective size. This is not
-a server configuration or schema change. External tools retain their original
-request semantics; generic result bounding and loop safeguards still apply.
+The final wire estimate includes serialized instructions/schemas/settings, a UTF-8
+byte heuristic and 4096 tokens per image before private hydration. Output and tool
+result capacity are reserved. Unknown models default to a 32768-token configured
+window; verified official DeepSeek V4 endpoints use a 128000 operational cap.
+Administrators configure each connection/model in **AI Connection → Available in
+Chat → Settings**, using a centered dialog. Context window, maximum response
+tokens and tool-result reservation are database-owned in `ai_model`; identities
+with the same model name on different connections remain independent. The input
+allowance is context minus response and tool reservations; instructions, schemas,
+images and safety margins consume that allowance. Values must be integer tokens
+from 1 through 100,000,000 and leave at least 1,024 input tokens. This validation
+does not discover or enlarge the inference server's actual capacity.
 
-The input estimate includes tool schemas and 4096 tokens per image, before private
-image hydration. Text uses a UTF-8 byte heuristic (three bytes per estimated token),
-not an exact provider tokenizer. Output and upcoming tool-result capacity are reserved.
-Unknown models default to a 32768-token window, 4096 response tokens, 4096 tool-result
-reserve and a separate 96000-character history ceiling. The verified official
-`api.deepseek.com` V4 Flash/Pro and Flash IDs use a 128000-token operational cap,
-below the [provider's documented window](https://api-docs.deepseek.com/quick_start/pricing/).
-This exception does not apply to similarly named models at custom endpoints. Operators can override these
-Chat-only values per exact model ID in `AI_RUNTIME_MODEL_CONTEXT_LIMITS`, for example:
+Migration `f7a8b9c0d1e2` copies `AI_RUNTIME_MODEL_CONTEXT_LIMITS` into existing model
+rows once, including any legacy `context_chars` override. Run it with the original
+application configuration loaded before removing those Python entries; see the
+[operator instructions](../../../README.md#model-context-settings). Resolved
+catalogue models subsequently ignore Python profiles. New models start with
+application defaults. Restore defaults clears the row's overrides (including a
+migrated `context_chars` value), and only persists when Save is clicked; it does
+not restore the migrated profile. Official DeepSeek endpoint defaults remain
+128,000 context tokens, other models 32,768, with 4,096 each for response and tool
+reservation. Explicit migrated values take precedence over those defaults.
 
-```python
-AI_RUNTIME_MODEL_CONTEXT_LIMITS = {
-    "my-model-id": {
-        "context_window_tokens": 65536,
-        "response_tokens": 8192,
-        "tool_result_tokens": 4096,
-        "context_chars": 160000,
-    },
-}
-```
+`POST /api/v1/ai_connection/models/<model_id>/settings` requires administrator and
+`AIConnectionConfig` write access, with `revision` and all three `values`, or
+`reset: true`. A stale revision returns 409; malformed or unusable values return
+400. Saving budgets does not reverify credentials or change publication. New
+turns snapshot the effective settings and revision in their encrypted state;
+queued, active and resumed turns retain their accepted budgets. These snapshots
+drive SDK model settings, trimming, summarization, final wire guards and context
+usage events. No process restart is required for settings edits.
 
-Configure measured model limits; these settings do not enlarge an inference server's
-window. Values are snapshotted at turn acceptance. Provider usage remains authoritative.
-If required policy/guidance, schemas, images or the current input alone cannot fit,
-the runtime reports that constraint instead of suggesting a branch with the same history.
-Checkpoint budget statistics separate schema tokens, fixed instructions and the
-input allowance. Fixed instruction/schema overflow is distinguished from an
-oversized current request or required call structure after evidence compaction.
-Responses continuation is reused only when the exact prior input-prefix hash matches;
-compaction, edits or changed guidance force full input without a stale response pointer.
-No model/provider switch occurs during a turn. This enables stable request prefixes;
-it does not guarantee inference-server KV-cache hits.
+SDK filtering uses a safety margin; one recognized pre-output
+context rejection retries a smaller view. If required input still cannot fit, the
+turn pauses for a focused request instead of failing with a context-overflow error.
 
-Verify with `tests/ai_runtime/test_context.py`, `test_engine.py`, `test_providers.py`
-and `test_store.py`, using the focused runtime test command in the repository README.
+Budget persistence, migration, connection isolation, stale-edit rejection and
+captured SDK wire requests are covered by
+[`test_model_settings.py`](../../../tests/ai_runtime/test_model_settings.py).
+
+Saved history and exact artifacts remain available. Dropped exchanges are not
+promised as remembered facts: retrieve required evidence or continue in a focused
+branch. Model/token/tool/time limits still bound execution. The SDK does not
+automatically infer business intent, prevent every repeated discovery call, or
+make remote writes exactly-once. The retained `context.py` contains only resource
+context and shared hashing/token-estimation helpers.
 
 ## Chart follow-up references
 
@@ -210,6 +292,11 @@ retrieval. Full snapshots include form_data, preview cache key, saved/preview st
 provenance and the original MCP request config. Metadata reads of the same cached
 preview can recover its originating config. These references survive refresh,
 compaction and conversation branches; they do not authorize writes.
+
+Artifact paths start at the artifact root, for example `payload.form_data`, not
+the response's `data` wrapper. A path error on an authorized artifact advertises
+its root keys and exact `read_artifact` examples. Unauthorized/unavailable
+artifacts retain a generic error without disclosing root fields.
 
 The agent loads the baseline before modifying a prior chart, preserves unchanged
 dataset/metrics/filters, and uses the existing MCP tools for supported changes.
@@ -227,11 +314,12 @@ or edits the source BI resource.
 
 - `store.py`, `models/ai_runtime.py`: scoped turn service and authoritative ledger.
 - `runner.py`, `worker.py`: leases, checkpoints, dispatch, recovery and identity refresh.
-- `engine.py`, `context.py`: one model/tool loop and bounded context views over full evidence.
-- `providers.py`: compatible Chat Completions and OpenAI Responses streaming.
-  Provider continuation data, including opaque DeepSeek tool protocol fields,
-  stays encrypted. Compatible self-hosted profiles can opt in to a separate
-  visible model-reasoning copy; opaque hosted-provider continuation stays private.
+- `engine.py`, `native_engine.py`: thin entrypoint and public SDK Runner orchestration.
+- `native_context.py`, `context.py`: bounded SDK model views and shared resource context.
+- `native_model.py`: SDK Chat Completions transport, scoped image hydration and
+  provider-field/budget guards. `providers.py` remains a connection-verification
+  utility; its Responses probe is not the Chat orchestration path.
+  Compatible self-hosted and DeepSeek profiles may opt in to visible reasoning.
 - `mcp.py`, `connections.py`: FastMCP lifecycle, typed/text-backed normalization,
   approved HTTP destinations, separate credentials and scoped discovery.
 - `workflows/`: trusted, versioned instruction packages; no executable extensions.
@@ -252,7 +340,7 @@ The reply action bar uses the shared clipboard utility, including its HTTP fallb
 snapshots and assistant-message metadata. Session reads batch-load activity for
 historical replies. The Worked-for disclosure precedes reply text and replaces the
 separate Activity block. Reasoning-content deltas remain encrypted continuation
-data. Compatible self-hosted profiles can explicitly opt in to a visible copy;
+data. Compatible self-hosted and DeepSeek profiles can explicitly opt in to a visible copy;
 otherwise their presence emits only a generic thinking status. Public provider
 summaries remain distinct from that opt-in model reasoning. Forks copy visible activity without dispatching
 tools. Existing records without measured duration display Work details.
@@ -266,10 +354,7 @@ replace streamed previews instead of duplicating them. Updates batch at 150 ms a
 flush before phase transitions or termination. Interrupted or cancelled phases
 retain that outcome rather than reporting completion.
 
-The Responses adapter consumes public `reasoning_summary_text` delta/done events
-and final summary arrays ([provider event contract](https://developers.openai.com/api/reference/resources/responses/streaming-events)).
-It does not enable reasoning automatically or expose encrypted reasoning or
-reasoning-text events. Named `custom`/`lmstudio` connections support the administrator
+Named `custom`/`lmstudio`/`deepseek` connections support the administrator
 `showModelReasoning` preference, default false. The Chat-only administrator endpoint
 `POST /api/v1/ai_connection/models/connections/{id}/reasoning-visibility` accepts
 `{showModelReasoning: boolean}`. It changes only the encrypted display preference,
@@ -285,8 +370,9 @@ original stays intact for provider continuation. Visible text is safe-rendered a
 Model reasoning, separate from the answer/public summary, and follows the same
 ownership, post scope, replay and branching access checks. Other profiles retain
 status/tool fallback. Empty thinking phases are plain status labels rather than
-empty disclosures. No extra summarization call is made. Visible summaries or model
-reasoning prevent automatic retry after partial output.
+empty disclosures. No extra summarization call is made for reasoning display. Context memory uses
+separate bounded calls as described above. Interrupted generations restore a durable SDK checkpoint or reset partial text
+before safe regeneration. Unknown writes still require review.
 
 The disclosure opens during execution and collapses on completion unless manually
 toggled. The workspace preserves manual state when a live reply becomes a historical
@@ -345,9 +431,19 @@ model generations trigger a final partial answer. Progress and new user steering
 reset the guard. Missing tracking state is rebuilt from active-request messages
 without executing historical operations; historical transcripts are not rewritten.
 
+Model calls using unavailable or unadvertised tool names receive a recorded,
+non-dispatched error with exact currently available names. At most two model
+generations may correct such names per turn; further invalid generations fail.
+Chat never guesses aliases, rewrites hash suffixes, or dispatches a correction on
+the model's behalf. Both execution drivers use this shared validation before
+scheduling; canonical call/result pairs and normal authorization remain intact.
+
 Under context pressure, Chat first attempts the compact view, then retains full
 schemas for a focused inspection or chart tool set, plus clarification/evidence
-access. Unresolved lookup keeps discovery available. If that still cannot fit,
+access. A successfully loaded chart reference retains its preview/edit/schema
+tools, including `update_chart_preview`, even when the active turn has no new
+dataset-discovery match. Unresolved lookup keeps discovery available. If that still
+cannot fit,
 Chat gives an explicitly partial answer; it must not claim unfinished chart work
 completed. `tests/ai_runtime/test_discovery.py` and the context/engine tests cover
 interception, isolation, replay, exact matches and both pressure-recovery stages.
@@ -443,7 +539,9 @@ drafts expire after 24 hours. Bound image data is retained with conversation evi
 Canonical messages contain image references, never image bytes. Provider adapters
 hydrate native Chat Completions or Responses image content immediately before inference.
 Image limits and model capability are enforced server-side, including retained images;
-images are never silently dropped. The composer supports picker, paste and drop with
+images are never silently dropped. The message input occupies a full-width row;
+attachment sits on the left of the bottom row, with confirmation mode, model,
+context usage and send/stop controls grouped on the right. The composer supports picker, paste and drop with
 thumbnails, progress, retry and removal. Only published model choices appear to users.
 An unavailable saved model requires explicit replacement. Model choice is frozen while
 a turn runs; text steering and Stop remain available. Retry/edit use the selected model.
@@ -522,3 +620,21 @@ revoked tools/data cannot survive through cache optimization; supported cache
 metrics demonstrate reuse in live evaluation. Retain the protected Superset MCP
 server boundary: no server or behavior-affecting dependency/configuration changes
 without the user's separate explicit confirmation.
+
+
+### Context usage and reasoning diagnostics
+
+The composer ring shows input plus output tokens for the latest model request,
+relative to that turn's configured context window. It is not cumulative billing
+usage. Before the response completes it uses the serialized-request estimate;
+provider usage replaces that estimate on completion. The tooltip identifies the
+source and shows the output limit, input allowance and tool-result reserve.
+Usage persists in the turn checkpoint and reloads with the turn snapshot. A model
+selection change hides an unrelated model's measurement until its next request.
+
+Reasoning display uses the connection preference documented above, bounded to
+12,000 characters per generation. Expired worker leases mark unfinished activities
+interrupted with a recovery reason. Streaming lease checks renew ownership alongside
+the ten-second heartbeat; this does not prevent recovery after a stopped or
+unreachable worker. Cancellation is displayed separately. Increasing token budgets
+does not extend worker leases.

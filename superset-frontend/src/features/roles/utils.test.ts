@@ -47,7 +47,10 @@ test('fetchPermissionsByIds loads permission catalog without id filter', async (
 
   expect(getMock).toHaveBeenCalledTimes(1);
   const { endpoint } = getMock.mock.calls[0][0] as { endpoint: string };
-  const query = rison.decode(endpoint.split('?q=')[1]) as Record<string, unknown>;
+  const query = rison.decode(endpoint.split('?q=')[1]) as Record<
+    string,
+    unknown
+  >;
   expect(query.filters).toBeUndefined();
   expect(result).toEqual([
     { value: 1, label: 'perm 1 view 1' },

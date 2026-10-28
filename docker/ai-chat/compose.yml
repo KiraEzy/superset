@@ -5,17 +5,18 @@
 # Append after the existing web/localization overlays. No MCP service changes.
 services:
   superset:
+    image: ${FOCALBI_CHAT_IMAGE:-focalbi-ai-sdk:20261025}
     environment:
       AI_CHAT_RUNTIME_ENABLED: 'true'
   ai-worker:
     extends:
       file: docker-compose-image-tag.yml
       service: superset
-    image: ${FOCALBI_CHAT_IMAGE:-apachesuperset.docker.scarf.sh/apache/superset@sha256:5822dff49c41fd745ce33e38af502f9c64df30d133aeba148c5d89b35a1004ef}
+    image: ${FOCALBI_CHAT_IMAGE:-focalbi-ai-sdk:20261025}
     environment:
       AI_CHAT_RUNTIME_ENABLED: 'true'
     container_name: focal_ai_worker
-    entrypoint: ['celery']
+    entrypoint: ['/opt/focal-ai/bin/python', '-m', 'celery']
     command:
       - '-A'
       - 'superset.ai_runtime.worker:app'

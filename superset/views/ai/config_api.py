@@ -55,6 +55,7 @@ class AIConnectionRestApi(BaseApi):
                 "publish_models",
                 "delete_connection",
                 "reasoning_visibility",
+                "model_settings",
             )
         },
     }
@@ -152,6 +153,25 @@ class AIConnectionRestApi(BaseApi):
                 403, {"message": "Administrator access required"}
             )
         return self._json_response(200, {"result": catalogue(admin=True)})
+
+    @expose("/models/<model_id>/settings", methods=("POST",))
+    @protect()
+    @safe
+    def model_settings(self, model_id: str) -> Response:
+        """Save administrator-owned budgets for subsequent Chat turns."""
+        from superset.ai_runtime.model_settings import ModelSettingsConflictError, save
+
+        if not security_manager.is_admin():
+            return self._json_response(
+                403, {"message": "Administrator access required"}
+            )
+        try:
+            save(model_id, request.get_json(silent=True))
+        except ModelSettingsConflictError as ex:
+            return self._json_response(409, {"message": str(ex)})
+        except ValueError as ex:
+            return self._json_response(400, {"message": str(ex)})
+        return self._json_response(200, {"result": {"saved": True}})
 
     @expose("/models/connections/verify", methods=("POST",))
     @protect()
