@@ -412,7 +412,10 @@ def snapshot(turn: AiRuntimeTurn) -> dict[str, Any]:
         for row in items
         if row.kind == "request" and row.status == "pending"
     ]
+    from .deliverables import listing
+
     return {
+        "deliverables": listing(turn),
         "id": turn.id,
         "thread_id": str(thread.uuid),
         "status": turn.status,
@@ -809,6 +812,7 @@ def fork(  # noqa: C901 - one atomic scoped branch transaction
                 artifact_type=original.artifact_type,
                 title=original.title,
                 version=original.version,
+                created_on=original.created_on,
                 payload_json=original.payload_json,
                 provenance_json=dumps(
                     {
@@ -821,6 +825,30 @@ def fork(  # noqa: C901 - one atomic scoped branch transaction
             db.session.add(copied_artifact)
             db.session.flush()
             artifact_ids[original.id] = artifact_dict(copied_artifact)
+    for previous in eligible:
+        for registration in (
+            db.session.query(AiRuntimeItem)
+            .filter_by(turn_id=previous.id, kind="deliverable")
+            .all()
+        ):
+            value = loads(registration.payload_json)
+            copied = artifact_ids.get(value.get("artifact_id"))
+            if not copied:
+                continue
+            if value["key"].startswith("visual:"):
+                source_id = value["key"][len("visual:") :]
+                if source_id not in artifact_ids:
+                    continue
+                value["key"] = f"visual:{artifact_ids[source_id]['id']}"
+            value["artifact_id"] = copied["id"]
+            db.session.add(
+                AiRuntimeItem(
+                    turn_id=turn_ids[previous.id],
+                    kind="deliverable",
+                    payload_json=dumps(value),
+                    created_on=registration.created_on,
+                )
+            )
     for message in thread.messages:
         extra = message.extra or {}
         original_turn_id = extra.get("runtime_turn_id")

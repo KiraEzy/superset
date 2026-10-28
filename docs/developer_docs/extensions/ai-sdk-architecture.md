@@ -307,3 +307,16 @@ transport when the final request exceeds its estimated budget. The
 providers and chart-edit invariants, plus unchanged connection settings and saved
 resource counts. Additional Stage 3 tests above exercise approval boundaries, interrupted callbacks
 and scoped mutations. Full cutover remains subject to the Stage 4 gates.
+
+
+## Visual deliverables
+
+The Chat application owns presentation through `ai_runtime/deliverables.py`.
+Saved chart/dashboard results register automatically; `present_deliverable` is a
+Chat-only SDK helper for completed previews and result tables. It validates scoped
+artifact references and successful source execution, then appends an idempotent,
+encrypted presentation entry to the existing ledger. It does not mutate artifacts,
+change BI permissions or introduce a second agent loop. Session/turn projections and
+streaming events feed a single-view Deliverables panel, with diagnostic evidence in
+a separate Details drawer. See the [runtime policy](./ai-chat-runtime.md#session-deliverables-viewer)
+for rendering, authorization, legacy-session and branch behavior.

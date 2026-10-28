@@ -60,6 +60,7 @@ export interface ChatSessionSummary {
 }
 
 export interface ChatSession extends ChatSessionSummary {
+  deliverables?: import('./runtime').PresentedDeliverable[];
   modelId?: string;
   activeTurn?: { id: string; status: string } | null;
   latestTurn?: { id: string; status: string } | null;
@@ -84,6 +85,7 @@ export interface ApiChatSessionSummary {
 }
 
 export interface ApiChatSession extends ApiChatSessionSummary {
+  deliverables?: import('./runtime').PresentedDeliverable[];
   model_id?: string;
   active_turn?: { id: string; status: string } | null;
   latest_turn?: { id: string; status: string } | null;

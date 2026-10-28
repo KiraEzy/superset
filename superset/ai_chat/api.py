@@ -73,6 +73,7 @@ def session_to_dict(
         "active_turn": None,
         "latest_turn": None,
     }
+    latest = None
     if session.runtime_version == 2:
         from superset.models.ai_runtime import AiRuntimeTurn
         active = db.session.query(AiRuntimeTurn).filter_by(active_key=str(session.uuid)).first()
@@ -83,6 +84,9 @@ def session_to_dict(
             data["latest_turn"] = {"id": latest.id, "status": latest.status}
             from superset.ai_runtime.store import loads
             data["model_id"] = loads(latest.state_json).get("config", {}).get("model_id")
+    if include_messages and session.runtime_version == 2 and latest:
+        from superset.ai_runtime.deliverables import listing
+        data["deliverables"] = listing(latest)
     if include_messages:
         data["messages"] = [message.data for message in session.messages]
         if session.runtime_version == 2:

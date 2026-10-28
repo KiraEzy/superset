@@ -22,7 +22,13 @@ import { useHistory, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { styled } from '@apache-superset/core/theme';
 import { t } from '@apache-superset/core/translation';
-import { Button, Input, Select, Tag } from '@superset-ui/core/components';
+import {
+  Button,
+  Drawer,
+  Input,
+  Select,
+  Tag,
+} from '@superset-ui/core/components';
 import { Icons } from '@superset-ui/core/components/Icons';
 import { Alert } from '@apache-superset/core/components';
 import { makeUrl } from 'src/utils/pathUtils';
@@ -36,6 +42,7 @@ import { ChatSession, ChatSessionSummary, AiChatChartPayload } from '../types';
 import {
   ApprovalMode,
   Artifact,
+  PresentedDeliverable,
   RuntimeContext,
   RuntimeMetadata,
   Turn,
@@ -46,6 +53,9 @@ import {
   runtimePost,
 } from '../runtime';
 import ChatMarkdown from './ChatMarkdown';
+import DeliverableLinks from './DeliverableLinks';
+import DeliverablesPanel from './DeliverablesPanel';
+import { groupDeliverables } from '../deliverables';
 import ChatHistoryItem from './ChatHistoryItem';
 import ReplyActions from './ReplyActions';
 import WorkActivity from './WorkActivity';
@@ -80,7 +90,7 @@ const Workspace = styled.div<{
     overflow: auto;
     padding: 20px;
   }
-  > aside[data-pane='artifacts'] {
+  > aside[data-pane='deliverables'] {
     position: relative;
     display: flex;
     min-height: 0;
@@ -202,7 +212,8 @@ const Workspace = styled.div<{
     }
     &[data-section='chat'] > [data-pane]:not([data-pane='chat']),
     &[data-section='history'] > [data-pane]:not([data-pane='history']),
-    &[data-section='artifacts'] > [data-pane]:not([data-pane='artifacts']) {
+    &[data-section='deliverables']
+      > [data-pane]:not([data-pane='deliverables']) {
       display: none;
     }
   }
@@ -315,9 +326,21 @@ const ArtifactBody = styled.section`
   pre {
     white-space: pre-wrap;
   }
+  details {
+    margin-top: 12px;
+  }
+  summary {
+    cursor: pointer;
+  }
 `;
 
-function ArtifactView({ artifact }: { artifact: Artifact }) {
+function ArtifactView({
+  artifact,
+  visualOnly = false,
+}: {
+  artifact: Artifact;
+  visualOnly?: boolean;
+}) {
   const chart = artifact.payload.chart ?? artifact.payload;
   const nativeChart =
     artifact.provenance?.connection_id === 'focalbi' ||
@@ -325,8 +348,12 @@ function ArtifactView({ artifact }: { artifact: Artifact }) {
   return (
     <ArtifactBody id={`artifact-${artifact.id}`} tabIndex={-1}>
       <h3>{artifact.title}</h3>
-      <Tag>{artifact.saved ? t('Saved') : t('Preview')}</Tag>{' '}
-      <span>{t('Version %s', artifact.version)}</span>
+      {!visualOnly && (
+        <>
+          <Tag>{artifact.saved ? t('Saved') : t('Preview')}</Tag>{' '}
+          <span>{t('Version %s', artifact.version)}</span>
+        </>
+      )}
       {artifact.type === 'chart' &&
       nativeChart &&
       typeof chart === 'object' &&
@@ -371,9 +398,14 @@ function ArtifactView({ artifact }: { artifact: Artifact }) {
                       row && typeof row === 'object' ? row : { value: row },
                     ).map((cell, column) => (
                       <td key={column}>
-                        {typeof cell === 'object'
-                          ? JSON.stringify(cell)
-                          : String(cell ?? '')}
+                        {cell !== null && typeof cell === 'object' ? (
+                          <details>
+                            <summary>{t('Details')}</summary>
+                            <pre>{JSON.stringify(cell, null, 2)}</pre>
+                          </details>
+                        ) : (
+                          String(cell ?? '')
+                        )}
                       </td>
                     ))}
                   </tr>
@@ -396,9 +428,12 @@ function ArtifactView({ artifact }: { artifact: Artifact }) {
           {artifact.title}
         </a>
       ) : (
-        <pre>{JSON.stringify(artifact.payload, null, 2)}</pre>
+        <details aria-label={t('Details for %s', artifact.title)}>
+          <summary>{t('Details')}</summary>
+          <pre>{JSON.stringify(artifact.payload, null, 2)}</pre>
+        </details>
       )}
-      {artifact.provenance && (
+      {!visualOnly && artifact.provenance && (
         <details>
           <summary>{t('Sources and provenance')}</summary>
           <pre>{JSON.stringify(artifact.provenance, null, 2)}</pre>
@@ -467,7 +502,7 @@ export default function RuntimeWorkspace({
   const historyDrag = useRef<{ x: number; width: number } | null>(null);
   const resizeHistory = (width: number) =>
     setHistoryWidth(Math.max(180, Math.min(520, width)));
-  const [section, setSection] = useState<'chat' | 'history' | 'artifacts'>(
+  const [section, setSection] = useState<'chat' | 'history' | 'deliverables'>(
     'chat',
   );
   const [workflows, setWorkflows] = useState<string[]>([]);
@@ -598,6 +633,7 @@ export default function RuntimeWorkspace({
       'tool_completed',
       'activity_updated',
       'artifact',
+      'deliverable',
       'request',
       'usage',
       'turn_completed',
@@ -688,12 +724,46 @@ export default function RuntimeWorkspace({
       ].map(artifact => [artifact.id, artifact]),
     ).values(),
   );
-  const inspectArtifact = (id: string) => {
-    setSection('artifacts');
+  const [selectedDeliverable, setSelectedDeliverable] = useState<string | null>(
+    null,
+  );
+  const [inspectedArtifact, setInspectedArtifact] = useState<string | null>(
+    null,
+  );
+  useEffect(() => {
+    setSelectedDeliverable(null);
+    setInspectedArtifact(null);
+  }, [sessionId]);
+  const registry = turn?.deliverables ?? session?.deliverables;
+  const presented: PresentedDeliverable[] =
+    registry ??
+    groupDeliverables(artifacts).deliverables.map(item => ({
+      key: item.key,
+      artifact_id: item.artifact.id,
+      title: item.title,
+      type: item.artifact.type as PresentedDeliverable['type'],
+      saved: item.artifact.saved,
+      version: item.artifact.version,
+      available: true,
+    }));
+  const inspectArtifact = (id: string) => setInspectedArtifact(id);
+  const viewDeliverable = (id: string) => {
+    const original = artifacts.find(item => item.id === id);
+    const key = original && groupDeliverables([original]).deliverables[0]?.key;
+    const entry = presented.find(
+      item => item.artifact_id === id || item.key === key,
+    );
+    if (!entry) {
+      inspectArtifact(id);
+      return;
+    }
+    setSelectedDeliverable(entry.key);
+    setSection('deliverables');
     requestAnimationFrame(() =>
-      document.getElementById(`artifact-${id}`)?.focus(),
+      document.getElementById('ai-chat-deliverables')?.focus(),
     );
   };
+  const inspected = artifacts.find(item => item.id === inspectedArtifact);
   return (
     <Workspace
       ref={workspaceRef}
@@ -719,11 +789,11 @@ export default function RuntimeWorkspace({
           {t('Chat')}
         </Button>
         <Button
-          buttonStyle={section === 'artifacts' ? 'primary' : 'secondary'}
-          aria-pressed={section === 'artifacts'}
-          onClick={() => setSection('artifacts')}
+          buttonStyle={section === 'deliverables' ? 'primary' : 'secondary'}
+          aria-pressed={section === 'deliverables'}
+          onClick={() => setSection('deliverables')}
         >
-          {t('Artifacts')}
+          {t('Deliverables')}
         </Button>
       </nav>
       <aside data-pane="history" aria-label={t('Chat history')}>
@@ -913,19 +983,12 @@ export default function RuntimeWorkspace({
                   <ChatMarkdown content={message.content} />
                 </div>
               )}
-              {Boolean(message.artifacts?.length) && (
-                <Controls>
-                  {message.artifacts?.map(artifact => (
-                    <Button
-                      key={artifact.id}
-                      buttonStyle="secondary"
-                      onClick={() => inspectArtifact(artifact.id)}
-                    >
-                      {t('Inspect %s', artifact.title)}
-                    </Button>
-                  ))}
-                </Controls>
-              )}
+              <DeliverableLinks
+                artifacts={message.artifacts ?? []}
+                onInspect={inspectArtifact}
+                onView={viewDeliverable}
+                presentations={presented}
+              />
               {message.charts?.map(chart => (
                 <ChatChartEmbed key={chart.id} chart={chart} />
               ))}
@@ -974,19 +1037,12 @@ export default function RuntimeWorkspace({
                     <div className="message-body">
                       <ChatMarkdown content={turn.content} />
                     </div>
-                    {Boolean(turn.artifacts.length) && (
-                      <Controls>
-                        {turn.artifacts.map(artifact => (
-                          <Button
-                            key={artifact.id}
-                            buttonStyle="secondary"
-                            onClick={() => inspectArtifact(artifact.id)}
-                          >
-                            {t('Inspect %s', artifact.title)}
-                          </Button>
-                        ))}
-                      </Controls>
-                    )}
+                    <DeliverableLinks
+                      artifacts={turn.artifacts}
+                      onInspect={inspectArtifact}
+                      onView={viewDeliverable}
+                      presentations={presented}
+                    />
                   </>
                 )}
                 {turn.error && (
@@ -1240,13 +1296,13 @@ export default function RuntimeWorkspace({
           }}
         />
       </main>
-      <aside data-pane="artifacts" aria-label={t('Artifacts')}>
+      <aside data-pane="deliverables" aria-label={t('Deliverables')}>
         <ArtifactResizeHandle
           className="artifact-resize"
           role="separator"
-          aria-label={t('Resize artifacts pane')}
+          aria-label={t('Resize deliverables pane')}
           aria-orientation="vertical"
-          aria-controls="ai-chat-artifacts"
+          aria-controls="ai-chat-deliverables"
           aria-valuemin={300}
           aria-valuemax={artifactMaxWidth}
           aria-valuenow={artifactWidth}
@@ -1287,17 +1343,31 @@ export default function RuntimeWorkspace({
             artifactDrag.current = null;
           }}
         />
-        <div className="artifact-content" id="ai-chat-artifacts">
-          <h2>{t('Artifacts')}</h2>
-          {artifacts.length ? (
-            artifacts.map(artifact => (
-              <ArtifactView key={artifact.id} artifact={artifact} />
-            ))
-          ) : (
-            <p>{t('Charts, queries and results appear here as you work.')}</p>
-          )}
+        <div
+          className="artifact-content"
+          id="ai-chat-deliverables"
+          tabIndex={-1}
+        >
+          <DeliverablesPanel
+            key={sessionId ?? 'new'}
+            entries={presented}
+            artifacts={artifacts}
+            selectedKey={selectedDeliverable}
+            onSelect={setSelectedDeliverable}
+            renderArtifact={artifact => (
+              <ArtifactView key={artifact.id} artifact={artifact} visualOnly />
+            )}
+          />
         </div>
       </aside>
+      <Drawer
+        title={t('Details')}
+        open={Boolean(inspected)}
+        onClose={() => setInspectedArtifact(null)}
+        width="min(640px, 100vw)"
+      >
+        {inspected && <ArtifactView key={inspected.id} artifact={inspected} />}
+      </Drawer>
     </Workspace>
   );
 }

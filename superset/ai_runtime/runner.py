@@ -31,7 +31,7 @@ from flask import current_app, g
 from sqlalchemy import or_
 
 from superset import security_manager
-from superset.ai_runtime import artifact_memory, notifications, store
+from superset.ai_runtime import artifact_memory, deliverables, notifications, store
 from superset.extensions import celery_app, db
 from superset.models.ai_chat import AiChatMessage
 from superset.models.ai_runtime import (
@@ -354,6 +354,7 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
         flush_deltas()
         live()
         item_id = None
+        registration = None
         if kind == "message_reset":
             turn.content = str(payload.get("content", ""))
         if kind in {"tool_started", "tool_completed"}:
@@ -446,7 +447,9 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
                     provenance_json=store.dumps(artifact.get("provenance", {})),
                 )
                 db.session.add(row)
+            db.session.flush()
             payload = {"artifact": store.artifact_dict(row)}
+            registration = deliverables.auto_present(turn, payload["artifact"])
         turn.lease_expires = store.now() + timedelta(seconds=LEASE_SECONDS)
         if item_id:
             row = db.session.query(AiRuntimeItem).get(item_id)
@@ -459,8 +462,14 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
                 },
                 item_id=item_id,
             )
+            if kind == "tool_completed" and deliverables.removed_chart_keys(row):
+                store.append_event(
+                    turn, "deliverable", {"deliverables": deliverables.listing(turn)}
+                )
         else:
-            store.append_event(turn, kind, payload)
+            store.append_event(turn, kind, payload, commit=registration is None)
+            if registration:
+                store.append_event(turn, "deliverable", {"deliverable": registration})
 
     async def elicit(
         message: str, response_type: Any, params: Any, context: Any
@@ -588,6 +597,31 @@ def execute_turn(turn_id: str) -> None:  # noqa: C901 - explicit execution state
             refresh_auth()
             return artifact_memory.read(turn, identifier)
 
+        def present_deliverable(
+            args: dict[str, Any], operation_id: str
+        ) -> dict[str, Any]:
+            refresh_auth()
+            if cancelled():
+                raise store.RuntimeRequestError("Turn is stopping", 409)
+            value = deliverables.present(turn, args, operation_id)
+            live()  # Revalidate lease before committing the presentation.
+            projection = deliverables.listing(turn)
+            current = next(
+                (entry for entry in projection if entry["key"] == value["key"]), None
+            )
+            store.append_event(
+                turn,
+                "deliverable",
+                {"deliverable": current} if current else {"deliverables": projection},
+            )
+            return value
+
+        def artifact_refs(call_id: str | None = None) -> list[dict[str, Any]]:
+            refresh_auth()
+            return deliverables.references(turn, call_id)
+
+        state["_present_deliverable"] = present_deliverable
+        state["_artifact_refs"] = artifact_refs
         state["_artifact_index"] = artifact_index
         state["_read_artifact"] = read_artifact
 

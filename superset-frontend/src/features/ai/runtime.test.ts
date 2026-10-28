@@ -130,3 +130,55 @@ test('runtime posts expose server validation messages instead of a generic failu
     post.mockRestore();
   }
 });
+
+test('deliverable events replace versions by stable key and reject replay', () => {
+  const entry = {
+    key: 'chart',
+    artifact_id: 'one',
+    title: 'Chart',
+    type: 'chart',
+    saved: true,
+    version: 1,
+    available: true,
+  };
+  const update = {
+    ...event,
+    type: 'deliverable',
+    payload: { deliverable: entry },
+  };
+  const first = reduceTurn(turn, update);
+  expect(first?.deliverables).toEqual([entry]);
+  expect(reduceTurn(first, update)).toBe(first);
+  const next = reduceTurn(first, {
+    ...update,
+    sequence: 2,
+    payload: { deliverable: { ...entry, artifact_id: 'two', version: 2 } },
+  });
+  expect(next?.deliverables).toHaveLength(1);
+  expect(next?.deliverables?.[0].artifact_id).toBe('two');
+});
+
+test('a confirmed dashboard rebuild replaces the registry without replaying retired entries', () => {
+  const state = {
+    ...turn,
+    deliverables: [
+      {
+        key: 'old',
+        artifact_id: 'old',
+        title: 'Draft',
+        type: 'chart' as const,
+        saved: true,
+        version: 1,
+        available: true,
+      },
+    ],
+  };
+  const update = {
+    ...event,
+    type: 'deliverable',
+    payload: { deliverables: [] },
+  };
+  const next = reduceTurn(state, update);
+  expect(next?.deliverables).toEqual([]);
+  expect(reduceTurn(next, update)).toBe(next);
+});

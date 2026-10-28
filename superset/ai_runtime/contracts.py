@@ -277,3 +277,28 @@ READ_ARTIFACT: dict[str, Any] = {
         },
     },
 }
+
+
+PRESENT_DELIVERABLE = {
+    "function": {
+        "name": "present_deliverable",
+        "description": (
+            "Present a completed chart preview or result table in Deliverables. "
+            "Use an artifact_id from a successful BI tool. Do not present "
+            "diagnostic queries, raw SQL or intermediate previews. Saved charts and "
+            "dashboards appear automatically. Optionally replace a prior presented "
+            "artifact of the same type. This changes presentation only; "
+            "it never saves BI data."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "artifact_id": {"type": "string", "minLength": 1, "maxLength": 256},
+                "title": {"type": "string", "minLength": 1, "maxLength": 256},
+                "replaces_artifact_id": {"type": "string", "maxLength": 256},
+            },
+            "required": ["artifact_id", "title"],
+            "additionalProperties": False,
+        },
+    }
+}

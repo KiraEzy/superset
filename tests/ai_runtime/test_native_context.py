@@ -311,6 +311,7 @@ def test_full_catalogue_respects_context_budget(
             *(f"tool_{i}" for i in range(100)),
             "read_evidence",
             "read_artifact",
+            "present_deliverable",
             "ask_user",
             "find_bi_tools",
         }

@@ -36,6 +36,7 @@ from .artifacts import extract_artifacts
 from .contracts import (
     AiRuntimeError,
     ASK_USER,
+    PRESENT_DELIVERABLE,
     READ_ARTIFACT,
     READ_EVIDENCE,
     TurnCancelledError,
@@ -413,7 +414,12 @@ async def run_native(  # noqa: C901 - isolated SDK orchestration and product cal
                     emit("artifact", artifact)
                 visible, truncated = bounded(value, max_chars=10000)
                 return json.dumps(
-                    {"result": visible, "truncated": truncated, "evidence_ref": call_id}
+                    {
+                        "result": visible,
+                        "truncated": truncated,
+                        "evidence_ref": call_id,
+                        "artifacts": state.get("_artifact_refs", lambda _: [])(call_id),
+                    }
                 )
 
         sdk_tools: list[SDKTool] = [
@@ -468,6 +474,14 @@ async def run_native(  # noqa: C901 - isolated SDK orchestration and product cal
             persist()
             return json.dumps(read_page(result, args, historical=True))
 
+        async def present_deliverable(ctx: Any, raw: str) -> str:
+            check()
+            try:
+                value = state["_present_deliverable"](json.loads(raw), ctx.tool_call_id)
+                return json.dumps({"deliverable": value})
+            except (ValueError, KeyError) as ex:
+                return json.dumps({"isError": True, "message": str(ex)})
+
         async def ask_user(ctx: Any, raw: str) -> str:
             return json.dumps({"answer": cp["answers"][ctx.tool_call_id]})
 
@@ -505,6 +519,7 @@ async def run_native(  # noqa: C901 - isolated SDK orchestration and product cal
         for definition, invoke in [
             (READ_EVIDENCE, read_evidence),
             (READ_ARTIFACT, read_artifact),
+            (PRESENT_DELIVERABLE, present_deliverable),
             (ASK_USER, ask_user),
             (FIND_TOOLS, find_tools),
         ]:
@@ -526,13 +541,29 @@ async def run_native(  # noqa: C901 - isolated SDK orchestration and product cal
             + state.get("workflow_instructions", "")
         )
         instructions += "\nAuthorized artifact references: " + json.dumps(references)
+        instructions += (
+            "\nSaved charts and dashboards appear automatically in Deliverables. "
+            "Use present_deliverable for completed chart previews or result tables you "
+            "are presenting to the user, never diagnostic probes. BI tool results "
+            "include exact persisted artifact IDs. SQL and intermediate evidence "
+            "remain in Work details. Presentations do not authorize BI writes."
+        )
         instructions += "\nSelected resource references: " + json.dumps(
             state.get("context", [])
         )
         instructions += "\nAdministrator BI guidance: " + str(
             config.get("systemPrompt", "")
         )
-        helper_definitions = [READ_EVIDENCE, READ_ARTIFACT, ASK_USER, FIND_TOOLS]
+        instructions += "\nPresentable artifact references: " + json.dumps(
+            state.get("_artifact_refs", lambda: [])()
+        )
+        helper_definitions = [
+            READ_EVIDENCE,
+            READ_ARTIFACT,
+            PRESENT_DELIVERABLE,
+            ASK_USER,
+            FIND_TOOLS,
+        ]
 
         def select_tools(available: list[Any]) -> list[Any]:
             cp["offered_tools"] = [t.name for t in available]

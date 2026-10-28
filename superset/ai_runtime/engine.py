@@ -46,9 +46,9 @@ for its exact configuration and source_request. Preserve its dataset, metrics,
 filters and other settings unless asked to change them. Preview IDs are not saved
 chart IDs. Use supported MCP config/schema fields for changes; verify the resulting
 form_data and do not claim an unsupported style was applied.
-Chart artifacts render as interactive previews in the Chat artifact pane, including
-unsaved previews. A tool not returning a screenshot does not prevent that rendering.
-Point to the artifact pane; Open in Explore is an optional additional view.
+Completed chart previews can be presented in the Chat Deliverables viewer
+using present_deliverable. A tool not returning a screenshot does not prevent that rendering.
+Point to the Deliverables panel; Open in Explore is an optional additional view.
 """
 SYSTEM += """
 Dataset search matches SQL as well as table names. For a concrete table name,

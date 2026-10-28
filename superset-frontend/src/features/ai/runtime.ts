@@ -42,6 +42,15 @@ export interface Artifact {
   version: number;
   saved: boolean;
 }
+export interface PresentedDeliverable {
+  key: string;
+  artifact_id: string;
+  title: string;
+  type: 'chart' | 'dashboard' | 'table';
+  saved: boolean;
+  version: number;
+  available: boolean;
+}
 export interface PendingRequest {
   id: string;
   kind: 'clarification' | 'approval' | 'review' | 'connection';
@@ -65,6 +74,7 @@ export interface ContextUsage {
   estimated: boolean;
 }
 export interface Turn {
+  deliverables?: PresentedDeliverable[];
   approval_mode?: ApprovalMode;
   context_usage?: ContextUsage | null;
   activity?: WorkActivityData;
@@ -154,6 +164,18 @@ export function reduceTurn(state: Turn | null, event: TurnEvent): Turn | null {
   }
   if (next.activity && next.activity.status !== next.status)
     next.activity = { ...next.activity, status: next.status };
+  if (event.type === 'deliverable') {
+    if (Array.isArray(event.payload.deliverables)) {
+      next.deliverables = event.payload.deliverables as PresentedDeliverable[];
+    } else {
+      const entry = event.payload
+        .deliverable as unknown as PresentedDeliverable;
+      next.deliverables = [
+        ...(state.deliverables ?? []).filter(item => item.key !== entry.key),
+        entry,
+      ];
+    }
+  }
   if (event.type === 'artifact') {
     const artifact = event.payload.artifact as unknown as Artifact;
     next.artifacts = [

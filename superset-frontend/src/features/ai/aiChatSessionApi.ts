@@ -128,6 +128,7 @@ export function mapApiSession(session: ApiChatSession): ChatSession {
   return {
     ...mapApiSessionSummary(session),
     modelId: session.model_id,
+    deliverables: session.deliverables,
     activeTurn: session.active_turn,
     latestTurn: session.latest_turn,
     messages: (session.messages ?? []).map(mapApiMessage),

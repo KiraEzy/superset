@@ -55,6 +55,7 @@ class AiChatMessagePostSchema(Schema):
 
 
 class AiChatSessionResponseSchema(Schema):
+    deliverables = fields.List(fields.Dict())
     is_pinned = fields.Boolean()
     runtime_version = fields.Integer()
     post_id = fields.Integer(allow_none=True)

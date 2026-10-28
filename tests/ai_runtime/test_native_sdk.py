@@ -316,6 +316,7 @@ def test_all_authorized_tools_remain_offered_after_search(
     expected = {tool.name for tool in tools[:-1]} | {
         "read_evidence",
         "read_artifact",
+        "present_deliverable",
         "ask_user",
         "find_bi_tools",
     }
@@ -423,3 +424,30 @@ def test_context_usage_reports_latest_request_not_cumulative_tokens(
         assert estimates[-1] == usage
 
     asyncio.run(exercise())
+
+
+def test_present_deliverable_is_an_sdk_helper_without_mcp_writes(database: Any) -> None:
+    import test_native_context as context_tests
+
+    calls: list[Any] = []
+    requests: list[Any] = []
+
+    async def handler(request: Any) -> Any:
+        requests.append(json.loads(request.content))
+        return streamed_response(
+            call=len(requests) == 1,
+            name="present_deliverable",
+            arguments={"artifact_id": "exact-artifact", "title": "Final table"},
+        )
+
+    value = context_tests.state(database, handler)
+    value["_present_deliverable"] = lambda args, operation_id: calls.append(args) or {
+        "key": "visual:exact-artifact"
+    }
+    result = asyncio.run(context_tests.run(value))
+    assert result["status"] == "completed"
+    assert calls == [{"artifact_id": "exact-artifact", "title": "Final table"}]
+    assert any(
+        tool["function"]["name"] == "present_deliverable"
+        for tool in requests[0]["tools"]
+    )

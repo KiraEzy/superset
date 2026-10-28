@@ -310,6 +310,60 @@ captured chart. No MCP tool, schema or endpoint is changed. Unsupported styles
 must be reported rather than claimed as applied. Creating a preview never saves
 or edits the source BI resource.
 
+## Session Deliverables viewer
+
+The right-hand **Deliverables** panel presents completed visuals from the entire
+conversation through a compact picker and one selected viewer. It groups saved
+resources by connection, type and resource ID, showing their latest snapshot.
+The initial selection is the latest dashboard, otherwise the latest visual.
+An explicit user selection stays selected as other results arrive; updated entries
+are marked in the picker. Only the selected chart/table or dashboard is mounted.
+A successful native dashboard rebuild with explicit `remove_chart_ids` retires those
+charts from this session's presentation, including legacy history. Inspection reads
+do not restore them; a later saved edit or explicit presentation can. Their saved BI
+resources and evidence remain intact. Standalone charts not explicitly removed are
+preserved, and equal titles never imply replacement. A full-registry SSE update
+removes retired entries immediately; forked tool history and preserved artifact
+timestamps retain this projection.
+Inspection reads can refresh an existing result but cannot publish a new one.
+Native charts reuse the existing renderer. Native dashboards use an authenticated,
+same-origin `/superset/dashboard/<id>/?standalone=2` frame and an Open dashboard
+link. Loading, inaccessible and timed-out frames retain that recovery action;
+arbitrary HTML and external frames are unsupported.
+
+Successful saved charts and dashboards register automatically. The Chat-only
+`present_deliverable` SDK helper presents an existing completed chart preview or
+table, with `artifact_id`, `title` and optional `replaces_artifact_id`. It neither
+saves BI resources nor authorizes writes. Tools return exact persisted artifact
+references so the model can publish a finished visual instead of a diagnostic
+probe. Publication checks conversation/user/post scope, successful source execution,
+current native chart/dataset/database access and a supported renderer. A replacement
+must be accessible and have the same type; distinct saved resource IDs cannot merge,
+and an unsaved preview cannot replace a saved resource.
+
+Registrations append encrypted `AiRuntimeItem(kind="deliverable")` entries;
+artifact snapshots remain immutable. Registration identity is deterministic for
+replay safety, keyed by the SDK tool call for explicit publication. A changed replay
+is rejected; a new publication call may change a title again. Session and turn
+responses include additive `deliverables` metadata;
+SSE `deliverable` events upsert by logical key. Reloads recheck access and show an
+unavailable state for revoked results. Existing sessions derive saved-resource
+entries without rewriting history. Historical previews/tables are not implicitly
+published. Forks remap only registrations whose artifacts were copied to the branch.
+No migration, history reset or external MCP change is required.
+
+Chat deliverable links select the current version in the viewer. SQL, raw JSON,
+standalone URLs, intermediate inspections and older snapshots remain under chat
+**Work details**; Inspect opens a separate Details drawer. Raw payloads, SQL JSON
+and nested JSON table values start collapsed under **Details**. Charts, ordinary
+table values and resource links remain readable. Full audit history, model evidence
+and permission requirements are preserved; publication is not task verification.
+
+Verification: `tests/ai_runtime/test_deliverables.py` covers persistence, replacement,
+source outcomes, access revocation and forks; the SDK contract tests exercise the
+helper through the actual Runner. `DeliverablesPanel.test.tsx`, the runtime reducer
+and chat-link tests cover selection, single-view loading, replay and evidence access.
+
 ## Components and contracts
 
 - `store.py`, `models/ai_runtime.py`: scoped turn service and authoritative ledger.
